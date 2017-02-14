@@ -6,6 +6,7 @@ import java.util.Random;
 import am2.ArsMagica2;
 import am2.api.DamageSources;
 import am2.api.math.AMVector3;
+import am2.blocks.BlockArsMagicaBlock.EnumBlockType;
 import am2.blocks.BlockArsMagicaOre.EnumOreType;
 import am2.bosses.BossSpawnHelper;
 import am2.defs.BlockDefs;
@@ -164,8 +165,8 @@ public class BlockInlay extends BlockRailBase {
 	}
 
 	private boolean checkForIceEffigy(World world, BlockPos pos){
-		if (world.getBlockState(pos.add(1, 0, 1)) == BlockDefs.ores.getDefaultState().withProperty(BlockArsMagicaOre.ORE_TYPE, EnumOreType.BLUETOPAZ)){
-			if (world.getBlockState(pos.add(1, 1, 1)) == BlockDefs.ores.getDefaultState().withProperty(BlockArsMagicaOre.ORE_TYPE, EnumOreType.BLUETOPAZ)){
+		if (world.getBlockState(pos.add(1, 0, 1)).getBlock() == BlockDefs.blocks.getDefaultState().withProperty(BlockArsMagicaBlock.BLOCK_TYPE, EnumBlockType.BLUETOPAZ).getBlock()) {
+			if (world.getBlockState(pos.add(1, 1, 1)).getBlock() == BlockDefs.blocks.getDefaultState().withProperty(BlockArsMagicaBlock.BLOCK_TYPE, EnumBlockType.BLUETOPAZ).getBlock()){
 				if (world.getBlockState(pos.add(1, 2, 1)).getBlock() == BlockDefs.iceEffigy){
 					IBlockState state = world.getBlockState(pos.add(1, 2, 1));
 					int iceMeta = world.getBlockState(pos.add(1, 2, 1)).getValue(BlockEffigy.PROGRESS);
