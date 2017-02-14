@@ -23,6 +23,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BossSpawnHelper{
 	public int dryadsKilled;
@@ -34,6 +37,7 @@ public class BossSpawnHelper{
 
 	private BossSpawnHelper(){
 		queuedBosses = new HashMap<EntityLivingBase, World>();
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	public void onDryadKilled(EntityDryad dryad){
@@ -45,7 +49,15 @@ public class BossSpawnHelper{
 		}
 	}
 
-	public void onVillagerChildKilled(EntityVillager villager){
+	@SubscribeEvent
+	public void onVillagerChildKilled(LivingDeathEvent event){
+		if (event.getEntity().getEntityWorld().isRemote || !(event.getEntity() instanceof EntityVillager))
+			return;
+		
+		EntityVillager villager = (EntityVillager) event.getEntity();
+		if (!villager.isChild())
+			return;
+		
 		BlockPos pos = villager.getPosition();
 
 		World world = villager.worldObj;
@@ -454,7 +466,7 @@ public class BossSpawnHelper{
 
 		for (int i = -1; i <= 1; ++i){
 			for (int j = -1; j <= 1; ++j){
-				hasStructure &= world.getBlockState(pos.add(i, -1, j)) == Blocks.COAL_BLOCK;
+				hasStructure &= world.getBlockState(pos.add(i, -1, j)).getBlock() == Blocks.COAL_BLOCK;
 			}
 		}
 
