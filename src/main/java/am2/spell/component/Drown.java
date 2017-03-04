@@ -23,6 +23,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -39,14 +41,16 @@ public class Drown extends SpellComponent{
 		if (!(target instanceof EntityLivingBase) || target instanceof EntityIronGolem) return false;
 		if (((EntityLivingBase)target).getCreatureAttribute() == EnumCreatureAttribute.UNDEAD)
 			return false;
-		float baseDamage = 12;
+		int duration = 200;
+		float baseDamage = 8;
 		double damage = SpellUtils.getModifiedDouble_Add(baseDamage, stack, caster, target, world, SpellModifiers.DAMAGE);
+		((EntityLivingBase)target).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("weakness"), duration, SpellUtils.countModifiers(SpellModifiers.BUFF_POWER, stack)));
 		return SpellUtils.attackTargetSpecial(stack, target, DamageSources.causeDrownDamage(caster), SpellUtils.modifyDamage(caster, (float)damage));
 	}
 
 	@Override
 	public float manaCost(EntityLivingBase caster){
-		return 80;
+		return 100;
 	}
 
 	@Override

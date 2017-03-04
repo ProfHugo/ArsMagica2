@@ -64,8 +64,11 @@ public class FireDamage extends SpellComponent implements IRitualInteraction{
 	@Override
 	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
 		if (!(target instanceof EntityLivingBase)) return false;
-		float baseDamage = 6;
+		float baseDamage = 8;
 		double damage = SpellUtils.getModifiedDouble_Add(baseDamage, stack, caster, target, world, SpellModifiers.DAMAGE);
+		if (target.isBurning()){
+			damage *= 2;
+		}
 		if (isNetherMob(target))
 			return true;
 		return SpellUtils.attackTargetSpecial(stack, target, DamageSources.causeFireDamage(caster), SpellUtils.modifyDamage(caster, (float)damage));
@@ -86,9 +89,9 @@ public class FireDamage extends SpellComponent implements IRitualInteraction{
 
 	@Override
 	public float manaCost(EntityLivingBase caster){
-		return 120;
+		return 80;
 	}
-
+	
 	@Override
 	public ItemStack[] reagents(EntityLivingBase caster){
 		return null;

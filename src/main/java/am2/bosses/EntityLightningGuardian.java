@@ -50,7 +50,7 @@ public class EntityLightningGuardian extends AM2Boss implements IAnimatedEntity{
 	@Override
 	protected void applyEntityAttributes(){
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(250D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2500D);
 	}
 
 	@Override

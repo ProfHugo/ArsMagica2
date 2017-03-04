@@ -59,6 +59,7 @@ public class Dig extends SpellComponent {
 				state.getBlock().dropXpOnBlockBreak(world, blockPos, xp);
 			}
 			world.destroyBlock(blockPos, false);
+			
 			EntityExtension.For(caster).deductMana(hardness * 1.28f);
 		}
 		return true;

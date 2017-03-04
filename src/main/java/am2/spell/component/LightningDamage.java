@@ -14,6 +14,7 @@ import am2.api.spell.SpellModifiers;
 import am2.defs.ItemDefs;
 import am2.items.ItemOre;
 import am2.particles.AMParticle;
+import am2.buffs.BuffEffectEntangled;
 import am2.utils.SpellUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -32,6 +33,7 @@ public class LightningDamage extends SpellComponent{
 		if (!(target instanceof EntityLivingBase)) return false;
 		float baseDamage = 12;
 		double damage = SpellUtils.getModifiedDouble_Add(baseDamage, stack, caster, target, world, SpellModifiers.DAMAGE);
+		((EntityLivingBase)target).addPotionEffect(new BuffEffectEntangled(20, SpellUtils.countModifiers(SpellModifiers.BUFF_POWER, stack)));
 		return SpellUtils.attackTargetSpecial(stack, target, DamageSources.causeLightningDamage(caster), SpellUtils.modifyDamage(caster, (float)damage));
 	}
 

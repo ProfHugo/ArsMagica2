@@ -77,7 +77,7 @@ public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity{
 	@Override
 	protected void applyEntityAttributes(){
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(490D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2100D);
 	}
 
 	@Override

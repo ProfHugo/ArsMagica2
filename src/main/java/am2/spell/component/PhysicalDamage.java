@@ -36,6 +36,9 @@ public class PhysicalDamage extends SpellComponent{
 		if (!(target instanceof EntityLivingBase)) return false;
 		float baseDamage = 8;
 		double damage = SpellUtils.getModifiedDouble_Add(baseDamage, stack, caster, target, world, SpellModifiers.DAMAGE);
+		int targetArmor = (int)((EntityLivingBase) target).getTotalArmorValue();
+		int lethalityCount = SpellUtils.countModifiers(SpellModifiers.LETHALITY, stack);
+		damage = damage + damage*lethalityCount/40*targetArmor;
 		return SpellUtils.attackTargetSpecial(stack, target, DamageSources.causePhysicalDamage(caster), SpellUtils.modifyDamage(caster, (float)damage));
 	}
 
@@ -51,7 +54,7 @@ public class PhysicalDamage extends SpellComponent{
 	
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
-		return EnumSet.of(SpellModifiers.DAMAGE);
+		return EnumSet.of(SpellModifiers.DAMAGE, SpellModifiers.LETHALITY);
 	}
 
 	@Override

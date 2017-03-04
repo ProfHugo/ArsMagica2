@@ -178,7 +178,7 @@ public abstract class AM2Boss extends EntityMob implements IEntityMultiPart, IAr
 			}
 		}
 
-		if (par2 > 7) par2 = 7;
+		if (par2 > 150) par2 = 150;
 
 		par2 = modifyDamageAmount(par1DamageSource, par2);
 
@@ -188,7 +188,7 @@ public abstract class AM2Boss extends EntityMob implements IEntityMultiPart, IAr
 		}
 
 		if (super.attackEntityFrom(par1DamageSource, par2)){
-			this.hurtResistantTime = 40;
+			this.hurtResistantTime = 1;
 			return true;
 		}
 		return false;

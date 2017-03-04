@@ -1,4 +1,4 @@
-affinity.air=Air
+﻿affinity.air=Air
 affinity.fire=Fire
 affinity.arcane=Arcane
 affinity.life=Life
@@ -412,8 +412,12 @@ skill.arsmagica2:contingency_fire.name=Contingency : Fire
 skill.arsmagica2:forge.name=Forge
 skill.arsmagica2:silence.name=Silence
 
+skill.arsmagica2:impale.name=Impale
+skill.arsmagica2:rend.name=Rend
+
 skill.arsmagica2:wall.name=Wall
 skill.arsmagica2:appropriation.name=Appropiation
+skill.arsmagica2:absorption.name=Absorption
 skill.arsmagica2:slow.name=Slow
 skill.arsmagica2:repel.name=Repel
 skill.arsmagica2:entangle.name=Entangle
@@ -444,13 +448,13 @@ skill.arsmagica2:chrono_anchor.name=Chrono Anchor
 skill.arsmagica2:duration.name=Duration
 skill.arsmagica2:shrink.name=Shrink
 skill.arsmagica2:healing.name=Healing
-skill.arsmagica2:absorption.name=Absorption
 skill.arsmagica2:contingency_health.name=Contingency : Health
 skill.arsmagica2:contingency_damage.name=Contingency : Damage
 
 skill.arsmagica2:touch.name=Touch
 skill.arsmagica2:dig.name=Dig
 skill.arsmagica2:wizards_autumn.name=Wizard's Autumn
+skill.arsmagica2:luck.name=Luck
 skill.arsmagica2:target_non_solid.name=Target Non-Solid Blocks
 skill.arsmagica2:place_block.name=Place Block
 skill.arsmagica2:feather_touch.name=Feather Touch
@@ -471,6 +475,7 @@ skill.arsmagica2:banish_rain.name=Banish Rain
 skill.arsmagica2:water_breathing.name=Water Breathing
 skill.arsmagica2:grow.name=Grow
 skill.arsmagica2:chain.name=Chain
+skill.arsmagica2:toggle.name=Toggle
 skill.arsmagica2:rift.name=Rift Storage
 skill.arsmagica2:invisibility.name=Invisibility
 skill.arsmagica2:random_teleport.name=Random Teleport
@@ -492,6 +497,8 @@ skill.arsmagica2:falling_star.name=Starstrike
 skill.arsmagica2:fire_rain.name=Fire Rain
 skill.arsmagica2:dismembering.name=Dismembering
 skill.arsmagica2:mana_blast.name=Mana Blast
+skill.arsmagica2:flame_choke.name=Flame Choke
+skill.arsmagica2:lethality.name=Lethality
 
 skill.arsmagica2:mana_link.name=Mana Link
 skill.arsmagica2:mana_shield.name=Mana Shield
@@ -542,7 +549,13 @@ skill.arsmagica2:velocity_added.occulusdesc=Faster! FASTER!
 skill.arsmagica2:drown.occulusdesc=How can you drown? There isn't any water.
 skill.arsmagica2:watery_grave.occulusdesc=Bottom of the ocean.
 
+skill.arsmagica2:flame_choke.occulusdesc=Wastin mana.
+skill.arsmagica2:impale.occulusdesc=Making you lokk like a porcupine.
+skill.arsmagica2:rend.occulusdesc=This won't hurt, I guarentee you.
+skill.arsmagica2:lethality.occulusdesc=Armor? What armor?
+
 skill.arsmagica2:wall.occulusdesc=You shall not pass.
+skill.arsmagica2:absorption.occulusdesc=Imaginary golden apple.
 skill.arsmagica2:appropriation.occulusdesc=That's mine.
 skill.arsmagica2:slow.occulusdesc=No more running!
 skill.arsmagica2:repel.occulusdesc=Go away from me!
@@ -580,6 +593,7 @@ skill.arsmagica2:contingency_damage.occulusdesc=Hurting me? That would be bad...
 skill.arsmagica2:touch.occulusdesc=Someone in there?
 skill.arsmagica2:dig.occulusdesc=Down the rabbit hole.
 skill.arsmagica2:wizards_autumn.occulusdesc=Leaves fall in autumn. But it's kind of a slow process...
+skill.arsmagica2:luck.occulusdesc=CHA CHING!
 skill.arsmagica2:target_non_solid.occulusdesc=And I decided that I would fight the water.
 skill.arsmagica2:place_block.occulusdesc=Don't mind me, I'm just sending an Anvil.
 skill.arsmagica2:feather_touch.occulusdesc=Feels soft...
@@ -600,6 +614,7 @@ skill.arsmagica2:banish_rain.occulusdesc=Come back latter. Or don't. It would be
 skill.arsmagica2:water_breathing.occulusdesc=Creating air directly inside my lungs? Cool!
 skill.arsmagica2:grow.occulusdesc=I won't sit all day.
 skill.arsmagica2:chain.occulusdesc=Looks like you brought friends. Well I don't mind, you're all gonna die.
+skill.arsmagica2:toggle.occulusdesc=Another one, and another one.
 skill.arsmagica2:rift.occulusdesc=One day i'll walk through it, for now, it'll just store items.
 skill.arsmagica2:invisibility.occulusdesc=Wanna play Hide and Seek?
 skill.arsmagica2:random_teleport.occulusdesc=I wanna go... There! Woops, wrong spot.
@@ -615,13 +630,13 @@ skill.arsmagica2:recall.occulusdesc=Can someone remind me who marked the trash?
 skill.arsmagica2:divine_intervention.occulusdesc=Help from across the cosmos.
 skill.arsmagica2:ender_intervention.occulusdesc=Well, I didn't know what hell looked like...
 skill.arsmagica2:contingency_death.occulusdesc=You're comming with me.
-skill.arsmagica2:absorption.occulusdesc=Like a slightly flimsier shield.
 
 skill.arsmagica2:blizzard.occulusdesc=Snow. Lots of snow. TOO MUCH SNOW!
 skill.arsmagica2:falling_star.occulusdesc=Shiny! Wait is it falling toward me?
-skill.arsmagica2:fire_rain.occulusdesc=Well. At least i'm not going to catch a cold...
+skill.arsmagica2:fire_rain.occulusdesc=Well. At least I'm not going to catch a cold...
 skill.arsmagica2:dismembering.occulusdesc=Wasn't me. I swear he had no head when I came in.
 skill.arsmagica2:mana_blast.occulusdesc=I LOVE mana, especially when it blows up in someone's face.
+skill.arsmagica2:flame_choke.occulusdesc=He ain't breathing air anymore, but red, hot mana.
 
 skill.arsmagica2:mana_link.occulusdesc=Tired? Keep going.
 skill.arsmagica2:mana_shield.occulusdesc=Well, now I know what boredom looks like.
@@ -945,6 +960,7 @@ compendium.component.entangle.name=Entangle
 compendium.component.falling_star.name=Starstrike
 compendium.component.fire_damage.name=Fire Damage
 compendium.component.fire_rain.name=Firestorm
+compendium.component.flame_choke.name=Flame Choke
 compendium.component.flight.name=Flight
 compendium.component.fling.name=Fling
 compendium.component.forge.name=Forge
@@ -965,6 +981,7 @@ compendium.component.life_drain.name=Life Drain
 compendium.component.life_tap.name=Life Tap
 compendium.component.light.name=Light
 compendium.component.lightning_damage.name=Lightning Damage
+compendium.component.luck.name=Luck
 compendium.component.magic_damage.name=Magic Damage
 compendium.component.mana_drain.name=Mana Drain
 compendium.component.mana_link.name=Mana Link
@@ -998,7 +1015,11 @@ compendium.component.water_breathing.name=Water Breathing
 compendium.component.watery_grave.name=Watery Grave
 compendium.component.wizards_autumn.name=Wizard's Autumn
 
-compendium.absorption.page1=As a faint light shimmered across his skin, the mage felt his resilience grow for a short while.
+compendium.component.rend.name=Rend
+compendium.component.impale.name=Impale
+
+
+compendium.absorption.page1=The most primitive type of damage mitigation, with this you are able to use your mana to quickly enacts a shield that takes damage for you. This is however, very inefficient, and multiple uses will not stack.
 compendium.accelerate.page1=This spell causes targeted blocks to tick faster. Note that it does not make tile entities any quicker. This spell is best used in a shape like beam, wall, or zone, due to its need to be cast multiple times to have any real effect.
 compendium.appropriation.page1=You can appropriate one block or entity into your spell. Casting the spell again will place a picked up entity or block at the targeted location.
 compendium.astral_distortion.page1=As I tried to step into the void, the warp shimmered and seemed to solidify. I walked face first into it, much to the amusement of my students. This effect seemed to prevent my teleportation abilities entirely. I had to turn this against Endermen as well.
@@ -1020,9 +1041,9 @@ compendium.drown.page1=You can create water directly inside the target's lungs, 
 compendium.ender_intervention.page1=You have mastered teleportation magic, to the level at which you can transcend interdimensional barriers, and can enter the nether from almost anywhere.
 compendium.entangle.page1=At your command, vines can burst from the ground and ensnare your target, holding them completely immobile.
 compendium.falling_star.page1=You can call down a star from the skies and cause it to strike all entities within the blast radius. It will harm friendly targets but not the caster. There is a short delay between casting the spell and the impact. This spell will not work underground (the star will fall onto the surface).
-compendium.fire_damage.page1=With a word, I released my will and fire erupted from out in front of me, searing everything in its path. Fire damage is hard hitting, but many nether mobs are immune to its effects.
+compendium.fire_damage.page1=With a word, I released my will and fire erupted from out in front of me, searing everything in its path. Fire damage is hard hitting, and does doubled damage against anything on fire, but many nether mobs are immune to its effects.
 compendium.fire_rain.page1=You have learned to summon a terrible firestorm, which will do large amounts of damage any entities in its radius. Firestorm has a built-in AoE to it. A firestorm cannot be summoned within 5 blocks of another existing firestorm. It initially does less damage than other attacks, but scales more quickly with modifiers. It also has the unique capability to deal damage more often than regular attacks. Firestorm does not ignite the ground. Though firestorm will harm all entities in its radius, it will never harm its caster.
-compendium.flight.page1=With a word, I rose into the air and mingled with the clouds and sky. I flew effortlessly, quick and agile. The skies were mine alone.
+compendium.flame_choke.page1=A forbidden technique used by court assassins, this cause its target's mana to materialize into flames that quickly scorch the innards of the target. This of course, does more damage the more mana the target has.
 compendium.fling.page1=Wind whirled around under the creeper and suddenly all at once blew straight up, sending it skyward.
 compendium.forge.page1=You have gained fine control over fire and can use it to magically smelt blocks where they stand, without charring them to ash.
 compendium.freeze.page1=Eira breathed deeply and opened her eyes. The caps of the mountains now glistened white with snow and a sublime frost covered everything. Water had become ice. Enemies moved at a crawl. Perfect.
@@ -1042,6 +1063,7 @@ compendium.life_drain.page1=By creating a sinister link with the target's life f
 compendium.life_tap.page1=If a mage is desparate and mana is scarce, he can fuel his spells using his own life force.
 compendium.light.page1=You can light up an area with magic. Lights can be recolored after the fact by right clicking them with a dye. Forge Ore Dictionary is supported for valid Dyes.
 compendium.lightning_damage.page1=I held my hands in front of me, and with a sharp crack a bolt of brilliant white lightning forked across the sky. His metal armor acted as a lightning rod, drawing each bolt down into him. Lightning does an exceptional amount of damage, but carries a hefty mana cost.
+compendium.luck.page1=With a wave of your index finger, you suddenly seems to come across an unusual quantity of treasure while exploring.
 compendium.magic_damage.page1=Magical damage differs from physical damage in that it bypasses many kinds of armors and attacks the target's aura directly - which can be just as devastating, if not more. This makes summoned and charmed creatures especially vulnerable, making them take triple damage.
 compendium.mana_drain.page1=You can create a parasitic bond with the target's aura, draining their mana and boosting your own.
 compendium.mana_link.page1=You have discovered the secret to linking your mana together with another entity. When you cast this spell, your target will be able to draw upon your mana pool as if it were their own. !d The target will use their own mana first, then will begin to draw upon yours.
@@ -1077,6 +1099,10 @@ compendium.true_sight.page1=Your magical sight allows you to see things as they 
 compendium.water_breathing.page1=You can use your magic to pull oxygen from the water, allowing you to get enough to not drown.
 compendium.watery_grave.page1=The water seemed to come alive, wrapping tendrils around the light mage and dragging him down into the black, crushing depths. His friend on the shore could only watch helplessly, for to jump into the water would mean the same fate for him.
 compendium.wizards_autumn.page1=You have learned to focus your digging magic into a small radius that directly affects leaves. This component has a built in AoE that can be modified with Radius modifiers. You can use it to clear those pesky hard to reach leaves.
+
+compendium.impale.page1=With your knowledge of materialization, you can create spectral arrows and stick them in your target.
+compendium.rend.page1=Using the power of will, you quickly pull out every foreign objects in your target, like needles in haystacks.
+
 
 #Shapes
 
@@ -1144,6 +1170,8 @@ compendium.modifier.dismembering.name=Dismembering
 compendium.modifier.feather_touch.name=Feather Touch
 compendium.modifier.colour.name=Colour
 
+compendium.modifier.lethality.name=Lethality
+
 compendium.gravity.page1=Amplifies the gravity of certain spell shapes. Zones and projectiles will be affected by gravity. AoE spells will search farther down when applying to terrain for a valid spot to apply (this is useful as it causes it to hug the terrain).
 compendium.bounce.page1=Causes the projectile spell shape to bounce off surfaces.
 compendium.damage.page1=Amplifies the damage dealt by spells.
@@ -1164,6 +1192,8 @@ compendium.buff_power.page1=You can put more power into your buffs. Each modifie
 compendium.dismembering.page1=You've decided that you like souvenirs. So much so, that you have discovered how to make your damaging spells leave some pieces intact. Each modifier adds 5% chance to drop a head when defeating an enemy.
 compendium.feather_touch.page1=With great power comes broken valuables. You've learned to be more careful when casting your digging spells and break things less often. Each modifier is equivalent to one level of Silk Touch on the spell.
 compendium.colour.page1=This modifier allows you to change the color of the particles on your spell. Want green fireballs? Have at it! Color is determined by the color dye that you throw in during the crafting process. Any one will be accepted, regardless of what the lectern prompts for.
+
+compendium.lethality.page1=Do you hate it when they have stacks on stacks of diamond armor, and you puny little magic rock does nothing? Well fear no more, because this will shreds armor like crazy!
 
 #Talents
 
@@ -1395,7 +1425,7 @@ compendium.essence_refiner.page1=The essence refiner takes everyday items and us
 compendium.essence_refiner.page2=The spinning ring on the UI will shift from blue to purple as the refinement process progresses and eventually completes. A flashing red ring means there is insufficient Etherium to continue, and the process has been paused.
 compendium.essence_conduit.page1=Infused with dusts to direct Etherium through the air, the Etherium Conduit began seeing heavy use almost immediately after its invention. They can be used to transfer Etherium over longer distances than the direct range of Etherium generation apparatus. Each one has a range of 10 blocks, and can form chains to move Etherium up to 100 blocks away from the origin.
 compendium.seer_stone.page1=Operating on a similar principle as the Astral Barrier, the Seer Stone uses an Etherium aura projected through a spell focus to detect nearby objects. It can be controlled by focusing the Etherium to a particular type of object, and the resonant frequency of the Etherium can be dictated with the use of a rune combination. Without the use of a rune combination, the resonant frequency fluxuates unpredictably and cannot be avoided. The seer stone, however, is meant for a more subtle approach, letting the object continue, but emitting a small signal that often activates much more powerful defenses. By sneaking up and activating the stone, one can even (if he has the correct key of course) cause the stone to invert its detection methods, detecting those with the matching keystone combination. !d Different #5Foci#0 can be used in the Seer Stone. #5Lesser, Standard, and Greater foci#0 change the detection distance of the stone (5, 10, or 15 blocks respectively), while #5Item, Player, Monster, or Creature foci#0 can change what the seer stone is looking for. Without a target focus and a distance focus, the seer stone will not function. !d A keystone is searched for in the case of a player. If the player has a keystone in their inventory matching the rune combination in the seer stone, the seer stone will ignore them and will not trigger. 
-compendium.astral_barrier.page1=When walking the void, one must be aware of barriers. Projecting an Etherium aura through a spell focus, these barriers resonate at a specific magical frequency, dictated by a keytstone. Without the proper matching keystone, these barriers will destabilize your magics and force you out of the void. Should the astral barrier not have a keystone present, its magic frequency will fluxuate unpredictably, and no amount of Keystones can protect you from its effects. Several Dark Magi raids have been foiled and several Light Magi have been captured due to their failure to spot the barrier in time. !d Different #5Foci#0 can be used in the Astral Barrier. #5Lesser, Standard, and Greater foci#0 change the distance of the barrier, to 5, 10, or 15 blocks respectively. Without a distance focus, the barrier will not function. !d The barrier will stop teleportation into its radius, including ender pearls, blink, mark/recall, and endermen.
+compendium.astral_barrier.page1=When walking the void, one must be aware of barriers. Projecting an Etherium aura through a spell focus, these barriers resonate at a specific magical frequency, dictated by a keystone. Without the proper matching keystone, these barriers will destabilize your magics and force you out of the void. Should the astral barrier not have a keystone present, its magic frequency will fluxuate unpredictably, and no amount of Keystones can protect you from its effects. Several Dark Magi raids have been foiled and several Light Magi have been captured due to their failure to spot the barrier in time. !d Different #5Foci#0 can be used in the Astral Barrier. #5Lesser, Standard, and Greater foci#0 change the distance of the barrier, to 5, 10, or 15 blocks respectively. Without a distance focus, the barrier will not function. !d The barrier will stop teleportation into its radius, including ender pearls, blink, mark/recall, and endermen.
 compendium.keystone_recepticle.page1=Not all magi are capable of walking the void as a means of travel, nor are all willing. The void is detectable, blockable. Gateways were developed by the Dark Magi early in the war, and it allowed them to take many Light Mage encampments by surprise, as it uses alternate pathways to transport to its destination. Astral Barriers were ineffective at stopping the arrival of the Dark Magi, and the destination gate required no power of its own. The Light Magi destroyed as many as they could find, but the Dark Magi only needed one. The only hope was when a young Light Mage by the name of Damien Callitri discovered that the gateways could be locked down if a Keystone was inserted into a flaw in the design at just the right spot in the gateway mechanism, and would actually cause the gateway to send the Dark Mages to a different gateway (or nowhere if none others existed that weren't locked down). This halted the raids completely, and allowed the White Magi to turn the tides back in their favour, as they could actually use the gateways to return to their keystone gate. The design flaw became jokingly known as the "Keystone Recepticle" amongst the White Magi.
 compendium.vinteum_ore.page1=Vinteum was discovered during a heated battle between the Light and Dark magi when a stray arcane bolt collided with an ender bolt. The resulting explosion created a crater several meters deep, where a sparkling blue ore shimmered in the light of the afternoon. It appears to have no magical properties of its own, but when heat is applied, it becomes a fine dust with an exceptional capacity to conduct Etherium. As such, it is widely used in magical contraptions all over the world.
 compendium.mana_battery.page1=Drawing further on vinteum dust's ability to conduct Etherium, a small group of brilliant magi created a frame out of iron and gold which is capable of storing massive amounts of Etherium. Mana batteries will always provide power to connected devices, but they can also request Etherium from the network when given a redstone signal.

@@ -27,6 +27,7 @@ import am2.spell.component.Entangle;
 import am2.spell.component.FallingStar;
 import am2.spell.component.FireDamage;
 import am2.spell.component.FireRain;
+import am2.spell.component.FlameChoke;
 import am2.spell.component.Flight;
 import am2.spell.component.Fling;
 import am2.spell.component.Forge;
@@ -39,6 +40,7 @@ import am2.spell.component.HarvestPlants;
 import am2.spell.component.Haste;
 import am2.spell.component.Heal;
 import am2.spell.component.Ignition;
+import am2.spell.component.Impale;
 import am2.spell.component.Invisiblity;
 import am2.spell.component.Knockback;
 import am2.spell.component.Leap;
@@ -65,6 +67,7 @@ import am2.spell.component.RandomTeleport;
 import am2.spell.component.Recall;
 import am2.spell.component.Reflect;
 import am2.spell.component.Regeneration;
+import am2.spell.component.Rend;
 import am2.spell.component.Repel;
 import am2.spell.component.Rift;
 import am2.spell.component.ScrambleSynapses;
@@ -91,6 +94,7 @@ import am2.spell.modifier.Duration;
 import am2.spell.modifier.FeatherTouch;
 import am2.spell.modifier.Gravity;
 import am2.spell.modifier.Healing;
+import am2.spell.modifier.Lethality;
 import am2.spell.modifier.Lunar;
 import am2.spell.modifier.MiningPower;
 import am2.spell.modifier.Piercing;
@@ -174,6 +178,11 @@ public class SpellDefs {
 		SpellRegistry.registerSpellModifier("piercing", getModifierTexture("Piercing"), SkillPoint.SKILL_POINT_3, new Piercing(), SkillDefs.TREE_OFFENSE, 323, 215, "arsmagica2:freeze");
 		
 		SpellRegistry.registerSpellShape("beam", getShapeTexture("Beam"), SkillPoint.SKILL_POINT_3, new Beam(), SkillDefs.TREE_OFFENSE, 300, 270, "arsmagica2:aoe");	
+		
+		SpellRegistry.registerSpellComponent("impale", getComponentTexture("Impale"), SkillPoint.SKILL_POINT_2, new Impale(), SkillDefs.TREE_OFFENSE, 255, 270, "arsmagica2:beam");
+		SpellRegistry.registerSpellComponent("rend", getComponentTexture("Rend"), SkillPoint.SKILL_POINT_3, new Rend(), SkillDefs.TREE_OFFENSE, 210, 270, "arsmagica2:impale");
+		
+		
 		SpellRegistry.registerSpellModifier("damage", getModifierTexture("Damage"), SkillPoint.SKILL_POINT_3, new Damage(), SkillDefs.TREE_OFFENSE, 300, 315, "arsmagica2:beam");
 		SpellRegistry.registerSpellComponent("fury", getComponentTexture("Fury"), SkillPoint.SKILL_POINT_3, new Fury(), SkillDefs.TREE_OFFENSE, 255, 315, "arsmagica2:beam", "arsmagica2:storm");
 		SpellRegistry.registerSpellShape("wave", getShapeTexture("Wave"), SkillPoint.SKILL_POINT_3, new Wave(), SkillDefs.TREE_OFFENSE, 367, 315, "arsmagica2:beam", "arsmagica2:fling");	
@@ -182,7 +191,9 @@ public class SpellDefs {
 		SpellRegistry.registerSpellComponent("falling_star", getComponentTexture("FallingStar"), SkillPoint.SILVER_POINT, new FallingStar(), SkillDefs.TREE_OFFENSE, 75, 90);
 		SpellRegistry.registerSpellComponent("fire_rain", getComponentTexture("FireRain"), SkillPoint.SILVER_POINT, new FireRain(), SkillDefs.TREE_OFFENSE, 75, 135);
 		SpellRegistry.registerSpellComponent("mana_blast", getComponentTexture("ManaBlast"), SkillPoint.SILVER_POINT, new ManaBlast(), SkillDefs.TREE_OFFENSE, 75, 180);
-		SpellRegistry.registerSpellModifier("dismembering", getModifierTexture("Dismembering"), SkillPoint.SILVER_POINT, new Dismembering(), SkillDefs.TREE_OFFENSE, 75, 225);
+		SpellRegistry.registerSpellComponent("flame_choke", getComponentTexture("FlameChoke"), SkillPoint.SILVER_POINT, new FlameChoke(), SkillDefs.TREE_OFFENSE, 75, 225);
+		SpellRegistry.registerSpellModifier("dismembering", getModifierTexture("Dismembering"), SkillPoint.SILVER_POINT, new Dismembering(), SkillDefs.TREE_OFFENSE, 75, 270);
+		SpellRegistry.registerSpellModifier("lethality", getModifierTexture("Lethality"), SkillPoint.SILVER_POINT, new Lethality(), SkillDefs.TREE_OFFENSE, 75, 315);
 	}
 	
 	public static void handleDefenseTree () {

@@ -48,7 +48,7 @@ public class EntityWaterGuardian extends AM2Boss {
 	@Override
 	protected void applyEntityAttributes(){
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(75D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(750D);
 	}
 
 	public void setClones(EntityWaterGuardian clone1, EntityWaterGuardian clone2){
