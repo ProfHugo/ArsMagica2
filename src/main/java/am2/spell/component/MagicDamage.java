@@ -37,7 +37,7 @@ public class MagicDamage extends SpellComponent{
 	@Override
 	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
 		if (!(target instanceof EntityLivingBase)) return false;
-		float baseDamage = 6;
+		float baseDamage = 10;
 		double damage = SpellUtils.getModifiedDouble_Add(baseDamage, stack, caster, target, world, SpellModifiers.DAMAGE);
 		float mod = 0.0f;
 		if (target instanceof EntityPlayer){
