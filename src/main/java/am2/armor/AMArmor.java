@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ISpecialArmor;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class AMArmor extends ItemArmor implements ISpecialArmor{
@@ -94,7 +95,10 @@ public class AMArmor extends ItemArmor implements ISpecialArmor{
 			return;
 		}else if (source == DamageSource.magic){
 			stack.damageItem(damage * 7, entity);
-		}else{
+		}else if (source.isUnblockable()){
+			return;
+		}
+		else{
 			stack.damageItem(damage * 10, entity);
 		}
 	}
