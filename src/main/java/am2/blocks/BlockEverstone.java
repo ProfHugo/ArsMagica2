@@ -15,6 +15,7 @@ import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -128,7 +129,11 @@ public class BlockEverstone extends BlockAMPowered{
 						return true;
 					}
 				}
-			}else if (player.getHeldItemMainhand().getItem() instanceof ItemBlock){
+			
+			}else if (player.getHeldItemMainhand().getItem() == Item.getItemFromBlock(this)){
+				return true;
+			}
+			else if (player.getHeldItemMainhand().getItem() instanceof ItemBlock){
 				ItemBlock itemblock = (ItemBlock)player.getHeldItemMainhand().getItem();
 				block = itemblock.getBlock().getStateFromMeta(player.getHeldItemMainhand().getItemDamage());
 			}
