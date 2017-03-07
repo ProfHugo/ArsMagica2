@@ -101,6 +101,12 @@ public class SpellUnlockManager{
 				SpellRegistry.getComponentFromName("arsmagica2:dig"),
 				SpellRegistry.getModifierFromName("arsmagica2:feather_touch"),
 				SpellRegistry.getModifierFromName("arsmagica2:mining_power")));
+		
+		entries.add(new UnlockEntry(ArsMagicaAPI.getSkillRegistry().getObject(new ResourceLocation("arsmagica2:amplify_momemtum")),
+				SpellRegistry.getComponentFromName("arsmagica2:haste"),
+				SpellRegistry.getModifierFromName("arsmagica2:speed"),
+				SpellRegistry.getModifierFromName("arsmagica2:speed"),
+				SpellRegistry.getModifierFromName("arsmagica2:speed")));
 
 		entries.add(new UnlockEntry(SkillDefs.SHIELD_OVERLOAD,
 				SpellRegistry.getComponentFromName("arsmagica2:mana_shield"),

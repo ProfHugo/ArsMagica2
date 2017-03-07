@@ -507,6 +507,7 @@ skill.arsmagica2:buff_power.name=Buff Power
 skill.arsmagica2:daylight.name=Daylight
 skill.arsmagica2:moonrise.name=Moonrise
 skill.arsmagica2:prosperity.name=Prosperity
+skill.arsmagica2:amplify_momemtum.name=Amplify Momemtum
 
 skill.arsmagica2:mana_regen1.name=Mana Regen Boost I
 skill.arsmagica2:mana_regen2.name=Mana Regen Boost II
@@ -645,6 +646,7 @@ skill.arsmagica2:buff_power.occulusdesc=Harder, Better, Faster and... my mana po
 skill.arsmagica2:daylight.occulusdesc=So... Does that means I can control time?
 skill.arsmagica2:moonrise.occulusdesc=Full Moon.
 skill.arsmagica2:prosperity.occulusdesc=Gold. Loads of Gold.
+skill.arsmagica2:amplify_momemtum.occulusdesc=Approching the speed of sound...
 
 skill.arsmagica2:mana_regen1.occulusdesc=You can fell the mana flowing around you...
 skill.arsmagica2:mana_regen2.occulusdesc=All this energy... Why waste it ?
@@ -938,6 +940,7 @@ compendium.category.component.name=Components
 
 compendium.component.absorption.name=Absorption
 compendium.component.accelerate.name=Accelerate
+compendium.component.amplify_momemtum.name=Amplify Momemtum
 compendium.component.appropriation.name=Appropiation
 compendium.component.astral_distortion.name=Astral Distortion
 compendium.component.attract.name=Attract
@@ -1021,6 +1024,7 @@ compendium.component.impale.name=Impale
 
 compendium.absorption.page1=The most primitive type of damage mitigation, with this you are able to use your mana to quickly enacts a shield that takes damage for you. This is however, very inefficient, and multiple uses will not stack.
 compendium.accelerate.page1=This spell causes targeted blocks to tick faster. Note that it does not make tile entities any quicker. This spell is best used in a shape like beam, wall, or zone, due to its need to be cast multiple times to have any real effect.
+compendium.amplify_momemtum.page1=You picked up a rock, and laced it with a small spark, then as you throw it, it accelerates near the speed of sound! If only this could be used on a human body, or a dragon...
 compendium.appropriation.page1=You can appropriate one block or entity into your spell. Casting the spell again will place a picked up entity or block at the targeted location.
 compendium.astral_distortion.page1=As I tried to step into the void, the warp shimmered and seemed to solidify. I walked face first into it, much to the amusement of my students. This effect seemed to prevent my teleportation abilities entirely. I had to turn this against Endermen as well.
 compendium.attract.page1=You create an area of negative pressure around you, pulling everything living in towards you.
