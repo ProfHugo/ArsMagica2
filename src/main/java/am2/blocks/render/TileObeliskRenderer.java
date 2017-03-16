@@ -1,6 +1,5 @@
 package am2.blocks.render;
 
-import net.minecraft.init.Blocks;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Function;

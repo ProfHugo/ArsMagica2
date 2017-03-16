@@ -7,7 +7,6 @@ import am2.ArsMagica2;
 import am2.api.DamageSources;
 import am2.api.math.AMVector3;
 import am2.blocks.BlockArsMagicaBlock.EnumBlockType;
-import am2.blocks.BlockArsMagicaOre.EnumOreType;
 import am2.bosses.BossSpawnHelper;
 import am2.defs.BlockDefs;
 import am2.defs.CreativeTabsDefs;

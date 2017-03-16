@@ -3,7 +3,6 @@ package am2.particles;
 import java.util.HashMap;
 import java.util.Random;
 
-import am2.api.affinity.Affinity;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;

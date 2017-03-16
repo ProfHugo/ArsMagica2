@@ -2,9 +2,7 @@ package am2.blocks.render;
 
 import am2.blocks.BlockLectern;
 import am2.blocks.tileentity.TileEntityLectern;
-import am2.gui.AMGuiHelper;
 import am2.models.ModelArchmagePodium;
-import am2.proxy.tick.ClientTickHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBook;
 import net.minecraft.client.renderer.GlStateManager;

@@ -5,7 +5,6 @@ import java.util.Random;
 import java.util.Set;
 
 import am2.bosses.AM2Boss;
-import am2.bosses.IArsMagicaBoss;
 import com.google.common.collect.Sets;
 
 import am2.ArsMagica2;

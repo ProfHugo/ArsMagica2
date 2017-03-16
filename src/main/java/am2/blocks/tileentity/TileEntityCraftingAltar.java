@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import am2.blocks.render.TileCraftingAltarRenderer;
 import com.google.common.collect.Lists;
 
 import am2.ArsMagica2;

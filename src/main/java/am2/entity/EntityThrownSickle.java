@@ -6,8 +6,6 @@ import java.util.List;
 import am2.api.DamageSources;
 import am2.bosses.EntityNatureGuardian;
 import am2.defs.ItemDefs;
-import am2.enchantments.AMEnchantmentHelper;
-import am2.items.ItemNatureGuardianSickle;
 import am2.trackers.PlayerTracker;
 import am2.utils.DummyEntityPlayer;
 import net.minecraft.block.BlockBush;

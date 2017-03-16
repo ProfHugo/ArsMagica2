@@ -32,7 +32,6 @@ import am2.utils.KeyValuePair;
 import am2.utils.NBTUtils;
 import am2.utils.RecipeUtils;
 import am2.utils.SpellUtils;
-import com.google.common.collect.Iterables;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;

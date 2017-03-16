@@ -2,8 +2,6 @@ package am2.entity;
 
 import java.util.List;
 
-import am2.spell.component.Dig;
-import am2.spell.modifier.Piercing;
 import com.google.common.base.Optional;
 
 import am2.api.affinity.Affinity;

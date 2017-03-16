@@ -1,7 +1,5 @@
 package am2.entity.render;
 
-import am2.entity.EntityShockwave;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderEntity;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;

@@ -1,6 +1,5 @@
 package am2.handler;
 
-import am2.blocks.*;
 import am2.defs.BlockDefs;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

@@ -1,17 +1,11 @@
 package am2.items.rendering;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.*;
-import java.security.CodeSource;
 import java.util.*;
 import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
 import com.google.common.collect.Lists;
 
 import am2.ArsMagica2;

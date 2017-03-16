@@ -1,7 +1,6 @@
 package am2.blocks.render;
 
 import am2.defs.BlockDefs;
-import net.minecraft.init.Blocks;
 import org.lwjgl.opengl.GL11;
 
 import am2.blocks.BlockEssenceConduit;
