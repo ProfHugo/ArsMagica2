@@ -414,6 +414,8 @@ skill.arsmagica2:silence.name=Silence
 
 skill.arsmagica2:impale.name=Impale
 skill.arsmagica2:rend.name=Rend
+skill.arsmagica2:smite.name=Smite
+skill.arsmagica2:thunder.name=Thunderbolt
 
 skill.arsmagica2:wall.name=Wall
 skill.arsmagica2:appropriation.name=Appropiation
@@ -508,6 +510,7 @@ skill.arsmagica2:daylight.name=Daylight
 skill.arsmagica2:moonrise.name=Moonrise
 skill.arsmagica2:prosperity.name=Prosperity
 skill.arsmagica2:amplify_momemtum.name=Amplify Momemtum
+skill.arsmagica2:repair.name=Repair
 
 skill.arsmagica2:mana_regen1.name=Mana Regen Boost I
 skill.arsmagica2:mana_regen2.name=Mana Regen Boost II
@@ -554,6 +557,8 @@ skill.arsmagica2:flame_choke.occulusdesc=Wastin mana.
 skill.arsmagica2:impale.occulusdesc=Making you lokk like a porcupine.
 skill.arsmagica2:rend.occulusdesc=This won't hurt, I guarentee you.
 skill.arsmagica2:lethality.occulusdesc=Armor? What armor?
+skill.arsmagica2:smite.occulusdesc=Bring down the sun!
+skill.arsmagica2:thunder.occulusdesc=One in a million?
 
 skill.arsmagica2:wall.occulusdesc=You shall not pass.
 skill.arsmagica2:absorption.occulusdesc=Imaginary golden apple.
@@ -647,6 +652,7 @@ skill.arsmagica2:daylight.occulusdesc=So... Does that means I can control time?
 skill.arsmagica2:moonrise.occulusdesc=Full Moon.
 skill.arsmagica2:prosperity.occulusdesc=Gold. Loads of Gold.
 skill.arsmagica2:amplify_momemtum.occulusdesc=Approching the speed of sound...
+skill.arsmagica2:repair.occulusdesc=I love my armor.
 
 skill.arsmagica2:mana_regen1.occulusdesc=You can fell the mana flowing around you...
 skill.arsmagica2:mana_regen2.occulusdesc=All this energy... Why waste it ?
@@ -1020,6 +1026,9 @@ compendium.component.wizards_autumn.name=Wizard's Autumn
 
 compendium.component.rend.name=Rend
 compendium.component.impale.name=Impale
+compendium.component.repair.name=Repair
+compendium.component.smite.name=Smite
+compendium.component.thunder.name=Thunderbolt
 
 
 compendium.absorption.page1=The most primitive type of damage mitigation, with this you are able to use your mana to quickly enacts a shield that takes damage for you. This is however, very inefficient, and multiple uses will not stack.
@@ -1106,7 +1115,9 @@ compendium.wizards_autumn.page1=You have learned to focus your digging magic int
 
 compendium.impale.page1=With your knowledge of materialization, you can create spectral arrows and stick them in your target.
 compendium.rend.page1=Using the power of will, you quickly pull out every foreign objects in your target, like needles in haystacks.
-
+compendium.repair.page1=You can now use mana to revert time and repair all currently equipped items. However, purified vinteum dust is needed to fill in what was lost due to the passage of time.
+compendium.smite.page1=The power of absurdity, is a power great enough to bring down even the gods. Be mindful, as something absurd might also happen to you while using this.
+compendium.thunderbolt.page1=You now have the ability to freely manupulate weather, bringing down buckets of sunshine to whoever deserves them.
 
 #Shapes
 
