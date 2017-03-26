@@ -74,7 +74,10 @@ public class SpellDefs {
 		SpellRegistry.registerSpellComponent("mana_blast", getComponentTexture("ManaBlast"), SkillPoint.SILVER_POINT, new ManaBlast(), SkillDefs.TREE_OFFENSE, 75, 180);
 		SpellRegistry.registerSpellComponent("flame_choke", getComponentTexture("FlameChoke"), SkillPoint.SILVER_POINT, new FlameChoke(), SkillDefs.TREE_OFFENSE, 75, 225);
 		SpellRegistry.registerSpellModifier("dismembering", getModifierTexture("Dismembering"), SkillPoint.SILVER_POINT, new Dismembering(), SkillDefs.TREE_OFFENSE, 75, 270);
+		
 		SpellRegistry.registerSpellModifier("lethality", getModifierTexture("Lethality"), SkillPoint.SILVER_POINT, new Lethality(), SkillDefs.TREE_OFFENSE, 75, 315);
+		SpellRegistry.registerSpellComponent("smite", getComponentTexture("Smite"), SkillPoint.SILVER_POINT, new Smite(), SkillDefs.TREE_OFFENSE, 75, 360);
+		SpellRegistry.registerSpellComponent("thunder", getComponentTexture("Thunder"), SkillPoint.SILVER_POINT, new Thunder(), SkillDefs.TREE_OFFENSE, 75, 405);
 	}
 	
 	public static void handleDefenseTree () {
@@ -200,6 +203,7 @@ public class SpellDefs {
 		SpellRegistry.registerSpellComponent("daylight", getComponentTexture("Daylight"), SkillPoint.SILVER_POINT, new Daylight(), SkillDefs.TREE_UTILITY, 75, 45);
 		SpellRegistry.registerSpellComponent("moonrise", getComponentTexture("Moonrise"), SkillPoint.SILVER_POINT, new Moonrise(), SkillDefs.TREE_UTILITY, 75, 90);
 		SpellRegistry.registerSpellModifier("prosperity", getModifierTexture("Prosperity"), SkillPoint.SILVER_POINT, new Prosperity(), SkillDefs.TREE_UTILITY, 75, 135);
+		SpellRegistry.registerSpellComponent("repair", getComponentTexture("Repair"), SkillPoint.SILVER_POINT, new Repair(), SkillDefs.TREE_UTILITY, 75, 225);
 		
 		SpellRegistry.registerSpellComponent("amplify_momemtum", getComponentTexture("AmplifyMomemtum"), SkillPoint.SILVER_POINT, new AmplifyMomentum(), SkillDefs.TREE_UTILITY, 75, 180);
 	}

@@ -7,5 +7,7 @@ public class DamageSourceHoly extends EntityDamageSource{
 	public DamageSourceHoly(EntityLivingBase source){
 		super("am2.holy", source);
 		this.setDamageBypassesArmor();
+		this.setDamageAllowedInCreativeMode();
+		this.setDamageIsAbsolute();
 	}
 }

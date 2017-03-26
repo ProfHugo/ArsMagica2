@@ -69,11 +69,19 @@ public class SpellUnlockManager{
 		entries.add(new UnlockEntry(ArsMagicaAPI.getSkillRegistry().getObject(new ResourceLocation("arsmagica2:lethality")),
 				SpellRegistry.getComponentFromName("arsmagica2:physical_damage"),
 				SpellRegistry.getModifierFromName("arsmagica2:damage")));
+		entries.add(new UnlockEntry(ArsMagicaAPI.getSkillRegistry().getObject(new ResourceLocation("arsmagica2:thunder")),
+				SpellRegistry.getComponentFromName("arsmagica2:storm"),
+				SpellRegistry.getModifierFromName("arsmagica2:lightning_damage")));
 		
 		entries.add(new UnlockEntry(ArsMagicaAPI.getSkillRegistry().getObject(new ResourceLocation("arsmagica2:flame_choke")),
 				SpellRegistry.getComponentFromName("arsmagica2:fire_damage"),
 				SpellRegistry.getComponentFromName("arsmagica2:mana_blast"),
 				SpellRegistry.getModifierFromName("arsmagica2:damage")));
+		
+		entries.add(new UnlockEntry(ArsMagicaAPI.getSkillRegistry().getObject(new ResourceLocation("arsmagica2:smite")),
+				SpellRegistry.getComponentFromName("arsmagica2:lightning_damage"),
+				SpellRegistry.getComponentFromName("arsmagica2:entangle"),
+				SpellRegistry.getModifierFromName("arsmagica2:blind")));
 		
 		entries.add(new UnlockEntry(ArsMagicaAPI.getSkillRegistry().getObject(new ResourceLocation("arsmagica2:mana_link")),
 				SpellRegistry.getComponentFromName("arsmagica2:mana_drain"),
@@ -107,6 +115,12 @@ public class SpellUnlockManager{
 				SpellRegistry.getModifierFromName("arsmagica2:speed"),
 				SpellRegistry.getModifierFromName("arsmagica2:speed"),
 				SpellRegistry.getModifierFromName("arsmagica2:speed")));
+		
+		entries.add(new UnlockEntry(ArsMagicaAPI.getSkillRegistry().getObject(new ResourceLocation("arsmagica2:repair")),
+				SpellRegistry.getComponentFromName("arsmagica2:heal"),
+				SpellRegistry.getModifierFromName("arsmagica2:healing"),
+				SpellRegistry.getModifierFromName("arsmagica2:healing"),
+				SpellRegistry.getModifierFromName("arsmagica2:healing")));
 
 		entries.add(new UnlockEntry(SkillDefs.SHIELD_OVERLOAD,
 				SpellRegistry.getComponentFromName("arsmagica2:mana_shield"),
