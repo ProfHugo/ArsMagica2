@@ -13,7 +13,9 @@ import am2.api.spell.SpellModifiers;
 import am2.defs.ItemDefs;
 import am2.items.ItemOre;
 import am2.particles.AMParticle;
+import am2.particles.ParticleApproachEntity;
 import am2.particles.ParticleArcToEntity;
+import am2.particles.ParticleFadeOut;
 import am2.utils.SpellUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -62,16 +64,17 @@ public class LifeDrain extends SpellComponent{
 
 	@Override
 	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
-		for (int i = 0; i < 15; ++i){
-			AMParticle particle = (AMParticle)ArsMagica2.proxy.particleManager.spawn(world, "ember", x, y, z);
-			if (particle != null){
-				particle.addRandomOffset(1, 1, 1);
-				particle.setIgnoreMaxAge(true);
-				particle.AddParticleController(new ParticleArcToEntity(particle, 1, caster, false).SetSpeed(0.03f).generateControlPoints());
-				particle.setRGBColorF(1, 0.2f, 0.2f);
-				particle.SetParticleAlpha(0.5f);
-				if (colorModifier > -1){
-					particle.setRGBColorF(((colorModifier >> 16) & 0xFF) / 255.0f, ((colorModifier >> 8) & 0xFF) / 255.0f, (colorModifier & 0xFF) / 255.0f);
+		double snapAngle = (2 * Math.PI) / (ArsMagica2.config.getGFXLevel() + 1)* 5;
+		for (int j = 0; j < 4; j++) {
+			for (int i = 0; i < (ArsMagica2.config.getGFXLevel() + 1) * 5; i++) {
+				double posX = x + (Math.cos(snapAngle * i) * (j * 0.5));
+				double posZ = z + (Math.sin(snapAngle * i) * (j * 0.5));
+				AMParticle particle = (AMParticle) ArsMagica2.proxy.particleManager.spawn(world, "sparkle2", posX, target.posY + target.height / 2 + j * 0.5, posZ);
+				if (particle != null) {
+					particle.setIgnoreMaxAge(true);
+					particle.AddParticleController(new ParticleApproachEntity(particle, target, 0.15f, 0.1, 1, false));
+					particle.AddParticleController(new ParticleFadeOut(particle, 2, false).setFadeSpeed(0.1f));
+					particle.setRGBColorF(0.9f, 0f, 0.6f);
 				}
 			}
 		}
