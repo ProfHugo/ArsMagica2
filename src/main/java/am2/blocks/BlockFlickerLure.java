@@ -5,9 +5,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockFlickerLure extends BlockAMPowered{
+public class BlockFlickerLure extends BlockAMPowered {
 
-	public BlockFlickerLure(){
+	public BlockFlickerLure() {
 		super(Material.ROCK);
 		setHardness(2.0f);
 		setResistance(2.0f);
@@ -15,7 +15,7 @@ public class BlockFlickerLure extends BlockAMPowered{
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int i){
+	public TileEntity createNewTileEntity(World world, int i) {
 		return new TileEntityFlickerLure();
 	}
 }

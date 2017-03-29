@@ -17,18 +17,18 @@ import am2.api.affinity.Affinity;
 import am2.extensions.AffinityData;
 import am2.utils.NBTUtils;
 
-public interface IAffinityData {	
+public interface IAffinityData {
 
 	public double getAffinityDepth(Affinity aff);
-	
-	public void setAffinityDepth (Affinity name, double value);
-	
+
+	public void setAffinityDepth(Affinity name, double value);
+
 	public HashMap<Affinity, Double> getAffinities();
 
 	public void init(EntityPlayer entity, IDataSyncExtension ext);
-	
+
 	public static class Storage implements IStorage<IAffinityData> {
-		
+
 		@Override
 		public NBTBase writeNBT(Capability<IAffinityData> capability, IAffinityData instance, EnumFacing side) {
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -60,12 +60,13 @@ public interface IAffinityData {
 			}
 			am2Tag.setTag("Floats", floats);
 			am2Tag.setTag("Booleans", booleans);
-			
+
 			return nbt;
 		}
 
 		@Override
-		public void readNBT(Capability<IAffinityData> capability, IAffinityData instance, EnumFacing side, NBTBase nbt) {
+		public void readNBT(Capability<IAffinityData> capability, IAffinityData instance, EnumFacing side,
+				NBTBase nbt) {
 			ArrayList<Affinity> affinities = Affinity.readFromNBT((NBTTagCompound) nbt);
 			for (Affinity aff : affinities) {
 				instance.setAffinityDepth(aff, aff.readDepth((NBTTagCompound) nbt));
@@ -88,7 +89,7 @@ public interface IAffinityData {
 			}
 		}
 	}
-	
+
 	public static class Factory implements Callable<IAffinityData> {
 		@Override
 		public IAffinityData call() throws Exception {

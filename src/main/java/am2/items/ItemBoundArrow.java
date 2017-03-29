@@ -14,22 +14,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemBoundArrow extends ItemArrow {
-	
+
 	public ItemBoundArrow() {
 		setCreativeTab(null);
 	}
-	
+
 	@Override
 	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
 	}
-	
+
 	@Override
 	public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
 		EntityBoundArrow arrow = new EntityBoundArrow(worldIn, shooter);
 		arrow.setSpellStack(stack);
 		return arrow;
 	}
-	
+
 	public ItemBoundArrow registerAndName(String name) {
 		this.setUnlocalizedName(new ResourceLocation("arsmagica2", name).toString());
 		GameRegistry.register(this, new ResourceLocation("arsmagica2", name));

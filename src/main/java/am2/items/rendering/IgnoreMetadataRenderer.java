@@ -5,9 +5,9 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 
 public class IgnoreMetadataRenderer implements ItemMeshDefinition {
-	
+
 	private final ModelResourceLocation loc;
-	
+
 	public IgnoreMetadataRenderer(ModelResourceLocation loc) {
 		this.loc = loc;
 	}

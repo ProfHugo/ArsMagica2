@@ -16,8 +16,9 @@ import net.minecraft.util.text.translation.I18n;
 
 @SuppressWarnings("deprecation")
 public class KeystoneUtilities {
-  
-	// constants to pass to the canPlayerAccess() function to say what you're trying to do
+
+	// constants to pass to the canPlayerAccess() function to say what you're
+	// trying to do
 	// please use these by reference instead of hard-coded numbers
 	public static final int MODE_NONE = 0;
 	public static final int MODE_USE = 1;
@@ -25,39 +26,40 @@ public class KeystoneUtilities {
 
 	public static final KeystoneUtilities instance = new KeystoneUtilities();
 
-	public static boolean HandleKeystoneRecovery(EntityPlayer player, IKeystoneLockable<?> lock){
-		if (EntityExtension.For(player).isRecoveringKeystone){
-			if (KeystoneUtilities.instance.getKeyFromRunes(lock.getRunesInKey()) != 0){
+	public static boolean HandleKeystoneRecovery(EntityPlayer player, IKeystoneLockable<?> lock) {
+		if (EntityExtension.For(player).isRecoveringKeystone) {
+			if (KeystoneUtilities.instance.getKeyFromRunes(lock.getRunesInKey()) != 0) {
 				String combo = "";
-				for (ItemStack rune : lock.getRunesInKey()){
+				for (ItemStack rune : lock.getRunesInKey()) {
 					if (rune == null)
 						combo += "empty ";
 					else
 						combo += rune.getDisplayName() + " ";
 				}
 				player.addChatMessage(new TextComponentString(combo));
-			}else{
+			} else {
 				player.addChatMessage(new TextComponentString(I18n.translateToLocal("am2.tooltip.noKeyPresent")));
 			}
 			EntityExtension.For(player).isRecoveringKeystone = false;
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
 
-	public ArrayList<Long> GetKeysInInvenory(EntityLivingBase ent){
+	public ArrayList<Long> GetKeysInInvenory(EntityLivingBase ent) {
 		ArrayList<Long> toReturn = new ArrayList<Long>();
-		toReturn.add((long)0); //any inventory has the "0", or "unlocked" key
+		toReturn.add((long) 0); // any inventory has the "0", or "unlocked" key
 
-		if (ent instanceof EntityPlayer){
-			EntityPlayer p = (EntityPlayer)ent;
-			for (ItemStack is : p.inventory.mainInventory){
-				if (is == null || !(is.getItem() instanceof ItemKeystone)) continue;
+		if (ent instanceof EntityPlayer) {
+			EntityPlayer p = (EntityPlayer) ent;
+			for (ItemStack is : p.inventory.mainInventory) {
+				if (is == null || !(is.getItem() instanceof ItemKeystone))
+					continue;
 
-				ItemKeystone keystone = (ItemKeystone)is.getItem();
+				ItemKeystone keystone = (ItemKeystone) is.getItem();
 				long key = keystone.getKey(is);
-				if (!toReturn.contains(key)){
+				if (!toReturn.contains(key)) {
 					toReturn.add(key);
 				}
 			}
@@ -65,13 +67,14 @@ public class KeystoneUtilities {
 		return toReturn;
 	}
 
-	public long getKeyFromRunes(ItemStack[] runes){
+	public long getKeyFromRunes(ItemStack[] runes) {
 		long key = 0;
 
 		int index = 0;
-		for (ItemStack stack : runes){
-			if (stack == null || stack.getItem() != ItemDefs.rune) continue;
-			long keyIndex = ((ItemRune)stack.getItem()).getKeyIndex(stack);
+		for (ItemStack stack : runes) {
+			if (stack == null || stack.getItem() != ItemDefs.rune)
+				continue;
+			long keyIndex = ((ItemRune) stack.getItem()).getKeyIndex(stack);
 			key |= (keyIndex << (index * 16));
 			index += 1;
 		}
@@ -79,40 +82,41 @@ public class KeystoneUtilities {
 		return key;
 	}
 
-
-	public boolean canPlayerAccess(IKeystoneLockable<?> inventory, EntityPlayer player, KeystoneAccessType accessMode){
+	public boolean canPlayerAccess(IKeystoneLockable<?> inventory, EntityPlayer player, KeystoneAccessType accessMode) {
 		ItemStack[] runes = inventory.getRunesInKey();
 		long key = getKeyFromRunes(runes);
 
-		if (key == 0) //no key combo set?  No lock!  Access granted!
+		if (key == 0) // no key combo set? No lock! Access granted!
 			return true;
 
-		if (inventory.keystoneMustBeHeld()){
-			if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == ItemDefs.keystone){
-				return ((ItemKeystone)player.getHeldItemMainhand().getItem()).getKey(player.getHeldItemMainhand()) == key;
+		if (inventory.keystoneMustBeHeld()) {
+			if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == ItemDefs.keystone) {
+				return ((ItemKeystone) player.getHeldItemMainhand().getItem())
+						.getKey(player.getHeldItemMainhand()) == key;
 			}
-		}else if (inventory.keystoneMustBeInActionBar()){
-			for (int i = 0; i < 9; ++i){
+		} else if (inventory.keystoneMustBeInActionBar()) {
+			for (int i = 0; i < 9; ++i) {
 				ItemStack stack = player.inventory.getStackInSlot(i);
-				if (stack == null || stack.getItem() != ItemDefs.keystone) continue;
-				if (((ItemKeystone)stack.getItem()).getKey(stack) == key){
+				if (stack == null || stack.getItem() != ItemDefs.keystone)
+					continue;
+				if (((ItemKeystone) stack.getItem()).getKey(stack) == key) {
 					return true;
 				}
 			}
-		}else{
-			for (int i = 0; i < player.inventory.mainInventory.length; ++i){
+		} else {
+			for (int i = 0; i < player.inventory.mainInventory.length; ++i) {
 				ItemStack stack = player.inventory.getStackInSlot(i);
-				if (stack == null || stack.getItem() != ItemDefs.keystone) continue;
-				if (((ItemKeystone)stack.getItem()).getKey(stack) == key){
+				if (stack == null || stack.getItem() != ItemDefs.keystone)
+					continue;
+				if (((ItemKeystone) stack.getItem()).getKey(stack) == key) {
 					return true;
 				}
 			}
 		}
 
-		if (accessMode == KeystoneAccessType.USE && !player.worldObj.isRemote){
+		if (accessMode == KeystoneAccessType.USE && !player.worldObj.isRemote) {
 			player.addChatMessage(new TextComponentString(I18n.translateToLocal("am2.tooltip.wrongKeystoneUse")));
-		}
-		else if (accessMode == KeystoneAccessType.BREAK && !player.worldObj.isRemote){
+		} else if (accessMode == KeystoneAccessType.BREAK && !player.worldObj.isRemote) {
 			player.addChatMessage(new TextComponentString(I18n.translateToLocal("am2.tooltip.wrongKeystoneBreak")));
 		}
 		return false;

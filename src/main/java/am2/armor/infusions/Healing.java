@@ -11,30 +11,31 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class Healing extends ArmorImbuement{
+public class Healing extends ArmorImbuement {
 
 	@Override
-	public String getID(){
+	public String getID() {
 		return "healing";
 	}
 
 	@Override
-	public ImbuementTiers getTier(){
+	public ImbuementTiers getTier() {
 		return ImbuementTiers.FOURTH;
 	}
 
 	@Override
-	public EnumSet<ImbuementApplicationTypes> getApplicationTypes(){
+	public EnumSet<ImbuementApplicationTypes> getApplicationTypes() {
 		return EnumSet.of(ImbuementApplicationTypes.ON_HIT);
 	}
 
 	@Override
-	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType, Object... params){
+	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType,
+			Object... params) {
 
 		if (world.isRemote)
 			return false;
 
-		if (player.getHealth() < (player.getMaxHealth() * 0.25f)){
+		if (player.getHealth() < (player.getMaxHealth() * 0.25f)) {
 			player.addPotionEffect(new BuffEffectRegeneration(240, 2));
 			return true;
 		}
@@ -42,22 +43,22 @@ public class Healing extends ArmorImbuement{
 	}
 
 	@Override
-	public EntityEquipmentSlot[] getValidSlots(){
-		return new EntityEquipmentSlot[]{EntityEquipmentSlot.CHEST};
+	public EntityEquipmentSlot[] getValidSlots() {
+		return new EntityEquipmentSlot[] { EntityEquipmentSlot.CHEST };
 	}
 
 	@Override
-	public boolean canApplyOnCooldown(){
+	public boolean canApplyOnCooldown() {
 		return false;
 	}
 
 	@Override
-	public int getCooldown(){
+	public int getCooldown() {
 		return 6400;
 	}
 
 	@Override
-	public int getArmorDamage(){
+	public int getArmorDamage() {
 		return 30;
 	}
 }

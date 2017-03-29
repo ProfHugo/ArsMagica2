@@ -4,8 +4,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 
-
-public class AMGuiIcons{
+public class AMGuiIcons {
 	public static boolean initialized = false;
 	public static TextureAtlasSprite manaBar;
 	public static TextureAtlasSprite manaLevel;
@@ -22,17 +21,16 @@ public class AMGuiIcons{
 	public static TextureAtlasSprite warning;
 	public static TextureAtlasSprite checkmark;
 	public static TextureAtlasSprite newEntry;
-	
+
 	public static TextureAtlasSprite frame;
 
 	public static AMGuiIcons instance = new AMGuiIcons();
 
-
-	private AMGuiIcons(){
+	private AMGuiIcons() {
 
 	}
 
-	public void init(TextureMap textureMap){
+	public void init(TextureMap textureMap) {
 		manaBar = textureMap.registerSprite(new ResourceLocation("arsmagica2:gui_icons/Mana_Bar"));
 		manaLevel = textureMap.registerSprite(new ResourceLocation("arsmagica2:gui_icons/Mana_Level"));
 
@@ -51,7 +49,7 @@ public class AMGuiIcons{
 		gatewayPortal = textureMap.registerSprite(new ResourceLocation("arsmagica2:gui_icons/gateway"));
 
 		selectedRunes = textureMap.registerSprite(new ResourceLocation("arsmagica2:gui_icons/rune_selected_aura"));
-		
+
 		frame = textureMap.registerSprite(new ResourceLocation("arsmagica2:gui_icons/spellFrame"));
 	}
 }

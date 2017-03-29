@@ -11,13 +11,13 @@ import net.minecraft.util.text.translation.I18n;
 
 @SuppressWarnings("deprecation")
 public class ItemEssence extends ItemArsMagica {
-	
+
 	public ItemEssence() {
 		super();
 		hasSubtypes = true;
 		setMaxDamage(0);
 	}
-	
+
 	@Override
 	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
 		for (int i = 0; i < ArsMagicaAPI.getAffinityRegistry().getValues().size(); i++) {
@@ -26,9 +26,10 @@ public class ItemEssence extends ItemArsMagica {
 			subItems.add(new ItemStack(this, 1, i));
 		}
 	}
-	
+
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		return String.format(I18n.translateToLocal("item.arsmagica2:essence.name"), ArsMagicaAPI.getAffinityRegistry().getObjectById(stack.getItemDamage()).getLocalizedName());
+		return String.format(I18n.translateToLocal("item.arsmagica2:essence.name"),
+				ArsMagicaAPI.getAffinityRegistry().getObjectById(stack.getItemDamage()).getLocalizedName());
 	}
 }

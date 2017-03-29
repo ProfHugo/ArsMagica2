@@ -11,7 +11,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
-public class EntityAIManaDrainBolt extends EntityAIBase{
+public class EntityAIManaDrainBolt extends EntityAIBase {
 
 	World worldObj;
 
@@ -22,8 +22,8 @@ public class EntityAIManaDrainBolt extends EntityAIBase{
 	EntityLivingBase attackTarget;
 
 	/**
-	 * A decrementing tick that spawns a ranged attack once this value reaches 0. It is then set back to the
-	 * maxRangedAttackTime.
+	 * A decrementing tick that spawns a ranged attack once this value reaches
+	 * 0. It is then set back to the maxRangedAttackTime.
 	 */
 	int rangedAttackTime;
 	float moveSpeed;
@@ -32,11 +32,13 @@ public class EntityAIManaDrainBolt extends EntityAIBase{
 	int manaDrainedPerCasterLevel;
 
 	/**
-	 * The maximum time the AI has to wait before peforming another ranged attack.
+	 * The maximum time the AI has to wait before peforming another ranged
+	 * attack.
 	 */
 	int maxRangedAttackTime;
 
-	public EntityAIManaDrainBolt(EntityCreature par1EntityLiving, float moveSpeed, int attackTime, int damage, int manaDrained){
+	public EntityAIManaDrainBolt(EntityCreature par1EntityLiving, float moveSpeed, int attackTime, int damage,
+			int manaDrained) {
 		rangedAttackTime = 0;
 		stuckTime = 0;
 		entityHost = par1EntityLiving;
@@ -52,12 +54,12 @@ public class EntityAIManaDrainBolt extends EntityAIBase{
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
 	@Override
-	public boolean shouldExecute(){
+	public boolean shouldExecute() {
 		EntityLivingBase entityliving = entityHost.getAttackTarget();
 
-		if (entityliving == null){
+		if (entityliving == null) {
 			return false;
-		}else{
+		} else {
 			attackTarget = entityliving;
 			return true;
 		}
@@ -67,7 +69,7 @@ public class EntityAIManaDrainBolt extends EntityAIBase{
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	@Override
-	public boolean continueExecuting(){
+	public boolean continueExecuting() {
 		return shouldExecute() || !entityHost.getNavigator().noPath();
 	}
 
@@ -75,7 +77,7 @@ public class EntityAIManaDrainBolt extends EntityAIBase{
 	 * Resets the task
 	 */
 	@Override
-	public void resetTask(){
+	public void resetTask() {
 		attackTarget = null;
 	}
 
@@ -83,33 +85,34 @@ public class EntityAIManaDrainBolt extends EntityAIBase{
 	 * Updates the task
 	 */
 	@Override
-	public void updateTask(){
-		double d = 25D; //5 blocks away
-		double d1 = entityHost.getDistanceSq(attackTarget.posX, attackTarget.getEntityBoundingBox().minY, attackTarget.posZ);
+	public void updateTask() {
+		double d = 25D; // 5 blocks away
+		double d1 = entityHost.getDistanceSq(attackTarget.posX, attackTarget.getEntityBoundingBox().minY,
+				attackTarget.posZ);
 		boolean flag = entityHost.getEntitySenses().canSee(attackTarget);
 
-		if (flag){
+		if (flag) {
 			stuckTime++;
-		}else{
+		} else {
 			stuckTime = 0;
 		}
 
-		if (d1 > d || stuckTime < 20){
+		if (d1 > d || stuckTime < 20) {
 			entityHost.getNavigator().tryMoveToEntityLiving(attackTarget, moveSpeed);
-		}else{
+		} else {
 			entityHost.getNavigator().clearPathEntity();
 		}
 
 		entityHost.getLookHelper().setLookPositionWithEntity(attackTarget, 30F, 30F);
 		rangedAttackTime = Math.max(rangedAttackTime - 1, 0);
 
-		if (rangedAttackTime > 0){
+		if (rangedAttackTime > 0) {
 			return;
 		}
 
-		if (d1 > d || !flag){
+		if (d1 > d || !flag) {
 			return;
-		}else{
+		} else {
 			doRangedAttack();
 			rangedAttackTime = maxRangedAttackTime;
 			return;
@@ -119,28 +122,31 @@ public class EntityAIManaDrainBolt extends EntityAIBase{
 	/**
 	 * Performs a ranged attack according to the AI's rangedAttackID.
 	 */
-	private void doRangedAttack(){
-		//43% chance to "miss"
+	private void doRangedAttack() {
+		// 43% chance to "miss"
 		int chanceToMiss = entityHost.isPotionActive(Potion.getPotionFromResourceLocation("speed")) ? 10 : 43;
-		if (worldObj.rand.nextInt(100) < chanceToMiss){
-			ArsMagica2.proxy.particleManager.BoltFromPointToPoint(worldObj,
-					entityHost.posX, entityHost.posY + entityHost.getEyeHeight(),
-					entityHost.posZ, attackTarget.posX + worldObj.rand.nextFloat() - 0.5f,
+		if (worldObj.rand.nextInt(100) < chanceToMiss) {
+			ArsMagica2.proxy.particleManager.BoltFromPointToPoint(worldObj, entityHost.posX,
+					entityHost.posY + entityHost.getEyeHeight(), entityHost.posZ,
+					attackTarget.posX + worldObj.rand.nextFloat() - 0.5f,
 					attackTarget.posY + attackTarget.getEyeHeight() + worldObj.rand.nextFloat() - 0.5f,
-					attackTarget.posZ + worldObj.rand.nextFloat() - 0.5f,
-					2, -1);
-		}else{
-			ArsMagica2.proxy.particleManager.BoltFromEntityToEntity(worldObj, entityHost, entityHost, attackTarget, this.damage, 2, -1);
+					attackTarget.posZ + worldObj.rand.nextFloat() - 0.5f, 2, -1);
+		} else {
+			ArsMagica2.proxy.particleManager.BoltFromEntityToEntity(worldObj, entityHost, entityHost, attackTarget,
+					this.damage, 2, -1);
 			float manaDrained = this.manaDrainedPerCasterLevel * EntityExtension.For(attackTarget).getCurrentLevel();
-			EntityExtension.For(attackTarget).setCurrentMana(EntityExtension.For(attackTarget).getCurrentMana() - (manaDrained));
+			EntityExtension.For(attackTarget)
+					.setCurrentMana(EntityExtension.For(attackTarget).getCurrentMana() - (manaDrained));
 
 			attackTarget.attackEntityFrom(DamageSource.causeIndirectMagicDamage(entityHost, entityHost), this.damage);
 
-			if (manaDrained > 100){
+			if (manaDrained > 100) {
 				entityHost.heal(1);
-				if (entityHost.worldObj.getDifficulty() == EnumDifficulty.HARD){
-					attackTarget.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 40, 1, true, true));
-					entityHost.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("speed"), 40, 3, true, true));
+				if (entityHost.worldObj.getDifficulty() == EnumDifficulty.HARD) {
+					attackTarget.addPotionEffect(
+							new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 40, 1, true, true));
+					entityHost.addPotionEffect(
+							new PotionEffect(Potion.getPotionFromResourceLocation("speed"), 40, 3, true, true));
 				}
 			}
 		}

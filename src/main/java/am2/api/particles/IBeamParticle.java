@@ -1,13 +1,14 @@
 package am2.api.particles;
 
-public interface IBeamParticle{
+public interface IBeamParticle {
 	/**
-	 * Sets the beam type.  Determines the texture of the beam.  Valid types are 0-2.
+	 * Sets the beam type. Determines the texture of the beam. Valid types are
+	 * 0-2.
 	 */
 	public void setType(int type);
 
 	/**
-	 * Sets the color from a single integer.  Good for hex colors.
+	 * Sets the color from a single integer. Good for hex colors.
 	 */
 	public void setRGBColor(int color);
 
@@ -22,9 +23,11 @@ public interface IBeamParticle{
 	public void setRGBColorF(float r, float g, float b);
 
 	/**
-	 * Indicates that this beam is being cast by a player that is in first person.  Should only be called when creating a beam from the local player, if the player is in first person.
-	 * <br />
-	 * This will offset the beam to make it look like it is coming from the player's active item and not their face.
+	 * Indicates that this beam is being cast by a player that is in first
+	 * person. Should only be called when creating a beam from the local player,
+	 * if the player is in first person. <br />
+	 * This will offset the beam to make it look like it is coming from the
+	 * player's active item and not their face.
 	 */
 	public void setFirstPersonPlayerCast();
 }

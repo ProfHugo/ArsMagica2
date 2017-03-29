@@ -23,11 +23,7 @@ public class Projectile extends SpellShape {
 
 	@Override
 	public Object[] getRecipe() {
-		return new Object[]{
-				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_VINTEUM),
-				Items.ARROW,
-				Items.SNOWBALL
-		};
+		return new Object[] { new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_VINTEUM), Items.ARROW, Items.SNOWBALL };
 	}
 
 	@Override
@@ -51,10 +47,14 @@ public class Projectile extends SpellShape {
 	}
 
 	@Override
-	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster, EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP, int useCount) {
+	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster,
+			EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP,
+			int useCount) {
 		if (!world.isRemote) {
-			double projectileSpeed = SpellUtils.getModifiedDouble_Add(stack, caster, target, world, SpellModifiers.SPEED);
-			float projectileGravity = (float) SpellUtils.getModifiedDouble_Mul(stack, caster, target, world, SpellModifiers.GRAVITY);
+			double projectileSpeed = SpellUtils.getModifiedDouble_Add(stack, caster, target, world,
+					SpellModifiers.SPEED);
+			float projectileGravity = (float) SpellUtils.getModifiedDouble_Mul(stack, caster, target, world,
+					SpellModifiers.GRAVITY);
 			int projectileBounce = SpellUtils.getModifiedInt_Add(stack, caster, target, world, SpellModifiers.BOUNCE);
 			EntitySpellProjectile projectile = new EntitySpellProjectile(world);
 			projectile.setPosition(caster.posX, caster.getEyeHeight() + caster.posY, caster.posZ);
@@ -69,21 +69,23 @@ public class Projectile extends SpellShape {
 			projectile.setShooter(caster);
 			projectile.setHoming(SpellUtils.modifierIsPresent(SpellModifiers.HOMING, stack));
 			projectile.setSpell(stack);
-			//if (AMParticleIcons.instance != null)
+			// if (AMParticleIcons.instance != null)
 			projectile.setIcon(AMParticleDefs.getParticleForAffinity(AffinityShiftUtils.getMainShiftForStack(stack)));
 			world.spawnEntityInWorld(projectile);
 		}
 		return SpellCastResult.SUCCESS;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
-		return EnumSet.of(SpellModifiers.GRAVITY, SpellModifiers.DURATION, SpellModifiers.COLOR, SpellModifiers.HOMING, SpellModifiers.TARGET_NONSOLID_BLOCKS, SpellModifiers.SPEED, SpellModifiers.BOUNCE, SpellModifiers.PIERCING);
+		return EnumSet.of(SpellModifiers.GRAVITY, SpellModifiers.DURATION, SpellModifiers.COLOR, SpellModifiers.HOMING,
+				SpellModifiers.TARGET_NONSOLID_BLOCKS, SpellModifiers.SPEED, SpellModifiers.BOUNCE,
+				SpellModifiers.PIERCING);
 	}
-	
+
 	@Override
 	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
-		
+
 	}
 
 }

@@ -13,24 +13,25 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-
-public class GuiEssenceRefiner extends GuiContainer{
+public class GuiEssenceRefiner extends GuiContainer {
 
 	private float rotation = 0;
 
-	private final float baseColorBlue = 0.858823f; //(23 R)
-	private final float baseColorRed = 0.094117f; //(224 G)
-	private final float baseColorGreen = 0.878431f; //(219 B)
+	private final float baseColorBlue = 0.858823f; // (23 R)
+	private final float baseColorRed = 0.094117f; // (224 G)
+	private final float baseColorGreen = 0.878431f; // (219 B)
 
-	private final float colorShiftRed = 0.36470f; //(93 R)
+	private final float colorShiftRed = 0.36470f; // (93 R)
 	private final float colorShiftGreen = -0.84705f; // (-216 G)
-	private final float colorShiftBlue = -0.29803f; //(-76 B)
+	private final float colorShiftBlue = -0.29803f; // (-76 B)
 
-	private static final ResourceLocation background = new ResourceLocation("arsmagica2", "textures/gui/essenceExtractorGui.png");
-	private static final ResourceLocation extras = new ResourceLocation("arsmagica2", "textures/gui/essenceExtractorGui_2.png");
+	private static final ResourceLocation background = new ResourceLocation("arsmagica2",
+			"textures/gui/essenceExtractorGui.png");
+	private static final ResourceLocation extras = new ResourceLocation("arsmagica2",
+			"textures/gui/essenceExtractorGui_2.png");
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j){
+	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		mc.renderEngine.bindTexture(background);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int l = (width - xSize) / 2;
@@ -40,16 +41,22 @@ public class GuiEssenceRefiner extends GuiContainer{
 		float percentComplete = essenceExtractorInventory.getRefinementPercentage();
 		boolean active = percentComplete > 0;
 
-		//rune circle
+		// rune circle
 		mc.renderEngine.bindTexture(extras);
 
-		if (active && PowerNodeRegistry.For(Minecraft.getMinecraft().theWorld).getHighestPower(essenceExtractorInventory) >= TileEntityEssenceRefiner.TICK_REFINE_COST)
+		if (active && PowerNodeRegistry.For(Minecraft.getMinecraft().theWorld)
+				.getHighestPower(essenceExtractorInventory) >= TileEntityEssenceRefiner.TICK_REFINE_COST)
 			this.rotation += 0.05f;
 
-		if (essenceExtractorInventory.isRefining() && PowerNodeRegistry.For(Minecraft.getMinecraft().theWorld).getHighestPower(essenceExtractorInventory) < TileEntityEssenceRefiner.TICK_REFINE_COST && AMGuiHelper.instance.getFastTicker() % 20 < 10){
+		if (essenceExtractorInventory.isRefining()
+				&& PowerNodeRegistry.For(Minecraft.getMinecraft().theWorld)
+						.getHighestPower(essenceExtractorInventory) < TileEntityEssenceRefiner.TICK_REFINE_COST
+				&& AMGuiHelper.instance.getFastTicker() % 20 < 10) {
 			GL11.glColor4f(1, 0, 0, 0.5f);
-		}else{
-			GL11.glColor4f(baseColorRed + (colorShiftRed * percentComplete), baseColorGreen + (colorShiftGreen * percentComplete), baseColorBlue + (colorShiftBlue * percentComplete), 0.5f);
+		} else {
+			GL11.glColor4f(baseColorRed + (colorShiftRed * percentComplete),
+					baseColorGreen + (colorShiftGreen * percentComplete),
+					baseColorBlue + (colorShiftBlue * percentComplete), 0.5f);
 		}
 
 		GL11.glMatrixMode(GL11.GL_TEXTURE);
@@ -75,14 +82,15 @@ public class GuiEssenceRefiner extends GuiContainer{
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
-	public GuiEssenceRefiner(InventoryPlayer inventoryplayer, TileEntityEssenceRefiner tileEntityEssenceExtractor){
+	public GuiEssenceRefiner(InventoryPlayer inventoryplayer, TileEntityEssenceRefiner tileEntityEssenceExtractor) {
 		super(new ContainerEssenceRefiner(inventoryplayer, tileEntityEssenceExtractor));
 		essenceExtractorInventory = tileEntityEssenceExtractor;
 		xSize = 176;
 		ySize = 232;
 	}
 
-	public void drawTexturedModalRect_Classic(int dst_x, int dst_y, int src_x, int src_y, int dst_width, int dst_height, int src_width, int src_height){
+	public void drawTexturedModalRect_Classic(int dst_x, int dst_y, int src_x, int src_y, int dst_width, int dst_height,
+			int src_width, int src_height) {
 
 		Tessellator var9 = Tessellator.getInstance();
 		var9.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -94,7 +102,7 @@ public class GuiEssenceRefiner extends GuiContainer{
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2){
+	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 	}
 
 	private final TileEntityEssenceRefiner essenceExtractorInventory;

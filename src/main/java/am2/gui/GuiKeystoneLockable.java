@@ -8,12 +8,13 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiKeystoneLockable extends GuiContainer{
+public class GuiKeystoneLockable extends GuiContainer {
 
-	private static final ResourceLocation background = new ResourceLocation("arsmagica2", "textures/gui/keystoneLockableGuiGeneric.png");
+	private static final ResourceLocation background = new ResourceLocation("arsmagica2",
+			"textures/gui/keystoneLockableGuiGeneric.png");
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j){
+	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		mc.renderEngine.bindTexture(background);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int l = (width - xSize) / 2;
@@ -21,14 +22,14 @@ public class GuiKeystoneLockable extends GuiContainer{
 		drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
 	}
 
-	public GuiKeystoneLockable(InventoryPlayer inventoryplayer, IKeystoneLockable<?> lockable){
+	public GuiKeystoneLockable(InventoryPlayer inventoryplayer, IKeystoneLockable<?> lockable) {
 		super(new ContainerKeystoneLockable(inventoryplayer, lockable));
 		xSize = 176;
 		ySize = 134;
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2){
+	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 	}
 
 }

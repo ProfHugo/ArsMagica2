@@ -12,30 +12,32 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemChalk extends ItemArsMagica{
+public class ItemChalk extends ItemArsMagica {
 
-	public ItemChalk(){
+	public ItemChalk() {
 		setMaxDamage(50);
 		setMaxStackSize(1);
 	}
-	
+
 	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-		if (side != EnumFacing.UP || !canBeUsed(world, pos.up())){
+	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos,
+			EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+		if (side != EnumFacing.UP || !canBeUsed(world, pos.up())) {
 			return EnumActionResult.FAIL;
 		}
-		if (!world.isRemote){
-			world.setBlockState(pos.up(), BlockDefs.wizardChalk.getDefaultState().withProperty(BlockWizardsChalk.VARIANT, world.rand.nextInt(16)));
+		if (!world.isRemote) {
+			world.setBlockState(pos.up(), BlockDefs.wizardChalk.getDefaultState()
+					.withProperty(BlockWizardsChalk.VARIANT, world.rand.nextInt(16)));
 			stack.damageItem(1, player);
 		}
 		return EnumActionResult.PASS;
 	}
 
-	public boolean canBeUsed(World world, BlockPos pos){
-		if (world.getBlockState(pos.down()).getBlock() == BlockDefs.wizardChalk){
+	public boolean canBeUsed(World world, BlockPos pos) {
+		if (world.getBlockState(pos.down()).getBlock() == BlockDefs.wizardChalk) {
 			return false;
 		}
-		if (!world.isAirBlock(pos)){
+		if (!world.isAirBlock(pos)) {
 			return false;
 		}
 		return true;
@@ -43,13 +45,13 @@ public class ItemChalk extends ItemArsMagica{
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldRotateAroundWhenRendering(){
+	public boolean shouldRotateAroundWhenRendering() {
 		return true;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean isFull3D(){
+	public boolean isFull3D() {
 		return true;
 	}
 }

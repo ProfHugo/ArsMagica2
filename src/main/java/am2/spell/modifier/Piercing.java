@@ -13,35 +13,32 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class Piercing extends SpellModifier{
+public class Piercing extends SpellModifier {
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.ICE),
-				Items.ARROW,
-				Items.EMERALD
-		};
+	public Object[] getRecipe() {
+		return new Object[] { AffinityShiftUtils.getEssenceForAffinity(Affinity.ICE), Items.ARROW, Items.EMERALD };
 	}
 
 	@Override
-	public EnumSet<SpellModifiers> getAspectsModified(){
+	public EnumSet<SpellModifiers> getAspectsModified() {
 		return EnumSet.of(SpellModifiers.PIERCING);
 	}
 
 	@Override
-	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, NBTTagCompound metadata){
+	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world,
+			NBTTagCompound metadata) {
 		return SpellModifiers.PIERCING.defaultValueInt;
 	}
 
 	@Override
-	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity){
+	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity) {
 		return 1.5f * quantity;
 	}
 
 	@Override
 	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

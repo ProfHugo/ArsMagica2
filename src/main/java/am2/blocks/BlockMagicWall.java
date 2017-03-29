@@ -19,26 +19,25 @@ public class BlockMagicWall extends BlockAM {
 		setResistance(5.0F);
 		setHarvestLevel("pickaxe", -1);
 	}
-	
+
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		if (entityIn instanceof EntitySpellProjectile) {
-			EntitySpellProjectile projectile = (EntitySpellProjectile)entityIn;
+			EntitySpellProjectile projectile = (EntitySpellProjectile) entityIn;
 			projectile.setBounces(projectile.getBounces() + 1);
 		}
 	}
-	
-	
+
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;

@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 public class AbilityFireWeakness extends AbstractAffinityAbility {
-	
+
 	public AbilityFireWeakness() {
 		super(new ResourceLocation("arsmagica2", "fireweakness"));
 	}
@@ -18,7 +18,7 @@ public class AbilityFireWeakness extends AbstractAffinityAbility {
 	public float getMinimumDepth() {
 		return 0.5f;
 	}
-	
+
 	@Override
 	public float getMaximumDepth() {
 		return 0.9f;
@@ -28,17 +28,19 @@ public class AbilityFireWeakness extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.WATER;
 	}
-	
+
 	@Override
 	public void applyTick(EntityPlayer player) {
 		IAttributeInstance attribute = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
-		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute, AffinityAbilityModifiers.fireWeakness, (player.isBurning() || player.worldObj.provider.getDimension() == -1));
+		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute, AffinityAbilityModifiers.fireWeakness,
+				(player.isBurning() || player.worldObj.provider.getDimension() == -1));
 	}
-	
+
 	@Override
 	public void removeEffects(EntityPlayer player) {
 		IAttributeInstance attribute = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
-		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute, AffinityAbilityModifiers.fireWeakness, false);
+		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute, AffinityAbilityModifiers.fireWeakness,
+				false);
 	}
 
 }

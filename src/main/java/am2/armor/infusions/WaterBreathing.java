@@ -12,30 +12,31 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class WaterBreathing extends ArmorImbuement{
+public class WaterBreathing extends ArmorImbuement {
 
 	@Override
-	public String getID(){
+	public String getID() {
 		return "wtrbrth";
 	}
 
 	@Override
-	public ImbuementTiers getTier(){
+	public ImbuementTiers getTier() {
 		return ImbuementTiers.FOURTH;
 	}
 
 	@Override
-	public EnumSet<ImbuementApplicationTypes> getApplicationTypes(){
+	public EnumSet<ImbuementApplicationTypes> getApplicationTypes() {
 		return EnumSet.of(ImbuementApplicationTypes.ON_TICK);
 	}
 
 	@Override
-	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType, Object... params){
+	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType,
+			Object... params) {
 		if (world.isRemote)
 			return false;
 
-		if (player.getAir() < 10){
-			if (!player.isPotionActive(PotionEffectsDefs.waterBreathing)){
+		if (player.getAir() < 10) {
+			if (!player.isPotionActive(PotionEffectsDefs.waterBreathing)) {
 				BuffEffectWaterBreathing wb = new BuffEffectWaterBreathing(200, 0);
 				player.addPotionEffect(wb);
 				return true;
@@ -45,22 +46,22 @@ public class WaterBreathing extends ArmorImbuement{
 	}
 
 	@Override
-	public EntityEquipmentSlot[] getValidSlots(){
-		return new EntityEquipmentSlot[]{EntityEquipmentSlot.HEAD};
+	public EntityEquipmentSlot[] getValidSlots() {
+		return new EntityEquipmentSlot[] { EntityEquipmentSlot.HEAD };
 	}
 
 	@Override
-	public boolean canApplyOnCooldown(){
+	public boolean canApplyOnCooldown() {
 		return false;
 	}
 
 	@Override
-	public int getCooldown(){
+	public int getCooldown() {
 		return 4000;
 	}
 
 	@Override
-	public int getArmorDamage(){
+	public int getArmorDamage() {
 		return 100;
 	}
 }

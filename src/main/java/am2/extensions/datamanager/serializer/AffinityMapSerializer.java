@@ -11,14 +11,16 @@ import am2.packet.AMDataWriter;
 import net.minecraft.util.ResourceLocation;
 
 public class AffinityMapSerializer implements TypeSerializer<HashMap<Affinity, Double>> {
-	
+
 	public static AffinityMapSerializer INSTANCE = new AffinityMapSerializer();
-	
-	private AffinityMapSerializer() {}
-	
+
+	private AffinityMapSerializer() {
+	}
+
 	@Override
 	public void serialize(AMDataWriter buf, HashMap<Affinity, Double> value) {
-		if (value == null) return;
+		if (value == null)
+			return;
 		buf.add(value.size());
 		for (Entry<Affinity, Double> entry : value.entrySet()) {
 			buf.add(entry.getKey().getRegistryName().toString());

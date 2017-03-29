@@ -11,47 +11,48 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 
-public class MiningSpeed extends ArmorImbuement{
+public class MiningSpeed extends ArmorImbuement {
 
 	@Override
-	public String getID(){
+	public String getID() {
 		return "minespd";
 	}
 
 	@Override
-	public ImbuementTiers getTier(){
+	public ImbuementTiers getTier() {
 		return ImbuementTiers.FOURTH;
 	}
 
 	@Override
-	public EnumSet<ImbuementApplicationTypes> getApplicationTypes(){
+	public EnumSet<ImbuementApplicationTypes> getApplicationTypes() {
 		return EnumSet.of(ImbuementApplicationTypes.ON_MINING_SPEED);
 	}
 
 	@Override
-	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType, Object... params){
-		BreakSpeed event = (BreakSpeed)params[0];
+	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType,
+			Object... params) {
+		BreakSpeed event = (BreakSpeed) params[0];
 		event.setNewSpeed(event.getOriginalSpeed() * 1.5f);
 		return true;
 	}
 
 	@Override
-	public EntityEquipmentSlot[] getValidSlots(){
-		return new EntityEquipmentSlot[]{EntityEquipmentSlot.HEAD};
+	public EntityEquipmentSlot[] getValidSlots() {
+		return new EntityEquipmentSlot[] { EntityEquipmentSlot.HEAD };
 	}
 
 	@Override
-	public boolean canApplyOnCooldown(){
+	public boolean canApplyOnCooldown() {
 		return true;
 	}
 
 	@Override
-	public int getCooldown(){
+	public int getCooldown() {
 		return 0;
 	}
 
 	@Override
-	public int getArmorDamage(){
+	public int getArmorDamage() {
 		return 1;
 	}
 }

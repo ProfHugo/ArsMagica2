@@ -9,16 +9,17 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-public class DummyEntityPlayer extends EntityPlayer{
+public class DummyEntityPlayer extends EntityPlayer {
 
 	private EntityLivingBase trackEntity = null;
 
-	public DummyEntityPlayer(World world){
+	public DummyEntityPlayer(World world) {
 		super(world, new GameProfile(UUID.randomUUID(), "dummyplayer"));
 	}
 
-	public static EntityPlayer fromEntityLiving(EntityLivingBase entity){
-		if (entity instanceof EntityPlayer) return (EntityPlayer)entity;
+	public static EntityPlayer fromEntityLiving(EntityLivingBase entity) {
+		if (entity instanceof EntityPlayer)
+			return (EntityPlayer) entity;
 
 		DummyEntityPlayer dep = new DummyEntityPlayer(entity.worldObj);
 		dep.setPosition(entity.posX, entity.posY, entity.posZ);
@@ -28,7 +29,7 @@ public class DummyEntityPlayer extends EntityPlayer{
 		return dep;
 	}
 
-	public void copyEntityLiving(EntityLivingBase entity){
+	public void copyEntityLiving(EntityLivingBase entity) {
 		this.setPosition(entity.posX, entity.posY, entity.posZ);
 		this.setRotation(entity.rotationYaw, entity.rotationPitch);
 		this.trackEntity = entity;
@@ -36,8 +37,8 @@ public class DummyEntityPlayer extends EntityPlayer{
 	}
 
 	@Override
-	public void onUpdate(){
-		if (trackEntity != null){
+	public void onUpdate() {
+		if (trackEntity != null) {
 			this.setPosition(trackEntity.posX, trackEntity.posY, trackEntity.posZ);
 			this.setRotation(trackEntity.rotationYaw, trackEntity.rotationPitch);
 
@@ -48,12 +49,12 @@ public class DummyEntityPlayer extends EntityPlayer{
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(int i, String s){
+	public boolean canCommandSenderUseCommand(int i, String s) {
 		return false;
 	}
 
 	@Override
-	public void addChatMessage(ITextComponent arg0){
+	public void addChatMessage(ITextComponent arg0) {
 	}
 
 	@Override

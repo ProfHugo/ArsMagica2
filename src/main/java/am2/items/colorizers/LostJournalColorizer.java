@@ -11,7 +11,7 @@ public class LostJournalColorizer implements IItemColor {
 	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
 
 		Story s = ItemDefs.lostJournal.getStory(stack);
-		if (s == null){
+		if (s == null) {
 			return 0xffffff;
 		}
 		return s.getStoryPassColor(tintIndex);

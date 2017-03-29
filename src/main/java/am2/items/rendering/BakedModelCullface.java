@@ -21,16 +21,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.TRSRTransformation;
 
-public class BakedModelCullface implements IPerspectiveAwareModel{
-	
+public class BakedModelCullface implements IPerspectiveAwareModel {
+
 	IBakedModel parent;
 	private ImmutableMap<TransformType, TRSRTransformation> transforms;
-	
+
 	public BakedModelCullface(IBakedModel parent, ImmutableMap<TransformType, TRSRTransformation> transforms) {
 		this.parent = parent;
 		this.transforms = transforms;
 	}
-	
+
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		GL11.glDisable(GL11.GL_CULL_FACE);

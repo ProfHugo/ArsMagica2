@@ -17,7 +17,7 @@ public class AMGuiFactory implements IModGuiFactory {
 
 	@Override
 	public void initialize(Minecraft minecraftInstance) {
-		
+
 	}
 
 	@Override
@@ -34,13 +34,13 @@ public class AMGuiFactory implements IModGuiFactory {
 	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
 		return null;
 	}
-	
+
 	public static class AMGuiConfig extends GuiConfig {
 
 		public AMGuiConfig(GuiScreen parentScreen) {
 			super(parentScreen, getConfigElements(), ArsMagica2.MODID, false, false, I18n.format("am2.gui.config"));
 		}
-		
+
 		private static List<IConfigElement> getConfigElements() {
 			ArrayList<IConfigElement> list = new ArrayList<>();
 			list.add(new ConfigElement(ArsMagica2.disabledSkills.getCategory("enabled_spell_part")));
@@ -56,7 +56,7 @@ public class AMGuiFactory implements IModGuiFactory {
 			}
 			return list;
 		}
-		
+
 	}
 
 }

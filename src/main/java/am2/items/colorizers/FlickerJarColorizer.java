@@ -5,7 +5,7 @@ import am2.api.affinity.Affinity;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
 
-public class FlickerJarColorizer implements IItemColor{
+public class FlickerJarColorizer implements IItemColor {
 
 	@Override
 	public int getColorFromItemstack(ItemStack stack, int tintIndex) {

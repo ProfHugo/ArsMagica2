@@ -22,10 +22,10 @@ public class AbilityClearCaster extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.ARCANE;
 	}
-	
+
 	@Override
 	public void applyPreSpellCast(EntityPlayer player, Pre event) {
-		if (event.entityLiving.worldObj.rand.nextInt(100) < 5 && !event.entityLiving.worldObj.isRemote){
+		if (event.entityLiving.worldObj.rand.nextInt(100) < 5 && !event.entityLiving.worldObj.isRemote) {
 			event.entityLiving.addPotionEffect(new BuffEffectClarity(140, 0));
 		}
 	}

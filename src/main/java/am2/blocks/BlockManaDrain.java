@@ -5,7 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockManaDrain extends BlockAMPowered{
+public class BlockManaDrain extends BlockAMPowered {
 
 	public BlockManaDrain() {
 		super(Material.IRON);

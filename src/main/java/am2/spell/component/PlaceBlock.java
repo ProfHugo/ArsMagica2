@@ -30,88 +30,89 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 @SuppressWarnings("deprecation")
-public class PlaceBlock extends SpellComponent{
+public class PlaceBlock extends SpellComponent {
 
 	private static final String KEY_BLOCKID = "PlaceBlockID";
 	private static final String KEY_META = "PlaceMeta";
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				Items.STONE_AXE,
-				Items.STONE_PICKAXE,
-				Items.STONE_SHOVEL,
-				Blocks.CHEST
-		};
+	public Object[] getRecipe() {
+		return new Object[] { Items.STONE_AXE, Items.STONE_PICKAXE, Items.STONE_SHOVEL, Blocks.CHEST };
 	}
 
-	private IBlockState getPlaceBlock(ItemStack stack){
-		if (stack.hasTagCompound() && stack.getTagCompound().hasKey(KEY_BLOCKID)){
-			return Block.getBlockById(stack.getTagCompound().getInteger(KEY_BLOCKID)).getStateFromMeta(stack.getTagCompound().getInteger(KEY_META));
+	private IBlockState getPlaceBlock(ItemStack stack) {
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey(KEY_BLOCKID)) {
+			return Block.getBlockById(stack.getTagCompound().getInteger(KEY_BLOCKID))
+					.getStateFromMeta(stack.getTagCompound().getInteger(KEY_META));
 		}
 		return null;
 	}
 
-	private void setPlaceBlock(ItemStack stack, IBlockState state){
+	private void setPlaceBlock(ItemStack stack, IBlockState state) {
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 
 		stack.getTagCompound().setInteger(KEY_BLOCKID, Block.getIdFromBlock(state.getBlock()));
 		stack.getTagCompound().setInteger(KEY_META, state.getBlock().getMetaFromState(state));
 
-		//set lore entry so that the stack displays the name of the block to place
+		// set lore entry so that the stack displays the name of the block to
+		// place
 		if (!stack.getTagCompound().hasKey("Lore"))
 			stack.getTagCompound().setTag("Lore", new NBTTagList());
 
 		ItemStack blockStack = new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state));
 
 		NBTTagList tagList = stack.getTagCompound().getTagList("Lore", Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < tagList.tagCount(); ++i){
+		for (int i = 0; i < tagList.tagCount(); ++i) {
 			String str = tagList.getStringTagAt(i);
-			if (str.startsWith(String.format(I18n.translateToLocal("am2.tooltip.placeBlockSpell"), ""))){
+			if (str.startsWith(String.format(I18n.translateToLocal("am2.tooltip.placeBlockSpell"), ""))) {
 				tagList.removeTag(i);
 			}
 		}
-		tagList.appendTag(new NBTTagString(String.format(I18n.translateToLocal("am2.tooltip.placeBlockSpell"), blockStack.getDisplayName())));
+		tagList.appendTag(new NBTTagString(
+				String.format(I18n.translateToLocal("am2.tooltip.placeBlockSpell"), blockStack.getDisplayName())));
 
 		stack.getTagCompound().setTag("Lore", tagList);
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.noneOf(SpellModifiers.class);
 	}
-	
+
 	@Override
-	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster){
+	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX,
+			double impactY, double impactZ, EntityLivingBase caster) {
 
 		if (!(caster instanceof EntityPlayer))
 			return false;
 
-		EntityPlayer player = (EntityPlayer)caster;
+		EntityPlayer player = (EntityPlayer) caster;
 		ItemStack spellStack = player.getActiveItemStack();
-		if (spellStack == null || spellStack.getItem() != ItemDefs.spell || !SpellUtils.componentIsPresent(spellStack, PlaceBlock.class))
+		if (spellStack == null || spellStack.getItem() != ItemDefs.spell
+				|| !SpellUtils.componentIsPresent(spellStack, PlaceBlock.class))
 			return false;
 
 		IBlockState bd = getPlaceBlock(spellStack);
 
-		if (bd != null && !caster.isSneaking()){
+		if (bd != null && !caster.isSneaking()) {
 			if (world.isAirBlock(pos) || !world.getBlockState(pos).isSideSolid(world, pos, blockFace))
 				blockFace = null;
-			if (blockFace != null){
+			if (blockFace != null) {
 				pos = pos.add(blockFace.getDirectionVec());
 			}
-			if (world.isAirBlock(pos) || !world.getBlockState(pos).getMaterial().isSolid()){
+			if (world.isAirBlock(pos) || !world.getBlockState(pos).getMaterial().isSolid()) {
 				ItemStack searchStack = new ItemStack(bd.getBlock(), 1, bd.getBlock().getMetaFromState(bd));
-				if (!world.isRemote && (player.capabilities.isCreativeMode || InventoryUtilities.inventoryHasItem(player.inventory, searchStack, 1))){
+				if (!world.isRemote && (player.capabilities.isCreativeMode
+						|| InventoryUtilities.inventoryHasItem(player.inventory, searchStack, 1))) {
 					world.setBlockState(pos, bd);
 					if (!player.capabilities.isCreativeMode)
 						InventoryUtilities.deductFromInventory(player.inventory, searchStack, 1);
 				}
 				return true;
 			}
-		}else if (caster.isSneaking()){
-			if (!world.isRemote && !world.isAirBlock(pos)){
+		} else if (caster.isSneaking()) {
+			if (!world.isRemote && !world.isAirBlock(pos)) {
 				setPlaceBlock(spellStack, world.getBlockState(pos));
 			}
 			return true;
@@ -120,38 +121,39 @@ public class PlaceBlock extends SpellComponent{
 	}
 
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
 		return false;
 	}
 
 	@Override
-	public float manaCost(EntityLivingBase caster){
+	public float manaCost(EntityLivingBase caster) {
 		return 5;
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
+	public ItemStack[] reagents(EntityLivingBase caster) {
 		return null;
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
 	}
 
 	@Override
-	public Set<Affinity> getAffinity(){
+	public Set<Affinity> getAffinity() {
 		return Sets.newHashSet(Affinity.EARTH, Affinity.ENDER);
 	}
 
 	@Override
-	public float getAffinityShift(Affinity affinity){
+	public float getAffinityShift(Affinity affinity) {
 		return 0.05f;
 	}
 
 	@Override
 	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

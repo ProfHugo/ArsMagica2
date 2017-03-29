@@ -13,20 +13,20 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
 public class DataSyncExtension implements IDataSyncExtension {
-	
+
 	public static final ResourceLocation ID = new ResourceLocation("arsmagica2:DataSync");
-	
+
 	@CapabilityInject(value = IDataSyncExtension.class)
 	public static Capability<IDataSyncExtension> INSTANCE = null;
-	
+
 	private ArrayList<Object> internalData = new ArrayList<>();
 	private ArrayList<Boolean> hasChanged = new ArrayList<>();
 	private Entity entity;
-	
-	public static DataSyncExtension For(EntityLivingBase living){
+
+	public static DataSyncExtension For(EntityLivingBase living) {
 		return (DataSyncExtension) living.getCapability(INSTANCE, null);
 	}
-	
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == INSTANCE;
@@ -51,12 +51,12 @@ public class DataSyncExtension implements IDataSyncExtension {
 		fillWithNull(data.getId());
 		return (T) internalData.get(Integer.valueOf(data.getId()));
 	}
-	
+
 	public void scheduleFullUpdate() {
 		for (int i = 0; i < hasChanged.size(); i++)
 			hasChanged.set(i, true);
 	}
-	
+
 	@Override
 	public <T> void set(SavedObject<T> data, T object) {
 		fillWithNull(data.getId());
@@ -72,7 +72,7 @@ public class DataSyncExtension implements IDataSyncExtension {
 		hasChanged.set(data.getId(), true);
 		internalData.set(data.getId(), defaultValue);
 	}
-	
+
 	private void fillWithNull(int upTo) {
 		while (internalData.size() <= upTo)
 			internalData.add(null);
@@ -87,18 +87,23 @@ public class DataSyncExtension implements IDataSyncExtension {
 		writer.add(entity.getEntityId());
 		int size = 0;
 		for (int i = 0; i < internalData.size(); i++) {
-			if (internalData.get(i) == null || ArsMagicaManager.getById(i) == null) continue;
-			if (!hasChanged.get(i).booleanValue()) continue;
+			if (internalData.get(i) == null || ArsMagicaManager.getById(i) == null)
+				continue;
+			if (!hasChanged.get(i).booleanValue())
+				continue;
 			size++;
 		}
 		writer.add(size);
 		for (int i = 0; i < internalData.size(); i++) {
-			if (internalData.get(i) == null || ArsMagicaManager.getById(i) == null) continue;
-			if (!hasChanged.get(i).booleanValue()) continue;
+			if (internalData.get(i) == null || ArsMagicaManager.getById(i) == null)
+				continue;
+			if (!hasChanged.get(i).booleanValue())
+				continue;
 			writer.add(i);
 			try {
 				ArsMagicaManager.getById(i).serialize(writer, internalData.get(i));
-			} catch (Throwable e) {}
+			} catch (Throwable e) {
+			}
 		}
 		hasChanged.clear();
 		fillWithNull(internalData.size());
@@ -113,7 +118,8 @@ public class DataSyncExtension implements IDataSyncExtension {
 			try {
 				fillWithNull(index);
 				internalData.set(index, ArsMagicaManager.getById(index).deserialize(reader));
-			} catch (Throwable e) {}
+			} catch (Throwable e) {
+			}
 		}
 	}
 

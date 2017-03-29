@@ -12,33 +12,37 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 
-public class EntityAIShieldBash extends EntityAIBase{
+public class EntityAIShieldBash extends EntityAIBase {
 	private final EntityLiving host;
 	private final float moveSpeed;
 	private EntityLivingBase target;
 	private int cooldownTicks = 0;
 
-	public EntityAIShieldBash(IArsMagicaBoss host, float moveSpeed){
-		this.host = ((EntityLiving)host);
+	public EntityAIShieldBash(IArsMagicaBoss host, float moveSpeed) {
+		this.host = ((EntityLiving) host);
 		this.moveSpeed = moveSpeed;
 		this.setMutexBits(1);
 	}
 
 	@Override
-	public boolean shouldExecute(){
-		if (cooldownTicks-- > 0 || ((IArsMagicaBoss)host).getCurrentAction() != BossActions.IDLE || !((IArsMagicaBoss)host).isActionValid(BossActions.SHIELD_BASH))
+	public boolean shouldExecute() {
+		if (cooldownTicks-- > 0 || ((IArsMagicaBoss) host).getCurrentAction() != BossActions.IDLE
+				|| !((IArsMagicaBoss) host).isActionValid(BossActions.SHIELD_BASH))
 			return false;
 		EntityLivingBase AITarget = host.getAttackTarget();
-		if (AITarget == null || AITarget.isDead) return false;
+		if (AITarget == null || AITarget.isDead)
+			return false;
 		this.target = AITarget;
 		return true;
 	}
 
 	@Override
-	public boolean continueExecuting(){
+	public boolean continueExecuting() {
 		EntityLivingBase AITarget = host.getAttackTarget();
-		if (AITarget == null || AITarget.isDead || (((IArsMagicaBoss)host).getCurrentAction() == BossActions.SHIELD_BASH && ((IArsMagicaBoss)host).getTicksInCurrentAction() > ((IArsMagicaBoss)host).getCurrentAction().getMaxActionTime())){
-			((IArsMagicaBoss)host).setCurrentAction(BossActions.IDLE);
+		if (AITarget == null || AITarget.isDead
+				|| (((IArsMagicaBoss) host).getCurrentAction() == BossActions.SHIELD_BASH && ((IArsMagicaBoss) host)
+						.getTicksInCurrentAction() > ((IArsMagicaBoss) host).getCurrentAction().getMaxActionTime())) {
+			((IArsMagicaBoss) host).setCurrentAction(BossActions.IDLE);
 			cooldownTicks = 10;
 			return false;
 		}
@@ -46,23 +50,27 @@ public class EntityAIShieldBash extends EntityAIBase{
 	}
 
 	@Override
-	public void updateTask(){
+	public void updateTask() {
 		host.getLookHelper().setLookPositionWithEntity(target, 30, 30);
 		host.getNavigator().tryMoveToEntityLiving(target, moveSpeed);
 
 		if (host.getDistanceSqToEntity(target) < 16)
-			if (((IArsMagicaBoss)host).getCurrentAction() != BossActions.SHIELD_BASH)
-				((IArsMagicaBoss)host).setCurrentAction(BossActions.SHIELD_BASH);
+			if (((IArsMagicaBoss) host).getCurrentAction() != BossActions.SHIELD_BASH)
+				((IArsMagicaBoss) host).setCurrentAction(BossActions.SHIELD_BASH);
 
-		if (((IArsMagicaBoss)host).getCurrentAction() == BossActions.SHIELD_BASH && ((IArsMagicaBoss)host).getTicksInCurrentAction() > 12){
+		if (((IArsMagicaBoss) host).getCurrentAction() == BossActions.SHIELD_BASH
+				&& ((IArsMagicaBoss) host).getTicksInCurrentAction() > 12) {
 			if (!host.worldObj.isRemote)
-				host.worldObj.playSound(host.posX, host.posY, host.posZ, ((IArsMagicaBoss)host).getAttackSound(), SoundCategory.HOSTILE, 1.0f, 1.0f, false);
+				host.worldObj.playSound(host.posX, host.posY, host.posZ, ((IArsMagicaBoss) host).getAttackSound(),
+						SoundCategory.HOSTILE, 1.0f, 1.0f, false);
 
 			double offsetX = Math.cos(host.rotationYaw) * 2;
 			double offsetZ = Math.sin(host.rotationYaw) * 2;
-			List<EntityLivingBase> aoeEntities = host.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, host.getEntityBoundingBox().offset(offsetX, 0, offsetZ).expand(2.5, 2, 2.5));
-			for (EntityLivingBase ent : aoeEntities){
-				if (ent == host) continue;
+			List<EntityLivingBase> aoeEntities = host.worldObj.getEntitiesWithinAABB(EntityLivingBase.class,
+					host.getEntityBoundingBox().offset(offsetX, 0, offsetZ).expand(2.5, 2, 2.5));
+			for (EntityLivingBase ent : aoeEntities) {
+				if (ent == host)
+					continue;
 
 				double speed = 4;
 				double vertSpeed = 0.325;
@@ -73,8 +81,9 @@ public class EntityAIShieldBash extends EntityAIBase{
 
 				double radians = angle;
 
-				if (ent instanceof EntityPlayer){
-					AMNetHandler.INSTANCE.sendVelocityAddPacket(host.worldObj, ent, speed * Math.cos(radians), vertSpeed, speed * Math.sin(radians));
+				if (ent instanceof EntityPlayer) {
+					AMNetHandler.INSTANCE.sendVelocityAddPacket(host.worldObj, ent, speed * Math.cos(radians),
+							vertSpeed, speed * Math.sin(radians));
 				}
 				ent.motionX = (speed * Math.cos(radians));
 				ent.motionZ = (speed * Math.sin(radians));

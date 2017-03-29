@@ -11,14 +11,16 @@ import am2.packet.AMDataWriter;
 import net.minecraft.util.ResourceLocation;
 
 public class SkillMapSerializer implements TypeSerializer<HashMap<Skill, Boolean>> {
-	
+
 	public static SkillMapSerializer INSTANCE = new SkillMapSerializer();
-	
-	private SkillMapSerializer() {}
-	
+
+	private SkillMapSerializer() {
+	}
+
 	@Override
 	public void serialize(AMDataWriter buf, HashMap<Skill, Boolean> value) {
-		if (value == null) return;
+		if (value == null)
+			return;
 		buf.add(value.size());
 		for (Entry<Skill, Boolean> entry : value.entrySet()) {
 			buf.add(entry.getKey().getRegistryName().toString());

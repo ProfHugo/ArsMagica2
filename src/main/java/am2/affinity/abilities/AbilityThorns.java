@@ -24,17 +24,17 @@ public class AbilityThorns extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.NATURE;
 	}
-	
+
 	@Override
 	public void applyHurt(EntityPlayer player, LivingHurtEvent event, boolean isAttacker) {
-		if (!isAttacker && event.getSource().getSourceOfDamage() instanceof EntityLivingBase){
+		if (!isAttacker && event.getSource().getSourceOfDamage() instanceof EntityLivingBase) {
 			double natureDepth = AffinityData.For(player).getAffinityDepth(Affinity.NATURE);
-			if (natureDepth == 1.0f){
-				((EntityLivingBase)event.getSource().getSourceOfDamage()).attackEntityFrom(DamageSource.cactus, 3);
-			}else if (natureDepth >= 0.75f){
-				((EntityLivingBase)event.getSource().getSourceOfDamage()).attackEntityFrom(DamageSource.cactus, 2);
-			}else if (natureDepth >= 0.5f){
-				((EntityLivingBase)event.getSource().getSourceOfDamage()).attackEntityFrom(DamageSource.cactus, 1);
+			if (natureDepth == 1.0f) {
+				((EntityLivingBase) event.getSource().getSourceOfDamage()).attackEntityFrom(DamageSource.cactus, 3);
+			} else if (natureDepth >= 0.75f) {
+				((EntityLivingBase) event.getSource().getSourceOfDamage()).attackEntityFrom(DamageSource.cactus, 2);
+			} else if (natureDepth >= 0.5f) {
+				((EntityLivingBase) event.getSource().getSourceOfDamage()).attackEntityFrom(DamageSource.cactus, 1);
 			}
 		}
 	}

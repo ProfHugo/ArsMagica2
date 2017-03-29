@@ -14,28 +14,28 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 
-public class TileEntitySlipstreamGenerator extends TileEntityAMPower{
+public class TileEntitySlipstreamGenerator extends TileEntityAMPower {
 
 	private ArrayList<EntityPlayer> levitatingEntities;
 	private int updateTicks = 1;
 
 	private static final int EFFECT_HEIGHT = 50;
 
-	public TileEntitySlipstreamGenerator(){
+	public TileEntitySlipstreamGenerator() {
 		super(100);
 		levitatingEntities = new ArrayList<EntityPlayer>();
 	}
 
 	@Override
-	public boolean canProvidePower(PowerTypes type){
+	public boolean canProvidePower(PowerTypes type) {
 		return false;
 	}
 
 	@Override
-	public void update(){
+	public void update() {
 		super.update();
 		updateTicks++;
-		if (updateTicks > 10){
+		if (updateTicks > 10) {
 			refreshPlayerList();
 			updateTicks = 0;
 			if (worldObj.isRemote && levitatingEntities.size() > 0)
@@ -46,44 +46,46 @@ public class TileEntitySlipstreamGenerator extends TileEntityAMPower{
 			return;
 
 		Iterator<EntityPlayer> it = levitatingEntities.iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			EntityPlayer player = it.next();
-			if (!playerIsValid(player)){
+			if (!playerIsValid(player)) {
 				it.remove();
 				continue;
 			}
 
-			if (PowerNodeRegistry.For(this.worldObj).getHighestPower(this) >= 0.25f){
+			if (PowerNodeRegistry.For(this.worldObj).getHighestPower(this) >= 0.25f) {
 
 				player.motionY *= 0.5999999;
-				if (Math.abs(player.motionY) < 0.2){
+				if (Math.abs(player.motionY) < 0.2) {
 					player.addVelocity(0, -player.motionY, 0);
 					player.fallDistance = 0f;
-				}else{
+				} else {
 					player.fallDistance--;
 				}
-				if (!player.isSneaking()){
-                    float pitch = player.rotationPitch;
-                    float factor = (pitch > 0 ? (pitch - 10) : (pitch + 10)) / -180.0f;
-					if (Math.abs(pitch) > 10f){
+				if (!player.isSneaking()) {
+					float pitch = player.rotationPitch;
+					float factor = (pitch > 0 ? (pitch - 10) : (pitch + 10)) / -180.0f;
+					if (Math.abs(pitch) > 10f) {
 						player.moveEntity(0, factor, 0);
 					}
 				}
 
 				if (worldObj.isRemote)
 					spawnParticles(player);
-				PowerNodeRegistry.For(this.worldObj).consumePower(this, PowerNodeRegistry.For(this.worldObj).getHighestPowerType(this), 0.25f);
+				PowerNodeRegistry.For(this.worldObj).consumePower(this,
+						PowerNodeRegistry.For(this.worldObj).getHighestPowerType(this), 0.25f);
 			}
 		}
 	}
 
-	private void spawnParticles(EntityPlayer player){
-		AMParticle wind = (AMParticle)ArsMagica2.proxy.particleManager.spawn(worldObj, "wind", player.posX, player.posY - player.height, player.posZ);
+	private void spawnParticles(EntityPlayer player) {
+		AMParticle wind = (AMParticle) ArsMagica2.proxy.particleManager.spawn(worldObj, "wind", player.posX,
+				player.posY - player.height, player.posZ);
 		float pitch = player.rotationPitch;
 		float factor = (pitch > 0 ? (pitch - 10) : (pitch + 10)) / -180.0f;
 		if (player.isSneaking())
 			factor = 0.01f;
-		if (wind != null){
+		if (wind != null) {
 			wind.setMaxAge(10);
 			wind.addRandomOffset(1, 1, 1);
 			wind.setParticleScale(0.1f);
@@ -91,38 +93,40 @@ public class TileEntitySlipstreamGenerator extends TileEntityAMPower{
 		}
 	}
 
-	private boolean playerIsValid(EntityPlayer player){
+	private boolean playerIsValid(EntityPlayer player) {
 		if (player == null || player.isDead)
 			return false;
 		float tolerance = 0.2f;
-		AxisAlignedBB bb = new AxisAlignedBB(pos.getX() - tolerance, pos.getY() + 1, pos.getZ() - tolerance, pos.getX() + 1 + tolerance, pos.getY() + 1 + EFFECT_HEIGHT, pos.getZ() + 1 + tolerance);
+		AxisAlignedBB bb = new AxisAlignedBB(pos.getX() - tolerance, pos.getY() + 1, pos.getZ() - tolerance,
+				pos.getX() + 1 + tolerance, pos.getY() + 1 + EFFECT_HEIGHT, pos.getZ() + 1 + tolerance);
 		Vec3d myLoc = new Vec3d(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 		Vec3d playerLoc = new Vec3d(player.posX, player.posY, player.posZ);
-		return bb.intersectsWith(player.getEntityBoundingBox()) && worldObj.rayTraceBlocks(myLoc, playerLoc, true) == null;
+		return bb.intersectsWith(player.getEntityBoundingBox())
+				&& worldObj.rayTraceBlocks(myLoc, playerLoc, true) == null;
 	}
 
-	private void refreshPlayerList(){
+	private void refreshPlayerList() {
 		levitatingEntities.clear();
 
-		for (int i = 0; i < worldObj.playerEntities.size(); ++i){
-			EntityPlayer player = (EntityPlayer)worldObj.playerEntities.get(i);
+		for (int i = 0; i < worldObj.playerEntities.size(); ++i) {
+			EntityPlayer player = (EntityPlayer) worldObj.playerEntities.get(i);
 			if (playerIsValid(player) && !levitatingEntities.contains(player))
 				levitatingEntities.add(player);
 		}
 	}
 
 	@Override
-	public boolean canRequestPower(){
+	public boolean canRequestPower() {
 		return true;
 	}
 
 	@Override
-	public int getChargeRate(){
+	public int getChargeRate() {
 		return 12;
 	}
 
 	@Override
-	public boolean canRelayPower(PowerTypes type){
+	public boolean canRelayPower(PowerTypes type) {
 		return false;
 	}
 }

@@ -19,15 +19,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.TRSRTransformation;
 
-public class SpellBakedModel implements IPerspectiveAwareModel{
-	
+public class SpellBakedModel implements IPerspectiveAwareModel {
+
 	private IBakedModel parent;
 	private ImmutableMap<TransformType, TRSRTransformation> transforms;
-	
-	 public SpellBakedModel(IBakedModel parent, ImmutableMap<TransformType, TRSRTransformation> transforms) {
-		 this.parent = parent;
-		 this.transforms = transforms;
-	 }
+
+	public SpellBakedModel(IBakedModel parent, ImmutableMap<TransformType, TRSRTransformation> transforms) {
+		this.parent = parent;
+		this.transforms = transforms;
+	}
 
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {

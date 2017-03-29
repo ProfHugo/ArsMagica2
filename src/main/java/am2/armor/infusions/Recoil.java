@@ -13,50 +13,51 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class Recoil extends ArmorImbuement{
+public class Recoil extends ArmorImbuement {
 
 	@Override
-	public String getID(){
+	public String getID() {
 		return "recoil";
 	}
 
 	@Override
-	public ImbuementTiers getTier(){
+	public ImbuementTiers getTier() {
 		return ImbuementTiers.FOURTH;
 	}
 
 	@Override
-	public EnumSet<ImbuementApplicationTypes> getApplicationTypes(){
+	public EnumSet<ImbuementApplicationTypes> getApplicationTypes() {
 		return EnumSet.of(ImbuementApplicationTypes.ON_HIT);
 	}
 
 	@Override
-	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType, Object... params){
-		LivingHurtEvent event = (LivingHurtEvent)params[0];
+	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType,
+			Object... params) {
+		LivingHurtEvent event = (LivingHurtEvent) params[0];
 		Entity e = event.getSource().getSourceOfDamage();
-		if (e != null && e instanceof EntityLivingBase){
-			((EntityLivingBase)e).knockBack(player, 10, player.posX - e.posX, player.posZ - e.posZ);
+		if (e != null && e instanceof EntityLivingBase) {
+			((EntityLivingBase) e).knockBack(player, 10, player.posX - e.posX, player.posZ - e.posZ);
 		}
 		return true;
 	}
 
 	@Override
-	public EntityEquipmentSlot[] getValidSlots(){
-		return new EntityEquipmentSlot[]{EntityEquipmentSlot.CHEST};
+	public EntityEquipmentSlot[] getValidSlots() {
+		return new EntityEquipmentSlot[] { EntityEquipmentSlot.CHEST };
 	}
 
 	@Override
-	public boolean canApplyOnCooldown(){
+	public boolean canApplyOnCooldown() {
 		return true;
 	}
 
 	@Override
-	public int getCooldown(){
+	public int getCooldown() {
 		return 0;
 	}
 
 	@Override
-	public int getArmorDamage(){
+	public int getArmorDamage() {
 		return 2;
 	}
 }

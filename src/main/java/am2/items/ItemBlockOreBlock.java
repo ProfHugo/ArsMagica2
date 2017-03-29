@@ -13,9 +13,11 @@ public class ItemBlockOreBlock extends ItemBlockSubtypes {
 	public ItemBlockOreBlock(Block block) {
 		super(block);
 	}
-	
+
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		return I18n.translateToLocal("tile.arsmagica2:block_" + EnumBlockType.values()[MathHelper.clamp_int(stack.getItemDamage(), 0, EnumOreType.values().length - 1)].getName().toLowerCase() + ".name");
+		return I18n.translateToLocal(
+				"tile.arsmagica2:block_" + EnumBlockType.values()[MathHelper.clamp_int(stack.getItemDamage(), 0,
+						EnumOreType.values().length - 1)].getName().toLowerCase() + ".name");
 	}
 }

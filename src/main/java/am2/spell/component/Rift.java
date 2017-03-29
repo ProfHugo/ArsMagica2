@@ -31,24 +31,25 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class Rift extends SpellComponent implements IRitualInteraction{
+public class Rift extends SpellComponent implements IRitualInteraction {
 
 	@Override
-	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos blockPos, EnumFacing blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster){
+	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos blockPos, EnumFacing blockFace,
+			double impactX, double impactY, double impactZ, EntityLivingBase caster) {
 
-		if (world.getBlockState(blockPos).getBlock().equals(Blocks.MOB_SPAWNER)){
-			
-			if (RitualShapeHelper.instance.matchesRitual(this, world, blockPos)){
-				if (!world.isRemote){
+		if (world.getBlockState(blockPos).getBlock().equals(Blocks.MOB_SPAWNER)) {
+
+			if (RitualShapeHelper.instance.matchesRitual(this, world, blockPos)) {
+				if (!world.isRemote) {
 					world.setBlockToAir(blockPos);
 					RitualShapeHelper.instance.consumeReagents(this, world, blockPos);
 					RitualShapeHelper.instance.consumeShape(this, world, blockPos);
-					
+
 					EntityItem item = new EntityItem(world);
 					item.setPosition(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5);
 					item.setEntityItemStack(new ItemStack(BlockDefs.inertSpawner));
 					world.spawnEntityInWorld(item);
-				}else{
+				} else {
 
 				}
 
@@ -77,82 +78,77 @@ public class Rift extends SpellComponent implements IRitualInteraction{
 		case EAST:
 			storage.setPosition(blockPos.getX() + 1.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5);
 			break;
-		default :
+		default:
 			storage.setPosition(blockPos.getX() + 0.5, blockPos.getY() - 1.5, blockPos.getZ() + 0.5);
 			break;
 		}
 		world.spawnEntityInWorld(storage);
 		return true;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.noneOf(SpellModifiers.class);
 	}
-	
+
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
 		return false;
 	}
 
 	@Override
-	public float manaCost(EntityLivingBase caster){
+	public float manaCost(EntityLivingBase caster) {
 		return 90;
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
+	public ItemStack[] reagents(EntityLivingBase caster) {
 		return null;
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
 	}
 
 	@Override
-	public Set<Affinity> getAffinity(){
+	public Set<Affinity> getAffinity() {
 		return Sets.newHashSet(Affinity.NONE);
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				new ItemStack(ItemDefs.rune, 1, EnumDyeColor.WHITE.getDyeDamage()),
-				new ItemStack(ItemDefs.rune, 1, EnumDyeColor.PURPLE.getDyeDamage()),
-				Blocks.CHEST,
-				Items.ENDER_EYE
-		};
+	public Object[] getRecipe() {
+		return new Object[] { new ItemStack(ItemDefs.rune, 1, EnumDyeColor.WHITE.getDyeDamage()),
+				new ItemStack(ItemDefs.rune, 1, EnumDyeColor.PURPLE.getDyeDamage()), Blocks.CHEST, Items.ENDER_EYE };
 	}
 
 	@Override
-	public float getAffinityShift(Affinity affinity){
+	public float getAffinityShift(Affinity affinity) {
 		return 0;
 	}
 
 	@Override
-	public MultiblockStructureDefinition getRitualShape(){
+	public MultiblockStructureDefinition getRitualShape() {
 		return RitualShapeHelper.instance.corruption;
 	}
 
 	@Override
-	public ItemStack[] getReagents(){
-		return new ItemStack[]{
-				new ItemStack(ItemDefs.mobFocus),
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.ENDER)
-		};
+	public ItemStack[] getReagents() {
+		return new ItemStack[] { new ItemStack(ItemDefs.mobFocus),
+				AffinityShiftUtils.getEssenceForAffinity(Affinity.ENDER) };
 	}
 
 	@Override
-	public int getReagentSearchRadius(){
+	public int getReagentSearchRadius() {
 		return 3;
 	}
 
 	@Override
 	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getResult() {

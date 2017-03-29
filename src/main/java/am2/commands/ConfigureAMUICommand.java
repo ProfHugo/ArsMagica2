@@ -10,34 +10,34 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 
-public class ConfigureAMUICommand extends CommandBase{
+public class ConfigureAMUICommand extends CommandBase {
 
 	private static boolean showGUI = false;
 
-	public static void showIfQueued(){
-		if (showGUI){
+	public static void showIfQueued() {
+		if (showGUI) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiHudCustomization());
 			showGUI = false;
 		}
 	}
 
 	@Override
-	public String getCommandName(){
+	public String getCommandName() {
 		return "amuicfg";
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender){
+	public String getCommandUsage(ICommandSender icommandsender) {
 		return "/amuicfg";
 	}
 
 	@Override
-	public int getRequiredPermissionLevel(){
+	public int getRequiredPermissionLevel() {
 		return 0;
 	}
 
 	@Override
-	public List<String> getCommandAliases(){
+	public List<String> getCommandAliases() {
 		ArrayList<String> aliases = new ArrayList<String>();
 		aliases.add("AMUICFG");
 		return aliases;

@@ -8,8 +8,8 @@ import am2.entity.render.AM2ModelRenderer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 
-public class ModelFireGuardian extends ModelBase{
-	//fields
+public class ModelFireGuardian extends ModelBase {
+	// fields
 	AM2ModelRenderer Body9;
 	AM2ModelRenderer Body8;
 	AM2ModelRenderer Body7;
@@ -37,7 +37,7 @@ public class ModelFireGuardian extends ModelBase{
 	AM2ModelRenderer Head2;
 	AM2ModelRenderer Head3;
 
-	public ModelFireGuardian(){
+	public ModelFireGuardian() {
 		textureWidth = 128;
 		textureHeight = 128;
 
@@ -202,14 +202,15 @@ public class ModelFireGuardian extends ModelBase{
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 
-		if (entity instanceof EntityFireGuardian){
-			if (((EntityFireGuardian)entity).getIsUnderground() && ((EntityFireGuardian)entity).getCurrentAction() != BossActions.SPINNING)
+		if (entity instanceof EntityFireGuardian) {
+			if (((EntityFireGuardian) entity).getIsUnderground()
+					&& ((EntityFireGuardian) entity).getCurrentAction() != BossActions.SPINNING)
 				return;
 			GL11.glPushMatrix();
 			setHeadRotations(f3, f4);
-			setModelRotations((EntityFireGuardian)entity, f, f1, f2, f3, f4, f5);
+			setModelRotations((EntityFireGuardian) entity, f, f1, f2, f3, f4, f5);
 			Body9.render(f5);
 			Body8.render(f5);
 			Body7.render(f5);
@@ -240,9 +241,9 @@ public class ModelFireGuardian extends ModelBase{
 		}
 	}
 
-	private void setHeadRotations(float pitch, float yaw){
-		yaw = (float)Math.toRadians(yaw);
-		pitch = (float)Math.toRadians(pitch);
+	private void setHeadRotations(float pitch, float yaw) {
+		yaw = (float) Math.toRadians(yaw);
+		pitch = (float) Math.toRadians(pitch);
 
 		setRotation(Head1, pitch, yaw, 0);
 		setRotation(Head2, pitch, yaw, 0);
@@ -254,37 +255,40 @@ public class ModelFireGuardian extends ModelBase{
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	private void setModelRotations(EntityFireGuardian entity, float f, float f1, float f2, float f3, float f4, float f5){
+	private void setModelRotations(EntityFireGuardian entity, float f, float f1, float f2, float f3, float f4,
+			float f5) {
 
 		float leftArmRotation = 0;
 		float rightArmRotation = 0;
 
-		switch (entity.getCurrentAction()){
+		switch (entity.getCurrentAction()) {
 		case SPINNING:
-			/*entityOffset = (float) Math.cos((entity.getTicksInCurrentAction() + 10) / 10f) * 5;
-			GL11.glTranslatef(0, entityOffset, 0);*/
+			/*
+			 * entityOffset = (float) Math.cos((entity.getTicksInCurrentAction()
+			 * + 10) / 10f) * 5; GL11.glTranslatef(0, entityOffset, 0);
+			 */
 
 			float stage = 35;
 
-			if (!entity.getIsUnderground()){
-				if (entity.getTicksInCurrentAction() > stage){
+			if (!entity.getIsUnderground()) {
+				if (entity.getTicksInCurrentAction() > stage) {
 					float offset = 3 * ((entity.getTicksInCurrentAction() + (f2 - entity.ticksExisted) - stage) / 5);
 					GL11.glTranslatef(0, -offset, 0);
 				}
-			}else{
+			} else {
 				GL11.glTranslatef(0, 2, 0);
 			}
 
 			stage = 10;
 
-			if (entity.getTicksInCurrentAction() > stage){
+			if (entity.getTicksInCurrentAction() > stage) {
 				float rotation = 180 * ((entity.getTicksInCurrentAction() + (f2 - entity.ticksExisted) - stage) / 20);
-				if (rotation > 180) rotation = 180;
+				if (rotation > 180)
+					rotation = 180;
 				GL11.glRotatef(rotation, 0.5f, 0, 0);
 			}
 
-
-			rightArmRotation = leftArmRotation = (float)Math.toRadians(180);
+			rightArmRotation = leftArmRotation = (float) Math.toRadians(180);
 			break;
 		case LONG_CASTING:
 			float max_degrees_x = 160;
@@ -292,11 +296,14 @@ public class ModelFireGuardian extends ModelBase{
 
 			float action_ticks = 10;
 			float fast_action_ticks = 3;
-			if (entity.getTicksInCurrentAction() < action_ticks){
-				rightArmRotation = (float)Math.toRadians(-max_degrees_x * ((entity.getTicksInCurrentAction() + (f2 - entity.ticksExisted)) / action_ticks));
-			}else if (entity.getTicksInCurrentAction() < action_ticks + fast_action_ticks){
-				rightArmRotation = (float)Math.toRadians(-max_degrees_x + (final_degrees_x * ((entity.getTicksInCurrentAction() + (f2 - entity.ticksExisted) - action_ticks) / fast_action_ticks)));
-			}else{
+			if (entity.getTicksInCurrentAction() < action_ticks) {
+				rightArmRotation = (float) Math.toRadians(-max_degrees_x
+						* ((entity.getTicksInCurrentAction() + (f2 - entity.ticksExisted)) / action_ticks));
+			} else if (entity.getTicksInCurrentAction() < action_ticks + fast_action_ticks) {
+				rightArmRotation = (float) Math.toRadians(-max_degrees_x + (final_degrees_x
+						* ((entity.getTicksInCurrentAction() + (f2 - entity.ticksExisted) - action_ticks)
+								/ fast_action_ticks)));
+			} else {
 				rightArmRotation = final_degrees_x;
 			}
 
@@ -309,11 +316,14 @@ public class ModelFireGuardian extends ModelBase{
 
 			action_ticks = 10;
 			fast_action_ticks = 3;
-			if (entity.getTicksInCurrentAction() < action_ticks){
-				rightArmRotation = (float)Math.toRadians(-max_degrees_x * ((entity.getTicksInCurrentAction() + (f2 - entity.ticksExisted)) / action_ticks));
-			}else if (entity.getTicksInCurrentAction() < action_ticks + fast_action_ticks){
-				rightArmRotation = (float)Math.toRadians(-max_degrees_x + (final_degrees_x * ((entity.getTicksInCurrentAction() + (f2 - entity.ticksExisted) - action_ticks) / fast_action_ticks)));
-			}else{
+			if (entity.getTicksInCurrentAction() < action_ticks) {
+				rightArmRotation = (float) Math.toRadians(-max_degrees_x
+						* ((entity.getTicksInCurrentAction() + (f2 - entity.ticksExisted)) / action_ticks));
+			} else if (entity.getTicksInCurrentAction() < action_ticks + fast_action_ticks) {
+				rightArmRotation = (float) Math.toRadians(-max_degrees_x + (final_degrees_x
+						* ((entity.getTicksInCurrentAction() + (f2 - entity.ticksExisted) - action_ticks)
+								/ fast_action_ticks)));
+			} else {
 				rightArmRotation = final_degrees_x;
 			}
 			break;
@@ -326,7 +336,7 @@ public class ModelFireGuardian extends ModelBase{
 		LeftArm2.rotateAngleX = LeftArm2.getRestRotationX() + leftArmRotation;
 
 		float angle = (entity.ticksExisted % 33f) / 10f;
-		float ambient = (float)Math.sin(angle) / 10f;
+		float ambient = (float) Math.sin(angle) / 10f;
 		RightArm1.rotateAngleZ = ambient;
 		RightArm2.rotateAngleZ = ambient;
 
@@ -334,7 +344,7 @@ public class ModelFireGuardian extends ModelBase{
 		LeftArm2.rotateAngleZ = -ambient;
 	}
 
-	private void setRotation(AM2ModelRenderer model, float x, float y, float z){
+	private void setRotation(AM2ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

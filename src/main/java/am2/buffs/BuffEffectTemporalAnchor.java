@@ -5,7 +5,7 @@ import am2.extensions.EntityExtension;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class BuffEffectTemporalAnchor extends BuffEffect{
+public class BuffEffectTemporalAnchor extends BuffEffect {
 
 	private double x;
 	private double y;
@@ -17,26 +17,26 @@ public class BuffEffectTemporalAnchor extends BuffEffect{
 	private float mana;
 	private float health;
 
-	public BuffEffectTemporalAnchor(int duration, int amplifier){
+	public BuffEffectTemporalAnchor(int duration, int amplifier) {
 		super(PotionEffectsDefs.temporalAnchor, duration, amplifier);
 	}
 
 	@Override
-	public void applyEffect(EntityLivingBase entityliving){
-		//store values from the entity
+	public void applyEffect(EntityLivingBase entityliving) {
+		// store values from the entity
 		x = entityliving.posX;
 		y = entityliving.posY;
 		z = entityliving.posZ;
 		rotationPitch = entityliving.rotationPitch;
 		rotationYaw = entityliving.rotationYaw;
 		rotationYawHead = entityliving.rotationYawHead;
-				
+
 		health = entityliving.getHealth();
 		mana = entityliving.getCapability(EntityExtension.INSTANCE, null).getCurrentMana();
 	}
 
 	@Override
-	public void stopEffect(EntityLivingBase entityliving){
+	public void stopEffect(EntityLivingBase entityliving) {
 		entityliving.setPositionAndUpdate(x, y, z);
 		entityliving.setAngles(rotationYaw, rotationPitch);
 		entityliving.rotationYawHead = rotationYawHead;
@@ -47,10 +47,10 @@ public class BuffEffectTemporalAnchor extends BuffEffect{
 	}
 
 	@Override
-	protected String spellBuffName(){
+	protected String spellBuffName() {
 		return "Temporal Anchor";
 	}
-	
+
 	@Override
 	public void writeCustomNBT(NBTTagCompound nbt) {
 		nbt.setDouble("X", x);
@@ -62,7 +62,7 @@ public class BuffEffectTemporalAnchor extends BuffEffect{
 		nbt.setFloat("Mana", mana);
 		nbt.setFloat("Health", health);
 	}
-	
+
 	@Override
 	public void readCustomNBT(NBTTagCompound nbt) {
 		x = nbt.getDouble("X");
@@ -74,6 +74,5 @@ public class BuffEffectTemporalAnchor extends BuffEffect{
 		health = nbt.getFloat("Health");
 		mana = nbt.getInteger("Mana");
 	}
-	
-	
+
 }

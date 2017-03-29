@@ -16,14 +16,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class Colour extends SpellModifier{
-	
+public class Colour extends SpellModifier {
+
 	@Override
 	public Object[] getRecipe() {
-		return new Object[]{
-				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_CHIMERITE),
-				new ItemStack(Items.DYE, 1, OreDictionary.WILDCARD_VALUE)
-		};
+		return new Object[] { new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_CHIMERITE),
+				new ItemStack(Items.DYE, 1, OreDictionary.WILDCARD_VALUE) };
 	}
 
 	@Override
@@ -36,13 +34,15 @@ public class Colour extends SpellModifier{
 			}
 		}
 	}
+
 	@Override
 	public EnumSet<SpellModifiers> getAspectsModified() {
 		return EnumSet.of(SpellModifiers.COLOR);
 	}
 
 	@Override
-	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, NBTTagCompound nbt) {
+	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world,
+			NBTTagCompound nbt) {
 		if (type == SpellModifiers.COLOR)
 			return NBTUtils.addTag(nbt, SpellUtils.SPELL_DATA).getInteger("Color");
 		return 0;

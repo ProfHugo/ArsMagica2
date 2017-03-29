@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("deprecation")
-public class ItemBindingCatalyst extends ItemArsMagica{
+public class ItemBindingCatalyst extends ItemArsMagica {
 
 	public static final int META_PICK = 0;
 	public static final int META_AXE = 1;
@@ -20,21 +20,21 @@ public class ItemBindingCatalyst extends ItemArsMagica{
 	public static final int META_BOW = 5;
 	public static final int META_SHIELD = 6;
 	public static final int META_BLANK = 7;
-	public static final String[] NAMES = {"pick", "axe", "sword", "shovel", "hoe", "bow", "shield"};
+	public static final String[] NAMES = { "pick", "axe", "sword", "shovel", "hoe", "bow", "shield" };
 
-	public ItemBindingCatalyst(){
+	public ItemBindingCatalyst() {
 		super();
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
 	}
-	
+
 	@Override
-	public String getItemStackDisplayName(ItemStack stack){
+	public String getItemStackDisplayName(ItemStack stack) {
 		int meta = stack.getItemDamage();
 
 		String baseName = I18n.translateToLocal("item.arsmagica2:bindingCatalyst.name");
 
-		switch (meta){
+		switch (meta) {
 		case META_PICK:
 			return baseName + I18n.translateToLocal("item.arsmagica2:bindingCatalystPick.name");
 		case META_AXE:
@@ -55,7 +55,7 @@ public class ItemBindingCatalyst extends ItemArsMagica{
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List){
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
 		par3List.add(new ItemStack(par1, 1, META_PICK));
 		par3List.add(new ItemStack(par1, 1, META_AXE));
 		par3List.add(new ItemStack(par1, 1, META_SHOVEL));

@@ -11,13 +11,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.fluids.FluidStack;
 
 public class EssenceRefinerRecipeWrapper implements IRecipeWrapper {
-	
+
 	RecipeArsMagica recipe;
-	
+
 	public EssenceRefinerRecipeWrapper(RecipeArsMagica recipe) {
 		this.recipe = recipe;
 	}
-	
+
 	@Override
 	public List<?> getInputs() {
 		return Lists.newArrayList(recipe.getRecipeItems());
@@ -40,12 +40,12 @@ public class EssenceRefinerRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-		
+
 	}
 
 	@Override
 	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-		
+
 	}
 
 	@Override

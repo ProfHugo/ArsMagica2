@@ -16,26 +16,28 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class Freedom extends ArmorImbuement{
+public class Freedom extends ArmorImbuement {
 
 	@Override
-	public String getID(){
+	public String getID() {
 		return "freedom";
 	}
 
 	@Override
-	public ImbuementTiers getTier(){
+	public ImbuementTiers getTier() {
 		return ImbuementTiers.FOURTH;
 	}
 
 	@Override
-	public EnumSet<ImbuementApplicationTypes> getApplicationTypes(){
+	public EnumSet<ImbuementApplicationTypes> getApplicationTypes() {
 		return EnumSet.of(ImbuementApplicationTypes.ON_TICK);
 	}
 
 	@Override
-	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType, Object... params){
-		ModifiableAttributeInstance instance = (ModifiableAttributeInstance)player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
+	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType,
+			Object... params) {
+		ModifiableAttributeInstance instance = (ModifiableAttributeInstance) player.getAttributeMap()
+				.getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
 
 		ArrayList<AttributeModifier> toRemove = new ArrayList<AttributeModifier>();
 
@@ -43,14 +45,14 @@ public class Freedom extends ArmorImbuement{
 		ArrayList<AttributeModifier> arraylist = new ArrayList<>(c);
 		Iterator<AttributeModifier> iterator = arraylist.iterator();
 
-		while (iterator.hasNext()){
+		while (iterator.hasNext()) {
 			AttributeModifier attributemodifier = iterator.next();
-			if (attributemodifier.getOperation() == 2 && attributemodifier.getAmount() < 0.0f){
+			if (attributemodifier.getOperation() == 2 && attributemodifier.getAmount() < 0.0f) {
 				toRemove.add(attributemodifier);
 			}
 		}
 
-		for (AttributeModifier modifier : toRemove){
+		for (AttributeModifier modifier : toRemove) {
 			instance.removeModifier(modifier);
 		}
 
@@ -58,22 +60,22 @@ public class Freedom extends ArmorImbuement{
 	}
 
 	@Override
-	public EntityEquipmentSlot[] getValidSlots(){
-		return new EntityEquipmentSlot[]{EntityEquipmentSlot.FEET};
+	public EntityEquipmentSlot[] getValidSlots() {
+		return new EntityEquipmentSlot[] { EntityEquipmentSlot.FEET };
 	}
 
 	@Override
-	public boolean canApplyOnCooldown(){
+	public boolean canApplyOnCooldown() {
 		return true;
 	}
 
 	@Override
-	public int getCooldown(){
+	public int getCooldown() {
 		return 0;
 	}
 
 	@Override
-	public int getArmorDamage(){
+	public int getArmorDamage() {
 		return 1;
 	}
 }

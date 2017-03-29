@@ -16,22 +16,24 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
 @SuppressWarnings("deprecation")
-public class ItemAirSled extends ItemArsMagica{
+public class ItemAirSled extends ItemArsMagica {
 
-	public ItemAirSled(){
+	public ItemAirSled() {
 		super();
 		setMaxStackSize(1);
 	}
 
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4){
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List,
+			boolean par4) {
 		par3List.add(I18n.translateToLocal("am2.tooltip.air_sled"));
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand){
-		if (!world.isRemote){
+	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos,
+			EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+		if (!world.isRemote) {
 			EntityAirSled sled = new EntityAirSled(world);
 			sled.setPosition(pos.getX() + hitX, pos.getY() + hitY + 0.5, pos.getZ() + hitZ);
 			world.spawnEntityInWorld(sled);
@@ -42,7 +44,7 @@ public class ItemAirSled extends ItemArsMagica{
 	}
 
 	@Override
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List){
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
 		par3List.add(ItemDefs.airSledEnchanted.copy());
 	}
 

@@ -71,12 +71,12 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 	private static int baseTicksForFullRegen = 2400;
 	private int ticksForFullRegen = baseTicksForFullRegen;
 	public boolean isRecoveringKeystone;
-	
+
 	private Entity ent;
-	
+
 	@CapabilityInject(value = IEntityExtension.class)
 	public static Capability<IEntityExtension> INSTANCE = null;
-	
+
 	private ArrayList<Integer> summon_ent_ids = new ArrayList<Integer>();
 	private EntityLivingBase entity;
 
@@ -89,151 +89,152 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 	public float bankedInfusionLegs = 0f;
 	public float bankedInfusionBoots = 0f;
 	public ArrayList<ItemStack> runningStacks = new ArrayList<>();
-		
+
 	@Override
 	public boolean hasEnoughtMana(float cost) {
 		if (getCurrentMana() + getBonusCurrentMana() < cost)
 			return false;
 		return true;
 	}
-	
+
 	@Override
-	public void setContingency (ContingencyType type, ItemStack stack) {
+	public void setContingency(ContingencyType type, ItemStack stack) {
 		DataSyncExtension.For(entity).set(CONTENGENCY_TYPE, type.name().toLowerCase());
 		DataSyncExtension.For(entity).set(CONTENGENCY_STACK, Optional.fromNullable(stack));
 	}
-	
+
 	@Override
 	public ContingencyType getContingencyType() {
 		return ContingencyType.fromName(DataSyncExtension.For(entity).get(CONTENGENCY_TYPE));
 	}
-	
+
 	@Override
 	public ItemStack getContingencyStack() {
 		return DataSyncExtension.For(entity).get(CONTENGENCY_STACK).orNull();
 	}
-	
+
 	@Override
 	public double getMarkX() {
 		return DataSyncExtension.For(entity).get(MARK_X);
 	}
-	
+
 	@Override
 	public double getMarkY() {
 		return DataSyncExtension.For(entity).get(MARK_Y);
 	}
-	
+
 	@Override
 	public double getMarkZ() {
 		return DataSyncExtension.For(entity).get(MARK_Z);
 	}
-	
+
 	@Override
 	public int getMarkDimensionID() {
 		return DataSyncExtension.For(entity).get(MARK_DIMENSION);
 	}
-	
+
 	@Override
 	public float getCurrentMana() {
 		return DataSyncExtension.For(entity).get(CURRENT_MANA);
 	}
-	
+
 	@Override
 	public int getCurrentLevel() {
 		return DataSyncExtension.For(entity).get(CURRENT_LEVEL);
 	}
-	
+
 	@Override
 	public float getCurrentBurnout() {
 		return DataSyncExtension.For(entity).get(CURRENT_MANA_FATIGUE);
 	}
-	
+
 	@Override
 	public int getCurrentSummons() {
 		return DataSyncExtension.For(entity).get(CURRENT_SUMMONS);
 	}
-	
+
 	@Override
 	public float getCurrentXP() {
 		return DataSyncExtension.For(entity).get(CURRENT_XP);
 	}
-	
+
 	@Override
 	public int getHealCooldown() {
 		return DataSyncExtension.For(entity).get(HEAL_COOLDOWN);
 	}
-	
+
 	@Override
 	public void lowerHealCooldown(int amount) {
 		setHealCooldown(Math.max(0, getHealCooldown() - amount));
 	}
-	
+
 	@Override
 	public void placeHealOnCooldown() {
 		DataSyncExtension.For(entity).set(HEAL_COOLDOWN, 40);
 	}
-	
+
 	@Override
-	public void lowerAffinityHealCooldown (int amount) {
+	public void lowerAffinityHealCooldown(int amount) {
 		setAffinityHealCooldown(Math.max(0, getAffinityHealCooldown() - amount));
 	}
-	
+
 	@Override
 	public int getAffinityHealCooldown() {
 		return DataSyncExtension.For(entity).get(AFFINITY_HEAL_COOLDOWN);
 	}
-	
+
 	@Override
 	public void placeAffinityHealOnCooldown(boolean full) {
 		DataSyncExtension.For(entity).set(AFFINITY_HEAL_COOLDOWN, 40);
 	}
-	
+
 	@Override
 	public float getMaxMana() {
-		float mana = (float)(Math.pow(getCurrentLevel(), 1.5f) * (85f * ((float)getCurrentLevel() / 100f)) + 500f);
+		float mana = (float) (Math.pow(getCurrentLevel(), 1.5f) * (85f * ((float) getCurrentLevel() / 100f)) + 500f);
 		if (this.entity.isPotionActive(PotionEffectsDefs.manaBoost))
 			mana *= 1 + (0.25 * (this.entity.getActivePotionEffect(PotionEffectsDefs.manaBoost).getAmplifier() + 1));
-		return (float)(mana + this.entity.getAttributeMap().getAttributeInstance(ArsMagicaAPI.maxManaBonus).getAttributeValue());
+		return (float) (mana
+				+ this.entity.getAttributeMap().getAttributeInstance(ArsMagicaAPI.maxManaBonus).getAttributeValue());
 	}
-	
+
 	@Override
-	public float getMaxXP () {
-		return (float)Math.pow(getCurrentLevel() * 0.25f, 1.5f);
+	public float getMaxXP() {
+		return (float) Math.pow(getCurrentLevel() * 0.25f, 1.5f);
 	}
-	
+
 	@Override
-	public float getMaxBurnout () {
+	public float getMaxBurnout() {
 		return getCurrentLevel() * 10 + 1;
 	}
-	
+
 	@Override
 	public void setAffinityHealCooldown(int affinityHealCooldown) {
 		DataSyncExtension.For(entity).set(AFFINITY_HEAL_COOLDOWN, affinityHealCooldown);
 	}
-	
+
 	@Override
 	public void setCurrentBurnout(float currentBurnout) {
 		DataSyncExtension.For(entity).set(CURRENT_MANA_FATIGUE, currentBurnout);
 	}
-	
+
 	@Override
 	public void setCurrentLevel(int currentLevel) {
-		ticksForFullRegen = (int)Math.round(baseTicksForFullRegen * (0.75 - (0.25 * (getCurrentLevel() / 99f))));
+		ticksForFullRegen = (int) Math.round(baseTicksForFullRegen * (0.75 - (0.25 * (getCurrentLevel() / 99f))));
 		if (entity instanceof EntityPlayer)
 			MinecraftForge.EVENT_BUS.post(new PlayerMagicLevelChangeEvent((EntityPlayer) entity, currentLevel));
 		DataSyncExtension.For(entity).set(CURRENT_LEVEL, currentLevel);
 	}
-	
+
 	@Override
 	public void setCurrentMana(float currentMana) {
 		DataSyncExtension.For(entity).set(CURRENT_MANA, currentMana);
 	}
-	
+
 	@Override
 	public void setCurrentSummons(int currentSummons) {
 		DataSyncExtension.For(entity).set(CURRENT_SUMMONS, currentSummons);
 	}
-	
+
 	@Override
 	public void setCurrentXP(float currentXP) {
 		while (currentXP >= this.getMaxXP()) {
@@ -242,81 +243,83 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 		}
 		DataSyncExtension.For(entity).set(CURRENT_XP, currentXP);
 	}
-	
+
 	@Override
 	public void setHealCooldown(int healCooldown) {
 		DataSyncExtension.For(entity).set(HEAL_COOLDOWN, healCooldown);
 	}
-	
+
 	@Override
 	public void setMarkX(double markX) {
 		DataSyncExtension.For(entity).set(MARK_X, markX);
 	}
-	
+
 	@Override
 	public void setMarkY(double markY) {
 		DataSyncExtension.For(entity).set(MARK_Y, markY);
 	}
-	
+
 	@Override
 	public void setMarkZ(double markZ) {
 		DataSyncExtension.For(entity).set(MARK_Z, markZ);
 	}
-	
+
 	@Override
 	public void setMarkDimensionID(int markDimensionID) {
 		DataSyncExtension.For(entity).set(MARK_DIMENSION, markDimensionID);
 	}
-	
+
 	@Override
-	public void setMark (double x, double y, double z, int dim) {
+	public void setMark(double x, double y, double z, int dim) {
 		setMarkX(x);
 		setMarkY(y);
 		setMarkZ(z);
 		setMarkDimensionID(dim);
 	}
-	
+
 	@Override
 	public boolean isShrunk() {
 		return DataSyncExtension.For(entity).get(IS_SHRUNK);
 	}
-	
+
 	@Override
 	public void setShrunk(boolean shrunk) {
 		DataSyncExtension.For(entity).set(IS_SHRUNK, shrunk);
 	}
-	
+
 	@Override
 	public void setInverted(boolean isInverted) {
 		DataSyncExtension.For(entity).set(IS_INVERTED, isInverted);
 	}
-	
+
 	@Override
 	public void setFallProtection(float hasFallProtection) {
 		DataSyncExtension.For(entity).set(FALL_PROTECTION, hasFallProtection);
 	}
-	
+
 	@Override
 	public boolean isInverted() {
-		return DataSyncExtension.For(entity).get(IS_INVERTED) == null ? false : DataSyncExtension.For(entity).get(IS_INVERTED);
+		return DataSyncExtension.For(entity).get(IS_INVERTED) == null ? false
+				: DataSyncExtension.For(entity).get(IS_INVERTED);
 	}
-	
+
 	@Override
 	public float getFallProtection() {
-		return DataSyncExtension.For(entity).get(FALL_PROTECTION) == null ? 0 : DataSyncExtension.For(entity).get(FALL_PROTECTION);
+		return DataSyncExtension.For(entity).get(FALL_PROTECTION) == null ? 0
+				: DataSyncExtension.For(entity).get(FALL_PROTECTION);
 	}
-	
+
 	@Override
 	public void addEntityReference(EntityLivingBase entity) {
 		this.entity = entity;
 		setOriginalSize(new AMVector2(entity.width, entity.height));
 	}
-	
+
 	public void setOriginalSize(AMVector2 amVector2) {
 		this.originalSize = amVector2;
 	}
-	
-	public AMVector2 getOriginalSize(){
+
+	public AMVector2 getOriginalSize() {
 		return this.originalSize;
 	}
 
@@ -334,7 +337,7 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 			ext.setWithSync(CURRENT_MANA, 500F);
 			ext.setWithSync(CURRENT_MANA_FATIGUE, 0F);
 			ext.setWithSync(CURRENT_XP, 0F);
-			ext.setWithSync(CURRENT_SUMMONS, 0);			
+			ext.setWithSync(CURRENT_SUMMONS, 0);
 		}
 		ext.setWithSync(HEAL_COOLDOWN, 0);
 		ext.setWithSync(AFFINITY_HEAL_COOLDOWN, 0);
@@ -368,11 +371,11 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 			return (T) this;
 		return null;
 	}
-	
+
 	public static EntityExtension For(EntityLivingBase thePlayer) {
 		return (EntityExtension) thePlayer.getCapability(INSTANCE, null);
 	}
-	
+
 	@Override
 	public NBTBase serializeNBT() {
 		return new IEntityExtension.Storage().writeNBT(INSTANCE, this, null);
@@ -391,14 +394,16 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 	@Override
 	public int getMaxSummons() {
 		int maxSummons = 1;
-		if (entity instanceof EntityPlayer && SkillData.For((EntityPlayer)entity).hasSkill(SkillDefs.EXTRA_SUMMONS.getID()));
-			maxSummons++;
+		if (entity instanceof EntityPlayer
+				&& SkillData.For((EntityPlayer) entity).hasSkill(SkillDefs.EXTRA_SUMMONS.getID()))
+			;
+		maxSummons++;
 		return maxSummons;
 	}
 
 	@Override
 	public boolean addSummon(EntityCreature entityliving) {
-		if (!entity.worldObj.isRemote){
+		if (!entity.worldObj.isRemote) {
 			summon_ent_ids.add(entityliving.getEntityId());
 			setCurrentSummons(getCurrentSummons() + 1);
 		}
@@ -409,105 +414,107 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 	public boolean getCanHaveMoreSummons() {
 		if (entity instanceof EntityLifeGuardian)
 			return true;
-		
+
 		verifySummons();
 		return this.getCurrentSummons() < getMaxSummons();
 	}
-	
-	private void verifySummons(){
-		for (int i = 0; i < summon_ent_ids.size(); ++i){
+
+	private void verifySummons() {
+		for (int i = 0; i < summon_ent_ids.size(); ++i) {
 			int id = summon_ent_ids.get(i);
 			Entity e = entity.worldObj.getEntityByID(id);
-			if (e == null || !(e instanceof EntityLivingBase)){
+			if (e == null || !(e instanceof EntityLivingBase)) {
 				summon_ent_ids.remove(i);
 				i--;
 				removeSummon();
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean removeSummon(){
-		if (getCurrentSummons() == 0){
+	public boolean removeSummon() {
+		if (getCurrentSummons() == 0) {
 			return false;
 		}
-		if (!entity.worldObj.isRemote){
+		if (!entity.worldObj.isRemote) {
 			setCurrentSummons(getCurrentSummons() - 1);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void updateManaLink(EntityLivingBase entity){
+	public void updateManaLink(EntityLivingBase entity) {
 		ManaLinkEntry mle = new ManaLinkEntry(entity.getEntityId(), 20);
 		if (!this.manaLinks.contains(mle))
 			this.manaLinks.add(mle);
 		else
 			this.manaLinks.remove(mle);
 		if (!this.entity.worldObj.isRemote)
-			AMNetHandler.INSTANCE.sendPacketToAllClientsNear(entity.dimension, entity.posX, entity.posY, entity.posZ, 32, AMPacketIDs.MANA_LINK_UPDATE, getManaLinkUpdate());
+			AMNetHandler.INSTANCE.sendPacketToAllClientsNear(entity.dimension, entity.posX, entity.posY, entity.posZ,
+					32, AMPacketIDs.MANA_LINK_UPDATE, getManaLinkUpdate());
 
 	}
-	
+
 	@Override
-	public void deductMana(float manaCost){
+	public void deductMana(float manaCost) {
 		float leftOver = manaCost - getCurrentMana();
 		this.setCurrentMana(getCurrentMana() - manaCost);
-		if (leftOver > 0){
-			for (ManaLinkEntry entry : this.manaLinks){
+		if (leftOver > 0) {
+			for (ManaLinkEntry entry : this.manaLinks) {
 				leftOver -= entry.deductMana(entity.worldObj, entity, leftOver);
 				if (leftOver <= 0)
 					break;
 			}
 		}
 	}
-	
+
 	@Override
-	public void cleanupManaLinks(){
+	public void cleanupManaLinks() {
 		Iterator<ManaLinkEntry> it = this.manaLinks.iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			ManaLinkEntry entry = it.next();
 			Entity e = this.entity.worldObj.getEntityByID(entry.entityID);
 			if (e == null)
 				it.remove();
 		}
 	}
-	
+
 	@Override
-	public float getBonusCurrentMana(){
+	public float getBonusCurrentMana() {
 		float bonus = 0;
-		for (ManaLinkEntry entry : this.manaLinks){
+		for (ManaLinkEntry entry : this.manaLinks) {
 			bonus += entry.getAdditionalCurrentMana(entity.worldObj, entity);
 		}
 		return bonus;
 	}
 
 	@Override
-	public float getBonusMaxMana(){
+	public float getBonusMaxMana() {
 		float bonus = 0;
-		for (ManaLinkEntry entry : this.manaLinks){
+		for (ManaLinkEntry entry : this.manaLinks) {
 			bonus += entry.getAdditionalMaxMana(entity.worldObj, entity);
 		}
 		return bonus;
 	}
-	
+
 	@Override
-	public boolean isManaLinkedTo(EntityLivingBase entity){
-		for (ManaLinkEntry entry : manaLinks){
+	public boolean isManaLinkedTo(EntityLivingBase entity) {
+		for (ManaLinkEntry entry : manaLinks) {
 			if (entry.entityID == entity.getEntityId())
 				return true;
 		}
 		return false;
 	}
-	
+
 	@Override
-	public void spawnManaLinkParticles(){
-		if (entity.worldObj != null && entity.worldObj.isRemote){
-			for (ManaLinkEntry entry : this.manaLinks){
+	public void spawnManaLinkParticles() {
+		if (entity.worldObj != null && entity.worldObj.isRemote) {
+			for (ManaLinkEntry entry : this.manaLinks) {
 				Entity e = entity.worldObj.getEntityByID(entry.entityID);
-				if (e != null && e.getDistanceSqToEntity(entity) < entry.range && e.ticksExisted % 90 == 0){
-					AMLineArc arc = (AMLineArc)ArsMagica2.proxy.particleManager.spawn(entity.worldObj, "textures/blocks/oreblockbluetopaz.png", e, entity);
-					if (arc != null){
+				if (e != null && e.getDistanceSqToEntity(entity) < entry.range && e.ticksExisted % 90 == 0) {
+					AMLineArc arc = (AMLineArc) ArsMagica2.proxy.particleManager.spawn(entity.worldObj,
+							"textures/blocks/oreblockbluetopaz.png", e, entity);
+					if (arc != null) {
 						arc.setIgnoreAge(false);
 						arc.setRBGColorF(0.17f, 0.88f, 0.88f);
 					}
@@ -515,38 +522,38 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 			}
 		}
 	}
-	
-	private class ManaLinkEntry{
+
+	private class ManaLinkEntry {
 		private final int entityID;
 		private final int range;
 
-		public ManaLinkEntry(int entityID, int range){
+		public ManaLinkEntry(int entityID, int range) {
 			this.entityID = entityID;
 			this.range = range * range;
 		}
 
-		private EntityLivingBase getEntity(World world){
+		private EntityLivingBase getEntity(World world) {
 			Entity e = world.getEntityByID(entityID);
 			if (e == null || !(e instanceof EntityLivingBase))
 				return null;
-			return (EntityLivingBase)e;
+			return (EntityLivingBase) e;
 		}
 
-		public float getAdditionalCurrentMana(World world, Entity host){
+		public float getAdditionalCurrentMana(World world, Entity host) {
 			EntityLivingBase e = getEntity(world);
 			if (e == null || e.getDistanceSqToEntity(host) > range)
 				return 0;
 			return For(e).getCurrentMana();
 		}
 
-		public float getAdditionalMaxMana(World world, Entity host){
+		public float getAdditionalMaxMana(World world, Entity host) {
 			EntityLivingBase e = getEntity(world);
 			if (e == null || e.getDistanceSqToEntity(host) > range)
 				return 0;
 			return For(e).getMaxMana();
 		}
 
-		public float deductMana(World world, Entity host, float amt){
+		public float deductMana(World world, Entity host, float amt) {
 			EntityLivingBase e = getEntity(world);
 			if (e == null || e.getDistanceSqToEntity(host) > range)
 				return 0;
@@ -556,14 +563,14 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 		}
 
 		@Override
-		public int hashCode(){
+		public int hashCode() {
 			return entityID;
 		}
 
 		@Override
-		public boolean equals(Object obj){
+		public boolean equals(Object obj) {
 			if (obj instanceof ManaLinkEntry)
-				return ((ManaLinkEntry)obj).entityID == this.entityID;
+				return ((ManaLinkEntry) obj).entityID == this.entityID;
 			return false;
 		}
 	}
@@ -575,19 +582,22 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 
 	@Override
 	public boolean getIsFlipped() {
-		return DataSyncExtension.For(entity).get(IS_INVERTED) == null ? false : DataSyncExtension.For(entity).get(IS_INVERTED);
+		return DataSyncExtension.For(entity).get(IS_INVERTED) == null ? false
+				: DataSyncExtension.For(entity).get(IS_INVERTED);
 	}
 
 	@Override
 	public float getFlipRotation() {
-		return DataSyncExtension.For(entity).get(FLIP_ROTATION) == null ? 0 : DataSyncExtension.For(entity).get(FLIP_ROTATION);
+		return DataSyncExtension.For(entity).get(FLIP_ROTATION) == null ? 0
+				: DataSyncExtension.For(entity).get(FLIP_ROTATION);
 	}
 
 	@Override
 	public float getPrevFlipRotation() {
-		return DataSyncExtension.For(entity).get(PREV_FLIP_ROTATION) == null ? 0 : DataSyncExtension.For(entity).get(PREV_FLIP_ROTATION);
+		return DataSyncExtension.For(entity).get(PREV_FLIP_ROTATION) == null ? 0
+				: DataSyncExtension.For(entity).get(PREV_FLIP_ROTATION);
 	}
-	
+
 	@Override
 	public void setFlipRotation(float rot) {
 		DataSyncExtension.For(entity).set(FLIP_ROTATION, rot);
@@ -600,12 +610,14 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 
 	@Override
 	public float getShrinkPct() {
-		return DataSyncExtension.For(entity).get(SHRINK_PCT) == null ? 0 : DataSyncExtension.For(entity).get(SHRINK_PCT);
+		return DataSyncExtension.For(entity).get(SHRINK_PCT) == null ? 0
+				: DataSyncExtension.For(entity).get(SHRINK_PCT);
 	}
 
 	@Override
 	public float getPrevShrinkPct() {
-		return DataSyncExtension.For(entity).get(PREV_SHRINK_PCT) == null ? 0 : DataSyncExtension.For(entity).get(PREV_SHRINK_PCT);
+		return DataSyncExtension.For(entity).get(PREV_SHRINK_PCT) == null ? 0
+				: DataSyncExtension.For(entity).get(PREV_SHRINK_PCT);
 	}
 
 	@Override
@@ -620,19 +632,20 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 
 	@Override
 	public float getTKDistance() {
-		return DataSyncExtension.For(entity).get(TK_DISTANCE) == null ? 0 : DataSyncExtension.For(entity).get(TK_DISTANCE);
+		return DataSyncExtension.For(entity).get(TK_DISTANCE) == null ? 0
+				: DataSyncExtension.For(entity).get(TK_DISTANCE);
 	}
-	
+
 	@Override
 	public void syncTKDistance() {
 		AMDataWriter writer = new AMDataWriter();
 		writer.add(this.getTKDistance());
 		AMNetHandler.INSTANCE.sendPacketToServer(AMPacketIDs.TK_DISTANCE_SYNC, writer.generate());
 	}
-	
+
 	@Override
-	public void manaBurnoutTick(){
-		if (isGravityDisabled()){
+	public void manaBurnoutTick() {
+		if (isGravityDisabled()) {
 			this.entity.motionY = 0;
 		}
 		float actualMaxMana = getMaxMana();
@@ -702,14 +715,15 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 				toRemove = overload;
 			setManaShielding(getManaShielding() - toRemove);
 		}
-		
+
 		if (getCurrentBurnout() > 0) {
 			int numArmorPieces = 0;
 			if (entity instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) entity;
 				for (int i = 0; i < 4; ++i) {
 					ItemStack stack = player.inventory.armorInventory[i];
-					if (stack == null) continue;
+					if (stack == null)
+						continue;
 					if (ImbuementRegistry.instance.isImbuementPresent(stack, GenericImbuement.burnoutReduction))
 						numArmorPieces++;
 				}
@@ -723,8 +737,8 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 			}
 		}
 	}
-	
-	public byte[] getManaLinkUpdate(){
+
+	public byte[] getManaLinkUpdate() {
 		AMDataWriter writer = new AMDataWriter();
 		writer.add(this.entity.getEntityId());
 		writer.add(this.manaLinks.size());
@@ -732,20 +746,21 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 			writer.add(entry.entityID);
 		return writer.generate();
 	}
-	
+
 	public void handleManaLinkUpdate(AMDataReader rdr) {
 		this.manaLinks.clear();
 		int numLinks = rdr.getInt();
-		for (int i = 0; i < numLinks; ++i){
+		for (int i = 0; i < numLinks; ++i) {
 			Entity e = entity.worldObj.getEntityByID(rdr.getInt());
 			if (e != null && e instanceof EntityLivingBase)
-				updateManaLink((EntityLivingBase)e);
+				updateManaLink((EntityLivingBase) e);
 		}
 	}
-	
+
 	@Override
-	public boolean setMagicLevelWithMana(int level){
-		if (level < 0) level = 0;
+	public boolean setMagicLevelWithMana(int level) {
+		if (level < 0)
+			level = 0;
 		setCurrentLevel(level);
 		setCurrentMana(getMaxMana());
 		setCurrentBurnout(0);
@@ -761,7 +776,7 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 	public void setDisableGravity(boolean b) {
 		DataSyncExtension.For(entity).set(DataDefinitions.DISABLE_GRAVITY, b);
 	}
-	
+
 	@Override
 	public boolean isGravityDisabled() {
 		return DataSyncExtension.For(entity).get(DataDefinitions.DISABLE_GRAVITY);
@@ -776,12 +791,12 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 	public void setInanimateTarget(Entity ent) {
 		this.ent = ent;
 	}
-	
-	public void flipTick(){
-		//this.setInverted(true);
+
+	public void flipTick() {
+		// this.setInverted(true);
 		boolean flipped = getIsFlipped();
 
-		ItemStack boots = ((EntityPlayer)entity).inventory.armorInventory[0];
+		ItemStack boots = ((EntityPlayer) entity).inventory.armorInventory[0];
 		if (boots == null || boots.getItem() != ItemDefs.enderBoots)
 			setInverted(false);
 
@@ -796,22 +811,22 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 		DataSyncExtension.For(entity).set(PREV_SHRINK_PCT, getShrinkPct());
 		DataSyncExtension.For(entity).set(SHRINK_PCT, shrinkPct);
 	}
-	
+
 	@Override
 	public float getManaShielding() {
 		return DataSyncExtension.For(entity).get(MANA_SHIELD);
 	}
-	
+
 	@Override
 	public void setManaShielding(float manaShield) {
 		manaShield = Math.max(0, manaShield);
 		DataSyncExtension.For(entity).set(MANA_SHIELD, manaShield);
 	}
-	
+
 	public float getMaxMagicShielding() {
 		return getCurrentLevel() * 2;
 	}
-	
+
 	public float protect(float damage) {
 		float left = getManaShielding() - damage;
 		setManaShielding(Math.max(0, left));
@@ -823,7 +838,7 @@ public class EntityExtension implements IEntityExtension, ICapabilityProvider, I
 	public void addMagicShielding(float manaShield) {
 		setManaShielding(getManaShielding() + manaShield);
 	}
-	
+
 	public void addMagicShieldingCapped(float manaShield) {
 		setManaShielding(Math.min(getManaShielding() + manaShield, getMaxMagicShielding()));
 	}

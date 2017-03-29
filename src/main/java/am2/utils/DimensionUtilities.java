@@ -16,13 +16,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-public class DimensionUtilities{
-	public static void doDimensionTransfer(EntityLivingBase entity, int dimension){
+public class DimensionUtilities {
+	public static void doDimensionTransfer(EntityLivingBase entity, int dimension) {
 
-		if (entity instanceof EntityPlayerMP){
-			EntityPlayerMP player = (EntityPlayerMP)entity;
+		if (entity instanceof EntityPlayerMP) {
+			EntityPlayerMP player = (EntityPlayerMP) entity;
 			new AMTeleporter(player.mcServer.worldServerForDimension(dimension)).teleport(entity);
-		}else{
+		} else {
 			entity.worldObj.theProfiler.startSection("changeDimension");
 			MinecraftServer minecraftserver = FMLCommonHandler.instance().getMinecraftServerInstance();
 			int j = entity.dimension;
@@ -32,11 +32,12 @@ public class DimensionUtilities{
 			entity.worldObj.removeEntity(entity);
 			entity.isDead = false;
 			entity.worldObj.theProfiler.startSection("reposition");
-			minecraftserver.getPlayerList().transferEntityToWorld(entity, j, worldserver, worldserver1, new AMTeleporter(worldserver1));
+			minecraftserver.getPlayerList().transferEntityToWorld(entity, j, worldserver, worldserver1,
+					new AMTeleporter(worldserver1));
 			entity.worldObj.theProfiler.endStartSection("reloading");
 			Entity e = EntityList.createEntityByName(EntityList.getEntityString(entity), worldserver1);
 
-			if (e != null){
+			if (e != null) {
 				e.readFromNBT(entity.writeToNBT(new NBTTagCompound()));
 				worldserver1.spawnEntityInWorld(e);
 			}
@@ -49,25 +50,27 @@ public class DimensionUtilities{
 		}
 	}
 
-	public static TileEntityAstralBarrier GetBlockingAstralBarrier(World world, BlockPos pos, ArrayList<Long> keys){
-		//check for Astral Barrier
-		for (int i = -20; i <= 20; ++i){
-			for (int j = -20; j <= 20; ++j){
-				for (int k = -20; k <= 20; ++k){
-					if (world.getBlockState(pos.add(i, j, k)).getBlock() == BlockDefs.astralBarrier){
+	public static TileEntityAstralBarrier GetBlockingAstralBarrier(World world, BlockPos pos, ArrayList<Long> keys) {
+		// check for Astral Barrier
+		for (int i = -20; i <= 20; ++i) {
+			for (int j = -20; j <= 20; ++j) {
+				for (int k = -20; k <= 20; ++k) {
+					if (world.getBlockState(pos.add(i, j, k)).getBlock() == BlockDefs.astralBarrier) {
 
 						TileEntity te = world.getTileEntity(pos.add(i, j, k));
-						if (te == null || !(te instanceof TileEntityAstralBarrier)){
+						if (te == null || !(te instanceof TileEntityAstralBarrier)) {
 							continue;
 						}
-						TileEntityAstralBarrier barrier = (TileEntityAstralBarrier)te;
+						TileEntityAstralBarrier barrier = (TileEntityAstralBarrier) te;
 
 						long barrierKey = KeystoneUtilities.instance.getKeyFromRunes(barrier.getRunesInKey());
-						if ((barrierKey != 0 && keys.contains(barrierKey)) || !barrier.IsActive()) continue;
+						if ((barrierKey != 0 && keys.contains(barrierKey)) || !barrier.IsActive())
+							continue;
 
 						int sqDist = (int) pos.distanceSq(barrier.getPos());
 
-						if (sqDist < (barrier.getRadius() * barrier.getRadius())) return barrier;
+						if (sqDist < (barrier.getRadius() * barrier.getRadius()))
+							return barrier;
 					}
 				}
 			}

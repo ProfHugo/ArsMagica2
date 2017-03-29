@@ -3,35 +3,35 @@ package am2.buffs;
 import net.minecraft.entity.EntityLivingBase;
 import am2.defs.PotionEffectsDefs;
 
-public class BuffEffectWaterBreathing extends BuffEffect{
+public class BuffEffectWaterBreathing extends BuffEffect {
 
 	int breath;
 
-	public BuffEffectWaterBreathing(int duration, int amplifier){
+	public BuffEffectWaterBreathing(int duration, int amplifier) {
 		super(PotionEffectsDefs.waterBreathing, duration, amplifier);
 	}
 
 	@Override
-	public void applyEffect(EntityLivingBase entityliving){
+	public void applyEffect(EntityLivingBase entityliving) {
 		breath = entityliving.getAir();
 	}
 
 	@Override
-	public void performEffect(EntityLivingBase entityliving){
-		if (entityliving.isInWater()){
+	public void performEffect(EntityLivingBase entityliving) {
+		if (entityliving.isInWater()) {
 			entityliving.setAir(breath);
-		}else{
+		} else {
 			breath = entityliving.getAir();
 		}
 	}
 
 	@Override
-	public void stopEffect(EntityLivingBase entityliving){
+	public void stopEffect(EntityLivingBase entityliving) {
 
 	}
 
 	@Override
-	public String spellBuffName(){
+	public String spellBuffName() {
 		return "Water Breathing";
 	}
 

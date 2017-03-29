@@ -22,7 +22,7 @@ public class AbilityFireResistance extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.FIRE;
 	}
-	
+
 	@Override
 	public void applyHurt(EntityPlayer player, LivingHurtEvent event, boolean isAttacker) {
 		if (!isAttacker && event.getSource().isFireDamage()) {

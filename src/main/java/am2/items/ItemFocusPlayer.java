@@ -8,29 +8,26 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class ItemFocusPlayer extends ItemFilterFocus{
+public class ItemFocusPlayer extends ItemFilterFocus {
 
-	public ItemFocusPlayer(){
+	public ItemFocusPlayer() {
 		super();
 	}
 
 	@Override
-	public Class<? extends Entity> getFilterClass(){
+	public Class<? extends Entity> getFilterClass() {
 		return EntityPlayer.class;
 	}
 
 	@Override
-	public Object[] getRecipeItems(){
-		return new Object[]{
-				"L",
-				"F",
-				Character.valueOf('L'), new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.LIFE)),
-				Character.valueOf('F'), ItemDefs.standardFocus
-		};
+	public Object[] getRecipeItems() {
+		return new Object[] { "L", "F", Character.valueOf('L'),
+				new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.LIFE)),
+				Character.valueOf('F'), ItemDefs.standardFocus };
 	}
 
 	@Override
-	public String getInGameName(){
+	public String getInGameName() {
 		return "Player Focus";
 	}
 }

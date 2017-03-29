@@ -15,36 +15,34 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.world.World;
 
-public class Speed extends SpellModifier{
+public class Speed extends SpellModifier {
 
 	@Override
-	public EnumSet<SpellModifiers> getAspectsModified(){
+	public EnumSet<SpellModifiers> getAspectsModified() {
 		return EnumSet.of(SpellModifiers.SPEED);
 	}
 
 	@Override
-	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, NBTTagCompound metadata){
+	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world,
+			NBTTagCompound metadata) {
 		return 2.6f;
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.LIGHTNING),
-				Items.LEATHER_BOOTS,
+	public Object[] getRecipe() {
+		return new Object[] { AffinityShiftUtils.getEssenceForAffinity(Affinity.LIGHTNING), Items.LEATHER_BOOTS,
 				Items.CARROT,
-				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.SWIFTNESS)
-		};
+				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.SWIFTNESS) };
 	}
 
 	@Override
-	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity){
+	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity) {
 		return 1.15f * quantity;
 	}
 
 	@Override
 	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

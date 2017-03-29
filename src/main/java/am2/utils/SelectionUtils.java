@@ -9,19 +9,19 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class SelectionUtils {
-	
+
 	public static int[] getRuneSet(EntityPlayer player) {
 		long key = player.getUniqueID().getMostSignificantBits();
 		return getRunesFromKey(key);
 	}
-	
+
 	public static int[] getRunesFromKey(long key) {
 		int size = 4;
 		long checkKey = 0xffff;
 		boolean[] used = new boolean[16];
 		int[] ids = new int[size];
 		for (int i = 0; i < size; i++) {
-			long rune = key >> i*16;
+			long rune = key >> i * 16;
 			rune &= checkKey;
 			if ((rune & 0x1L) == 0x1L && !used[0]) {
 				ids[i] = EnumDyeColor.BLACK.getDyeDamage();
@@ -75,8 +75,8 @@ public class SelectionUtils {
 		}
 		return ids;
 	}
-	
-	public static EntityPlayer getPlayersForRuneSet (int[] runes) {
+
+	public static EntityPlayer getPlayersForRuneSet(int[] runes) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		GameProfile[] profiles = server.getPlayerList().getAllProfiles();
 		if (runes.length != 4)
@@ -94,7 +94,7 @@ public class SelectionUtils {
 				LogHelper.error("Missing player " + profile.getName());
 				continue;
 			}
-			
+
 		}
 		return null;
 	}

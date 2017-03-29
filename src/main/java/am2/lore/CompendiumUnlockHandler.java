@@ -19,18 +19,20 @@ import net.minecraftforge.fml.common.registry.EntityRegistry.EntityRegistration;
 
 /**
  * This class should handle compendium unlocks wherever possible through events.
- * If it is not possible, then all calls should use the static utility methods here.
+ * If it is not possible, then all calls should use the static utility methods
+ * here.
  *
  * @author Mithion
  */
-public class CompendiumUnlockHandler{
+public class CompendiumUnlockHandler {
 	/**
-	 * This is a catch all method - it's genericized to attempt to unlock a compendium entry for anything AM2 based that the player picks up
+	 * This is a catch all method - it's genericized to attempt to unlock a
+	 * compendium entry for anything AM2 based that the player picks up
 	 *
 	 * @param event
 	 */
 	@SubscribeEvent
-	public void onPlayerPickupItem(EntityItemPickupEvent event){
+	public void onPlayerPickupItem(EntityItemPickupEvent event) {
 		IArcaneCompendium instance = ArcaneCompendium.For(event.getEntityPlayer());
 		instance.unlockRelatedItems(event.getItem().getEntityItem());
 	}
@@ -41,33 +43,33 @@ public class CompendiumUnlockHandler{
 	 * @param event
 	 */
 	@SubscribeEvent
-	public void onPlayerMagicLevelChange(PlayerMagicLevelChangeEvent event){
-		if (event.getEntity().worldObj.isRemote && event.getEntity() instanceof EntityPlayer){
+	public void onPlayerMagicLevelChange(PlayerMagicLevelChangeEvent event) {
+		if (event.getEntity().worldObj.isRemote && event.getEntity() instanceof EntityPlayer) {
 			IArcaneCompendium instance = ArcaneCompendium.For(event.getEntityPlayer());
-			if (event.getLevel() >= 5){
-				//ArcaneCompendium.instance.unlockEntry("dungeonsAndExploring");
+			if (event.getLevel() >= 5) {
+				// ArcaneCompendium.instance.unlockEntry("dungeonsAndExploring");
 				instance.unlockEntry("enchantments");
 			}
-			if (event.getLevel() >= 10){
+			if (event.getLevel() >= 10) {
 				instance.unlockEntry("armorMage");
 				instance.unlockEntry("playerjournal");
 			}
-			if (event.getLevel() >= 15){
+			if (event.getLevel() >= 15) {
 				instance.unlockEntry("BossWaterGuardian");
 				instance.unlockEntry("BossEarthGuardian");
 				instance.unlockEntry("rituals");
 				instance.unlockEntry("inlays");
 				instance.unlockEntry("inlays_structure");
 			}
-			if (event.getLevel() >= 20){
+			if (event.getLevel() >= 20) {
 				instance.unlockEntry("armorBattlemage");
 			}
-			if (event.getLevel() >= 25){
+			if (event.getLevel() >= 25) {
 				instance.unlockEntry("BossAirGuardian");
 				instance.unlockEntry("BossArcaneGuardian");
 				instance.unlockEntry("BossLifeGuardian");
 			}
-			if (event.getLevel() >= 35){
+			if (event.getLevel() >= 35) {
 				instance.unlockEntry("BossNatureGuardian");
 				instance.unlockEntry("BossWinterGuardian");
 				instance.unlockEntry("BossFireGuardian");
@@ -83,20 +85,20 @@ public class CompendiumUnlockHandler{
 	 * @param event
 	 */
 	@SubscribeEvent
-	public void onEntityDeath(LivingDeathEvent event){
-		if (event.getEntityLiving().worldObj.isRemote && event.getSource().getEntity() instanceof EntityPlayer){
-			if (event.getEntity() instanceof EntityEnderman){
-				ArcaneCompendium.For((EntityPlayer)event.getSource().getEntity()).unlockEntry("blockastralbarrier");
-			}else{
-				EntityRegistration reg = EntityRegistry.instance().lookupModSpawn(event.getEntityLiving().getClass(), true);
-				if (reg != null && reg.getContainer().matches(ArsMagica2.instance)){
+	public void onEntityDeath(LivingDeathEvent event) {
+		if (event.getEntityLiving().worldObj.isRemote && event.getSource().getEntity() instanceof EntityPlayer) {
+			if (event.getEntity() instanceof EntityEnderman) {
+				ArcaneCompendium.For((EntityPlayer) event.getSource().getEntity()).unlockEntry("blockastralbarrier");
+			} else {
+				EntityRegistration reg = EntityRegistry.instance().lookupModSpawn(event.getEntityLiving().getClass(),
+						true);
+				if (reg != null && reg.getContainer().matches(ArsMagica2.instance)) {
 					String id = reg.getEntityName();
-					ArcaneCompendium.For((EntityPlayer)event.getSource().getEntity()).unlockEntry(id);
+					ArcaneCompendium.For((EntityPlayer) event.getSource().getEntity()).unlockEntry(id);
 				}
 			}
 		}
 	}
-
 
 	/**
 	 * Any skill-based unlocks should go in here
@@ -104,40 +106,43 @@ public class CompendiumUnlockHandler{
 	 * @param event
 	 */
 	@SubscribeEvent
-	public void onSkillLearned(SkillLearnedEvent event){
+	public void onSkillLearned(SkillLearnedEvent event) {
 		IArcaneCompendium instance = ArcaneCompendium.For(event.getEntityPlayer());
-		if (event.getSkill().equals(SkillRegistry.getSkillFromName("summon"))){
+		if (event.getSkill().equals(SkillRegistry.getSkillFromName("summon"))) {
 			instance.unlockEntry("crystal_phylactery");
 			instance.unlockEntry("summoner");
-		} else if (event.getSkill().equals(SkillRegistry.getSkillFromName("true_sight"))){
+		} else if (event.getSkill().equals(SkillRegistry.getSkillFromName("true_sight"))) {
 			instance.unlockEntry("illusionBlocks");
-		} else if (event.getSkill().getPoint().equals(SkillPoint.SILVER_POINT)){
+		} else if (event.getSkill().getPoint().equals(SkillPoint.SILVER_POINT)) {
 			instance.unlockEntry("silver_skills");
 		}
 	}
 
 	/**
-	 * Any spell-based unlocks should go here (eg, low mana based unlocks, affinity, etc.)
+	 * Any spell-based unlocks should go here (eg, low mana based unlocks,
+	 * affinity, etc.)
 	 *
 	 * @param event
 	 */
 	@SubscribeEvent
-	public void onSpellCast(SpellCastEvent.Pre event){
-		if (event.entityLiving instanceof EntityPlayer){
+	public void onSpellCast(SpellCastEvent.Pre event) {
+		if (event.entityLiving instanceof EntityPlayer) {
 			IArcaneCompendium instance = ArcaneCompendium.For((EntityPlayer) event.entityLiving);
 			instance.unlockEntry("unlockingPowers");
 			instance.unlockEntry("affinity");
-			if (EntityExtension.For(event.entityLiving).getCurrentMana() < EntityExtension.For(event.entityLiving).getMaxMana() / 2)
+			if (EntityExtension.For(event.entityLiving)
+					.getCurrentMana() < EntityExtension.For(event.entityLiving).getMaxMana() / 2)
 				instance.unlockEntry("mana_potion");
 		}
 	}
 
 	/**
-	 * This is another genericized method, which attempts to unlock any entry for something the player crafts
+	 * This is another genericized method, which attempts to unlock any entry
+	 * for something the player crafts
 	 */
 	@SubscribeEvent
-	public void onCrafting(ItemCraftedEvent event){
-		if (event.player.worldObj.isRemote){
+	public void onCrafting(ItemCraftedEvent event) {
+		if (event.player.worldObj.isRemote) {
 			IArcaneCompendium instance = ArcaneCompendium.For(event.player);
 			instance.unlockRelatedItems(event.crafting);
 		}

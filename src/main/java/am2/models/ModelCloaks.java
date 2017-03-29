@@ -13,8 +13,8 @@ import net.minecraft.util.math.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
-public class ModelCloaks extends ModelBase{
-	ResourceLocation cloakLoc = new ResourceLocation("arsmagica2","textures/mobs/cloak.png");
+public class ModelCloaks extends ModelBase {
+	ResourceLocation cloakLoc = new ResourceLocation("arsmagica2", "textures/mobs/cloak.png");
 	private static final int MASK_HOOD = 0x1;
 	private static final int MASK_SLEEVES = 0x2;
 	private static final int MASK_COATTAIL = 0x4;
@@ -32,7 +32,7 @@ public class ModelCloaks extends ModelBase{
 	ModelRenderer RightSleeveLong;
 	ModelRenderer LeftSleeveShort;
 
-	public ModelCloaks(){
+	public ModelCloaks() {
 		textureWidth = 64;
 		textureHeight = 96;
 		setTextureOffset("Hood.HoodBottom", 35, 19);
@@ -141,19 +141,20 @@ public class ModelCloaks extends ModelBase{
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 	}
 
-	public void render(EntityPlayer player, ModelBiped mainModel, float f5, float partialTicks, ResourceLocation cloakLocation, int drawMask){
+	public void render(EntityPlayer player, ModelBiped mainModel, float f5, float partialTicks,
+			ResourceLocation cloakLocation, int drawMask) {
 
 		if (cloakLocation == null)
 			return;
-		
+
 		IEntityExtension ext = player.getCapability(EntityExtension.INSTANCE, null);
-		
+
 		float fr = ext.getFlipRotation();
-		if (fr > 0){
+		if (fr > 0) {
 			return;
 		}
 
@@ -166,12 +167,13 @@ public class ModelCloaks extends ModelBase{
 		float f2 = player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * partialTicks;
 		GL11.glRotatef(-f2, 0, 1, 0);
 
-		float f3 = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * partialTicks - (player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks);
+		float f3 = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * partialTicks
+				- (player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks);
 		GL11.glRotatef(f3, 0.0F, 1.0F, 0.0F);
 		copyRotations(mainModel);
 
 		float pct = ext.getShrinkPct();
-		if (pct > 0){
+		if (pct > 0) {
 			float amt = 0.5f * pct;
 			GL11.glTranslatef(0, 1 * 1 - pct, 0);
 			GL11.glScalef(1 - amt, 1 - amt, 1 - amt);
@@ -183,35 +185,36 @@ public class ModelCloaks extends ModelBase{
 		float f8 = player.limbSwing - player.limbSwingAmount * (1.0F - partialTicks);
 
 		float leftLegRotation = MathHelper.cos(f8 * 0.6662F) * 1.4F * f7;
-		float rightLegRotation = MathHelper.cos(f8 * 0.6662F + (float)Math.PI) * 1.4F * f7;
+		float rightLegRotation = MathHelper.cos(f8 * 0.6662F + (float) Math.PI) * 1.4F * f7;
 
-		if ((drawMask & MASK_COATTAIL) == MASK_COATTAIL){
+		if ((drawMask & MASK_COATTAIL) == MASK_COATTAIL) {
 			FlapBackHalfRight.showModel = false;
 			FlapBackHalfLeft.showModel = false;
 			FlapBackWhole.showModel = true;
 
-			FlapBackWhole.rotateAngleX = Math.max(leftLegRotation, rightLegRotation) + (float)Math.toRadians(player.isSneaking() ? -10 : 10);
+			FlapBackWhole.rotateAngleX = Math.max(leftLegRotation, rightLegRotation)
+					+ (float) Math.toRadians(player.isSneaking() ? -10 : 10);
 			FlapLeft.rotateAngleX = FlapBackWhole.rotateAngleX;
 			FlapRight.rotateAngleX = FlapBackWhole.rotateAngleX;
-		}else{
+		} else {
 			FlapBackHalfRight.showModel = true;
 			FlapBackHalfLeft.showModel = true;
 			FlapBackWhole.showModel = false;
 
-			FlapBackHalfLeft.rotateAngleX = leftLegRotation + (float)Math.toRadians(player.isSneaking() ? -10 : 10);
-			FlapBackHalfRight.rotateAngleX = rightLegRotation + (float)Math.toRadians(player.isSneaking() ? -10 : 10);
+			FlapBackHalfLeft.rotateAngleX = leftLegRotation + (float) Math.toRadians(player.isSneaking() ? -10 : 10);
+			FlapBackHalfRight.rotateAngleX = rightLegRotation + (float) Math.toRadians(player.isSneaking() ? -10 : 10);
 
 			FlapLeft.rotateAngleX = FlapBackHalfLeft.rotateAngleX;
 			FlapRight.rotateAngleX = FlapBackHalfRight.rotateAngleX;
 		}
 
-		FlapFrontRight.rotateAngleX = Math.min(0, rightLegRotation) + (float)Math.toRadians(-8);
-		FlapFrontLeft.rotateAngleX = Math.min(0, leftLegRotation) + (float)Math.toRadians(-8);
+		FlapFrontRight.rotateAngleX = Math.min(0, rightLegRotation) + (float) Math.toRadians(-8);
+		FlapFrontLeft.rotateAngleX = Math.min(0, leftLegRotation) + (float) Math.toRadians(-8);
 
 		GL11.glTranslatef(0, 0.15f, 0);
 		Jacket.render(f5);
 
-		if ((drawMask & MASK_HOOD) == MASK_HOOD){
+		if ((drawMask & MASK_HOOD) == MASK_HOOD) {
 			GL11.glTranslatef(0, 0.075f, 0);
 			Hood.render(f5);
 			GL11.glTranslatef(0, -0.075f, 0);
@@ -234,13 +237,13 @@ public class ModelCloaks extends ModelBase{
 
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z){
+	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
 
-	private void copyRotations(ModelBiped source){
+	private void copyRotations(ModelBiped source) {
 		copyRotation(source.bipedHead, Hood);
 		copyRotation(source.bipedBody, Jacket);
 		copyRotation(source.bipedLeftArm, LeftSleeveLong);
@@ -249,7 +252,7 @@ public class ModelCloaks extends ModelBase{
 		copyRotation(source.bipedRightArm, RightSleeveShort);
 	}
 
-	private void copyRotation(ModelRenderer source, ModelRenderer dest){
+	private void copyRotation(ModelRenderer source, ModelRenderer dest) {
 		dest.rotateAngleX = source.rotateAngleX;
 		dest.rotateAngleY = source.rotateAngleY;
 		dest.rotateAngleZ = source.rotateAngleZ;

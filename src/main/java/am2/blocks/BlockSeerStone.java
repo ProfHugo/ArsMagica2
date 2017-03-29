@@ -26,35 +26,36 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
-public class BlockSeerStone extends BlockAMPowered{
+public class BlockSeerStone extends BlockAMPowered {
 
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-	public BlockSeerStone(){
+	public BlockSeerStone() {
 		super(Material.GLASS);
 		setHardness(2.0f);
 		setResistance(2.0f);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING);
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = state.getValue(FACING).ordinal();
 		return meta;
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(FACING, EnumFacing.values()[meta]);
-	}	
+	}
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		switch (state.getValue(FACING)){
+		switch (state.getValue(FACING)) {
 		case UP:
 			return new AxisAlignedBB(0.0f, 0.6f, 0.0f, 1.0f, 1.0f, 1.0f);
 		case DOWN:
@@ -70,15 +71,17 @@ public class BlockSeerStone extends BlockAMPowered{
 		}
 		return super.getBoundingBox(state, source, pos);
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side) {
 		return worldIn.getBlockState(pos.offset(side.getOpposite())).isSideSolid(worldIn, pos, side);
 	}
-	
+
 	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, facing.getOpposite());
+	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
+			int meta, EntityLivingBase placer) {
+		return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING,
+				facing.getOpposite());
 	}
 
 	@Override
@@ -88,47 +91,50 @@ public class BlockSeerStone extends BlockAMPowered{
 
 		TileEntity te = worldIn.getTileEntity(pos);
 		TileEntitySeerStone sste = null;
-		if (te != null && te instanceof TileEntitySeerStone){
-			sste = (TileEntitySeerStone)te;
-		}else{
+		if (te != null && te instanceof TileEntitySeerStone) {
+			sste = (TileEntitySeerStone) te;
+		} else {
 			return true;
 		}
 
-		if (KeystoneUtilities.HandleKeystoneRecovery(playerIn, sste)){
+		if (KeystoneUtilities.HandleKeystoneRecovery(playerIn, sste)) {
 			return true;
 		}
 
-		if (!KeystoneUtilities.instance.canPlayerAccess(sste, playerIn, KeystoneAccessType.USE)){
+		if (!KeystoneUtilities.instance.canPlayerAccess(sste, playerIn, KeystoneAccessType.USE)) {
 			return true;
 		}
 
-		if (playerIn.isSneaking()){
+		if (playerIn.isSneaking()) {
 			sste.invertDetection();
-			if (worldIn.isRemote){
-				playerIn.addChatMessage(new TextComponentString("Inverting detection mode: " + ((TileEntitySeerStone)te).isInvertingDetection()));
+			if (worldIn.isRemote) {
+				playerIn.addChatMessage(new TextComponentString(
+						"Inverting detection mode: " + ((TileEntitySeerStone) te).isInvertingDetection()));
 			}
 			return true;
 		}
 
-		if (HandleSpecialItems(worldIn, playerIn, pos)){
+		if (HandleSpecialItems(worldIn, playerIn, pos)) {
 			return true;
 		}
 		if (!worldIn.isRemote)
-			FMLNetworkHandler.openGui(playerIn, ArsMagica2.instance, IDDefs.GUI_SEER_STONE, worldIn, pos.getX(), pos.getY(), pos.getZ());
+			FMLNetworkHandler.openGui(playerIn, ArsMagica2.instance, IDDefs.GUI_SEER_STONE, worldIn, pos.getX(),
+					pos.getY(), pos.getZ());
 		return true;
 	}
-	
+
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player,
-			boolean willHarvest){
-		IKeystoneLockable<?> lockable = (IKeystoneLockable<?>)world.getTileEntity(pos);
-		if (!KeystoneUtilities.instance.canPlayerAccess(lockable, player, KeystoneAccessType.BREAK)) return false;
+			boolean willHarvest) {
+		IKeystoneLockable<?> lockable = (IKeystoneLockable<?>) world.getTileEntity(pos);
+		if (!KeystoneUtilities.instance.canPlayerAccess(lockable, player, KeystoneAccessType.BREAK))
+			return false;
 
 		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World var1, int i){
+	public TileEntity createNewTileEntity(World var1, int i) {
 		return new TileEntitySeerStone();
 	}
 
@@ -136,61 +142,64 @@ public class BlockSeerStone extends BlockAMPowered{
 	public boolean canProvidePower(IBlockState state) {
 		return true;
 	}
-	
+
 	@Override
 	public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		TileEntity myTE = blockAccess.getTileEntity(pos);
 		if (myTE == null || !(myTE instanceof TileEntitySeerStone))
 			return 0;
-		return ((TileEntitySeerStone)myTE).HasSight() ? 15 : 0;
-	}
-	@Override
-	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side){
-		TileEntity myTE = blockAccess.getTileEntity(pos);
-		if (myTE == null || !(myTE instanceof TileEntitySeerStone))
-			return 0;
-		return ((TileEntitySeerStone)myTE).HasSight() ? 15 : 0;
+		return ((TileEntitySeerStone) myTE).HasSight() ? 15 : 0;
 	}
 
 	@Override
-	public int quantityDropped(Random random){
+	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+		TileEntity myTE = blockAccess.getTileEntity(pos);
+		if (myTE == null || !(myTE instanceof TileEntitySeerStone))
+			return 0;
+		return ((TileEntitySeerStone) myTE).HasSight() ? 15 : 0;
+	}
+
+	@Override
+	public int quantityDropped(Random random) {
 		return 1;
 	}
-	
+
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state){
-		if (world.isRemote){
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		if (world.isRemote) {
 			super.breakBlock(world, pos, state);
 			return;
 		}
-		TileEntitySeerStone myTE = (TileEntitySeerStone)world.getTileEntity(pos);
-		if (myTE == null) return;
-		for (int l = 0; l < myTE.getSizeInventory() - 3; l++){
+		TileEntitySeerStone myTE = (TileEntitySeerStone) world.getTileEntity(pos);
+		if (myTE == null)
+			return;
+		for (int l = 0; l < myTE.getSizeInventory() - 3; l++) {
 			ItemStack itemstack = myTE.getStackInSlot(l);
-			if (itemstack == null){
+			if (itemstack == null) {
 				continue;
 			}
 			float f = world.rand.nextFloat() * 0.8F + 0.1F;
 			float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
 			float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
-			do{
-				if (itemstack.stackSize <= 0){
+			do {
+				if (itemstack.stackSize <= 0) {
 					break;
 				}
 				int i1 = world.rand.nextInt(21) + 10;
-				if (i1 > itemstack.stackSize){
+				if (i1 > itemstack.stackSize) {
 					i1 = itemstack.stackSize;
 				}
 				itemstack.stackSize -= i1;
 				ItemStack newItem = new ItemStack(itemstack.getItem(), i1, itemstack.getItemDamage());
 				newItem.setTagCompound(itemstack.getTagCompound());
-				EntityItem entityitem = new EntityItem(world, pos.getX() + f, pos.getY() + f1, pos.getZ() + f2, newItem);
+				EntityItem entityitem = new EntityItem(world, pos.getX() + f, pos.getY() + f1, pos.getZ() + f2,
+						newItem);
 				float f3 = 0.05F;
-				entityitem.motionX = (float)world.rand.nextGaussian() * f3;
-				entityitem.motionY = (float)world.rand.nextGaussian() * f3 + 0.2F;
-				entityitem.motionZ = (float)world.rand.nextGaussian() * f3;
+				entityitem.motionX = (float) world.rand.nextGaussian() * f3;
+				entityitem.motionY = (float) world.rand.nextGaussian() * f3 + 0.2F;
+				entityitem.motionZ = (float) world.rand.nextGaussian() * f3;
 				world.spawnEntityInWorld(entityitem);
-			}while (true);
+			} while (true);
 		}
 		super.breakBlock(world, pos, state);
 	}

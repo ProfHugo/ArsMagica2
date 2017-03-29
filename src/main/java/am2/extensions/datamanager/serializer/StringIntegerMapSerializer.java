@@ -8,14 +8,16 @@ import am2.packet.AMDataReader;
 import am2.packet.AMDataWriter;
 
 public class StringIntegerMapSerializer implements TypeSerializer<HashMap<String, Integer>> {
-	
+
 	public static StringIntegerMapSerializer INSTANCE = new StringIntegerMapSerializer();
-	
-	private StringIntegerMapSerializer() {}
-	
+
+	private StringIntegerMapSerializer() {
+	}
+
 	@Override
 	public void serialize(AMDataWriter buf, HashMap<String, Integer> value) {
-		if (value == null) return;
+		if (value == null)
+			return;
 		buf.add(value.size());
 		for (Entry<String, Integer> entry : value.entrySet()) {
 			buf.add(entry.getKey());

@@ -44,13 +44,16 @@ public class Toggle extends SpellShape {
 	}
 
 	@Override
-	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster, EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP, int useCount) {
+	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster,
+			EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP,
+			int useCount) {
 		String current = stack.getTagCompound().getString("ToggleShapeID");
 		ArrayList<ItemStack> rs = EntityExtension.For(caster).runningStacks;
 		int foundID = -1;
 		for (int i = 0; i < rs.size(); i++) {
 			ItemStack is = rs.get(i);
-			if (is != null && is.getTagCompound() != null && is.getTagCompound().getString("ToggleShapeID").equals(current)) {
+			if (is != null && is.getTagCompound() != null
+					&& is.getTagCompound().getString("ToggleShapeID").equals(current)) {
 				foundID = i;
 				break;
 			}
@@ -58,10 +61,11 @@ public class Toggle extends SpellShape {
 		if (foundID != -1) {
 			EntityExtension.For(caster).runningStacks.remove(foundID);
 			if (caster instanceof EntityPlayer) {
-				InventoryPlayer inv = ((EntityPlayer)caster).inventory;
+				InventoryPlayer inv = ((EntityPlayer) caster).inventory;
 				for (int i = 0; i < inv.getSizeInventory(); i++) {
 					ItemStack is = inv.getStackInSlot(i);
-					if (is != null && is.getItem() instanceof SpellBase && is.getTagCompound() != null && is.getTagCompound().getString("ToggleShapeID").equals(current)) {
+					if (is != null && is.getItem() instanceof SpellBase && is.getTagCompound() != null
+							&& is.getTagCompound().getString("ToggleShapeID").equals(current)) {
 						is.getTagCompound().setBoolean("HasEffect", false);
 					}
 				}
@@ -69,10 +73,11 @@ public class Toggle extends SpellShape {
 		} else {
 			EntityExtension.For(caster).runningStacks.add(stack.copy());
 			if (caster instanceof EntityPlayer) {
-				InventoryPlayer inv = ((EntityPlayer)caster).inventory;
+				InventoryPlayer inv = ((EntityPlayer) caster).inventory;
 				for (int i = 0; i < inv.getSizeInventory(); i++) {
 					ItemStack is = inv.getStackInSlot(i);
-					if (is != null && is.getItem() instanceof SpellBase && is.getTagCompound() != null && is.getTagCompound().getString("ToggleShapeID").equals(current)) {
+					if (is != null && is.getItem() instanceof SpellBase && is.getTagCompound() != null
+							&& is.getTagCompound().getString("ToggleShapeID").equals(current)) {
 						is.getTagCompound().setBoolean("HasEffect", true);
 					}
 				}
@@ -83,11 +88,9 @@ public class Toggle extends SpellShape {
 
 	@Override
 	public Object[] getRecipe() {
-		return new Object[] {
-				new ItemStack(Blocks.LEVER),
+		return new Object[] { new ItemStack(Blocks.LEVER),
 				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_PURIFIED_VINTEUM),
-				new ItemStack(ItemDefs.greaterFocus)
-		};
+				new ItemStack(ItemDefs.greaterFocus) };
 	}
 
 	@Override

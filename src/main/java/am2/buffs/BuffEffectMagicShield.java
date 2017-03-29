@@ -2,15 +2,14 @@ package am2.buffs;
 
 import am2.defs.PotionEffectsDefs;
 
-public class BuffEffectMagicShield extends BuffEffectShield{
+public class BuffEffectMagicShield extends BuffEffectShield {
 
-	public BuffEffectMagicShield(int duration,
-								 int amplifier){
+	public BuffEffectMagicShield(int duration, int amplifier) {
 		super(PotionEffectsDefs.magicShield, duration, amplifier);
 	}
 
 	@Override
-	protected String spellBuffName(){
+	protected String spellBuffName() {
 		return "Magic Shield";
 	}
 

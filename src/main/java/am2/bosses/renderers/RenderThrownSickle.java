@@ -6,16 +6,17 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderThrownSickle extends RenderLiving<EntityThrownSickle>{
+public class RenderThrownSickle extends RenderLiving<EntityThrownSickle> {
 
-	private static final ResourceLocation rLoc = new ResourceLocation("arsmagica2", "textures/mobs/bosses/plant_guardian.png");
+	private static final ResourceLocation rLoc = new ResourceLocation("arsmagica2",
+			"textures/mobs/bosses/plant_guardian.png");
 
-	public RenderThrownSickle(RenderManager manager){
+	public RenderThrownSickle(RenderManager manager) {
 		super(manager, new ModelPlantGuardianSickle(), 0.5f);
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityThrownSickle entity){
+	protected ResourceLocation getEntityTexture(EntityThrownSickle entity) {
 		return rLoc;
 	}
 

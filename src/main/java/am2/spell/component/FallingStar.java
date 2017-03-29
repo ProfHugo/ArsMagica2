@@ -26,30 +26,29 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class FallingStar extends SpellComponent{
+public class FallingStar extends SpellComponent {
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.ARCANE),
+	public Object[] getRecipe() {
+		return new Object[] { AffinityShiftUtils.getEssenceForAffinity(Affinity.ARCANE),
 				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_ARCANEASH),
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.ARCANE),
-				BlockDefs.manaBattery,
-				Items.LAVA_BUCKET
-		};
+				AffinityShiftUtils.getEssenceForAffinity(Affinity.ARCANE), BlockDefs.manaBattery, Items.LAVA_BUCKET };
 	}
 
-	private boolean spawnStar(ItemStack spellStack, EntityLivingBase caster, Entity target, World world, double x, double y, double z){
+	private boolean spawnStar(ItemStack spellStack, EntityLivingBase caster, Entity target, World world, double x,
+			double y, double z) {
 
-		List<EntityThrownRock> rocks = world.getEntitiesWithinAABB(EntityThrownRock.class, new AxisAlignedBB(x - 10, y - 10, z - 10, x + 10, y + 10, z + 10));
+		List<EntityThrownRock> rocks = world.getEntitiesWithinAABB(EntityThrownRock.class,
+				new AxisAlignedBB(x - 10, y - 10, z - 10, x + 10, y + 10, z + 10));
 
-		int damageMultitplier = SpellUtils.getModifiedInt_Mul(15, spellStack, caster, target, world, SpellModifiers.DAMAGE);
-		for (EntityThrownRock rock : rocks){
+		int damageMultitplier = SpellUtils.getModifiedInt_Mul(15, spellStack, caster, target, world,
+				SpellModifiers.DAMAGE);
+		for (EntityThrownRock rock : rocks) {
 			if (rock.getIsShootingStar())
 				return false;
 		}
 
-		if (!world.isRemote){
+		if (!world.isRemote) {
 			EntityThrownRock star = new EntityThrownRock(world);
 			star.setPosition(x, world.getActualHeight(), z);
 			star.setShootingStar(2 * damageMultitplier);
@@ -59,51 +58,52 @@ public class FallingStar extends SpellComponent{
 		}
 		return true;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.of(SpellModifiers.DAMAGE, SpellModifiers.COLOR);
 	}
 
-
 	@Override
-	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster){
+	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX,
+			double impactY, double impactZ, EntityLivingBase caster) {
 		return spawnStar(stack, caster, caster, world, impactX, impactY + 50, impactZ);
 	}
 
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
 		return spawnStar(stack, caster, target, world, target.posX, target.posY + 50, target.posZ);
 	}
 
 	@Override
-	public float manaCost(EntityLivingBase caster){
+	public float manaCost(EntityLivingBase caster) {
 		return 400;
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
+	public ItemStack[] reagents(EntityLivingBase caster) {
 		return null;
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
 	}
 
 	@Override
-	public Set<Affinity> getAffinity(){
+	public Set<Affinity> getAffinity() {
 		return Sets.newHashSet(Affinity.ARCANE);
 	}
 
 	@Override
-	public float getAffinityShift(Affinity affinity){
+	public float getAffinityShift(Affinity affinity) {
 		return 0.05f;
 	}
-	
+
 	@Override
 	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

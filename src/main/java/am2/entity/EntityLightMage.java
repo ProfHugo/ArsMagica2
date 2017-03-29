@@ -42,17 +42,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("deprecation")
-public class EntityLightMage extends EntityCreature{
+public class EntityLightMage extends EntityCreature {
 
 	int hp;
 	private static ItemStack diminishedHeldItem = new ItemStack(ItemDefs.affinityTome, 1, 2);
 	private static ItemStack normalHeldItem = new ItemStack(ItemDefs.affinityTome, 1, 7);
 	private static ItemStack augmentedHeldItem = new ItemStack(ItemDefs.affinityTome, 1, 5);
 
-	public static final DataParameter<Integer> MAGE_SKIN = EntityDataManager.createKey(EntityLightMage.class, DataSerializers.VARINT);
-	public static final DataParameter<Integer> MAGE_BOOK = EntityDataManager.createKey(EntityLightMage.class, DataSerializers.VARINT);
+	public static final DataParameter<Integer> MAGE_SKIN = EntityDataManager.createKey(EntityLightMage.class,
+			DataSerializers.VARINT);
+	public static final DataParameter<Integer> MAGE_BOOK = EntityDataManager.createKey(EntityLightMage.class,
+			DataSerializers.VARINT);
 
-	public EntityLightMage(World world){
+	public EntityLightMage(World world) {
 		super(world);
 		setSize(0.6F, 1.8F);
 		hp = rand.nextInt(10) + 12;
@@ -60,18 +62,18 @@ public class EntityLightMage extends EntityCreature{
 	}
 
 	@Override
-	protected void entityInit(){
+	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(MAGE_BOOK, 0);
 		this.dataManager.register(MAGE_SKIN, rand.nextInt(12) + 1);
 	}
 
 	@Override
-	protected void applyEntityAttributes(){
+	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(22D);
 	}
-	
+
 	@Override
 	public ItemStack getHeldItemMainhand() {
 		int cm = this.dataManager.get(MAGE_BOOK);
@@ -83,34 +85,39 @@ public class EntityLightMage extends EntityCreature{
 			return augmentedHeldItem;
 	}
 
-	private void initAI(){
+	private void initAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(7, new EntityAILookIdle(this));
 		this.tasks.addTask(5, new EntityAIWander(this, MovementSpeed()));
-		this.tasks.addTask(1, new EntityAIAvoidEntity<EntityManaVortex>(this, EntityManaVortex.class, 10, MovementSpeed(), ActionSpeed()));
+		this.tasks.addTask(1, new EntityAIAvoidEntity<EntityManaVortex>(this, EntityManaVortex.class, 10,
+				MovementSpeed(), ActionSpeed()));
 
 		this.tasks.addTask(3, new EntityAIAllyManaLink(this));
 
-		this.tasks.addTask(4, new EntityAIRangedAttackSpell(this, MovementSpeed(), 20, NPCSpells.instance.lightMage_DiminishedAttack));
+		this.tasks.addTask(4, new EntityAIRangedAttackSpell(this, MovementSpeed(), 20,
+				NPCSpells.instance.lightMage_DiminishedAttack));
 
-		//Retaliation to attacks
+		// Retaliation to attacks
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
 
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<EntityDarkMage>(this, EntityDarkMage.class, 0, true, false, null));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<EntitySlime>(this, EntitySlime.class, 0, true, false, null));
-		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityMob>(this, EntityMob.class, 0, true, false, LightMageEntitySelector.instance));
+		this.targetTasks.addTask(2,
+				new EntityAINearestAttackableTarget<EntityDarkMage>(this, EntityDarkMage.class, 0, true, false, null));
+		this.targetTasks.addTask(2,
+				new EntityAINearestAttackableTarget<EntitySlime>(this, EntitySlime.class, 0, true, false, null));
+		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityMob>(this, EntityMob.class, 0, true,
+				false, LightMageEntitySelector.instance));
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound par1nbtTagCompound){
+	public void readEntityFromNBT(NBTTagCompound par1nbtTagCompound) {
 		super.readEntityFromNBT(par1nbtTagCompound);
 		this.dataManager.set(MAGE_SKIN, par1nbtTagCompound.getInteger("am2_lm_skin"));
 		this.dataManager.set(MAGE_BOOK, par1nbtTagCompound.getInteger("am2_lm_book"));
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound par1nbtTagCompound){
+	public void writeEntityToNBT(NBTTagCompound par1nbtTagCompound) {
 		super.writeEntityToNBT(par1nbtTagCompound);
 
 		par1nbtTagCompound.setInteger("am2_lm_skin", this.dataManager.get(MAGE_SKIN));
@@ -118,72 +125,78 @@ public class EntityLightMage extends EntityCreature{
 	}
 
 	@Override
-	public int getTotalArmorValue(){
+	public int getTotalArmorValue() {
 		return 1;
 	}
 
-	protected float MovementSpeed(){
+	protected float MovementSpeed() {
 		return 0.4f;
 	}
 
-	protected float ActionSpeed(){
+	protected float ActionSpeed() {
 		return 0.5f;
 	}
 
 	@Override
-	public boolean isAIDisabled(){
+	public boolean isAIDisabled() {
 		return false;
 	}
 
-	private int getAverageNearbyPlayerMagicLevel(){
-		if (this.worldObj == null) return 0;
-		List<EntityPlayer> players = worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().expand(250, 250, 250));
-		if (players.size() == 0) return 0;
+	private int getAverageNearbyPlayerMagicLevel() {
+		if (this.worldObj == null)
+			return 0;
+		List<EntityPlayer> players = worldObj.getEntitiesWithinAABB(EntityPlayer.class,
+				this.getEntityBoundingBox().expand(250, 250, 250));
+		if (players.size() == 0)
+			return 0;
 		int avgLvl = 0;
-		for (EntityPlayer player : players){
+		for (EntityPlayer player : players) {
 			avgLvl += EntityExtension.For(player).getCurrentLevel();
 		}
-		return (int)Math.ceil(avgLvl / players.size());
+		return (int) Math.ceil(avgLvl / players.size());
 	}
 
 	@Override
-	public boolean getCanSpawnHere(){
+	public boolean getCanSpawnHere() {
 		if (!SpawnBlacklists.entityCanSpawnHere(this.getPosition(), worldObj, this))
 			return false;
-		if (getAverageNearbyPlayerMagicLevel() < 8){
+		if (getAverageNearbyPlayerMagicLevel() < 8) {
 			return false;
 		}
 
 		int avgLevel = getAverageNearbyPlayerMagicLevel();
-		if (avgLevel == 0){
+		if (avgLevel == 0) {
 			EntityExtension.For(this).setMagicLevelWithMana(10);
-			if (rand.nextInt(100) < 10){
-				this.tasks.addTask(3, new EntityAIRangedAttackSpell(this, MovementSpeed(), 40, NPCSpells.instance.lightMage_NormalAttack));
+			if (rand.nextInt(100) < 10) {
+				this.tasks.addTask(3, new EntityAIRangedAttackSpell(this, MovementSpeed(), 40,
+						NPCSpells.instance.lightMage_NormalAttack));
 				this.dataManager.set(MAGE_BOOK, 1);
 			}
-		}else{
+		} else {
 			EntityExtension.For(this).setMagicLevelWithMana(10 + rand.nextInt(avgLevel));
 			int levelRand = rand.nextInt(avgLevel * 2);
-			if (levelRand > 60){
-				this.tasks.addTask(2, new EntityAIRangedAttackSpell(this, MovementSpeed(), 100, NPCSpells.instance.lightMage_AugmentedAttack));
+			if (levelRand > 60) {
+				this.tasks.addTask(2, new EntityAIRangedAttackSpell(this, MovementSpeed(), 100,
+						NPCSpells.instance.lightMage_AugmentedAttack));
 				this.dataManager.set(MAGE_BOOK, 2);
 			}
-			if (levelRand > 30){
-				this.tasks.addTask(3, new EntityAIRangedAttackSpell(this, MovementSpeed(), 40, NPCSpells.instance.lightMage_NormalAttack));
+			if (levelRand > 30) {
+				this.tasks.addTask(3, new EntityAIRangedAttackSpell(this, MovementSpeed(), 40,
+						NPCSpells.instance.lightMage_NormalAttack));
 				this.dataManager.set(MAGE_BOOK, 1);
 			}
 		}
 		return isValidLightLevel() && super.getCanSpawnHere();
 	}
 
-	protected boolean isValidLightLevel(){
+	protected boolean isValidLightLevel() {
 
-		if (this.worldObj.getLightFor(EnumSkyBlock.SKY, getPosition()) > this.rand.nextInt(32)){
+		if (this.worldObj.getLightFor(EnumSkyBlock.SKY, getPosition()) > this.rand.nextInt(32)) {
 			return false;
-		}else{
+		} else {
 			int var4 = this.worldObj.getLightFor(EnumSkyBlock.BLOCK, getPosition());
 
-			if (this.worldObj.isThundering()){
+			if (this.worldObj.isThundering()) {
 				int var5 = this.worldObj.getSkylightSubtracted();
 				this.worldObj.setSkylightSubtracted(10);
 				var4 = this.worldObj.getLightFor(EnumSkyBlock.BLOCK, getPosition());
@@ -193,64 +206,74 @@ public class EntityLightMage extends EntityCreature{
 			return var4 <= this.rand.nextInt(8);
 		}
 	}
-	
+
 	@Override
 	protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier) {
 	}
 
-//	@Override
-//	protected void dropFewItems(boolean par1, int par2){
-//		if (par1 && getRNG().nextDouble() < 0.2)
-//			for (int j = 0; j < getRNG().nextInt(3); ++j)
-//				this.entityDropItem(new ItemStack(ItemDefs.rune, 1, getRNG().nextInt(16)), 0.0f);
-//
-//		if (par1 && getRNG().nextDouble() < 0.2)
-//			this.entityDropItem(new ItemStack(ItemDefs.spellParchment, 1, 0), 0.0f);
-//
-//		if (par1 && getRNG().nextDouble() < 0.05)
-//			this.entityDropItem(new ItemStack(ItemDefs.spellBook, 1, 0), 0.0f);
-//	}
-//	
+	// @Override
+	// protected void dropFewItems(boolean par1, int par2){
+	// if (par1 && getRNG().nextDouble() < 0.2)
+	// for (int j = 0; j < getRNG().nextInt(3); ++j)
+	// this.entityDropItem(new ItemStack(ItemDefs.rune, 1,
+	// getRNG().nextInt(16)), 0.0f);
+	//
+	// if (par1 && getRNG().nextDouble() < 0.2)
+	// this.entityDropItem(new ItemStack(ItemDefs.spellParchment, 1, 0), 0.0f);
+	//
+	// if (par1 && getRNG().nextDouble() < 0.05)
+	// this.entityDropItem(new ItemStack(ItemDefs.spellBook, 1, 0), 0.0f);
+	// }
+	//
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTablesArsMagica.LIGHT_MAGE_LOOT;
 	}
+
 	@Override
-	public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, ItemStack stack, EnumHand hand){
+	public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, ItemStack stack, EnumHand hand) {
 		if (worldObj.isRemote)
 			return EnumActionResult.PASS;
 
 		if (stack != null && stack.getItem() instanceof ItemNameTag)
 			return EnumActionResult.PASS;
-		
-		if (hand == EnumHand.OFF_HAND) return EnumActionResult.PASS;
-		
-		if (SkillData.For(player).hasSkill(SkillDefs.MAGE_POSSE_1.getID())){
-			if (EntityUtils.isSummon(this)){
-				player.addChatMessage(new TextComponentString(String.format("\247o%s", I18n.translateToLocal("am2.npc.partyleave"))));
+
+		if (hand == EnumHand.OFF_HAND)
+			return EnumActionResult.PASS;
+
+		if (SkillData.For(player).hasSkill(SkillDefs.MAGE_POSSE_1.getID())) {
+			if (EntityUtils.isSummon(this)) {
+				player.addChatMessage(
+						new TextComponentString(String.format("\247o%s", I18n.translateToLocal("am2.npc.partyleave"))));
 				EntityUtils.revertAI(this);
-			}else{
-				if (EntityExtension.For(player).getCanHaveMoreSummons()){
-					if (EntityExtension.For(player).getCurrentLevel() - 5 >= EntityExtension.For(this).getCurrentLevel()){
-						player.addChatMessage(new TextComponentString(String.format("\247o%s", I18n.translateToLocal("am2.npc.partyjoin"))));
+			} else {
+				if (EntityExtension.For(player).getCanHaveMoreSummons()) {
+					if (EntityExtension.For(player).getCurrentLevel() - 5 >= EntityExtension.For(this)
+							.getCurrentLevel()) {
+						player.addChatMessage(new TextComponentString(
+								String.format("\247o%s", I18n.translateToLocal("am2.npc.partyjoin"))));
 						EntityUtils.setOwner(this, player);
 						EntityUtils.makeSummon_PlayerFaction(this, player, true);
 						EntityUtils.setSummonDuration(this, -1);
-					}else{
-						player.addChatMessage(new TextComponentString(String.format("\247o%s", I18n.translateToLocal("am2.npc.partyrefuse"))));
+					} else {
+						player.addChatMessage(new TextComponentString(
+								String.format("\247o%s", I18n.translateToLocal("am2.npc.partyrefuse"))));
 					}
-				}else{
-					player.addChatMessage(new TextComponentString(String.format("\247o%s", I18n.translateToLocal("am2.npc.partyfull"))));
+				} else {
+					player.addChatMessage(new TextComponentString(
+							String.format("\247o%s", I18n.translateToLocal("am2.npc.partyfull"))));
 				}
 			}
-		}else{
-			player.addChatMessage(new TextComponentString(String.format("\247o%s", I18n.translateToLocal("am2.npc.nopartyskill"))));
+		} else {
+			player.addChatMessage(
+					new TextComponentString(String.format("\247o%s", I18n.translateToLocal("am2.npc.nopartyskill"))));
 		}
 		return EnumActionResult.SUCCESS;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public String getTexture(){
-		return String.format("arsmagica2:textures/mobs/light_mages/light_mage_%d.png", this.dataManager.get(MAGE_SKIN).intValue());
+	public String getTexture() {
+		return String.format("arsmagica2:textures/mobs/light_mages/light_mage_%d.png",
+				this.dataManager.get(MAGE_SKIN).intValue());
 	}
 }

@@ -14,50 +14,51 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class FireProtection extends ArmorImbuement{
+public class FireProtection extends ArmorImbuement {
 
 	@Override
-	public String getID(){
+	public String getID() {
 		return "fireprot";
 	}
 
 	@Override
-	public ImbuementTiers getTier(){
+	public ImbuementTiers getTier() {
 		return ImbuementTiers.FOURTH;
 	}
 
 	@Override
-	public EnumSet<ImbuementApplicationTypes> getApplicationTypes(){
+	public EnumSet<ImbuementApplicationTypes> getApplicationTypes() {
 		return EnumSet.of(ImbuementApplicationTypes.ON_TICK);
 	}
 
 	@Override
-	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType, Object... params){
+	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType,
+			Object... params) {
 
 		if (world.isRemote)
 			return false;
 
 		boolean effectApplied = false;
-		//EntityExtension.For(player).armorProcCooldowns[1] == 0
-		if (true){
-			if (player.isInsideOfMaterial(Material.LAVA)){
+		// EntityExtension.For(player).armorProcCooldowns[1] == 0
+		if (true) {
+			if (player.isInsideOfMaterial(Material.LAVA)) {
 				player.motionY = 0;
 				player.fallDistance = 0;
-				for (int i = -1; i <= 1; ++i){
-					for (int j = -2; j <= 2; ++j){
-						for (int k = -1; k <= 1; ++k){
+				for (int i = -1; i <= 1; ++i) {
+					for (int j = -2; j <= 2; ++j) {
+						for (int k = -1; k <= 1; ++k) {
 							BlockPos newPos = player.getPosition().add(i, j, k);
 							Block block = world.getBlockState(newPos).getBlock();
-							if (block == Blocks.FLOWING_LAVA){
-								if (i == 0 && k == 0 && j != -2){
+							if (block == Blocks.FLOWING_LAVA) {
+								if (i == 0 && k == 0 && j != -2) {
 									world.setBlockToAir(newPos);
-								}else{
+								} else {
 									world.setBlockState(newPos, Blocks.COBBLESTONE.getDefaultState());
 								}
-							}else if (block == Blocks.LAVA){
-								if (i == 0 && k == 0 && j != -2){
+							} else if (block == Blocks.LAVA) {
+								if (i == 0 && k == 0 && j != -2) {
 									world.setBlockToAir(newPos);
-								}else{
+								} else {
 									world.setBlockState(newPos, Blocks.OBSIDIAN.getDefaultState());
 								}
 							}
@@ -67,29 +68,29 @@ public class FireProtection extends ArmorImbuement{
 				effectApplied = true;
 			}
 		}
-		if (player.isBurning()){
+		if (player.isBurning()) {
 			player.extinguish();
 		}
 		return effectApplied;
 	}
 
 	@Override
-	public EntityEquipmentSlot[] getValidSlots(){
-		return new EntityEquipmentSlot[]{EntityEquipmentSlot.LEGS};
+	public EntityEquipmentSlot[] getValidSlots() {
+		return new EntityEquipmentSlot[] { EntityEquipmentSlot.LEGS };
 	}
 
 	@Override
-	public boolean canApplyOnCooldown(){
+	public boolean canApplyOnCooldown() {
 		return true;
 	}
 
 	@Override
-	public int getCooldown(){
+	public int getCooldown() {
 		return 900;
 	}
 
 	@Override
-	public int getArmorDamage(){
+	public int getArmorDamage() {
 		return 40;
 	}
 }

@@ -9,15 +9,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockAMFlower extends BlockBush{
+public class BlockAMFlower extends BlockBush {
 
-	public BlockAMFlower(){
+	public BlockAMFlower() {
 		super();
 		setSoundType(SoundType.PLANT);
 		setCreativeTab(CreativeTabsDefs.tabAM2Blocks);
 	}
 
-	public BlockAMFlower registerAndName(ResourceLocation loc){
+	public BlockAMFlower registerAndName(ResourceLocation loc) {
 		setUnlocalizedName(loc.toString());
 		GameRegistry.register(this, loc);
 		GameRegistry.register(new ItemBlock(this), loc);
@@ -27,5 +27,5 @@ public class BlockAMFlower extends BlockBush{
 	public boolean canGrowOn(World worldIn, BlockPos pos) {
 		return canBlockStay(worldIn, pos, worldIn.getBlockState(pos));
 	}
-	
+
 }

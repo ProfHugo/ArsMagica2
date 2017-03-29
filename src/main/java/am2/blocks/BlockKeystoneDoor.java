@@ -28,16 +28,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockKeystoneDoor extends BlockDoor implements ITileEntityProvider{
+public class BlockKeystoneDoor extends BlockDoor implements ITileEntityProvider {
 
-	public BlockKeystoneDoor(){
+	public BlockKeystoneDoor() {
 		super(Material.WOOD);
 		this.setHardness(2.5f);
 		this.setResistance(2.0f);
 	}
-	
+
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos oldPos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos oldPos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		BlockPos pos = oldPos;
 		if (worldIn.getBlockState(pos.down()).getBlock() == BlockDefs.keystoneDoor)
 			pos = oldPos.down();
@@ -45,63 +46,72 @@ public class BlockKeystoneDoor extends BlockDoor implements ITileEntityProvider{
 		TileEntity te = worldIn.getTileEntity(pos);
 		playerIn.swingArm(hand);
 
-		if (KeystoneUtilities.HandleKeystoneRecovery(playerIn, (IKeystoneLockable<?>)te))
+		if (KeystoneUtilities.HandleKeystoneRecovery(playerIn, (IKeystoneLockable<?>) te))
 			return true;
 
-		if (KeystoneUtilities.instance.canPlayerAccess((IKeystoneLockable<?>)te, playerIn, KeystoneAccessType.USE)){
-			if (playerIn.isSneaking()){
+		if (KeystoneUtilities.instance.canPlayerAccess((IKeystoneLockable<?>) te, playerIn, KeystoneAccessType.USE)) {
+			if (playerIn.isSneaking()) {
 				if (!worldIn.isRemote)
-					FMLNetworkHandler.openGui(playerIn, ArsMagica2.instance, IDDefs.GUI_KEYSTONE_LOCKABLE, worldIn, pos.getX(), pos.getY(), pos.getZ());
-			}else{
+					FMLNetworkHandler.openGui(playerIn, ArsMagica2.instance, IDDefs.GUI_KEYSTONE_LOCKABLE, worldIn,
+							pos.getX(), pos.getY(), pos.getZ());
+			} else {
 				activateNeighbors(worldIn, pos, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
-				//CompendiumUnlockHandler.unlockEntry(this.getUnlocalizedName().replace("arsmagica2:", "").replace("tile.", ""));
+				// CompendiumUnlockHandler.unlockEntry(this.getUnlocalizedName().replace("arsmagica2:",
+				// "").replace("tile.", ""));
 				return super.onBlockActivated(worldIn, oldPos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
 			}
 		}
 		return false;
 	}
 
-	private void activateNeighbors(World world, BlockPos pos, EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing direction, float xOffset, float yOffset, float zOffset){
+	private void activateNeighbors(World world, BlockPos pos, EntityPlayer player, EnumHand hand, ItemStack held,
+			EnumFacing direction, float xOffset, float yOffset, float zOffset) {
 		if (world.getBlockState(pos.east()).getBlock() == BlockDefs.keystoneDoor)
-			super.onBlockActivated(world, pos.east(), world.getBlockState(pos.east()), player, hand, held, direction, xOffset, yOffset, zOffset);
+			super.onBlockActivated(world, pos.east(), world.getBlockState(pos.east()), player, hand, held, direction,
+					xOffset, yOffset, zOffset);
 
 		if (world.getBlockState(pos.west()).getBlock() == BlockDefs.keystoneDoor)
-			super.onBlockActivated(world, pos.west(), world.getBlockState(pos.west()), player, hand, held, direction, xOffset, yOffset, zOffset);
+			super.onBlockActivated(world, pos.west(), world.getBlockState(pos.west()), player, hand, held, direction,
+					xOffset, yOffset, zOffset);
 
 		if (world.getBlockState(pos.north()).getBlock() == BlockDefs.keystoneDoor)
-			super.onBlockActivated(world, pos.north(), world.getBlockState(pos.north()), player, hand, held, direction, xOffset, yOffset, zOffset);
+			super.onBlockActivated(world, pos.north(), world.getBlockState(pos.north()), player, hand, held, direction,
+					xOffset, yOffset, zOffset);
 
 		if (world.getBlockState(pos.south()).getBlock() == BlockDefs.keystoneDoor)
-			super.onBlockActivated(world, pos.south(), world.getBlockState(pos.south()), player, hand, held, direction, xOffset, yOffset, zOffset);
+			super.onBlockActivated(world, pos.south(), world.getBlockState(pos.south()), player, hand, held, direction,
+					xOffset, yOffset, zOffset);
 	}
 
 	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player,
+			boolean willHarvest) {
 		if (world.isRemote)
 			return false;
 
 		if (world.getBlockState(pos.down()).getBlock() == BlockDefs.keystoneDoor)
 			pos = pos.down();
 
-		IKeystoneLockable<?> lockable = (IKeystoneLockable<?>)world.getTileEntity(pos);
+		IKeystoneLockable<?> lockable = (IKeystoneLockable<?>) world.getTileEntity(pos);
 
 		if (lockable == null)
 			return false;
 
-		if (!KeystoneUtilities.instance.canPlayerAccess(lockable, player, KeystoneAccessType.BREAK)) return false;
-		
+		if (!KeystoneUtilities.instance.canPlayerAccess(lockable, player, KeystoneAccessType.BREAK))
+			return false;
+
 		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
 
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player){
+	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
 		if (worldIn.isRemote)
 			return;
 
 		if (worldIn.getBlockState(pos.down()).getBlock() == BlockDefs.keystoneDoor)
 			pos = pos.down();
 
-		IKeystoneLockable<?> lockable = (IKeystoneLockable<?>)worldIn.getTileEntity(pos);
+		IKeystoneLockable<?> lockable = (IKeystoneLockable<?>) worldIn.getTileEntity(pos);
 
 		if (lockable == null)
 			return;
@@ -110,24 +120,23 @@ public class BlockKeystoneDoor extends BlockDoor implements ITileEntityProvider{
 			return;
 		super.onBlockHarvested(worldIn, pos, state, player);
 	}
-	
+
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return ItemDefs.itemKeystoneDoor;
 	}
-	
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int i){
+	public TileEntity createNewTileEntity(World world, int i) {
 		return new TileEntityKeystoneDoor();
 	}
-	
+
 	public Block registerAndName(ResourceLocation rl) {
 		this.setUnlocalizedName(rl.getResourcePath());
 		GameRegistry.register(this, rl);
 		return this;
 	}
-	
+
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.TRANSLUCENT;

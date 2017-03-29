@@ -20,12 +20,12 @@ public class AbilityLightningStep extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.LIGHTNING;
 	}
-	
+
 	@Override
 	public void applyTick(EntityPlayer player) {
 		player.stepHeight = 1.014F;
 	}
-	
+
 	@Override
 	public void removeEffects(EntityPlayer player) {
 		if (player.stepHeight == 1.014F)

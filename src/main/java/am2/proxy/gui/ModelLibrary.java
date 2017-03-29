@@ -15,11 +15,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelLibrary{
+public class ModelLibrary {
 
 	public static final ModelLibrary instance = new ModelLibrary();
 
-	private ModelLibrary(){
+	private ModelLibrary() {
 		dummyBroom = new EntityBroom(Minecraft.getMinecraft().theWorld);
 		sickle.setNoSpin();
 

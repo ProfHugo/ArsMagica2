@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class ImbuementRegistry implements IImbuementRegistry{
+public class ImbuementRegistry implements IImbuementRegistry {
 
 	public static final ImbuementRegistry instance = new ImbuementRegistry();
 
@@ -24,23 +24,24 @@ public class ImbuementRegistry implements IImbuementRegistry{
 
 	@Override
 	public void registerImbuement(ArmorImbuement imbuementInstance) {
-		GameRegistry.register(imbuementInstance, new ResourceLocation(ArsMagicaAPI.getCurrentModId(), imbuementInstance.getID()));
+		GameRegistry.register(imbuementInstance,
+				new ResourceLocation(ArsMagicaAPI.getCurrentModId(), imbuementInstance.getID()));
 		LogHelper.info(String.format("Registered imbuement: %s", imbuementInstance.getID()));
 	}
 
 	@Override
-	public ArmorImbuement getImbuementByID(ResourceLocation ID){
+	public ArmorImbuement getImbuementByID(ResourceLocation ID) {
 		return ArsMagicaAPI.getArmorImbuementRegistry().getObject(ID);
 	}
 
 	@Override
-	public ArmorImbuement[] getImbuementsForTier(ImbuementTiers tier, EntityEquipmentSlot armorType){
+	public ArmorImbuement[] getImbuementsForTier(ImbuementTiers tier, EntityEquipmentSlot armorType) {
 		ArrayList<ArmorImbuement> list = new ArrayList<ArmorImbuement>();
 
-		for (ArmorImbuement imbuement : ArsMagicaAPI.getArmorImbuementRegistry().getValues()){
-			if (imbuement.getTier() == tier){
-				for (EntityEquipmentSlot i : imbuement.getValidSlots()){
-					if (i == armorType){
+		for (ArmorImbuement imbuement : ArsMagicaAPI.getArmorImbuementRegistry().getValues()) {
+			if (imbuement.getTier() == tier) {
+				for (EntityEquipmentSlot i : imbuement.getValidSlots()) {
+					if (i == armorType) {
 						list.add(imbuement);
 						break;
 					}
@@ -52,12 +53,12 @@ public class ImbuementRegistry implements IImbuementRegistry{
 	}
 
 	@Override
-	public boolean isImbuementPresent(ItemStack stack, ArmorImbuement imbuement){
+	public boolean isImbuementPresent(ItemStack stack, ArmorImbuement imbuement) {
 		return isImbuementPresent(stack, imbuement.getID());
 	}
 
 	@Override
-	public boolean isImbuementPresent(ItemStack stack, String id){
+	public boolean isImbuementPresent(ItemStack stack, String id) {
 		return ArmorHelper.isInfusionPreset(stack, id);
 	}
 }

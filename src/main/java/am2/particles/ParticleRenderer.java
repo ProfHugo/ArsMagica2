@@ -18,7 +18,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-public class ParticleRenderer{
+public class ParticleRenderer {
 
 	public static String name = "am2-particle";
 	private final ArrayList<Particle> particles;
@@ -31,7 +31,7 @@ public class ParticleRenderer{
 	private final ArrayList<Particle> deferredRadiants;
 	private final ArrayList<AMLineArc> deferredArcs;
 
-	public ParticleRenderer(){
+	public ParticleRenderer() {
 		MinecraftForge.EVENT_BUS.register(this);
 		particles = new ArrayList<Particle>();
 		radiants = new ArrayList<Particle>();
@@ -44,17 +44,17 @@ public class ParticleRenderer{
 		deferredBlocks = new ArrayList<Particle>();
 	}
 
-	public void addEffect(Particle effect){
-		if (effect instanceof AMParticle){
-			addAMParticle((AMParticle)effect);
-		}else if (effect instanceof AMLineArc){
-			addArcEffect((AMLineArc)effect);
-		}else{
+	public void addEffect(Particle effect) {
+		if (effect instanceof AMParticle) {
+			addAMParticle((AMParticle) effect);
+		} else if (effect instanceof AMLineArc) {
+			addArcEffect((AMLineArc) effect);
+		} else {
 			deferredParticles.add(effect);
 		}
 	}
 
-	public void addAMParticle(AMParticle particle){
+	public void addAMParticle(AMParticle particle) {
 		if (particle.isRadiant())
 			deferredRadiants.add(particle);
 		else if (particle.isBlockTexture())
@@ -63,17 +63,17 @@ public class ParticleRenderer{
 			deferredParticles.add(particle);
 	}
 
-	public void addArcEffect(AMLineArc arc){
+	public void addArcEffect(AMLineArc arc) {
 		deferredArcs.add(arc);
 	}
 
 	@SubscribeEvent
-	public void onRenderWorldLast(RenderWorldLastEvent event){
+	public void onRenderWorldLast(RenderWorldLastEvent event) {
 		render(event.getPartialTicks());
 	}
 
 	@SubscribeEvent
-	public void onWorldUnload(WorldEvent.Unload event){
+	public void onWorldUnload(WorldEvent.Unload event) {
 		particles.clear();
 		radiants.clear();
 		arcs.clear();
@@ -85,13 +85,13 @@ public class ParticleRenderer{
 	}
 
 	@SubscribeEvent
-	public void onTickEnd(TickEvent.ClientTickEvent event){
-		if (event.phase == TickEvent.Phase.END){
+	public void onTickEnd(TickEvent.ClientTickEvent event) {
+		if (event.phase == TickEvent.Phase.END) {
 			updateParticles();
 		}
 	}
 
-	private void updateParticles(){
+	private void updateParticles() {
 		Minecraft.getMinecraft().mcProfiler.startSection(name + "-update");
 
 		particles.addAll(deferredParticles);
@@ -106,42 +106,42 @@ public class ParticleRenderer{
 		blocks.addAll(deferredBlocks);
 		deferredBlocks.clear();
 
-		for (Iterator<Particle> it = particles.iterator(); it.hasNext(); ){
+		for (Iterator<Particle> it = particles.iterator(); it.hasNext();) {
 			Particle particle = it.next();
 
 			particle.onUpdate();
 
-			if (!particle.isAlive()){
+			if (!particle.isAlive()) {
 				it.remove();
 			}
 		}
 
-		for (Iterator<Particle> it = radiants.iterator(); it.hasNext(); ){
+		for (Iterator<Particle> it = radiants.iterator(); it.hasNext();) {
 			Particle particle = it.next();
 
 			particle.onUpdate();
 
-			if (!particle.isAlive()){
+			if (!particle.isAlive()) {
 				it.remove();
 			}
 		}
 
-		for (Iterator<AMLineArc> it = arcs.iterator(); it.hasNext(); ){
+		for (Iterator<AMLineArc> it = arcs.iterator(); it.hasNext();) {
 			AMLineArc particle = it.next();
 
 			particle.onUpdate();
 
-			if (!particle.isAlive()){
+			if (!particle.isAlive()) {
 				it.remove();
 			}
 		}
 
-		for (Iterator<Particle> it = blocks.iterator(); it.hasNext(); ){
+		for (Iterator<Particle> it = blocks.iterator(); it.hasNext();) {
 			Particle particle = it.next();
 
 			particle.onUpdate();
 
-			if (!particle.isAlive()){
+			if (!particle.isAlive()) {
 				it.remove();
 			}
 		}
@@ -149,7 +149,7 @@ public class ParticleRenderer{
 		Minecraft.getMinecraft().mcProfiler.endSection();
 	}
 
-	private void render(float partialTicks){
+	private void render(float partialTicks) {
 		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		Minecraft.getMinecraft().mcProfiler.startSection(name + "-render");
 
@@ -161,34 +161,34 @@ public class ParticleRenderer{
 		// bind the texture
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
-		//============================================================================================
+		// ============================================================================================
 		// Standard Particles Using the Block Atlas
-		//============================================================================================
+		// ============================================================================================
 		renderBlockParticles(partialTicks);
 
 		// bind the texture
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
-		//============================================================================================
+		// ============================================================================================
 		// Standard Particles
-		//============================================================================================
+		// ============================================================================================
 		renderStandardParticles(partialTicks);
-		//============================================================================================
+		// ============================================================================================
 		// Radiant Particles
-		//============================================================================================
+		// ============================================================================================
 		renderRadiants(partialTicks);
-		//============================================================================================
+		// ============================================================================================
 		// Arc Particles
-		//============================================================================================
+		// ============================================================================================
 		renderArcs(partialTicks);
-		//============================================================================================
+		// ============================================================================================
 		// End
-		//============================================================================================
+		// ============================================================================================
 		Minecraft.getMinecraft().mcProfiler.endSection();
 		GL11.glPopAttrib();
 	}
 
-	private void renderStandardParticles(float partialTicks){
+	private void renderStandardParticles(float partialTicks) {
 		float rotationX = ActiveRenderInfo.getRotationX();
 		float rotationZ = ActiveRenderInfo.getRotationZ();
 		float rotationYZ = ActiveRenderInfo.getRotationYZ();
@@ -204,18 +204,21 @@ public class ParticleRenderer{
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
-		GL11.glDisable(32826 /*GL_RESCALE_NORMAL_EXT*/);
+		GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
 
-		//GL11.glRotatef(180F - RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
-		//GL11.glRotatef(-RenderManager.instance.playerViewX, 1.0F, 0.0F, 0.0F);
+		// GL11.glRotatef(180F - RenderManager.instance.playerViewY, 0.0F, 1.0F,
+		// 0.0F);
+		// GL11.glRotatef(-RenderManager.instance.playerViewX, 1.0F, 0.0F,
+		// 0.0F);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 
-		for (Particle particle : particles){
-			//tessellator.setBrightness(particle.getBrightnessForRender(partialTicks));
-			//LogHelper.info("Rendering");
-			particle.renderParticle(tessellator.getBuffer(), Minecraft.getMinecraft().getRenderViewEntity(), partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
+		for (Particle particle : particles) {
+			// tessellator.setBrightness(particle.getBrightnessForRender(partialTicks));
+			// LogHelper.info("Rendering");
+			particle.renderParticle(tessellator.getBuffer(), Minecraft.getMinecraft().getRenderViewEntity(),
+					partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
 		}
 
 		tessellator.draw();
@@ -224,7 +227,7 @@ public class ParticleRenderer{
 		GL11.glPopAttrib();
 	}
 
-	private void renderBlockParticles(float partialTicks){
+	private void renderBlockParticles(float partialTicks) {
 		float rotationX = ActiveRenderInfo.getRotationX();
 		float rotationZ = ActiveRenderInfo.getRotationZ();
 		float rotationYZ = ActiveRenderInfo.getRotationYZ();
@@ -240,27 +243,30 @@ public class ParticleRenderer{
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
-		GL11.glDisable(32826 /*GL_RESCALE_NORMAL_EXT*/);
+		GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
 
-		//GL11.glRotatef(180F - RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
-		//GL11.glRotatef(-RenderManager.instance.playerViewX, 1.0F, 0.0F, 0.0F);
+		// GL11.glRotatef(180F - RenderManager.instance.playerViewY, 0.0F, 1.0F,
+		// 0.0F);
+		// GL11.glRotatef(-RenderManager.instance.playerViewX, 1.0F, 0.0F,
+		// 0.0F);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		//tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX);
+		// tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX);
 
-		for (Particle particle : blocks){
-			//tessellator.setBrightness(particle.getBrightnessForRender(partialTicks));
+		for (Particle particle : blocks) {
+			// tessellator.setBrightness(particle.getBrightnessForRender(partialTicks));
 
-			particle.renderParticle(tessellator.getBuffer(), Minecraft.getMinecraft().getRenderViewEntity(), partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
+			particle.renderParticle(tessellator.getBuffer(), Minecraft.getMinecraft().getRenderViewEntity(),
+					partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
 		}
 
-		//tessellator.draw();
+		// tessellator.draw();
 
 		// restore previous gl state
 		GL11.glPopAttrib();
 	}
 
-	private void renderRadiants(float partialTicks){
+	private void renderRadiants(float partialTicks) {
 		float rotationX = ActiveRenderInfo.getRotationX();
 		float rotationZ = ActiveRenderInfo.getRotationZ();
 		float rotationYZ = ActiveRenderInfo.getRotationYZ();
@@ -280,10 +286,11 @@ public class ParticleRenderer{
 		GL11.glDepthMask(false);
 		Tessellator tessellator = Tessellator.getInstance();
 
-		for (Particle particle : radiants){
-			//tessellator.setBrightness(particle.getBrightnessForRender(partialTicks));
+		for (Particle particle : radiants) {
+			// tessellator.setBrightness(particle.getBrightnessForRender(partialTicks));
 
-			particle.renderParticle(tessellator.getBuffer(), Minecraft.getMinecraft().getRenderViewEntity(), partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
+			particle.renderParticle(tessellator.getBuffer(), Minecraft.getMinecraft().getRenderViewEntity(),
+					partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
 		}
 
 		// restore previous gl state
@@ -298,7 +305,7 @@ public class ParticleRenderer{
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
 
-	private void renderArcs(float partialTicks){
+	private void renderArcs(float partialTicks) {
 		float rotationX = ActiveRenderInfo.getRotationX();
 		float rotationZ = ActiveRenderInfo.getRotationZ();
 		float rotationYZ = ActiveRenderInfo.getRotationYZ();
@@ -306,17 +313,18 @@ public class ParticleRenderer{
 		float rotationXZ = ActiveRenderInfo.getRotationXZ();
 
 		Tessellator tessellator = Tessellator.getInstance();
-		//tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX);
+		// tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX);
 
 		GL11.glDepthMask(false);
 		GL11.glEnable(3042);
 		GL11.glBlendFunc(770, 1);
-		GL11.glDisable(2884);//2884
+		GL11.glDisable(2884);// 2884
 
-		for (AMLineArc particle : arcs){
-//			tessellator.setBrightness(15728864);
+		for (AMLineArc particle : arcs) {
+			// tessellator.setBrightness(15728864);
 
-			particle.renderParticle(tessellator.getBuffer(), Minecraft.getMinecraft().getRenderViewEntity(), partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
+			particle.renderParticle(tessellator.getBuffer(), Minecraft.getMinecraft().getRenderViewEntity(),
+					partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
 		}
 
 		GL11.glEnable(2884);

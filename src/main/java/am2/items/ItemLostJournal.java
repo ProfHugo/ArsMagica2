@@ -20,9 +20,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemLostJournal extends ItemWritableBook{
+public class ItemLostJournal extends ItemWritableBook {
 
-	public ItemLostJournal(){
+	public ItemLostJournal() {
 		super();
 		setMaxDamage(0);
 		setMaxStackSize(1);
@@ -30,13 +30,13 @@ public class ItemLostJournal extends ItemWritableBook{
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean hasEffect(ItemStack par1ItemStack){
+	public boolean hasEffect(ItemStack par1ItemStack) {
 		return false;
 	}
 
-	public String getItemStackDisplayName(ItemStack par1ItemStack){
+	public String getItemStackDisplayName(ItemStack par1ItemStack) {
 		String title = super.getItemStackDisplayName(par1ItemStack);
-		if (par1ItemStack.hasTagCompound()){
+		if (par1ItemStack.hasTagCompound()) {
 			NBTTagCompound compound = par1ItemStack.getTagCompound();
 			int part = compound.getInteger("story_part");
 			String nbtTitle = compound.getString("title");
@@ -47,8 +47,8 @@ public class ItemLostJournal extends ItemWritableBook{
 		return title;
 	}
 
-	public Story getStory(ItemStack stack){
-		if (stack.hasTagCompound()){
+	public Story getStory(ItemStack stack) {
+		if (stack.hasTagCompound()) {
 			NBTTagCompound compound = stack.getTagCompound();
 			String nbtTitle = compound.getString("title");
 			Story s = StoryManager.INSTANCE.getByTitle(nbtTitle);
@@ -57,18 +57,19 @@ public class ItemLostJournal extends ItemWritableBook{
 		return null;
 	}
 
-	public short getStoryPart(ItemStack stack){
-		if (stack.hasTagCompound()){
+	public short getStoryPart(ItemStack stack) {
+		if (stack.hasTagCompound()) {
 			NBTTagCompound compound = stack.getTagCompound();
 			int part = compound.getInteger("story_part");
-			return (short)part;
+			return (short) part;
 		}
 		return -1;
 	}
-	
+
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		if (worldIn.isRemote){
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn,
+			EnumHand hand) {
+		if (worldIn.isRemote) {
 			AMGuiHelper.OpenBookGUI(itemStackIn);
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
@@ -76,14 +77,14 @@ public class ItemLostJournal extends ItemWritableBook{
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> par3List){
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
 
 		super.getSubItems(item, par2CreativeTabs, par3List);
 
 		int sCount = 0;
-		for (Story s : StoryManager.INSTANCE.allStories()){
+		for (Story s : StoryManager.INSTANCE.allStories()) {
 			int meta = sCount << 16;
-			for (short i = 0; i < s.getNumParts(); ++i){
+			for (short i = 0; i < s.getNumParts(); ++i) {
 				meta = sCount + i;
 				ItemStack stack = new ItemStack(item, 1, meta);
 				stack.setTagCompound(new NBTTagCompound());
@@ -93,7 +94,7 @@ public class ItemLostJournal extends ItemWritableBook{
 			}
 		}
 	}
-	
+
 	public ItemLostJournal registerAndName(String name) {
 		this.setUnlocalizedName(new ResourceLocation("arsmagica2", name).toString());
 		GameRegistry.register(this, new ResourceLocation("arsmagica2", name));

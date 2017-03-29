@@ -1,4 +1,5 @@
 package am2.gui;
+
 import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
@@ -10,13 +11,15 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiEssenceBag extends GuiContainer{
+public class GuiEssenceBag extends GuiContainer {
 
-	private static final ResourceLocation background = new ResourceLocation("arsmagica2", "textures/gui/essenceBagGUI.png");
-	private static final ResourceLocation extras = new ResourceLocation("arsmagica2", "textures/gui/spellBookGui_2.png");
+	private static final ResourceLocation background = new ResourceLocation("arsmagica2",
+			"textures/gui/essenceBagGUI.png");
+	private static final ResourceLocation extras = new ResourceLocation("arsmagica2",
+			"textures/gui/spellBookGui_2.png");
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j){
+	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		mc.renderEngine.bindTexture(background);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int l = (width - xSize) / 2;
@@ -24,18 +27,18 @@ public class GuiEssenceBag extends GuiContainer{
 		drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
 	}
 
-	public GuiEssenceBag(InventoryPlayer inventoryplayer, ItemStack spellBookStack, InventoryEssenceBag inventorybag){
+	public GuiEssenceBag(InventoryPlayer inventoryplayer, ItemStack spellBookStack, InventoryEssenceBag inventorybag) {
 		super(new ContainerEssenceBag(inventoryplayer, spellBookStack, inventorybag));
 		xSize = 176;
 		ySize = 140;
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2){
+	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		mc.renderEngine.bindTexture(extras);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		//special slot
-		int index = ((ContainerEssenceBag)this.inventorySlots).specialSlotIndex - 32;
+		// special slot
+		int index = ((ContainerEssenceBag) this.inventorySlots).specialSlotIndex - 32;
 		int x = 8 + 18 * index;
 		int y = 116;
 		GL11.glEnable(GL11.GL_BLEND);
@@ -46,7 +49,7 @@ public class GuiEssenceBag extends GuiContainer{
 	}
 
 	@Override
-	protected void keyTyped(char par1, int par2) throws IOException{
+	protected void keyTyped(char par1, int par2) throws IOException {
 		if (!Character.isDigit(par1))
 			super.keyTyped(par1, par2);
 	}

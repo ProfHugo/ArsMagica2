@@ -11,129 +11,129 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
-public class AMDataWriter{
+public class AMDataWriter {
 	ByteArrayOutputStream bytes;
 	DataOutputStream data;
 
-	public AMDataWriter(){
+	public AMDataWriter() {
 		bytes = new ByteArrayOutputStream();
 		data = new DataOutputStream(bytes);
 	}
 
-	public AMDataWriter add(int value){
-		try{
+	public AMDataWriter add(int value) {
+		try {
 			data.writeInt(Integer.valueOf(value));
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataWriter: " + e.getMessage());
 		}
 		return this;
 	}
 
-	public AMDataWriter add(boolean value){
-		try{
+	public AMDataWriter add(boolean value) {
+		try {
 			data.writeBoolean(value);
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error(e.getMessage());
 		}
 		return this;
 	}
 
-	public AMDataWriter add(byte value){
-		try{
+	public AMDataWriter add(byte value) {
+		try {
 			data.writeByte(value);
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataWriter: " + e.getMessage());
 		}
 		return this;
 	}
 
-	public AMDataWriter add(String value){
-		try{
+	public AMDataWriter add(String value) {
+		try {
 			data.writeUTF(value);
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataWriter: " + e.getMessage());
 		}
 		return this;
 	}
 
-	public AMDataWriter add(short value){
-		try{
+	public AMDataWriter add(short value) {
+		try {
 			data.writeShort(value);
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataWriter: " + e.getMessage());
 		}
 		return this;
 	}
 
-	public AMDataWriter add(double value){
-		try{
+	public AMDataWriter add(double value) {
+		try {
 			data.writeDouble(value);
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataWriter: " + e.getMessage());
 		}
 		return this;
 	}
 
-	public AMDataWriter add(float value){
-		try{
+	public AMDataWriter add(float value) {
+		try {
 			data.writeFloat(value);
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataWriter: " + e.getMessage());
 		}
 		return this;
 	}
 
-	public AMDataWriter add(long value){
-		try{
+	public AMDataWriter add(long value) {
+		try {
 			data.writeLong(value);
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataWriter: " + e.getMessage());
 		}
 		return this;
 	}
 
-	public AMDataWriter add(byte[] value){
-		try{
+	public AMDataWriter add(byte[] value) {
+		try {
 			data.write(value);
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataWriter: " + e.getMessage());
 		}
 		return this;
 	}
 
-	public AMDataWriter add(int[] value){
-		try{
+	public AMDataWriter add(int[] value) {
+		try {
 			data.writeInt(Integer.valueOf(value.length));
 			for (int i = 0; i < value.length; ++i)
 				data.writeInt(Integer.valueOf(value[i]));
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataWriter: " + e.getMessage());
 		}
 		return this;
 	}
 
-	public AMDataWriter add(NBTTagCompound compound){
-		try{
+	public AMDataWriter add(NBTTagCompound compound) {
+		try {
 			ByteBuf buf = Unpooled.buffer();
 			ByteBufUtils.writeTag(buf, compound);
 			byte[] arr = buf.array();
 			data.writeInt(arr.length);
 			data.write(arr);
-		}catch (IOException ex){
+		} catch (IOException ex) {
 			LogHelper.error("AMDataWriter: " + ex.getMessage());
 		}
 		return this;
 	}
 
-	public AMDataWriter add(ItemStack stack){
+	public AMDataWriter add(ItemStack stack) {
 		NBTTagCompound compound = new NBTTagCompound();
 		if (stack == null)
-			return add((NBTTagCompound)null);
+			return add((NBTTagCompound) null);
 		stack.writeToNBT(compound);
 		return add(compound);
 	}
 
-	public byte[] generate(){
+	public byte[] generate() {
 		return bytes.toByteArray();
 	}
 }

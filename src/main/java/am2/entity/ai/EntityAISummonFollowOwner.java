@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityAISummonFollowOwner extends EntityAIBase{
+public class EntityAISummonFollowOwner extends EntityAIBase {
 	private EntityCreature theSummon;
 	private EntityLivingBase theOwner;
 	World theWorld;
@@ -22,7 +22,8 @@ public class EntityAISummonFollowOwner extends EntityAIBase{
 	private int field_75343_h;
 	float maxDist;
 	float minDist;
-	public EntityAISummonFollowOwner(EntityCreature host, double moveSpeed, float minDist, float maxDist){
+
+	public EntityAISummonFollowOwner(EntityCreature host, double moveSpeed, float minDist, float maxDist) {
 		this.theSummon = host;
 		this.theWorld = host.worldObj;
 		this.moveSpeed = moveSpeed;
@@ -35,65 +36,68 @@ public class EntityAISummonFollowOwner extends EntityAIBase{
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
-	public boolean shouldExecute(){
+	public boolean shouldExecute() {
 		EntityLivingBase entitylivingbase = getOwner();
 
-		if (entitylivingbase == null){
+		if (entitylivingbase == null) {
 			return false;
-		}else if (this.theSummon.getDistanceSqToEntity(entitylivingbase) < (double)(this.minDist * this.minDist)){
+		} else if (this.theSummon.getDistanceSqToEntity(entitylivingbase) < (double) (this.minDist * this.minDist)) {
 			return false;
-		}else{
+		} else {
 			this.theOwner = entitylivingbase;
 			return true;
 		}
 	}
 
-	private EntityLivingBase getOwner(){
+	private EntityLivingBase getOwner() {
 		int entityID = EntityUtils.getOwner(theSummon);
-		if (entityID == -1) return null;
+		if (entityID == -1)
+			return null;
 		Entity e = theSummon.worldObj.getEntityByID(entityID);
 		if (e instanceof EntityLivingBase)
-			return (EntityLivingBase)e;
+			return (EntityLivingBase) e;
 		return null;
 	}
 
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
-	public boolean continueExecuting(){
-		return !this.petPathfinder.noPath() && this.theSummon.getDistanceSqToEntity(this.theOwner) > (double)(this.maxDist * this.maxDist);
+	public boolean continueExecuting() {
+		return !this.petPathfinder.noPath()
+				&& this.theSummon.getDistanceSqToEntity(this.theOwner) > (double) (this.maxDist * this.maxDist);
 	}
 
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
-	public void startExecuting(){
+	public void startExecuting() {
 		this.field_75343_h = 0;
-//		this.field_75344_i = this.theSummon.getNavigator().getAvoidsWater();
-//		this.theSummon.getNavigator().setAvoidsWater(false);
+		// this.field_75344_i = this.theSummon.getNavigator().getAvoidsWater();
+		// this.theSummon.getNavigator().setAvoidsWater(false);
 	}
 
 	/**
 	 * Resets the task
 	 */
-	public void resetTask(){
+	public void resetTask() {
 		this.theOwner = null;
 		this.petPathfinder.clearPathEntity();
-//		this.theSummon.getNavigator().setAvoidsWater(this.field_75344_i);
+		// this.theSummon.getNavigator().setAvoidsWater(this.field_75344_i);
 	}
-	
+
 	private boolean isEmptyBlock(BlockPos pos) {
 		IBlockState iblockstate = this.theWorld.getBlockState(pos);
 		Block block = iblockstate.getBlock();
 		return block == Blocks.AIR ? true : !iblockstate.isFullCube();
 	}
-	
+
 	/**
 	 * Updates the task
 	 */
 	@SuppressWarnings("deprecation")
 	public void updateTask() {
-		this.theSummon.getLookHelper().setLookPositionWithEntity(this.theOwner, 10.0F,(float) this.theSummon.getVerticalFaceSpeed());
+		this.theSummon.getLookHelper().setLookPositionWithEntity(this.theOwner, 10.0F,
+				(float) this.theSummon.getVerticalFaceSpeed());
 		if (--this.field_75343_h <= 0) {
 			this.field_75343_h = 10;
 

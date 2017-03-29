@@ -22,57 +22,57 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class Contingency_Health extends SpellShape{
+public class Contingency_Health extends SpellShape {
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				Items.CLOCK,
+	public Object[] getRecipe() {
+		return new Object[] { Items.CLOCK,
 				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.HEALING),
-				BlockDefs.tarmaRoot,
-				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_BLUE_TOPAZ),
-				"E:*", 5000,
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.LIFE)
-		};
+				BlockDefs.tarmaRoot, new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_BLUE_TOPAZ), "E:*", 5000,
+				AffinityShiftUtils.getEssenceForAffinity(Affinity.LIFE) };
 	}
 
 	@Override
-	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster, EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP, int useCount){
+	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster,
+			EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP,
+			int useCount) {
 		EntityExtension.For(target != null ? target : caster).setContingency(ContingencyType.HEALTH, stack);
 		return SpellCastResult.SUCCESS;
 	}
 
 	@Override
-	public boolean isChanneled(){
+	public boolean isChanneled() {
 		return false;
 	}
 
 	@Override
-	public float manaCostMultiplier(ItemStack spellStack){
+	public float manaCostMultiplier(ItemStack spellStack) {
 		return 10;
 	}
 
 	@Override
-	public boolean isTerminusShape(){
+	public boolean isTerminusShape() {
 		return false;
 	}
 
 	@Override
-	public boolean isPrincipumShape(){
+	public boolean isPrincipumShape() {
 		return true;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.noneOf(SpellModifiers.class);
 	}
-	
-//
-//	@Override
-//	public String getSoundForAffinity(Affinity affinity, ItemStack stack, World world){
-//		return "arsmagica2:spell.contingency.contingency";
-//	}
+
+	//
+	// @Override
+	// public String getSoundForAffinity(Affinity affinity, ItemStack stack,
+	// World world){
+	// return "arsmagica2:spell.contingency.contingency";
+	// }
 
 	@Override
-	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {}
+	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
+	}
 }

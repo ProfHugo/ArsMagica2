@@ -22,69 +22,76 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockBrokenPowerLink extends BlockAMContainer{
+public class BlockBrokenPowerLink extends BlockAMContainer {
 
-	public BlockBrokenPowerLink(){
+	public BlockBrokenPowerLink() {
 		super(Material.CIRCUITS);
-		setBlockUnbreakable(); // can't be broken, but can be directly replaced, and has no collisions
+		setBlockUnbreakable(); // can't be broken, but can be directly replaced,
+								// and has no collisions
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int i){
+	public TileEntity createNewTileEntity(World world, int i) {
 		return new TileEntityBrokenPowerLink();
 	}
 
-
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
-		if (ArsMagica2.proxy.getLocalPlayer() != null &&
-				ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null &&
-				(ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == ItemDefs.magitechGoggles)
-				|| ArmorHelper.isInfusionPreset(ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD), GenericImbuement.magitechGoggleIntegration))
+		if (ArsMagica2.proxy.getLocalPlayer() != null
+				&& ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null
+				&& (ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD)
+						.getItem() == ItemDefs.magitechGoggles)
+				|| ArmorHelper.isInfusionPreset(
+						ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD),
+						GenericImbuement.magitechGoggleIntegration))
 			return FULL_BLOCK_AABB;
 		return NULL_AABB;
 	}
-	
+
 	@Override
 	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
 		return true;
 	}
-	
+
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos){
-		if (ArsMagica2.proxy.getLocalPlayer() != null &&
-				ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null &&
-				(ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == ItemDefs.magitechGoggles)
-				|| ArmorHelper.isInfusionPreset(ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD), GenericImbuement.magitechGoggleIntegration))
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+		if (ArsMagica2.proxy.getLocalPlayer() != null
+				&& ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null
+				&& (ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD)
+						.getItem() == ItemDefs.magitechGoggles)
+				|| ArmorHelper.isInfusionPreset(
+						ArsMagica2.proxy.getLocalPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD),
+						GenericImbuement.magitechGoggleIntegration))
 			return FULL_BLOCK_AABB;
 		return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 	}
 
-	
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox,
-			List<AxisAlignedBB> collidingBoxes, Entity entityIn) {}
-	
+			List<AxisAlignedBB> collidingBoxes, Entity entityIn) {
+	}
+
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state){
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isFullBlock(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+			EntityPlayer player) {
 		return null;
 	}
-	
+
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		return new ArrayList<>();

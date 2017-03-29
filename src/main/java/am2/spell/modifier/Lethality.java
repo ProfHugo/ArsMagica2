@@ -15,32 +15,31 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.world.World;
 
-public class Lethality extends SpellModifier{
+public class Lethality extends SpellModifier {
 	@Override
-	public EnumSet<SpellModifiers> getAspectsModified(){
+	public EnumSet<SpellModifiers> getAspectsModified() {
 		return EnumSet.of(SpellModifiers.LETHALITY);
 	}
 
 	@Override
-	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, NBTTagCompound metadata){
+	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world,
+			NBTTagCompound metadata) {
 		return 1f;
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.FIRE),
-				Items.FIRE_CHARGE,
+	public Object[] getRecipe() {
+		return new Object[] { AffinityShiftUtils.getEssenceForAffinity(Affinity.FIRE), Items.FIRE_CHARGE,
 				Items.BLAZE_POWDER,
-				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.STRENGTH)
-		};
+				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.STRENGTH) };
 	}
 
 	@Override
-	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity){
+	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity) {
 		return 1.25f * quantity;
 	}
 
 	@Override
-	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {}
+	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
+	}
 }

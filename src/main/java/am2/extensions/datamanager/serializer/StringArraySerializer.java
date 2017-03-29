@@ -7,14 +7,16 @@ import am2.packet.AMDataReader;
 import am2.packet.AMDataWriter;
 
 public class StringArraySerializer implements TypeSerializer<ArrayList<String>> {
-	
+
 	public static StringArraySerializer INSTANCE = new StringArraySerializer();
-	
-	private StringArraySerializer() {}
-	
+
+	private StringArraySerializer() {
+	}
+
 	@Override
 	public void serialize(AMDataWriter buf, ArrayList<String> value) {
-		if (value == null) return;
+		if (value == null)
+			return;
 		buf.add(value.size());
 		for (String entry : value) {
 			buf.add(entry);

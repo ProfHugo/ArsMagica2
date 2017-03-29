@@ -22,7 +22,8 @@ import net.minecraft.world.World;
 public class TileIllusionBlockRenderer extends TileEntitySpecialRenderer<TileEntityIllusionBlock> {
 
 	@Override
-	public void renderTileEntityAt(TileEntityIllusionBlock te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void renderTileEntityAt(TileEntityIllusionBlock te, double x, double y, double z, float partialTicks,
+			int destroyStage) {
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		GlStateManager.pushMatrix();
 		RenderHelper.disableStandardItemLighting();
@@ -32,28 +33,37 @@ public class TileIllusionBlockRenderer extends TileEntitySpecialRenderer<TileEnt
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		boolean flag = te.getMimicBlock() != null && te.getMimicBlock() != Blocks.AIR.getDefaultState();
 		if (BlockIllusionBlock.getIllusionType(te.getWorld().getBlockState(te.getPos())).canBeRevealed())
-			flag &= ArsMagica2.proxy.getLocalPlayer() != null && !ArsMagica2.proxy.getLocalPlayer().isPotionActive(PotionEffectsDefs.trueSight);
+			flag &= ArsMagica2.proxy.getLocalPlayer() != null
+					&& !ArsMagica2.proxy.getLocalPlayer().isPotionActive(PotionEffectsDefs.trueSight);
 		if (flag) {
 			Tessellator.getInstance().getBuffer().begin(7, DefaultVertexFormats.BLOCK);
-			Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(te.getMimicBlock(), te.getPos(), te.getWorld(), Tessellator.getInstance().getBuffer());
+			Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(te.getMimicBlock(), te.getPos(),
+					te.getWorld(), Tessellator.getInstance().getBuffer());
 			Tessellator.getInstance().draw();
 			if (destroyStage >= 0) {
 				Tessellator.getInstance().getBuffer().begin(7, DefaultVertexFormats.BLOCK);
-				TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/destroy_stage_" + destroyStage);
-	            IBakedModel ibakedmodel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(te.getMimicBlock());
-	            IBakedModel ibakedmodel1 = net.minecraftforge.client.ForgeHooksClient.getDamageModel(ibakedmodel, sprite, te.getMimicBlock(), te.getWorld(), te.getPos());
-				Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(te.getWorld(), ibakedmodel1, te.getMimicBlock(), te.getPos(), Tessellator.getInstance().getBuffer(), true);
+				TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks()
+						.getAtlasSprite("minecraft:blocks/destroy_stage_" + destroyStage);
+				IBakedModel ibakedmodel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes()
+						.getModelForState(te.getMimicBlock());
+				IBakedModel ibakedmodel1 = net.minecraftforge.client.ForgeHooksClient.getDamageModel(ibakedmodel,
+						sprite, te.getMimicBlock(), te.getWorld(), te.getPos());
+				Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(te.getWorld(),
+						ibakedmodel1, te.getMimicBlock(), te.getPos(), Tessellator.getInstance().getBuffer(), true);
 				Tessellator.getInstance().draw();
 			}
 		} else {
-			IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(BlockDefs.illusionBlock.getDefaultState());
+			IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes()
+					.getModelForState(BlockDefs.illusionBlock.getDefaultState());
 			Tessellator t = Tessellator.getInstance();
 			VertexBuffer wr = t.getBuffer();
 			wr.begin(7, DefaultVertexFormats.BLOCK);
 			World world = te.getWorld();
 			IBlockState state = world.getBlockState(te.getPos());
-			Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(world, model, state, te.getPos(), wr, true);
-			t.draw();		}
+			Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(world, model,
+					state, te.getPos(), wr, true);
+			t.draw();
+		}
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
 		RenderHelper.enableStandardItemLighting();

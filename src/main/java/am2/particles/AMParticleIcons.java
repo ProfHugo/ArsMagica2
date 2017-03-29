@@ -10,7 +10,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class AMParticleIcons{
+public class AMParticleIcons {
 
 	public static final AMParticleIcons instance = new AMParticleIcons();
 
@@ -18,19 +18,18 @@ public class AMParticleIcons{
 	private final HashMap<String, TextureAtlasSprite> hiddenIcons;
 	private static final Random rand = new Random();
 
-
-	private AMParticleIcons(){
+	private AMParticleIcons() {
 		MinecraftForge.EVENT_BUS.register(this);
 		icons = new HashMap<String, TextureAtlasSprite>();
 		hiddenIcons = new HashMap<String, TextureAtlasSprite>();
 	}
 
-	public int numParticles(){
+	public int numParticles() {
 		return icons.size();
 	}
 
 	@SubscribeEvent
-	public void init(TextureStitchEvent.Pre e){
+	public void init(TextureStitchEvent.Pre e) {
 
 		icons.clear();
 		TextureMap textureMap = e.getMap();
@@ -70,11 +69,11 @@ public class AMParticleIcons{
 		loadAndInitIcon("beam1", "beam1", textureMap, false);
 		loadAndInitIcon("beam2", "beam2", textureMap, false);
 
-		for (int i = 1; i <= 28; ++i){
+		for (int i = 1; i <= 28; ++i) {
 			loadAndInitIcon("Symbols" + i, "symbols/Symbols" + i, textureMap, false);
 		}
 
-		for (int i = 1; i <= 9; ++i){
+		for (int i = 1; i <= 9; ++i) {
 			loadAndInitIcon("snowflake" + i, "snowflakes/snowflake" + i, textureMap, false);
 		}
 
@@ -85,33 +84,35 @@ public class AMParticleIcons{
 		AMParticle.particleTypes[AMParticle.particleTypes.length - 1] = "radiant";
 	}
 
-	private void loadAndInitIcon(String name, String TextureAtlasSpritePath, TextureMap register){
+	private void loadAndInitIcon(String name, String TextureAtlasSpritePath, TextureMap register) {
 		loadAndInitIcon(name, TextureAtlasSpritePath, register, true);
 	}
 
-	private void loadAndInitIcon(String name, String TextureAtlasSpritePath, TextureMap register, boolean registerName){
+	private void loadAndInitIcon(String name, String TextureAtlasSpritePath, TextureMap register,
+			boolean registerName) {
 		register.registerSprite(new ResourceLocation("arsmagica2:items/particles/" + TextureAtlasSpritePath));
-		TextureAtlasSprite icon = register.getTextureExtry(new ResourceLocation("arsmagica2:items/particles/" + TextureAtlasSpritePath).toString());
-		if (registerName){
-			if (icon != null){
+		TextureAtlasSprite icon = register.getTextureExtry(
+				new ResourceLocation("arsmagica2:items/particles/" + TextureAtlasSpritePath).toString());
+		if (registerName) {
+			if (icon != null) {
 				icons.put(name, icon);
 			}
-		}else{
-			if (icon != null){
+		} else {
+			if (icon != null) {
 				hiddenIcons.put(name, icon);
 			}
 		}
 	}
 
-	public void RegisterIcon(String name, TextureAtlasSprite TextureAtlasSprite){
+	public void RegisterIcon(String name, TextureAtlasSprite TextureAtlasSprite) {
 		icons.put(name, TextureAtlasSprite);
 	}
 
-	public TextureAtlasSprite getIconByName(String name){
+	public TextureAtlasSprite getIconByName(String name) {
 		TextureAtlasSprite icon = null;
-		if (name.equals("symbols")){
+		if (name.equals("symbols")) {
 			icon = hiddenIcons.get("Symbols" + (rand.nextInt(28) + 1));
-		} else if (name.equals("snowflakes")){
+		} else if (name.equals("snowflakes")) {
 			icon = hiddenIcons.get("snowflake" + (rand.nextInt(9) + 1));
 		} else
 			icon = icons.get(name);
@@ -120,9 +121,10 @@ public class AMParticleIcons{
 		return icon;
 	}
 
-	public TextureAtlasSprite getHiddenIconByName(String name){
+	public TextureAtlasSprite getHiddenIconByName(String name) {
 		TextureAtlasSprite icon = hiddenIcons.get(name);
-		if (icon == null) return icons.get("lights");
+		if (icon == null)
+			return icons.get("lights");
 		return icon;
 	}
 }

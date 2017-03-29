@@ -31,25 +31,25 @@ public class AffinityData implements IAffinityData, ICapabilityProvider, ICapabi
 	private EntityPlayer player;
 	public float accumulatedLifeRegen = 0.0f;
 	public float accumulatedHungerRegen = 0.0f;
-	
+
 	@CapabilityInject(value = IAffinityData.class)
 	public static Capability<IAffinityData> INSTANCE = null;
-		
-	public static AffinityData For(EntityLivingBase living){
+
+	public static AffinityData For(EntityLivingBase living) {
 		return (AffinityData) living.getCapability(INSTANCE, null);
 	}
-	
+
 	public double getAffinityDepth(Affinity aff) {
 		return DataSyncExtension.For(player).get(DataDefinitions.AFFINITY_DATA).get(aff) / MAX_DEPTH;
 	}
-	
-	public void setAffinityDepth (Affinity name, double value) {
+
+	public void setAffinityDepth(Affinity name, double value) {
 		value = MathHelper.clamp_double(value, 0, MAX_DEPTH);
 		HashMap<Affinity, Double> map = DataSyncExtension.For(player).get(DataDefinitions.AFFINITY_DATA);
 		map.put(name, value);
 		DataSyncExtension.For(player).setWithSync(DataDefinitions.AFFINITY_DATA, map);
 	}
-	
+
 	public HashMap<Affinity, Double> getAffinities() {
 		return DataSyncExtension.For(player).get(DataDefinitions.AFFINITY_DATA);
 	}
@@ -66,78 +66,81 @@ public class AffinityData implements IAffinityData, ICapabilityProvider, ICapabi
 		ext.setWithSync(DataDefinitions.DIMINISHING_RETURNS, 1.0F);
 		ext.setWithSync(DataDefinitions.COOLDOWNS, new HashMap<>());
 	}
-	
+
 	@Override
 	public boolean getAbilityBoolean(String name) {
 		Boolean bool = getAbilityBooleanMap().get(name);
 		return bool == null ? false : bool.booleanValue();
 	}
-	
+
 	@Override
 	public void addAbilityBoolean(String name, boolean bool) {
 		HashMap<String, Boolean> map = DataSyncExtension.For(player).get(DataDefinitions.ABILITY_BOOLEAN);
 		map.put(name, bool);
 		DataSyncExtension.For(player).setWithSync(DataDefinitions.ABILITY_BOOLEAN, map);
 	}
-	
+
 	@Override
 	public float getAbilityFloat(String name) {
 		Float bool = getAbilityFloatMap().get(name);
 		return bool == null ? 0f : bool.floatValue();
 	}
-	
+
 	@Override
 	public void addAbilityFloat(String name, float f) {
 		HashMap<String, Float> map = DataSyncExtension.For(player).get(DataDefinitions.ABILITY_FLOAT);
 		map.put(name, f);
 		DataSyncExtension.For(player).setWithSync(DataDefinitions.ABILITY_FLOAT, map);
 	}
-	
+
 	@Override
 	public Map<String, Boolean> getAbilityBooleanMap() {
 		return DataSyncExtension.For(player).get(DataDefinitions.ABILITY_BOOLEAN);
 	}
-	
+
 	@Override
 	public Map<String, Float> getAbilityFloatMap() {
 		return DataSyncExtension.For(player).get(DataDefinitions.ABILITY_FLOAT);
 	}
-	
+
 	@Override
 	public void addCooldown(String name, int cooldown) {
 		HashMap<String, Integer> map = DataSyncExtension.For(player).get(DataDefinitions.COOLDOWNS);
 		map.put(name, cooldown);
 		DataSyncExtension.For(player).setWithSync(DataDefinitions.COOLDOWNS, map);
 	}
-	
+
 	@Override
 	public int getCooldown(String name) {
 		return getCooldowns().get(name) == null ? 0 : getCooldowns().get(name);
 	}
-	
+
 	@Override
 	public Map<String, Integer> getCooldowns() {
 		return DataSyncExtension.For(player).get(DataDefinitions.COOLDOWNS);
 	}
-	
+
 	@Override
-	public float getDiminishingReturnsFactor(){
+	public float getDiminishingReturnsFactor() {
 		return DataSyncExtension.For(player).get(DataDefinitions.DIMINISHING_RETURNS);
 	}
-	
+
 	@Override
-	public void tickDiminishingReturns(){
-		if (getDiminishingReturnsFactor() < 1.3f){
-			DataSyncExtension.For(player).set(DataDefinitions.DIMINISHING_RETURNS, DataSyncExtension.For(player).get(DataDefinitions.DIMINISHING_RETURNS) + 0.005f);
+	public void tickDiminishingReturns() {
+		if (getDiminishingReturnsFactor() < 1.3f) {
+			DataSyncExtension.For(player).set(DataDefinitions.DIMINISHING_RETURNS,
+					DataSyncExtension.For(player).get(DataDefinitions.DIMINISHING_RETURNS) + 0.005f);
 		}
 	}
-	
+
 	@Override
-	public void addDiminishingReturns(boolean isChanneled){
-		DataSyncExtension.For(player).set(DataDefinitions.DIMINISHING_RETURNS, getDiminishingReturnsFactor() - (isChanneled ? 0.1f : 0.3f));
-		if (this.getDiminishingReturnsFactor() < 0) DataSyncExtension.For(player).set(DataDefinitions.DIMINISHING_RETURNS, 0F);
+	public void addDiminishingReturns(boolean isChanneled) {
+		DataSyncExtension.For(player).set(DataDefinitions.DIMINISHING_RETURNS,
+				getDiminishingReturnsFactor() - (isChanneled ? 0.1f : 0.3f));
+		if (this.getDiminishingReturnsFactor() < 0)
+			DataSyncExtension.For(player).set(DataDefinitions.DIMINISHING_RETURNS, 0F);
 	}
-	
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == INSTANCE;
@@ -178,56 +181,63 @@ public class AffinityData implements IAffinityData, ICapabilityProvider, ICapabi
 				maxAff2 = entry.getKey();
 			}
 		}
-		return new Affinity[] {maxAff1, maxAff2};
+		return new Affinity[] { maxAff1, maxAff2 };
 	}
 
 	@Override
 	public void incrementAffinity(Affinity affinity, float amt) {
-		if (affinity == Affinity.NONE || isLocked()) return;
+		if (affinity == Affinity.NONE || isLocked())
+			return;
 
 		float adjacentDecrement = amt * ADJACENT_FACTOR;
 		float minorOppositeDecrement = amt * MINOR_OPPOSING_FACTOR;
 		float majorOppositeDecrement = amt * MAJOR_OPPOSING_FACTOR;
-		
+
 		addToAffinity(affinity, amt);
 
-		if (getAffinityDepth(affinity) * MAX_DEPTH == MAX_DEPTH){
+		if (getAffinityDepth(affinity) * MAX_DEPTH == MAX_DEPTH) {
 			setLocked(true);
 		}
 
-		for (Affinity adjacent : affinity.getAdjacentAffinities()){
+		for (Affinity adjacent : affinity.getAdjacentAffinities()) {
 			subtractFromAffinity(adjacent, adjacentDecrement);
 		}
 
-		for (Affinity minorOpposite : affinity.getMinorOpposingAffinities()){
+		for (Affinity minorOpposite : affinity.getMinorOpposingAffinities()) {
 			subtractFromAffinity(minorOpposite, minorOppositeDecrement);
 		}
 
-		for (Affinity majorOpposite : affinity.getMajorOpposingAffinities()){
+		for (Affinity majorOpposite : affinity.getMajorOpposingAffinities()) {
 			subtractFromAffinity(majorOpposite, majorOppositeDecrement);
 		}
 
 		Affinity directOpposite = affinity.getOpposingAffinity();
-		if (directOpposite != null){
+		if (directOpposite != null) {
 			subtractFromAffinity(directOpposite, amt);
 		}
 	}
-	
-	private void addToAffinity(Affinity affinity, float amt){
-		if (affinity == Affinity.NONE) return;
+
+	private void addToAffinity(Affinity affinity, float amt) {
+		if (affinity == Affinity.NONE)
+			return;
 		double existingAmt = getAffinityDepth(affinity) * MAX_DEPTH;
 		existingAmt += amt;
-		if (existingAmt > MAX_DEPTH) existingAmt = MAX_DEPTH;
-		else if (existingAmt < 0) existingAmt = 0;
+		if (existingAmt > MAX_DEPTH)
+			existingAmt = MAX_DEPTH;
+		else if (existingAmt < 0)
+			existingAmt = 0;
 		setAffinityDepth(affinity, existingAmt);
 	}
-	
-	private void subtractFromAffinity(Affinity affinity, float amt){
-		if (affinity == Affinity.NONE) return;
-		double existingAmt = getAffinityDepth(affinity)  * MAX_DEPTH;
+
+	private void subtractFromAffinity(Affinity affinity, float amt) {
+		if (affinity == Affinity.NONE)
+			return;
+		double existingAmt = getAffinityDepth(affinity) * MAX_DEPTH;
 		existingAmt -= amt;
-		if (existingAmt > MAX_DEPTH) existingAmt = MAX_DEPTH;
-		else if (existingAmt < 0) existingAmt = 0;
+		if (existingAmt > MAX_DEPTH)
+			existingAmt = MAX_DEPTH;
+		else if (existingAmt < 0)
+			existingAmt = 0;
 		setAffinityDepth(affinity, existingAmt);
 	}
 
@@ -235,7 +245,7 @@ public class AffinityData implements IAffinityData, ICapabilityProvider, ICapabi
 	public void setLocked(boolean b) {
 		addAbilityBoolean("affinity_data_locked", b);
 	}
-	
+
 	@Override
 	public boolean isLocked() {
 		return getAbilityBoolean("affinity_data_locked");

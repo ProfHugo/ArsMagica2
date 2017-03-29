@@ -18,24 +18,24 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
 @SuppressWarnings("deprecation")
-public class ItemKeystone extends ItemArsMagica{
+public class ItemKeystone extends ItemArsMagica {
 
 	public static final int KEYSTONE_INVENTORY_SIZE = 3;
 
-	public ItemKeystone(){
+	public ItemKeystone() {
 		super();
 		setMaxStackSize(1);
 	}
 
-	public void addCombination(ItemStack stack, String name, int[] metas){
+	public void addCombination(ItemStack stack, String name, int[] metas) {
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 
 		int comboID = numCombinations(stack);
 		boolean isNew = true;
 
-		for (int i = 0; i < comboID; ++i){
-			if (name.equals(stack.getTagCompound().getString("Combination_" + i + "_name"))){
+		for (int i = 0; i < comboID; ++i) {
+			if (name.equals(stack.getTagCompound().getString("Combination_" + i + "_name"))) {
 				comboID = i;
 				isNew = false;
 				break;
@@ -49,12 +49,12 @@ public class ItemKeystone extends ItemArsMagica{
 			stack.getTagCompound().setInteger("numKeystoneCombinations", comboID + 1);
 	}
 
-	public void removeCombination(ItemStack stack, String name){
+	public void removeCombination(ItemStack stack, String name) {
 		int c = numCombinations(stack);
 		int removedIndex = -1;
-		for (int i = 0; i < c; ++i){
+		for (int i = 0; i < c; ++i) {
 			KeystoneCombination combo = getCombinationAt(stack, i);
-			if (combo.name.equals(name)){
+			if (combo.name.equals(name)) {
 				removedIndex = i;
 				break;
 			}
@@ -63,7 +63,7 @@ public class ItemKeystone extends ItemArsMagica{
 		if (removedIndex == -1)
 			return;
 
-		for (int i = removedIndex + 1; i < c; ++i){
+		for (int i = removedIndex + 1; i < c; ++i) {
 			String tName = stack.getTagCompound().getString("Combination_" + i + "_name");
 			int[] tMetas = stack.getTagCompound().getIntArray("Combination_" + i + "_metas");
 
@@ -76,15 +76,18 @@ public class ItemKeystone extends ItemArsMagica{
 		stack.getTagCompound().setInteger("numKeystoneCombinations", c - 1);
 	}
 
-	public int numCombinations(ItemStack stack){
-		if (!stack.hasTagCompound()) return 0;
+	public int numCombinations(ItemStack stack) {
+		if (!stack.hasTagCompound())
+			return 0;
 		return stack.getTagCompound().getInteger("numKeystoneCombinations");
 	}
 
-	public KeystoneCombination getCombinationAt(ItemStack stack, int index){
-		if (!stack.hasTagCompound()) return null;
+	public KeystoneCombination getCombinationAt(ItemStack stack, int index) {
+		if (!stack.hasTagCompound())
+			return null;
 
-		if (numCombinations(stack) <= index) return null;
+		if (numCombinations(stack) <= index)
+			return null;
 
 		String name = stack.getTagCompound().getString("Combination_" + index + "_name");
 		int[] metas = stack.getTagCompound().getIntArray("Combination_" + index + "_metas");
@@ -93,54 +96,55 @@ public class ItemKeystone extends ItemArsMagica{
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand){
-		if (player.isSneaking()){
-			FMLNetworkHandler.openGui(player, ArsMagica2.instance, IDDefs.GUI_KEYSTONE, world, (int)player.posX, (int)player.posY, (int)player.posZ);
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+		if (player.isSneaking()) {
+			FMLNetworkHandler.openGui(player, ArsMagica2.instance, IDDefs.GUI_KEYSTONE, world, (int) player.posX,
+					(int) player.posY, (int) player.posZ);
 		}
 
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 	}
 
-	private ItemStack[] getMyInventory(ItemStack itemStack){
+	private ItemStack[] getMyInventory(ItemStack itemStack) {
 		return ReadFromStackTagCompound(itemStack);
 	}
 
-	public String getRecipeAsString(ItemStack keystoneStack){
+	public String getRecipeAsString(ItemStack keystoneStack) {
 		String s = "Recipe: ";
-		for (ItemStack stack : getMyInventory(keystoneStack)){
+		for (ItemStack stack : getMyInventory(keystoneStack)) {
 			s += stack.getDisplayName().replace("Rune ", "") + " ";
 		}
 		return s;
 	}
 
-	public void UpdateStackTagCompound(ItemStack itemStack, ItemStack[] values){
-		if (itemStack.getTagCompound() == null){
+	public void UpdateStackTagCompound(ItemStack itemStack, ItemStack[] values) {
+		if (itemStack.getTagCompound() == null) {
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
-		for (int i = 0; i < values.length; ++i){
+		for (int i = 0; i < values.length; ++i) {
 			ItemStack stack = values[i];
-			if (stack == null){
+			if (stack == null) {
 				itemStack.getTagCompound().setInteger("keystonemeta" + i, -1);
-			}else{
+			} else {
 				itemStack.getTagCompound().setInteger("keystonemeta" + i, stack.getItemDamage());
 			}
 		}
 	}
 
-	public ItemStack[] ReadFromStackTagCompound(ItemStack itemStack){
-		if (itemStack.getTagCompound() == null){
+	public ItemStack[] ReadFromStackTagCompound(ItemStack itemStack) {
+		if (itemStack.getTagCompound() == null) {
 			return new ItemStack[InventoryKeyStone.inventorySize];
 		}
 		ItemStack[] items = new ItemStack[InventoryKeyStone.inventorySize];
-		for (int i = 0; i < items.length; ++i){
+		for (int i = 0; i < items.length; ++i) {
 			int meta = 0;
-			if (!itemStack.getTagCompound().hasKey("keystonemeta" + i)){
+			if (!itemStack.getTagCompound().hasKey("keystonemeta" + i)) {
 				items[i] = null;
 				continue;
-			}else if (itemStack.getTagCompound().getInteger("keystonemeta" + i) == -1){
+			} else if (itemStack.getTagCompound().getInteger("keystonemeta" + i) == -1) {
 				items[i] = null;
 				continue;
-			}else{
+			} else {
 				meta = itemStack.getTagCompound().getInteger("keystonemeta" + i);
 			}
 
@@ -149,60 +153,65 @@ public class ItemKeystone extends ItemArsMagica{
 		return items;
 	}
 
-	public InventoryKeyStone ConvertToInventory(ItemStack keyStoneStack){
+	public InventoryKeyStone ConvertToInventory(ItemStack keyStoneStack) {
 		InventoryKeyStone iks = new InventoryKeyStone();
 		iks.SetInventoryContents(getMyInventory(keyStoneStack));
 		return iks;
 	}
 
 	@Override
-	public boolean getShareTag(){
+	public boolean getShareTag() {
 		return true;
 	}
 
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4){
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List,
+			boolean par4) {
 		ItemStack[] items = getMyInventory(par1ItemStack);
 
 		String s = I18n.translateToLocal("am2.tooltip.open");
 		par3List.add((new StringBuilder()).append("\2477").append(s).toString());
 
-		if (items.length > 0){
+		if (items.length > 0) {
 			s = I18n.translateToLocal("am2.tooltip.runes") + ": ";
 			par3List.add((new StringBuilder()).append("\2477").append(s).toString());
 			s = "";
-			for (int i = 0; i < KEYSTONE_INVENTORY_SIZE; ++i){
-				if (items[i] == null) continue;
+			for (int i = 0; i < KEYSTONE_INVENTORY_SIZE; ++i) {
+				if (items[i] == null)
+					continue;
 				s += items[i].getDisplayName().replace("Rune", "").trim() + " ";
 			}
-			if (s == "") s = I18n.translateToLocal("am2.tooltip.none");
+			if (s == "")
+				s = I18n.translateToLocal("am2.tooltip.none");
 			par3List.add((new StringBuilder()).append("\2477").append(s).toString());
 		}
 	}
 
-	public long getKey(ItemStack keystoneStack){
+	public long getKey(ItemStack keystoneStack) {
 		ItemStack[] inventory = getMyInventory(keystoneStack);
-		if (inventory == null) return 0;
+		if (inventory == null)
+			return 0;
 		return KeystoneUtilities.instance.getKeyFromRunes(inventory);
 	}
 
-	public class KeystoneCombination{
+	public class KeystoneCombination {
 		public int[] metas;
 		public String name;
 
-		public KeystoneCombination(String name, int[] metas){
+		public KeystoneCombination(String name, int[] metas) {
 			this.metas = metas;
 			this.name = name;
 		}
 
 		@Override
-		public boolean equals(Object obj){
-			if (obj instanceof KeystoneCombination){
-				boolean match = ((KeystoneCombination)obj).metas.length == metas.length;
-				if (!match) return false;
+		public boolean equals(Object obj) {
+			if (obj instanceof KeystoneCombination) {
+				boolean match = ((KeystoneCombination) obj).metas.length == metas.length;
+				if (!match)
+					return false;
 
-				for (int i = 0; i < this.metas.length; ++i){
-					match &= (this.metas[i] == ((KeystoneCombination)obj).metas[i]);
+				for (int i = 0; i < this.metas.length; ++i) {
+					match &= (this.metas[i] == ((KeystoneCombination) obj).metas[i]);
 				}
 
 				return match;
@@ -211,7 +220,7 @@ public class ItemKeystone extends ItemArsMagica{
 		}
 
 		@Override
-		public int hashCode(){
+		public int hashCode() {
 			int sum = 0;
 			for (int i : metas)
 				sum += i;

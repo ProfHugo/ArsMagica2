@@ -24,35 +24,45 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntitySpellProjectile extends Entity {
-	
-	
-	private static final DataParameter<Integer> DW_BOUNCE_COUNTER = EntityDataManager.createKey(EntitySpellProjectile.class, DataSerializers.VARINT);
-	private static final DataParameter<Float> DW_GRAVITY = EntityDataManager.createKey(EntitySpellProjectile.class, DataSerializers.FLOAT);
-	private static final DataParameter<Optional<ItemStack>> DW_EFFECT = EntityDataManager.createKey(EntitySpellProjectile.class, DataSerializers.OPTIONAL_ITEM_STACK);
-	private static final DataParameter<String> DW_ICON_NAME = EntityDataManager.createKey(EntitySpellProjectile.class, DataSerializers.STRING);
-	private static final DataParameter<Integer> DW_PIERCE_COUNT = EntityDataManager.createKey(EntitySpellProjectile.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> DW_COLOR = EntityDataManager.createKey(EntitySpellProjectile.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> DW_SHOOTER = EntityDataManager.createKey(EntitySpellProjectile.class, DataSerializers.VARINT);
-	private static final DataParameter<Boolean> DW_TARGETGRASS = EntityDataManager.createKey(EntitySpellProjectile.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> DW_HOMING = EntityDataManager.createKey(EntitySpellProjectile.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> DW_HOMING_TARGET = EntityDataManager.createKey(EntitySpellProjectile.class, DataSerializers.VARINT);
+
+	private static final DataParameter<Integer> DW_BOUNCE_COUNTER = EntityDataManager
+			.createKey(EntitySpellProjectile.class, DataSerializers.VARINT);
+	private static final DataParameter<Float> DW_GRAVITY = EntityDataManager.createKey(EntitySpellProjectile.class,
+			DataSerializers.FLOAT);
+	private static final DataParameter<Optional<ItemStack>> DW_EFFECT = EntityDataManager
+			.createKey(EntitySpellProjectile.class, DataSerializers.OPTIONAL_ITEM_STACK);
+	private static final DataParameter<String> DW_ICON_NAME = EntityDataManager.createKey(EntitySpellProjectile.class,
+			DataSerializers.STRING);
+	private static final DataParameter<Integer> DW_PIERCE_COUNT = EntityDataManager
+			.createKey(EntitySpellProjectile.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> DW_COLOR = EntityDataManager.createKey(EntitySpellProjectile.class,
+			DataSerializers.VARINT);
+	private static final DataParameter<Integer> DW_SHOOTER = EntityDataManager.createKey(EntitySpellProjectile.class,
+			DataSerializers.VARINT);
+	private static final DataParameter<Boolean> DW_TARGETGRASS = EntityDataManager
+			.createKey(EntitySpellProjectile.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> DW_HOMING = EntityDataManager.createKey(EntitySpellProjectile.class,
+			DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> DW_HOMING_TARGET = EntityDataManager
+			.createKey(EntitySpellProjectile.class, DataSerializers.VARINT);
 
 	private static int currentPierces;
+
 	public EntitySpellProjectile(World worldIn) {
 		super(worldIn);
 		setSize(0.5F, 0.5F);
-		//noClip = true;
+		// noClip = true;
 	}
-	
-	public void setTargetWater(){
+
+	public void setTargetWater() {
 		if (!this.worldObj.isRemote)
 			this.getDataManager().set(DW_TARGETGRASS, true);
 	}
-	
+
 	public boolean targetWater() {
 		return this.getDataManager().get(DW_TARGETGRASS);
 	}
-	
+
 	@Override
 	protected void entityInit() {
 		this.getDataManager().register(DW_BOUNCE_COUNTER, 0);
@@ -66,43 +76,43 @@ public class EntitySpellProjectile extends Entity {
 		this.getDataManager().register(DW_HOMING, false);
 		this.getDataManager().register(DW_HOMING_TARGET, -1);
 	}
-	
-	public void setShooter (EntityLivingBase living) {
+
+	public void setShooter(EntityLivingBase living) {
 		this.getDataManager().set(DW_SHOOTER, living.getEntityId());
 	}
-	
-	public void decreaseBounces () {
-		setBounces(getBounces() -1);
+
+	public void decreaseBounces() {
+		setBounces(getBounces() - 1);
 	}
-	
-	public int getBounces () {
+
+	public int getBounces() {
 		return this.getDataManager().get(DW_BOUNCE_COUNTER);
 	}
 
-	public int getPierces () { return this.getDataManager().get(DW_PIERCE_COUNT) - this.currentPierces; }
-	
-	public ItemStack getSpell () {
+	public int getPierces() {
+		return this.getDataManager().get(DW_PIERCE_COUNT) - this.currentPierces;
+	}
+
+	public ItemStack getSpell() {
 		return this.getDataManager().get(DW_EFFECT).orNull();
 	}
-	
+
 	public void bounce(EnumFacing facing) {
 		if (facing == null) {
 			motionX = -motionX;
 			motionY = -motionY;
-			motionZ = -motionZ;			
-		}
-		else {
-			double projectileSpeed = SpellUtils.getModifiedDouble_Mul(1, getSpell(), getShooter(), null, worldObj, SpellModifiers.VELOCITY_ADDED);
+			motionZ = -motionZ;
+		} else {
+			double projectileSpeed = SpellUtils.getModifiedDouble_Mul(1, getSpell(), getShooter(), null, worldObj,
+					SpellModifiers.VELOCITY_ADDED);
 			double newMotionX = motionX / projectileSpeed;
 			double newMotionY = motionY / projectileSpeed;
 			double newMotionZ = motionZ / projectileSpeed;
 			if (facing.equals(EnumFacing.UP) || facing.equals(EnumFacing.DOWN)) {
 				newMotionY = -newMotionY;
-			}
-			else if (facing.equals(EnumFacing.NORTH) || facing.equals(EnumFacing.SOUTH)) {
+			} else if (facing.equals(EnumFacing.NORTH) || facing.equals(EnumFacing.SOUTH)) {
 				newMotionZ = -newMotionZ;
-			}
-			else if (facing.equals(EnumFacing.EAST) || facing.equals(EnumFacing.WEST)) {
+			} else if (facing.equals(EnumFacing.EAST) || facing.equals(EnumFacing.WEST)) {
 				newMotionX = -newMotionX;
 			}
 			motionX = newMotionX * projectileSpeed;
@@ -111,29 +121,37 @@ public class EntitySpellProjectile extends Entity {
 		}
 		decreaseBounces();
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		try {
 			if (ticksExisted > 200)
 				this.setDead();
-			RayTraceResult mop = worldObj.rayTraceBlocks(new Vec3d(posX, posY, posZ),new Vec3d(posX + motionX, posY + motionY, posZ + motionZ));
+			RayTraceResult mop = worldObj.rayTraceBlocks(new Vec3d(posX, posY, posZ),
+					new Vec3d(posX + motionX, posY + motionY, posZ + motionZ));
 			if (mop != null && mop.typeOfHit.equals(RayTraceResult.Type.BLOCK)) {
-				if (worldObj.getBlockState(mop.getBlockPos()).getBlock().isBlockSolid(worldObj, mop.getBlockPos(), mop.sideHit) || targetWater()) {
-					worldObj.getBlockState(mop.getBlockPos()).getBlock().onEntityCollidedWithBlock(worldObj, mop.getBlockPos(), worldObj.getBlockState(mop.getBlockPos()), this);
+				if (worldObj.getBlockState(mop.getBlockPos()).getBlock().isBlockSolid(worldObj, mop.getBlockPos(),
+						mop.sideHit) || targetWater()) {
+					worldObj.getBlockState(mop.getBlockPos()).getBlock().onEntityCollidedWithBlock(worldObj,
+							mop.getBlockPos(), worldObj.getBlockState(mop.getBlockPos()), this);
 					if (getBounces() > 0) {
 						bounce(mop.sideHit);
 					} else {
-						SpellUtils.applyStageToGround(getSpell(), getShooter(), worldObj, mop.getBlockPos(), mop.sideHit, posX, posY, posZ, true);
-						SpellUtils.applyStackStage(getSpell(), getShooter(), null, mop.hitVec.xCoord + motionX, mop.hitVec.yCoord + motionY, mop.hitVec.zCoord + motionZ, mop.sideHit, worldObj, false, true, 0);
-						if (this.getPierces() == 1 || !SpellUtils.modifierIsPresent(SpellModifiers.PIERCING, this.getSpell()))
+						SpellUtils.applyStageToGround(getSpell(), getShooter(), worldObj, mop.getBlockPos(),
+								mop.sideHit, posX, posY, posZ, true);
+						SpellUtils.applyStackStage(getSpell(), getShooter(), null, mop.hitVec.xCoord + motionX,
+								mop.hitVec.yCoord + motionY, mop.hitVec.zCoord + motionZ, mop.sideHit, worldObj, false,
+								true, 0);
+						if (this.getPierces() == 1
+								|| !SpellUtils.modifierIsPresent(SpellModifiers.PIERCING, this.getSpell()))
 							this.setDead();
 						else
 							this.currentPierces++;
 					}
 				}
 			} else {
-				List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().addCoord(motionX, motionY, motionZ).expand(0.25D, 0.25D, 0.25D));
+				List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this,
+						getEntityBoundingBox().addCoord(motionX, motionY, motionZ).expand(0.25D, 0.25D, 0.25D));
 				int effSize = list.size();
 				for (Entity entity : list) {
 					if (entity instanceof EntityLivingBase) {
@@ -141,17 +159,20 @@ public class EntitySpellProjectile extends Entity {
 							effSize--;
 							continue;
 						}
-						if (entity instanceof EntityDragonPart && ((EntityDragonPart)entity).entityDragonObj instanceof EntityLivingBase)
-							entity = (EntityLivingBase)((EntityDragonPart)entity).entityDragonObj;
+						if (entity instanceof EntityDragonPart
+								&& ((EntityDragonPart) entity).entityDragonObj instanceof EntityLivingBase)
+							entity = (EntityLivingBase) ((EntityDragonPart) entity).entityDragonObj;
 						SpellUtils.applyStageToEntity(getSpell(), getShooter(), worldObj, entity, true);
-						SpellUtils.applyStackStage(getSpell(), getShooter(), (EntityLivingBase) entity, entity.posX, entity.posY, entity.posZ, null, worldObj, false, true, 0);
+						SpellUtils.applyStackStage(getSpell(), getShooter(), (EntityLivingBase) entity, entity.posX,
+								entity.posY, entity.posZ, null, worldObj, false, true, 0);
 						break;
 					} else {
 						effSize--;
 					}
 				}
 				if (effSize != 0) {
-					if (this.getPierces() == 1 || !SpellUtils.modifierIsPresent(SpellModifiers.PIERCING, this.getSpell()))
+					if (this.getPierces() == 1
+							|| !SpellUtils.modifierIsPresent(SpellModifiers.PIERCING, this.getSpell()))
 						this.setDead();
 					else
 						this.currentPierces++;
@@ -163,7 +184,7 @@ public class EntitySpellProjectile extends Entity {
 			this.setDead();
 		}
 	}
-	
+
 	public EntityLivingBase getShooter() {
 		try {
 			return (EntityLivingBase) worldObj.getEntityByID(this.getDataManager().get(DW_SHOOTER));
@@ -205,9 +226,10 @@ public class EntitySpellProjectile extends Entity {
 		am2Tag.setBoolean("Homing", dataManager.get(DW_HOMING));
 		am2Tag.setInteger("HomingTarget", dataManager.get(DW_HOMING_TARGET));
 	}
-	
-	public void selectHomingTarget () {
-		List<Entity> entities = worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getCollisionBoundingBox().expand(10.0F, 10.0F, 10.0F));
+
+	public void selectHomingTarget() {
+		List<Entity> entities = worldObj.getEntitiesWithinAABBExcludingEntity(this,
+				this.getCollisionBoundingBox().expand(10.0F, 10.0F, 10.0F));
 		Vec3d pos = new Vec3d(posX, posY, posZ);
 		EntityLivingBase target = null;
 		double dist = 900;
@@ -217,32 +239,35 @@ public class EntitySpellProjectile extends Entity {
 				double eDist = pos.distanceTo(ePos);
 				if (eDist < dist) {
 					dist = eDist;
-					target = (EntityLivingBase)entity;
+					target = (EntityLivingBase) entity;
 				}
 			}
 		}
-		
+
 		if (target != null) {
 			this.getDataManager().set(DW_HOMING_TARGET, target.getEntityId());
 		}
 	}
-	
+
 	public EntityLivingBase getHomingTarget() {
 		return (EntityLivingBase) worldObj.getEntityByID(this.getDataManager().get(DW_HOMING_TARGET));
 	}
-	
+
 	public void setGravity(float projectileGravity) {
 		this.getDataManager().set(DW_GRAVITY, projectileGravity);
 	}
-	
-	public void setSpell (ItemStack stack) {
+
+	public void setSpell(ItemStack stack) {
 		this.getDataManager().set(DW_EFFECT, Optional.fromNullable(stack));
 		Affinity mainAff = AffinityShiftUtils.getMainShiftForStack(stack);
-		if (mainAff.equals(Affinity.ENDER)) this.getDataManager().set(DW_COLOR, 0x550055);
-		else if (mainAff.equals(Affinity.ICE)) this.getDataManager().set(DW_COLOR, 0x2299FF);
-		else if (mainAff.equals(Affinity.LIFE)) this.getDataManager().set(DW_COLOR, 0x22FF44);
+		if (mainAff.equals(Affinity.ENDER))
+			this.getDataManager().set(DW_COLOR, 0x550055);
+		else if (mainAff.equals(Affinity.ICE))
+			this.getDataManager().set(DW_COLOR, 0x2299FF);
+		else if (mainAff.equals(Affinity.LIFE))
+			this.getDataManager().set(DW_COLOR, 0x22FF44);
 	}
-	
+
 	public void setBounces(int projectileBounce) {
 		this.getDataManager().set(DW_BOUNCE_COUNTER, projectileBounce);
 	}
@@ -253,19 +278,19 @@ public class EntitySpellProjectile extends Entity {
 	}
 
 	public void setHoming(boolean homing) {
-		this.getDataManager().set(DW_HOMING, homing);		
+		this.getDataManager().set(DW_HOMING, homing);
 	}
-	
+
 	public void setIcon(String icon) {
 		this.getDataManager().set(DW_ICON_NAME, icon);
 	}
-	
+
 	public String getIcon() {
 		return this.getDataManager().get(DW_ICON_NAME);
 	}
-	
+
 	public int getColor() {
 		return this.getDataManager().get(DW_COLOR);
 	}
-	
+
 }

@@ -23,11 +23,11 @@ public class AbilityPoisonResistance extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.ENDER;
 	}
-	
+
 	@Override
 	public void applyHurt(EntityPlayer player, LivingHurtEvent event, boolean isAttacker) {
 		if (!isAttacker) {
-			if (event.getSource() == DamageSource.magic || event.getSource() == DamageSource.wither){
+			if (event.getSource() == DamageSource.magic || event.getSource() == DamageSource.wither) {
 				double enderDepth = AffinityData.For(player).getAffinityDepth(Affinity.ENDER);
 				double reduction = 1 - (0.75f * enderDepth);
 				event.setAmount((float) (event.getAmount() * reduction));

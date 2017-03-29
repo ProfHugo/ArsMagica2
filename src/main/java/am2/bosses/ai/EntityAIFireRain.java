@@ -6,45 +6,46 @@ import am2.entity.EntitySpellEffect;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 
-public class EntityAIFireRain extends EntityAIBase{
+public class EntityAIFireRain extends EntityAIBase {
 
 	private final EntityLiving host;
 	private int cooldownTicks = 0;
 	private int boltTicks = 0;
 
-	public EntityAIFireRain(IArsMagicaBoss host){
-		this.host = (EntityLiving)host;
+	public EntityAIFireRain(IArsMagicaBoss host) {
+		this.host = (EntityLiving) host;
 		this.setMutexBits(1);
 	}
 
 	@Override
-	public boolean shouldExecute(){
-		boolean execute = ((IArsMagicaBoss)host).getCurrentAction() == BossActions.IDLE && host.getAttackTarget() != null && cooldownTicks-- <= 0;
+	public boolean shouldExecute() {
+		boolean execute = ((IArsMagicaBoss) host).getCurrentAction() == BossActions.IDLE
+				&& host.getAttackTarget() != null && cooldownTicks-- <= 0;
 		if (execute)
-			((IArsMagicaBoss)host).setCurrentAction(BossActions.CASTING);
+			((IArsMagicaBoss) host).setCurrentAction(BossActions.CASTING);
 		return execute;
 	}
 
 	@Override
-	public boolean continueExecuting(){
+	public boolean continueExecuting() {
 		return this.cooldownTicks <= 0;
 	}
 
 	@Override
-	public void resetTask(){
-		((IArsMagicaBoss)host).setCurrentAction(BossActions.IDLE);
+	public void resetTask() {
+		((IArsMagicaBoss) host).setCurrentAction(BossActions.IDLE);
 		cooldownTicks = 150;
 		boltTicks = 0;
 	}
 
 	@Override
-	public void updateTask(){
-		if (((IArsMagicaBoss)host).getCurrentAction() != BossActions.CASTING)
-			((IArsMagicaBoss)host).setCurrentAction(BossActions.CASTING);
+	public void updateTask() {
+		if (((IArsMagicaBoss) host).getCurrentAction() != BossActions.CASTING)
+			((IArsMagicaBoss) host).setCurrentAction(BossActions.CASTING);
 
 		boltTicks++;
-		if (boltTicks == 12){
-			if (!host.worldObj.isRemote){
+		if (boltTicks == 12) {
+			if (!host.worldObj.isRemote) {
 				EntitySpellEffect fire = new EntitySpellEffect(host.worldObj);
 				fire.setPosition(host.posX, host.posY, host.posZ);
 				fire.setTicksToExist(300);
@@ -54,7 +55,7 @@ public class EntityAIFireRain extends EntityAIBase{
 				host.worldObj.spawnEntityInWorld(fire);
 			}
 		}
-		if (boltTicks >= 23){
+		if (boltTicks >= 23) {
 			resetTask();
 		}
 	}

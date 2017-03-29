@@ -14,7 +14,7 @@ public enum ContingencyType {
 	 */
 	DAMAGE,
 	/**
-	 * When the entity hits the ground 
+	 * When the entity hits the ground
 	 */
 	FALL,
 	/**
@@ -25,14 +25,13 @@ public enum ContingencyType {
 	 * When the entity is on fire
 	 */
 	FIRE;
-	
-	
+
 	public static ContingencyType fromName(String name) {
 		for (ContingencyType type : values()) {
 			if (type.name().toLowerCase().equalsIgnoreCase(name))
 				return type;
 		}
-		
+
 		return NULL;
 	}
 }

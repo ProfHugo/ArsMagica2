@@ -24,7 +24,7 @@ public class AbilityAgile extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.AIR;
 	}
-	
+
 	@Override
 	public void applyJump(EntityPlayer player, LivingJumpEvent event) {
 		double airDepth = AffinityData.For(player).getAffinityDepth(Affinity.AIR);
@@ -33,12 +33,13 @@ public class AbilityAgile extends AbstractAffinityAbility {
 			velocity *= -1;
 		player.addVelocity(0, velocity, 0);
 	}
-	
+
 	@Override
 	public void applyFall(EntityPlayer player, LivingFallEvent event) {
 		double airDepth = AffinityData.For(player).getAffinityDepth(Affinity.AIR);
 		event.setDistance((float) (event.getDistance() - (2 * airDepth)));
-		if (event.getDistance() < 0) event.setDistance(0);
+		if (event.getDistance() < 0)
+			event.setDistance(0);
 	}
 
 }

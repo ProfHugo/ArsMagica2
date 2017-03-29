@@ -26,29 +26,27 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class FireRain extends SpellComponent{
+public class FireRain extends SpellComponent {
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.FIRE),
-				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_ARCANEASH),
-				Blocks.NETHERRACK,
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.FIRE),
-				Items.LAVA_BUCKET
-		};
+	public Object[] getRecipe() {
+		return new Object[] { AffinityShiftUtils.getEssenceForAffinity(Affinity.FIRE),
+				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_ARCANEASH), Blocks.NETHERRACK,
+				AffinityShiftUtils.getEssenceForAffinity(Affinity.FIRE), Items.LAVA_BUCKET };
 	}
 
-	private boolean spawnFireRain(ItemStack stack, World world, EntityLivingBase caster, Entity target, double x, double y, double z){
+	private boolean spawnFireRain(ItemStack stack, World world, EntityLivingBase caster, Entity target, double x,
+			double y, double z) {
 
-		List<EntitySpellEffect> zones = world.getEntitiesWithinAABB(EntitySpellEffect.class, new AxisAlignedBB(x - 10, y - 10, z - 10, x + 10, y + 10, z + 10));
+		List<EntitySpellEffect> zones = world.getEntitiesWithinAABB(EntitySpellEffect.class,
+				new AxisAlignedBB(x - 10, y - 10, z - 10, x + 10, y + 10, z + 10));
 
-		for (EntitySpellEffect zone : zones){
+		for (EntitySpellEffect zone : zones) {
 			if (zone.isRainOfFire())
 				return false;
 		}
 
-		if (!world.isRemote){
+		if (!world.isRemote) {
 			int radius = SpellUtils.getModifiedInt_Add(2, stack, caster, target, world, SpellModifiers.RADIUS) / 2 + 1;
 			double damage = SpellUtils.getModifiedDouble_Mul(1, stack, caster, target, world, SpellModifiers.DAMAGE);
 			int duration = SpellUtils.getModifiedInt_Mul(100, stack, caster, target, world, SpellModifiers.DURATION);
@@ -57,57 +55,59 @@ public class FireRain extends SpellComponent{
 			fire.setPosition(x, y, z);
 			fire.setRainOfFire(false);
 			fire.setRadius(radius);
-			fire.setDamageBonus((float)damage);
+			fire.setDamageBonus((float) damage);
 			fire.setTicksToExist(duration);
 			fire.SetCasterAndStack(caster, stack);
 			world.spawnEntityInWorld(fire);
 		}
 		return true;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.of(SpellModifiers.RADIUS, SpellModifiers.DAMAGE, SpellModifiers.DURATION, SpellModifiers.COLOR);
 	}
-	
+
 	@Override
-	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster){
+	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX,
+			double impactY, double impactZ, EntityLivingBase caster) {
 		return spawnFireRain(stack, world, caster, caster, impactX, impactY, impactZ);
 	}
 
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
 		return spawnFireRain(stack, world, caster, target, target.posX, target.posY, target.posZ);
 	}
 
 	@Override
-	public float manaCost(EntityLivingBase caster){
+	public float manaCost(EntityLivingBase caster) {
 		return 3000;
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
+	public ItemStack[] reagents(EntityLivingBase caster) {
 		return null;
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
 	}
 
 	@Override
-	public Set<Affinity> getAffinity(){
+	public Set<Affinity> getAffinity() {
 		return Sets.newHashSet(Affinity.FIRE);
 	}
 
 	@Override
-	public float getAffinityShift(Affinity affinity){
+	public float getAffinityShift(Affinity affinity) {
 		return 0.1f;
 	}
-	
+
 	@Override
 	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

@@ -23,21 +23,21 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.List;
 import java.util.Random;
 
-public class BlockWitchwoodSapling extends BlockBush implements IGrowable{
-	
+public class BlockWitchwoodSapling extends BlockBush implements IGrowable {
+
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);
-	
-	public BlockWitchwoodSapling(){
+
+	public BlockWitchwoodSapling() {
 		super();
 		setTickRandomly(true);
 		setCreativeTab(CreativeTabsDefs.tabAM2Blocks);
 		setDefaultState(blockState.getBaseState().withProperty(AGE, 0));
 		setSoundType(SoundType.PLANT);
 	}
-	
+
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
-		if (!worldIn.isRemote){
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		if (!worldIn.isRemote) {
 			super.updateTick(worldIn, pos, state, rand);
 
 			int nearbyEssence = countNearbyEssencePools(worldIn, pos, rand);
@@ -45,10 +45,10 @@ public class BlockWitchwoodSapling extends BlockBush implements IGrowable{
 		}
 	}
 
-	private void updateOrGrowTree(World world, BlockPos pos, Random rand, int numNearbyPools){
-		if(!(world.getBlockState(pos).getBlock() instanceof BlockWitchwoodSapling))
+	private void updateOrGrowTree(World world, BlockPos pos, Random rand, int numNearbyPools) {
+		if (!(world.getBlockState(pos).getBlock() instanceof BlockWitchwoodSapling))
 			return;
-		if (rand.nextInt(7) == 0){
+		if (rand.nextInt(7) == 0) {
 			int meta = world.getBlockState(pos).getValue(AGE) + numNearbyPools;
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(AGE, Math.min(meta, 15)));
 			if (canGrow(world, pos, world.getBlockState(pos), world.isRemote))
@@ -56,11 +56,11 @@ public class BlockWitchwoodSapling extends BlockBush implements IGrowable{
 		}
 	}
 
-	private int countNearbyEssencePools(World world, BlockPos pos, Random rand){
+	private int countNearbyEssencePools(World world, BlockPos pos, Random rand) {
 		int essenceNearby = 0;
 
-		for (int i = -1; i <= 1; i++){
-			for (int j = -1; j <= 1; j++){
+		for (int i = -1; i <= 1; i++) {
+			for (int j = -1; j <= 1; j++) {
 				IBlockState block = world.getBlockState(pos.add(i, -1, j));
 				if (block == BlockDefs.liquid_essence.getBlock().getDefaultState())
 					essenceNearby++;
@@ -71,7 +71,7 @@ public class BlockWitchwoodSapling extends BlockBush implements IGrowable{
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list){
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 		list.add(new ItemStack(this));
 	}
 
@@ -95,22 +95,22 @@ public class BlockWitchwoodSapling extends BlockBush implements IGrowable{
 		else
 			new AM2FlowerGen(BlockDefs.aum).generate(worldIn, rand, pos);
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(AGE);
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(AGE, meta);
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, AGE);
 	}
-	
+
 	public BlockWitchwoodSapling registerAndName(ResourceLocation rl) {
 		this.setUnlocalizedName(rl.toString());
 		GameRegistry.register(this, rl);

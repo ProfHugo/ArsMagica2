@@ -22,67 +22,68 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-public class Moonrise extends SpellComponent{
+public class Moonrise extends SpellComponent {
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_MOONSTONE),
-				Items.CLOCK,
-				new ItemStack(ItemDefs.core, 1, ItemCore.META_PURE)
-		};
+	public Object[] getRecipe() {
+		return new Object[] { new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_MOONSTONE), Items.CLOCK,
+				new ItemStack(ItemDefs.core, 1, ItemCore.META_PURE) };
 	}
 
-	private boolean setNightTime(World world){
+	private boolean setNightTime(World world) {
 		if (!world.isDaytime())
 			return false;
-		if (!world.isRemote){
-			long curTime = ((WorldServer)world).getWorldTime();
-			int day = (int)Math.floor(curTime / 24000);
-			((WorldServer)world).setWorldTime((day * 24000) + 13250);
+		if (!world.isRemote) {
+			long curTime = ((WorldServer) world).getWorldTime();
+			int day = (int) Math.floor(curTime / 24000);
+			((WorldServer) world).setWorldTime((day * 24000) + 13250);
 		}
 		return true;
 	}
 
 	@Override
-	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster){
+	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX,
+			double impactY, double impactZ, EntityLivingBase caster) {
 		return setNightTime(world);
 	}
 
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
 		return setNightTime(world);
 	}
 
 	@Override
-	public float manaCost(EntityLivingBase caster){
+	public float manaCost(EntityLivingBase caster) {
 		return 25000;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.noneOf(SpellModifiers.class);
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
+	public ItemStack[] reagents(EntityLivingBase caster) {
 		return null;
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){}
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
+	}
 
 	@Override
-	public Set<Affinity> getAffinity(){
+	public Set<Affinity> getAffinity() {
 		return Sets.newHashSet(Affinity.NONE);
 	}
 
 	@Override
-	public float getAffinityShift(Affinity affinity){
+	public float getAffinityShift(Affinity affinity) {
 		return 0;
 	}
-	
+
 	@Override
-	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {}
+	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
+	}
 
 }

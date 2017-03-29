@@ -14,20 +14,21 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderSpellProjectile extends Render<EntitySpellProjectile>{
+public class RenderSpellProjectile extends Render<EntitySpellProjectile> {
 
 	public RenderSpellProjectile(RenderManager renderManager) {
 		super(renderManager);
 	}
 
 	@Override
-	public void doRender(EntitySpellProjectile entity, double d0, double d1, double d2, float f, float f1){
-		doRenderSpellProjectile((EntitySpellProjectile)entity, d0, d1, d2, f, f1);
+	public void doRender(EntitySpellProjectile entity, double d0, double d1, double d2, float f, float f1) {
+		doRenderSpellProjectile((EntitySpellProjectile) entity, d0, d1, d2, f, f1);
 	}
 
-	private void doRenderSpellProjectile(EntitySpellProjectile entity, double d, double d1, double d2, float f, float f1){
+	private void doRenderSpellProjectile(EntitySpellProjectile entity, double d, double d1, double d2, float f,
+			float f1) {
 		TextureAtlasSprite sprite = AMParticleIcons.instance.getIconByName(entity.getIcon());
-		if (sprite == null){
+		if (sprite == null) {
 			return;
 		}
 
@@ -38,7 +39,7 @@ public class RenderSpellProjectile extends Render<EntitySpellProjectile>{
 		GL11.glDisable(32826); /* RESCALE_NORMAL_EXT */
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
 		GL11.glDepthMask(false);
-		//RenderHelper.disableStandardItemLighting();
+		// RenderHelper.disableStandardItemLighting();
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
@@ -54,7 +55,7 @@ public class RenderSpellProjectile extends Render<EntitySpellProjectile>{
 		GL11.glPopMatrix();
 	}
 
-	private void renderIcon(TextureAtlasSprite sprite, int renderColor){
+	private void renderIcon(TextureAtlasSprite sprite, int renderColor) {
 		Tessellator tessellator = Tessellator.getInstance();
 		float f = 1.0F;
 		float f1 = 0.5F;
@@ -62,16 +63,24 @@ public class RenderSpellProjectile extends Render<EntitySpellProjectile>{
 
 		tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 		RenderHelper.disableStandardItemLighting();
-		tessellator.getBuffer().pos(0.0F - f1, 0.0F - f2, 0.0D).tex( sprite.getMinU(), sprite.getMaxV()).color((renderColor & 0xFF0000) >> 16, (renderColor & 0x00FF00) >> 8, renderColor & 0x0000FF, 255).endVertex();
-		tessellator.getBuffer().pos(f - f1, 0.0F - f2, 0.0D).tex( sprite.getMaxU(), sprite.getMaxV()).color((renderColor & 0xFF0000) >> 16, (renderColor & 0x00FF00) >> 8, renderColor & 0x0000FF, 255).endVertex();
-		tessellator.getBuffer().pos(f - f1, f - f2, 0.0D).tex( sprite.getMaxU(), sprite.getMinV()).color((renderColor & 0xFF0000) >> 16, (renderColor & 0x00FF00) >> 8, renderColor & 0x0000FF, 255).endVertex();
-		tessellator.getBuffer().pos(0.0F - f1, f - f2, 0.0D).tex( sprite.getMinU(), sprite.getMinV()).color((renderColor & 0xFF0000) >> 16, (renderColor & 0x00FF00) >> 8, renderColor & 0x0000FF, 255).endVertex();
+		tessellator.getBuffer().pos(0.0F - f1, 0.0F - f2, 0.0D).tex(sprite.getMinU(), sprite.getMaxV())
+				.color((renderColor & 0xFF0000) >> 16, (renderColor & 0x00FF00) >> 8, renderColor & 0x0000FF, 255)
+				.endVertex();
+		tessellator.getBuffer().pos(f - f1, 0.0F - f2, 0.0D).tex(sprite.getMaxU(), sprite.getMaxV())
+				.color((renderColor & 0xFF0000) >> 16, (renderColor & 0x00FF00) >> 8, renderColor & 0x0000FF, 255)
+				.endVertex();
+		tessellator.getBuffer().pos(f - f1, f - f2, 0.0D).tex(sprite.getMaxU(), sprite.getMinV())
+				.color((renderColor & 0xFF0000) >> 16, (renderColor & 0x00FF00) >> 8, renderColor & 0x0000FF, 255)
+				.endVertex();
+		tessellator.getBuffer().pos(0.0F - f1, f - f2, 0.0D).tex(sprite.getMinU(), sprite.getMinV())
+				.color((renderColor & 0xFF0000) >> 16, (renderColor & 0x00FF00) >> 8, renderColor & 0x0000FF, 255)
+				.endVertex();
 		tessellator.draw();
 		RenderHelper.enableStandardItemLighting();
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntitySpellProjectile entity){
+	protected ResourceLocation getEntityTexture(EntitySpellProjectile entity) {
 		return null;
 	}
 

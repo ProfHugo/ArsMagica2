@@ -11,17 +11,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityIllusionBlock extends TileEntity implements ITickable{
-	
+public class TileEntityIllusionBlock extends TileEntity implements ITickable {
+
 	private IBlockState mimicBlock;
-	
+
 	public TileEntityIllusionBlock() {
-		
+
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public boolean isRevealed(IBlockState state) {
-		return BlockIllusionBlock.getIllusionType(state).canBeRevealed() && ArsMagica2.proxy.getLocalPlayer().isPotionActive(PotionEffectsDefs.trueSight);
+		return BlockIllusionBlock.getIllusionType(state).canBeRevealed()
+				&& ArsMagica2.proxy.getLocalPlayer().isPotionActive(PotionEffectsDefs.trueSight);
 	}
 
 	@Override
@@ -34,7 +35,7 @@ public class TileEntityIllusionBlock extends TileEntity implements ITickable{
 		}
 		mimicBlock = blockBellow;
 	}
-	
+
 	public IBlockState getMimicBlock() {
 		return mimicBlock;
 	}

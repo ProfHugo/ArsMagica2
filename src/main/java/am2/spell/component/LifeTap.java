@@ -35,15 +35,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class LifeTap extends SpellComponent implements IRitualInteraction{
+public class LifeTap extends SpellComponent implements IRitualInteraction {
 
 	@Override
-	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster){
+	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX,
+			double impactY, double impactZ, EntityLivingBase caster) {
 
-		if (world.getBlockState(pos).getBlock().equals(Blocks.MOB_SPAWNER)){
+		if (world.getBlockState(pos).getBlock().equals(Blocks.MOB_SPAWNER)) {
 			boolean hasMatch = RitualShapeHelper.instance.matchesRitual(this, world, pos);
-			if (hasMatch){
-				if (!world.isRemote){
+			if (hasMatch) {
+				if (!world.isRemote) {
 					world.setBlockToAir(pos);
 					RitualShapeHelper.instance.consumeReagents(this, world, pos);
 					RitualShapeHelper.instance.consumeShape(this, world, pos);
@@ -51,7 +52,7 @@ public class LifeTap extends SpellComponent implements IRitualInteraction{
 					item.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
 					item.setEntityItemStack(new ItemStack(BlockDefs.inertSpawner));
 					world.spawnEntityInWorld(item);
-				}else{
+				} else {
 
 				}
 
@@ -63,43 +64,44 @@ public class LifeTap extends SpellComponent implements IRitualInteraction{
 	}
 
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
-		if (!(target instanceof EntityLivingBase)) return false;
-		if (!world.isRemote){
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
+		if (!(target instanceof EntityLivingBase))
+			return false;
+		if (!world.isRemote) {
 			double damage = SpellUtils.getModifiedDouble_Mul(2, stack, caster, target, world, SpellModifiers.DAMAGE);
 			IEntityExtension casterProperties = EntityExtension.For(caster);
-			float manaRefunded = (float)(((damage * 0.01)) * casterProperties.getMaxMana());
+			float manaRefunded = (float) (((damage * 0.01)) * casterProperties.getMaxMana());
 
-			if ((caster).attackEntityFrom(DamageSource.outOfWorld, (int)Math.floor(damage))){
+			if ((caster).attackEntityFrom(DamageSource.outOfWorld, (int) Math.floor(damage))) {
 				casterProperties.setCurrentMana(casterProperties.getCurrentMana() + manaRefunded);
-			}else{
+			} else {
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.of(SpellModifiers.DAMAGE);
 	}
 
-
 	@Override
-	public float manaCost(EntityLivingBase caster){
+	public float manaCost(EntityLivingBase caster) {
 		return 0;
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
+	public ItemStack[] reagents(EntityLivingBase caster) {
 		return null;
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
-		for (int i = 0; i < 25; ++i){
-			AMParticle particle = (AMParticle)ArsMagica2.proxy.particleManager.spawn(world, "sparkle2", x, y, z);
-			if (particle != null){
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
+		for (int i = 0; i < 25; ++i) {
+			AMParticle particle = (AMParticle) ArsMagica2.proxy.particleManager.spawn(world, "sparkle2", x, y, z);
+			if (particle != null) {
 				particle.addRandomOffset(2, 2, 2);
 				particle.setMaxAge(15);
 				particle.setParticleScale(0.1f);
@@ -108,52 +110,49 @@ public class LifeTap extends SpellComponent implements IRitualInteraction{
 					particle.setRGBColorF(0.4f, 0.1f, 0.5f);
 				else
 					particle.setRGBColorF(0.1f, 0.5f, 0.1f);
-				if (colorModifier > -1){
-					particle.setRGBColorF(((colorModifier >> 16) & 0xFF) / 255.0f, ((colorModifier >> 8) & 0xFF) / 255.0f, (colorModifier & 0xFF) / 255.0f);
+				if (colorModifier > -1) {
+					particle.setRGBColorF(((colorModifier >> 16) & 0xFF) / 255.0f,
+							((colorModifier >> 8) & 0xFF) / 255.0f, (colorModifier & 0xFF) / 255.0f);
 				}
 			}
 		}
 	}
 
 	@Override
-	public Set<Affinity> getAffinity(){
+	public Set<Affinity> getAffinity() {
 		return Sets.newHashSet(Affinity.LIFE, Affinity.ENDER);
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				new ItemStack(ItemDefs.rune, 1, EnumDyeColor.BLACK.getDyeDamage()),
-				BlockDefs.aum
-		};
+	public Object[] getRecipe() {
+		return new Object[] { new ItemStack(ItemDefs.rune, 1, EnumDyeColor.BLACK.getDyeDamage()), BlockDefs.aum };
 	}
 
 	@Override
-	public float getAffinityShift(Affinity affinity){
+	public float getAffinityShift(Affinity affinity) {
 		return 0.01f;
 	}
 
 	@Override
-	public MultiblockStructureDefinition getRitualShape(){
+	public MultiblockStructureDefinition getRitualShape() {
 		return RitualShapeHelper.instance.corruption;
 	}
 
 	@Override
-	public ItemStack[] getReagents(){
-		return new ItemStack[]{
-				new ItemStack(ItemDefs.mobFocus),
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.ENDER)
-		};
+	public ItemStack[] getReagents() {
+		return new ItemStack[] { new ItemStack(ItemDefs.mobFocus),
+				AffinityShiftUtils.getEssenceForAffinity(Affinity.ENDER) };
 	}
 
 	@Override
-	public int getReagentSearchRadius(){
+	public int getReagentSearchRadius() {
 		return 3;
 	}
 
 	@Override
-	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {}
-	
+	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getResult() {

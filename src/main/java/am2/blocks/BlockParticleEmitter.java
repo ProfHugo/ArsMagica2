@@ -25,49 +25,51 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockParticleEmitter extends BlockAMContainer{
-	
-	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
+public class BlockParticleEmitter extends BlockAMContainer {
+
+	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class,
+			EnumFacing.HORIZONTALS);
 	public static final PropertyBool HIDDEN = PropertyBool.create("hidden");
-	
-	
-	public BlockParticleEmitter(){
+
+	public BlockParticleEmitter() {
 		super(Material.GLASS);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(HIDDEN, false));
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING, HIDDEN);
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = state.getValue(FACING).getHorizontalIndex();
-		if (state.getValue(HIDDEN)) meta |= 0x8;
+		if (state.getValue(HIDDEN))
+			meta |= 0x8;
 		return meta;
 	}
-	
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta & 0x3)).withProperty(HIDDEN, (meta & 0x8) == 0x8);
-	}	
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state){
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta & 0x3)).withProperty(HIDDEN,
+				(meta & 0x8) == 0x8);
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player,
 			boolean willHarvest) {
-		TileEntityParticleEmitter tile = (TileEntityParticleEmitter)world.getTileEntity(pos);
-		if(tile != null && !tile.getShow())
+		TileEntityParticleEmitter tile = (TileEntityParticleEmitter) world.getTileEntity(pos);
+		if (tile != null && !tile.getShow())
 			return false;
-		
+
 		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
-	
+
 	@Override
 	public void onBlockExploded(World world, BlockPos pos, Explosion explosion) {
 		TileEntity te = world.getTileEntity(pos);
@@ -79,47 +81,46 @@ public class BlockParticleEmitter extends BlockAMContainer{
 		if (te2 != null && te2.getShow())
 			super.onBlockExploded(world, pos, explosion);
 	}
-	
-	
-	
+
 	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
+			int meta, EntityLivingBase placer) {
+		return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING,
+				placer.getHorizontalFacing().getOpposite());
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int i){
+	public TileEntity createNewTileEntity(World world, int i) {
 		return new TileEntityParticleEmitter();
 	}
-	
+
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return state.getValue(HIDDEN) ? new AxisAlignedBB(0, 0, 0, 0, 0, 0) : super.getBoundingBox(state, source, pos);
 	}
-	
+
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return blockState.getValue(HIDDEN) ? null : super.getCollisionBoundingBox(blockState, worldIn, pos);
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (worldIn.isRemote) {
 			TileEntity te = worldIn.getTileEntity(pos);
 			if (te != null && te instanceof TileEntityParticleEmitter) {
-				if (heldItem != null
-						&& heldItem.getItem() == ItemDefs.crystalWrench) {
+				if (heldItem != null && heldItem.getItem() == ItemDefs.crystalWrench) {
 					if (ItemCrystalWrench.getMode(heldItem) == 0) {
 						ArsMagica2.proxy.openParticleBlockGUI(worldIn, playerIn, (TileEntityParticleEmitter) te);
 					} else {

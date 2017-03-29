@@ -5,40 +5,42 @@ import am2.bosses.IArsMagicaBoss;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 
-public class EntityAIFlamethrower extends EntityAIBase{
+public class EntityAIFlamethrower extends EntityAIBase {
 
 	private final EntityLiving host;
 	private int cooldownTicks = 0;
 
-	public EntityAIFlamethrower(IArsMagicaBoss host){
-		this.host = (EntityLiving)host;
+	public EntityAIFlamethrower(IArsMagicaBoss host) {
+		this.host = (EntityLiving) host;
 		this.setMutexBits(1);
 	}
 
 	@Override
-	public boolean shouldExecute(){
-		boolean execute = ((IArsMagicaBoss)host).getCurrentAction() == BossActions.IDLE && host.getAttackTarget() != null && cooldownTicks-- <= 0;
+	public boolean shouldExecute() {
+		boolean execute = ((IArsMagicaBoss) host).getCurrentAction() == BossActions.IDLE
+				&& host.getAttackTarget() != null && cooldownTicks-- <= 0;
 		return execute;
 	}
 
 	@Override
-	public boolean continueExecuting(){
-		if (host.getAttackTarget() == null || host.getAttackTarget().isDead || ((IArsMagicaBoss)host).getTicksInCurrentAction() > 80){
+	public boolean continueExecuting() {
+		if (host.getAttackTarget() == null || host.getAttackTarget().isDead
+				|| ((IArsMagicaBoss) host).getTicksInCurrentAction() > 80) {
 			this.cooldownTicks = 40;
-			((IArsMagicaBoss)host).setCurrentAction(BossActions.IDLE);
+			((IArsMagicaBoss) host).setCurrentAction(BossActions.IDLE);
 			return false;
 		}
 		return true;
 	}
 
 	@Override
-	public void updateTask(){
-		if (host.getDistanceSqToEntity(host.getAttackTarget()) < 64){
-			if (((IArsMagicaBoss)host).getCurrentAction() != BossActions.LONG_CASTING)
-				((IArsMagicaBoss)host).setCurrentAction(BossActions.LONG_CASTING);
+	public void updateTask() {
+		if (host.getDistanceSqToEntity(host.getAttackTarget()) < 64) {
+			if (((IArsMagicaBoss) host).getCurrentAction() != BossActions.LONG_CASTING)
+				((IArsMagicaBoss) host).setCurrentAction(BossActions.LONG_CASTING);
 			host.getLookHelper().setLookPositionWithEntity(host.getAttackTarget(), 10, 10);
 			host.getNavigator().clearPathEntity();
-		}else{
+		} else {
 			double deltaZ = host.getAttackTarget().posZ - host.posZ;
 			double deltaX = host.getAttackTarget().posX - host.posX;
 

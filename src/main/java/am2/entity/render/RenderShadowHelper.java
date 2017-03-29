@@ -8,19 +8,20 @@ import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderShadowHelper extends RenderBiped<EntityShadowHelper>{
+public class RenderShadowHelper extends RenderBiped<EntityShadowHelper> {
 
-	public RenderShadowHelper(RenderManager manager){
+	public RenderShadowHelper(RenderManager manager) {
 		super(manager, new ModelBiped(), 0.5f);
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityShadowHelper par1Entity){
+	protected ResourceLocation getEntityTexture(EntityShadowHelper par1Entity) {
 		return par1Entity.getLocationSkin();
 	}
 
 	@Override
-	protected void renderModel(EntityShadowHelper par1EntityLivingBase, float par2, float par3, float par4, float par5, float par6, float par7){
+	protected void renderModel(EntityShadowHelper par1EntityLivingBase, float par2, float par3, float par4, float par5,
+			float par6, float par7) {
 		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

@@ -11,23 +11,24 @@ public class ItemRune extends ItemArsMagica {
 
 	public ItemRune() {
 	}
-	
+
 	@Override
 	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
 		for (int i = 0; i < 16; i++) {
 			subItems.add(new ItemStack(itemIn, 1, i));
 		}
 	}
-	
+
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		return "item.arsmagica2:rune." + EnumDyeColor.byDyeDamage(stack.getItemDamage()).getUnlocalizedName();
 	}
-	
+
 	public int getKeyIndex(ItemStack stack) {
 		return getKeyIndex(stack.getItemDamage());
 	}
-	public int getKeyIndex(int meta){
+
+	public int getKeyIndex(int meta) {
 		if (meta == EnumDyeColor.BLACK.getDyeDamage())
 			return 0x1;
 		if (meta == EnumDyeColor.BLUE.getDyeDamage())

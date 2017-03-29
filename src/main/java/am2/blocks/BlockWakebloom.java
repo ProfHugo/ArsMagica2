@@ -10,27 +10,27 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockWakebloom extends BlockAMFlower{
+public class BlockWakebloom extends BlockAMFlower {
 
-	public BlockWakebloom(){
+	public BlockWakebloom() {
 		super();
 	}
 
 	@Override
-	public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos){
+	public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
 		return EnumPlantType.Water;
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		return worldIn.getBlockState(pos.down()).getBlock().equals(Blocks.WATER);
 	}
-	
+
 	@Override
-	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state){
+	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
 		return canPlaceBlockAt(worldIn, pos);
 	}
-	
+
 	@Override
 	public BlockAMFlower registerAndName(ResourceLocation loc) {
 		setUnlocalizedName(loc.toString());

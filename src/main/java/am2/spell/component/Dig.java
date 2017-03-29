@@ -27,15 +27,13 @@ public class Dig extends SpellComponent {
 
 	@Override
 	public Object[] getRecipe() {
-		return new Object[] {
-			new ItemStack(Items.IRON_SHOVEL),
-			new ItemStack(Items.IRON_AXE),
-			new ItemStack(Items.IRON_PICKAXE)
-		};
+		return new Object[] { new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.IRON_AXE),
+				new ItemStack(Items.IRON_PICKAXE) };
 	}
 
 	@Override
-	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos blockPos, EnumFacing blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster) {
+	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos blockPos, EnumFacing blockFace,
+			double impactX, double impactY, double impactZ, EntityLivingBase caster) {
 		if (!(caster instanceof EntityPlayer))
 			return false;
 		stack.getTagCompound().setBoolean("ArsMagica2.harvestByProjectile", true);
@@ -43,23 +41,28 @@ public class Dig extends SpellComponent {
 			return true;
 		IBlockState state = world.getBlockState(blockPos);
 		float hardness = state.getBlockHardness(world, blockPos);
-		if (hardness != -1 && state.getBlock().getHarvestLevel(state) <= SpellUtils.getModifiedInt_Add(2, stack, caster, null, world, SpellModifiers.MINING_POWER)) {
+		if (hardness != -1 && state.getBlock().getHarvestLevel(state) <= SpellUtils.getModifiedInt_Add(2, stack, caster,
+				null, world, SpellModifiers.MINING_POWER)) {
 			if (SpellUtils.modifierIsPresent(SpellModifiers.SILKTOUCH_LEVEL, stack)) {
 				ItemStack blockstack = new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state));
-				EntityItem blockitem = new EntityItem(world, blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockstack);
-	            blockitem.setDefaultPickupDelay();
-	            //items were flying at insane speeds, so I'm toning it down a bit
-	            blockitem.motionX = (double)((float)(Math.random() * 0.020000000298023224D - 0.01000000149011612D));
-	            blockitem.motionY = 0.01;
-	            blockitem.motionZ = (double)((float)(Math.random() * 0.02000000298023224D - 0.01000000149011612D));
-	            world.spawnEntityInWorld(blockitem);
-			}else{
-				int xp = state.getBlock().getExpDrop(state, world, blockPos, SpellUtils.countModifiers(SpellModifiers.FORTUNE_LEVEL, stack));
-				state.getBlock().dropBlockAsItem(world, blockPos, state, SpellUtils.countModifiers(SpellModifiers.FORTUNE_LEVEL, stack));
+				EntityItem blockitem = new EntityItem(world, blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+						blockstack);
+				blockitem.setDefaultPickupDelay();
+				// items were flying at insane speeds, so I'm toning it down a
+				// bit
+				blockitem.motionX = (double) ((float) (Math.random() * 0.020000000298023224D - 0.01000000149011612D));
+				blockitem.motionY = 0.01;
+				blockitem.motionZ = (double) ((float) (Math.random() * 0.02000000298023224D - 0.01000000149011612D));
+				world.spawnEntityInWorld(blockitem);
+			} else {
+				int xp = state.getBlock().getExpDrop(state, world, blockPos,
+						SpellUtils.countModifiers(SpellModifiers.FORTUNE_LEVEL, stack));
+				state.getBlock().dropBlockAsItem(world, blockPos, state,
+						SpellUtils.countModifiers(SpellModifiers.FORTUNE_LEVEL, stack));
 				state.getBlock().dropXpOnBlockBreak(world, blockPos, xp);
 			}
 			world.destroyBlock(blockPos, false);
-			
+
 			EntityExtension.For(caster).deductMana(hardness * 1.28f);
 		}
 		return true;
@@ -71,8 +74,7 @@ public class Dig extends SpellComponent {
 	}
 
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world,
-			EntityLivingBase caster, Entity target) {
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
 		return false;
 	}
 
@@ -87,9 +89,8 @@ public class Dig extends SpellComponent {
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z,
-			EntityLivingBase caster, Entity target, Random rand,
-			int colorModifier) {
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
 	}
 
 	@Override

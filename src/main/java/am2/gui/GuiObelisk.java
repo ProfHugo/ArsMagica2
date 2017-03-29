@@ -8,12 +8,13 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiObelisk extends GuiContainer{
+public class GuiObelisk extends GuiContainer {
 
-	private static final ResourceLocation background = new ResourceLocation("arsmagica2", "textures/gui/ObeliskGUI.png");
+	private static final ResourceLocation background = new ResourceLocation("arsmagica2",
+			"textures/gui/ObeliskGUI.png");
 	private final TileEntityObelisk obelisk;
 
-	public GuiObelisk(TileEntityObelisk obelisk, EntityPlayer player){
+	public GuiObelisk(TileEntityObelisk obelisk, EntityPlayer player) {
 		super(new ContainerObelisk(obelisk, player));
 		this.obelisk = obelisk;
 		xSize = 176;
@@ -21,7 +22,7 @@ public class GuiObelisk extends GuiContainer{
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j){
+	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		mc.renderEngine.bindTexture(background);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int l = (width - xSize) / 2;
@@ -30,7 +31,8 @@ public class GuiObelisk extends GuiContainer{
 
 		int overlayHeight = this.obelisk.getCookProgressScaled(14);
 		if (overlayHeight > 0)
-			this.drawTexturedModalRect(l + 79, i1 + 30 + 14 - overlayHeight, 176, 14 - overlayHeight, 14, overlayHeight + 2);
+			this.drawTexturedModalRect(l + 79, i1 + 30 + 14 - overlayHeight, 176, 14 - overlayHeight, 14,
+					overlayHeight + 2);
 	}
 
 }

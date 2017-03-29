@@ -26,53 +26,57 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
-public class Mark extends SpellComponent{
+public class Mark extends SpellComponent {
 
 	@Override
-	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster){
+	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX,
+			double impactY, double impactZ, EntityLivingBase caster) {
 		EntityExtension.For(caster).setMark(impactX, impactY, impactZ, caster.worldObj.provider.getDimension());
-		if (caster instanceof EntityPlayer && world.isRemote){
-			((EntityPlayer)caster).addChatMessage(new TextComponentString("Mark Set"));
+		if (caster instanceof EntityPlayer && world.isRemote) {
+			((EntityPlayer) caster).addChatMessage(new TextComponentString("Mark Set"));
 		}
 		return true;
 	}
 
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
-		if (!(target instanceof EntityLivingBase)){
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
+		if (!(target instanceof EntityLivingBase)) {
 			return false;
 		}
-		if (EntityExtension.For(caster).getMarkDimensionID() != -512){
-			EntityExtension.For(caster).setMarkDimensionID(-512);;
-			if (caster instanceof EntityPlayer && world.isRemote){
-				((EntityPlayer)caster).addChatMessage(new TextComponentString("Mark Cleared"));
+		if (EntityExtension.For(caster).getMarkDimensionID() != -512) {
+			EntityExtension.For(caster).setMarkDimensionID(-512);
+			;
+			if (caster instanceof EntityPlayer && world.isRemote) {
+				((EntityPlayer) caster).addChatMessage(new TextComponentString("Mark Cleared"));
 			}
-		}else{
-			EntityExtension.For(caster).setMark(target.posX, target.posY, target.posZ, caster.worldObj.provider.getDimension());
-			if (caster instanceof EntityPlayer && world.isRemote){
-				((EntityPlayer)caster).addChatMessage(new TextComponentString("Mark Set"));
+		} else {
+			EntityExtension.For(caster).setMark(target.posX, target.posY, target.posZ,
+					caster.worldObj.provider.getDimension());
+			if (caster instanceof EntityPlayer && world.isRemote) {
+				((EntityPlayer) caster).addChatMessage(new TextComponentString("Mark Set"));
 			}
 		}
 		return true;
 	}
 
 	@Override
-	public float manaCost(EntityLivingBase caster){
+	public float manaCost(EntityLivingBase caster) {
 		return 5;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.noneOf(SpellModifiers.class);
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
+	public ItemStack[] reagents(EntityLivingBase caster) {
 		return null;
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
 		int offset = 1;
 
 		SetupParticle(world, caster.posX - 0.5f, caster.posY + offset, caster.posZ, 0.2, 0, colorModifier);
@@ -81,39 +85,40 @@ public class Mark extends SpellComponent{
 		SetupParticle(world, caster.posX, caster.posY + offset, caster.posZ + 0.5f, 0, -0.2, colorModifier);
 	}
 
-	private void SetupParticle(World world, double x, double y, double z, double motionx, double motionz, int colorModifier){
-		AMParticle effect = (AMParticle)ArsMagica2.proxy.particleManager.spawn(world, "symbols", x, y, z);
-		if (effect != null){
+	private void SetupParticle(World world, double x, double y, double z, double motionx, double motionz,
+			int colorModifier) {
+		AMParticle effect = (AMParticle) ArsMagica2.proxy.particleManager.spawn(world, "symbols", x, y, z);
+		if (effect != null) {
 			effect.AddParticleController(new ParticleConverge(effect, motionx, -0.1, motionz, 1, true));
 			effect.setMaxAge(40);
 			effect.setIgnoreMaxAge(false);
 			effect.setParticleScale(0.1f);
-			if (colorModifier > -1){
-				effect.setRGBColorF(((colorModifier >> 16) & 0xFF) / 255.0f, ((colorModifier >> 8) & 0xFF) / 255.0f, (colorModifier & 0xFF) / 255.0f);
+			if (colorModifier > -1) {
+				effect.setRGBColorF(((colorModifier >> 16) & 0xFF) / 255.0f, ((colorModifier >> 8) & 0xFF) / 255.0f,
+						(colorModifier & 0xFF) / 255.0f);
 			}
 		}
 	}
 
 	@Override
-	public Set<Affinity> getAffinity(){
+	public Set<Affinity> getAffinity() {
 		return Sets.newHashSet(Affinity.NONE);
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				new ItemStack(ItemDefs.rune, 1, EnumDyeColor.RED.getDyeDamage()),
-				new ItemStack(Items.MAP)
-		};
+	public Object[] getRecipe() {
+		return new Object[] { new ItemStack(ItemDefs.rune, 1, EnumDyeColor.RED.getDyeDamage()),
+				new ItemStack(Items.MAP) };
 	}
 
 	@Override
-	public float getAffinityShift(Affinity affinity){
+	public float getAffinityShift(Affinity affinity) {
 		return 0;
 	}
+
 	@Override
 	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

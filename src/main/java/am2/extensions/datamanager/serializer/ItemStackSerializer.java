@@ -8,11 +8,12 @@ import am2.packet.AMDataWriter;
 import net.minecraft.item.ItemStack;
 
 public class ItemStackSerializer implements TypeSerializer<Optional<ItemStack>> {
-	
+
 	public static ItemStackSerializer INSTANCE = new ItemStackSerializer();
-	
-	private ItemStackSerializer() {}
-	
+
+	private ItemStackSerializer() {
+	}
+
 	@Override
 	public void serialize(AMDataWriter buf, Optional<ItemStack> value) {
 		buf.add(value == null ? null : value.orNull());

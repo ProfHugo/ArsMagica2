@@ -13,31 +13,30 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class Dismembering extends SpellModifier{
+public class Dismembering extends SpellModifier {
 	@Override
-	public EnumSet<SpellModifiers> getAspectsModified(){
+	public EnumSet<SpellModifiers> getAspectsModified() {
 		return EnumSet.of(SpellModifiers.DISMEMBERING_LEVEL);
 	}
 
 	@Override
-	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, NBTTagCompound metadata){
+	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world,
+			NBTTagCompound metadata) {
 		return 0.05f;
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				new ItemStack(ItemDefs.core, 1, ItemCore.META_BASE_CORE),
-				new ItemStack(Items.SKULL, 1, 1),
-				Items.BONE
-		};
+	public Object[] getRecipe() {
+		return new Object[] { new ItemStack(ItemDefs.core, 1, ItemCore.META_BASE_CORE),
+				new ItemStack(Items.SKULL, 1, 1), Items.BONE };
 	}
 
 	@Override
-	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity){
+	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity) {
 		return 1.25f * quantity;
 	}
 
 	@Override
-	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {}
+	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
+	}
 }

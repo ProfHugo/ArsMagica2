@@ -19,26 +19,27 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityAirSled extends EntityLiving{
+public class EntityAirSled extends EntityLiving {
 
 	private float rotation;
 
-	public EntityAirSled(World par1World){
+	public EntityAirSled(World par1World) {
 		super(par1World);
 		this.setSize(0.5f, 1);
 		this.stepHeight = 1.02f;
 	}
 
 	@Override
-	public void onUpdate(){
+	public void onUpdate() {
 		this.stepHeight = 1.02f;
 
-		if (worldObj.isRemote){
+		if (worldObj.isRemote) {
 			rotation += 1f;
-			if (this.worldObj.isAirBlock(getPosition().down())){
-				for (int i = 0; i < ArsMagica2.config.getGFXLevel(); ++i){
-					AMParticle cloud = (AMParticle)ArsMagica2.proxy.particleManager.spawn(worldObj, "sparkle2", posX, posY + 0.5, posZ);
-					if (cloud != null){
+			if (this.worldObj.isAirBlock(getPosition().down())) {
+				for (int i = 0; i < ArsMagica2.config.getGFXLevel(); ++i) {
+					AMParticle cloud = (AMParticle) ArsMagica2.proxy.particleManager.spawn(worldObj, "sparkle2", posX,
+							posY + 0.5, posZ);
+					if (cloud != null) {
 						cloud.addRandomOffset(1, 1, 1);
 						cloud.AddParticleController(new ParticleFadeOut(cloud, 1, false).setFadeSpeed(0.01f));
 					}
@@ -48,29 +49,29 @@ public class EntityAirSled extends EntityLiving{
 		super.onUpdate();
 	}
 
-	public float getRotation(){
+	public float getRotation() {
 		return rotation;
 	}
 
 	@Override
-	public boolean shouldRiderSit(){
+	public boolean shouldRiderSit() {
 		return false;
 	}
-	
-	
+
 	@Override
 	public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, ItemStack stack, EnumHand hand) {
-		if (this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer && this.getControllingPassenger() != player){
+		if (this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer
+				&& this.getControllingPassenger() != player) {
 			return EnumActionResult.SUCCESS;
-		}else{
-			if (!this.worldObj.isRemote){
-				if (player.isSneaking()){
+		} else {
+			if (!this.worldObj.isRemote) {
+				if (player.isSneaking()) {
 					this.setDead();
 					EntityItem item = new EntityItem(worldObj);
 					item.setPosition(posX, posY, posZ);
 					item.setEntityItemStack(ItemDefs.airSledEnchanted.copy());
 					worldObj.spawnEntityInWorld(item);
-				}else{
+				} else {
 					player.startRiding(this);
 				}
 			}
@@ -78,41 +79,42 @@ public class EntityAirSled extends EntityLiving{
 			return EnumActionResult.SUCCESS;
 		}
 	}
-	
+
 	@Override
 	public void updateRidden() {
-		if (this.isBeingRidden()){
-			this.getControllingPassenger().setPosition(this.posX, this.posY + this.getMountedYOffset() + this.getControllingPassenger().getYOffset(), this.posZ);
+		if (this.isBeingRidden()) {
+			this.getControllingPassenger().setPosition(this.posX,
+					this.posY + this.getMountedYOffset() + this.getControllingPassenger().getYOffset(), this.posZ);
 		}
 	}
-	
+
 	@Override
 	public Entity getControllingPassenger() {
 		return getPassengers().isEmpty() ? null : getPassengers().get(0);
 	}
 
 	@Override
-	public void moveEntityWithHeading(float par1, float par2){
-		if (this.getControllingPassenger() != null){
+	public void moveEntityWithHeading(float par1, float par2) {
+		if (this.getControllingPassenger() != null) {
 			this.prevRotationYaw = this.rotationYaw = this.getControllingPassenger().rotationYaw;
 			this.rotationPitch = this.getControllingPassenger().rotationPitch * 0.5F;
 			this.setRotation(this.rotationYaw, this.rotationPitch);
 			this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
-			par1 = ((EntityLivingBase)this.getControllingPassenger()).moveStrafing * 0.5F;
-			par2 = ((EntityLivingBase)this.getControllingPassenger()).moveForward;
+			par1 = ((EntityLivingBase) this.getControllingPassenger()).moveStrafing * 0.5F;
+			par2 = ((EntityLivingBase) this.getControllingPassenger()).moveForward;
 
-			if (par2 <= 0.0F){
+			if (par2 <= 0.0F) {
 				par2 *= 0.25F;
 			}
 
 			this.stepHeight = 1.0F;
 			this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
 
-			if (!this.worldObj.isRemote){
+			if (!this.worldObj.isRemote) {
 				par2 *= 0.06f;
-				if (par1 != 0){
-					float f4 = MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F);
-					float f5 = MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F);
+				if (par1 != 0) {
+					float f4 = MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F);
+					float f5 = MathHelper.cos(this.rotationYaw * (float) Math.PI / 180.0F);
 					this.motionX += (par1 * f5 - par2 * f4) * 0.06f;
 					this.motionZ += (par2 * f5 + par1 * f4) * 0.06f;
 				}
@@ -121,7 +123,7 @@ public class EntityAirSled extends EntityLiving{
 				this.motionY += -Math.sin(Math.toRadians(this.rotationPitch)) * par2;
 				this.motionZ += Math.cos(Math.toRadians(this.rotationYaw)) * par2;
 			}
-		}else{
+		} else {
 			if (!this.onGround && !this.isInWater())
 				this.motionY = -0.1f;
 			else
@@ -140,41 +142,43 @@ public class EntityAirSled extends EntityLiving{
 
 		float f2 = 0.91F;
 
-		this.motionY *= f2;//0.9800000190734863D;
+		this.motionY *= f2;// 0.9800000190734863D;
 		this.motionX *= f2;
 		this.motionZ *= f2;
 	}
 
 	@Override
-	public double getMountedYOffset(){
+	public double getMountedYOffset() {
 		return 1.6f;
 	}
 
 	@Override
-	protected void entityInit(){
+	protected void entityInit() {
 		super.entityInit();
 	}
-	
+
 	@Override
 	public void playSound(SoundEvent soundIn, float volume, float pitch) {
 	}
-	
-	@Override
-	public void fall(float distance, float damageMultiplier) {}
 
 	@Override
-	public boolean canBeCollidedWith(){
+	public void fall(float distance, float damageMultiplier) {
+	}
+
+	@Override
+	public boolean canBeCollidedWith() {
 		return true;
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBox(Entity par1Entity){
+	public AxisAlignedBB getCollisionBox(Entity par1Entity) {
 		return null;
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2){
-		if (this.getControllingPassenger() != null && !this.getControllingPassenger().isEntityEqual(par1DamageSource.getEntity()))
+	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
+		if (this.getControllingPassenger() != null
+				&& !this.getControllingPassenger().isEntityEqual(par1DamageSource.getEntity()))
 			this.getControllingPassenger().dismountRidingEntity();
 		return false;
 	}

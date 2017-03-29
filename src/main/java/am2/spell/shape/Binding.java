@@ -20,21 +20,23 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class Binding extends SpellShape{
+public class Binding extends SpellShape {
 
 	@Override
-	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster, EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP, int useCount){
-		if (!(caster instanceof EntityPlayer)){
+	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster,
+			EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP,
+			int useCount) {
+		if (!(caster instanceof EntityPlayer)) {
 			return SpellCastResult.EFFECT_FAILED;
 		}
-		
-		EntityPlayer player = (EntityPlayer)caster;
+
+		EntityPlayer player = (EntityPlayer) caster;
 		ItemStack heldStack = player.getActiveItemStack();
-		if (heldStack == null || heldStack.getItem() != ItemDefs.spell){
+		if (heldStack == null || heldStack.getItem() != ItemDefs.spell) {
 			return SpellCastResult.EFFECT_FAILED;
 		}
 		int bindingType = getBindingType(SpellUtils.merge(heldStack.copy()));
-		switch (bindingType){
+		switch (bindingType) {
 		case ItemBindingCatalyst.META_AXE:
 			heldStack = InventoryUtilities.replaceItem(heldStack, ItemDefs.BoundAxe);
 			break;
@@ -62,57 +64,54 @@ public class Binding extends SpellShape{
 	}
 
 	@Override
-	public boolean isChanneled(){
+	public boolean isChanneled() {
 		return false;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.noneOf(SpellModifiers.class);
 	}
-	
+
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_CHIMERITE),
-				Items.WOODEN_SWORD,
-				Items.STONE_SHOVEL,
-				Items.IRON_HOE,
-				Items.GOLDEN_AXE,
-				Items.DIAMOND_PICKAXE,
-				new ItemStack(ItemDefs.bindingCatalyst, 1, OreDictionary.WILDCARD_VALUE)
-		};
+	public Object[] getRecipe() {
+		return new Object[] { new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_CHIMERITE), Items.WOODEN_SWORD,
+				Items.STONE_SHOVEL, Items.IRON_HOE, Items.GOLDEN_AXE, Items.DIAMOND_PICKAXE,
+				new ItemStack(ItemDefs.bindingCatalyst, 1, OreDictionary.WILDCARD_VALUE) };
 	}
 
 	@Override
-	public float manaCostMultiplier(ItemStack spellStack){
+	public float manaCostMultiplier(ItemStack spellStack) {
 		return 1;
 	}
 
 	@Override
-	public boolean isTerminusShape(){
+	public boolean isTerminusShape() {
 		return false;
 	}
 
 	@Override
-	public boolean isPrincipumShape(){
+	public boolean isPrincipumShape() {
 		return true;
 	}
 
-//	@Override
-//	public String getSoundForAffinity(Affinity affinity, ItemStack stack, World world){
-//		return "arsmagica2:spell.binding.cast";
-//	}
+	// @Override
+	// public String getSoundForAffinity(Affinity affinity, ItemStack stack,
+	// World world){
+	// return "arsmagica2:spell.binding.cast";
+	// }
 
-//	public void setBindingType(ItemStack craftStack, ItemStack addedBindingCatalyst){
-//		SpellUtils.instance.setSpellMetadata(craftStack, "binding_type", "" + addedBindingCatalyst.getItemDamage());
-//	}
+	// public void setBindingType(ItemStack craftStack, ItemStack
+	// addedBindingCatalyst){
+	// SpellUtils.instance.setSpellMetadata(craftStack, "binding_type", "" +
+	// addedBindingCatalyst.getItemDamage());
+	// }
 
-	public int getBindingType(ItemStack spellStack){
+	public int getBindingType(ItemStack spellStack) {
 		int type = 0;
-		try{
+		try {
 			type = Integer.parseInt(SpellUtils.getSpellMetadata(spellStack, "binding_type"));
-		}catch (Throwable t){
+		} catch (Throwable t) {
 
 		}
 		return type;
@@ -122,7 +121,7 @@ public class Binding extends SpellShape{
 	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
 		for (Object obj : recipe) {
 			if (obj instanceof ItemStack) {
-				ItemStack is = (ItemStack)obj;
+				ItemStack is = (ItemStack) obj;
 				if (is.getItem().equals(ItemDefs.bindingCatalyst))
 					tag.setString("binding_type", "" + is.getItemDamage());
 			}

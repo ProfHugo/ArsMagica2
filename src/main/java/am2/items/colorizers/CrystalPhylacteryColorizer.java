@@ -10,11 +10,11 @@ public class CrystalPhylacteryColorizer implements IItemColor {
 	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
 		if (tintIndex == 0 && stack.getItemDamage() != ItemCrystalPhylactery.META_EMPTY) {
 			int color = 0x0000FF;
-			if (stack.hasTagCompound()){
+			if (stack.hasTagCompound()) {
 				String className = stack.getTagCompound().getString("SpawnClassName");
-				if (className != null){
-					Integer storedColor = ((ItemCrystalPhylactery)stack.getItem()).spawnableEntities.get(className);
-					if (storedColor != null){
+				if (className != null) {
+					Integer storedColor = ((ItemCrystalPhylactery) stack.getItem()).spawnableEntities.get(className);
+					if (storedColor != null) {
 						color = storedColor.intValue();
 					}
 				}

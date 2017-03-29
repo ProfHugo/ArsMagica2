@@ -23,23 +23,27 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 public class ArcaneCompendium implements IArcaneCompendium, ICapabilityProvider, ICapabilitySerializable<NBTBase> {
-	
+
 	@CapabilityInject(IArcaneCompendium.class)
 	public static Capability<IArcaneCompendium> INSTANCE = null;
-	
-	public static Achievement compendiumData = (new Achievement("am2_ach_data", "compendiumData", 0, 0, ItemDefs.arcaneCompendium, null));
-	public static Achievement componentUnlock = (new Achievement("am2_ach_unlock", "componentUnlock", 0, 0, ItemDefs.spellParchment, null));
-	
+
+	public static Achievement compendiumData = (new Achievement("am2_ach_data", "compendiumData", 0, 0,
+			ItemDefs.arcaneCompendium, null));
+	public static Achievement componentUnlock = (new Achievement("am2_ach_unlock", "componentUnlock", 0, 0,
+			ItemDefs.spellParchment, null));
+
 	private EntityPlayer player;
 	private String path = "";
-	public ArcaneCompendium() {}
-	
+
+	public ArcaneCompendium() {
+	}
+
 	public void unlockEntry(String name) {
 		ArrayList<String> compendium = DataSyncExtension.For(player).get(DataDefinitions.COMPENDIUM);
 		compendium.add(name);
 		DataSyncExtension.For(player).setWithSync(DataDefinitions.COMPENDIUM, compendium);
 	}
-	
+
 	public boolean isUnlocked(String name) {
 		for (String str : DataSyncExtension.For(player).get(DataDefinitions.COMPENDIUM)) {
 			if (str.equalsIgnoreCase(name))
@@ -47,7 +51,7 @@ public class ArcaneCompendium implements IArcaneCompendium, ICapabilityProvider,
 		}
 		return false;
 	}
-	
+
 	public void init(EntityPlayer player, IDataSyncExtension ext) {
 		this.player = player;
 		ext.setWithSync(DataDefinitions.COMPENDIUM, new ArrayList<String>());
@@ -101,11 +105,12 @@ public class ArcaneCompendium implements IArcaneCompendium, ICapabilityProvider,
 			Object obj = entry.getRenderObject();
 			if (obj == null)
 				continue;
-			else if (obj instanceof ItemStack && ((ItemStack)obj).isItemEqual(crafting))
+			else if (obj instanceof ItemStack && ((ItemStack) obj).isItemEqual(crafting))
 				unlockEntry(entry.getID());
 			else if (obj instanceof Item && crafting.getItem() == obj)
 				unlockEntry(entry.getID());
-			else if (obj instanceof Block && crafting.getItem() instanceof ItemBlock && ((ItemBlock)crafting.getItem()).block == obj)
+			else if (obj instanceof Block && crafting.getItem() instanceof ItemBlock
+					&& ((ItemBlock) crafting.getItem()).block == obj)
 				unlockEntry(entry.getID());
 		}
 	}

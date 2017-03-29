@@ -8,13 +8,14 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiRiftStorage extends GuiContainer{
+public class GuiRiftStorage extends GuiContainer {
 
 	private static final ResourceLocation background = new ResourceLocation("arsmagica2", "textures/gui/riftGUI.png");
-	private static final ResourceLocation extras = new ResourceLocation("arsmagica2", "textures/gui/spellBookGui_2.png");
+	private static final ResourceLocation extras = new ResourceLocation("arsmagica2",
+			"textures/gui/spellBookGui_2.png");
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j){
+	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		mc.renderEngine.bindTexture(background);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int l = (width - xSize) / 2;
@@ -22,7 +23,7 @@ public class GuiRiftStorage extends GuiContainer{
 		drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
 	}
 
-	public GuiRiftStorage(EntityPlayer player, IRiftStorage iRiftStorage){
+	public GuiRiftStorage(EntityPlayer player, IRiftStorage iRiftStorage) {
 		super(new ContainerRiftStorage(player, iRiftStorage));
 		this.storage = iRiftStorage;
 		xSize = 176;
@@ -30,13 +31,13 @@ public class GuiRiftStorage extends GuiContainer{
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2){
+	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 
 		mc.renderEngine.bindTexture(extras);
 
 		int rows = 1;
 
-		switch (storage.getAccessLevel()){
+		switch (storage.getAccessLevel()) {
 		case 1:
 			rows = 1;
 			break;
@@ -48,8 +49,8 @@ public class GuiRiftStorage extends GuiContainer{
 			break;
 		}
 
-		for (int j = rows; j < 6; ++j){
-			for (int i = 0; i < 9; ++i){
+		for (int j = rows; j < 6; ++j) {
+			for (int i = 0; i < 9; ++i) {
 				int x = 8 + (18 * i);
 				int y = 13 + (j * 18);
 				GL11.glEnable(GL11.GL_BLEND);

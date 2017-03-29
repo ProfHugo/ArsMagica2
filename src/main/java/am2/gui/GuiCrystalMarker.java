@@ -14,19 +14,19 @@ import net.minecraft.util.ResourceLocation;
 /**
  * @author Zero
  */
-public class GuiCrystalMarker extends GuiContainer{
+public class GuiCrystalMarker extends GuiContainer {
 
-	private static final ResourceLocation background = new ResourceLocation("arsmagica2", "textures/gui/crystalMarker.png");
-	
-	public GuiCrystalMarker(EntityPlayer player, TileEntityCrystalMarker tileEntityCrystalMarker){
+	private static final ResourceLocation background = new ResourceLocation("arsmagica2",
+			"textures/gui/crystalMarker.png");
+
+	public GuiCrystalMarker(EntityPlayer player, TileEntityCrystalMarker tileEntityCrystalMarker) {
 		super(new ContainerCrystalMarker(player, tileEntityCrystalMarker));
 		xSize = 176;
 		ySize = 165;
 	}
 
-
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j){
+	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		mc.renderEngine.bindTexture(background);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int l = (width - xSize) / 2;

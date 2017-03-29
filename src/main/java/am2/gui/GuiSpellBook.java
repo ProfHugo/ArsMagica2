@@ -13,16 +13,17 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-
-public class GuiSpellBook extends GuiContainer{
+public class GuiSpellBook extends GuiContainer {
 
 	private int bookActiveSlot;
 
-	private static final ResourceLocation background = new ResourceLocation("arsmagica2", "textures/gui/spellBookGui.png");
-	private static final ResourceLocation extras = new ResourceLocation("arsmagica2", "textures/gui/spellBookGui_2.png");
+	private static final ResourceLocation background = new ResourceLocation("arsmagica2",
+			"textures/gui/spellBookGui.png");
+	private static final ResourceLocation extras = new ResourceLocation("arsmagica2",
+			"textures/gui/spellBookGui_2.png");
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j){
+	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		mc.renderEngine.bindTexture(background);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int l = (width - xSize) / 2;
@@ -30,19 +31,20 @@ public class GuiSpellBook extends GuiContainer{
 		drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
 	}
 
-	public GuiSpellBook(InventoryPlayer inventoryplayer, ItemStack spellBookStack, InventorySpellBook inventoryspellbook){
+	public GuiSpellBook(InventoryPlayer inventoryplayer, ItemStack spellBookStack,
+			InventorySpellBook inventoryspellbook) {
 		super(new ContainerSpellBook(inventoryplayer, spellBookStack, inventoryspellbook));
 		spellBookInventory = inventoryspellbook;
-		bookActiveSlot = ((ItemSpellBook)spellBookStack.getItem()).GetActiveSlot(spellBookStack);
+		bookActiveSlot = ((ItemSpellBook) spellBookStack.getItem()).GetActiveSlot(spellBookStack);
 		xSize = 256;
 		ySize = 250;
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2){
-		for (int i = 0; i < 8; ++i){
+	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
+		for (int i = 0; i < 8; ++i) {
 			ItemStack stack = spellBookInventory.getStackInSlot(i);
-			if (stack == null){
+			if (stack == null) {
 				continue;
 			}
 			String[] nameParts = stack.getDisplayName().split(" ");
@@ -50,9 +52,9 @@ public class GuiSpellBook extends GuiContainer{
 			int Y = 5 + i * 18;
 			int maxWidth = 120;
 			int line = 1;
-			for (String s : nameParts){
+			for (String s : nameParts) {
 				int width = fontRendererObj.getStringWidth(s);
-				if (X + width > maxWidth && line == 1){
+				if (X + width > maxWidth && line == 1) {
 					Y += fontRendererObj.FONT_HEIGHT;
 					line++;
 					X = 37;
@@ -70,8 +72,8 @@ public class GuiSpellBook extends GuiContainer{
 		drawTexturedModalRect(x, y, 0, 0, 20, 20);
 		GlStateManager.disableBlend();
 
-		//special slot
-		int index = ((ContainerSpellBook)this.inventorySlots).specialSlotIndex - 67;
+		// special slot
+		int index = ((ContainerSpellBook) this.inventorySlots).specialSlotIndex - 67;
 		x = 48 + 18 * index;
 		y = 229;
 		GL11.glEnable(GL11.GL_BLEND);
@@ -82,7 +84,7 @@ public class GuiSpellBook extends GuiContainer{
 	}
 
 	@Override
-	protected void keyTyped(char par1, int par2) throws IOException{
+	protected void keyTyped(char par1, int par2) throws IOException {
 		if (!Character.isDigit(par1))
 			super.keyTyped(par1, par2);
 	}

@@ -20,57 +20,55 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class Contingency_Hit extends SpellShape{
+public class Contingency_Hit extends SpellShape {
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				Items.CLOCK,
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.LIGHTNING),
-				Items.DIAMOND_SWORD,
-				BlockDefs.tarmaRoot,
-				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_MOONSTONE),
-				"E:*", 5000
-		};
+	public Object[] getRecipe() {
+		return new Object[] { Items.CLOCK, AffinityShiftUtils.getEssenceForAffinity(Affinity.LIGHTNING),
+				Items.DIAMOND_SWORD, BlockDefs.tarmaRoot, new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_MOONSTONE),
+				"E:*", 5000 };
 	}
 
 	@Override
-	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster, EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP, int useCount){
+	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster,
+			EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP,
+			int useCount) {
 		EntityExtension.For(target != null ? target : caster).setContingency(ContingencyType.DAMAGE, stack);
 		return SpellCastResult.SUCCESS;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.noneOf(SpellModifiers.class);
 	}
 
-
 	@Override
-	public boolean isChanneled(){
+	public boolean isChanneled() {
 		return false;
 	}
 
 	@Override
-	public float manaCostMultiplier(ItemStack spellStack){
+	public float manaCostMultiplier(ItemStack spellStack) {
 		return 10;
 	}
 
 	@Override
-	public boolean isTerminusShape(){
+	public boolean isTerminusShape() {
 		return false;
 	}
 
 	@Override
-	public boolean isPrincipumShape(){
+	public boolean isPrincipumShape() {
 		return true;
 	}
 
 	@Override
-	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {}
+	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
+	}
 
-//	@Override
-//	public String getSoundForAffinity(Affinity affinity, ItemStack stack, World world){
-//		return "arsmagica2:spell.contingency.contingency";
-//	}
+	// @Override
+	// public String getSoundForAffinity(Affinity affinity, ItemStack stack,
+	// World world){
+	// return "arsmagica2:spell.contingency.contingency";
+	// }
 }

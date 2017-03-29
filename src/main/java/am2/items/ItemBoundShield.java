@@ -33,7 +33,7 @@ public class ItemBoundShield extends ItemShield implements IBoundItem {
 	public float maintainCost(EntityPlayer player, ItemStack stack) {
 		return normalMaintain;
 	}
-	
+
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		return I18n.translateToLocal("item." + getRegistryName().toString() + ".name");
@@ -44,5 +44,5 @@ public class ItemBoundShield extends ItemShield implements IBoundItem {
 		GameRegistry.register(this, new ResourceLocation("arsmagica2", name));
 		return this;
 	}
-	
+
 }

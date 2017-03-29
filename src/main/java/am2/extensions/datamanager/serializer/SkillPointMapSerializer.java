@@ -10,14 +10,16 @@ import am2.packet.AMDataReader;
 import am2.packet.AMDataWriter;
 
 public class SkillPointMapSerializer implements TypeSerializer<HashMap<SkillPoint, Integer>> {
-	
+
 	public static SkillPointMapSerializer INSTANCE = new SkillPointMapSerializer();
-	
-	private SkillPointMapSerializer() {}
-	
+
+	private SkillPointMapSerializer() {
+	}
+
 	@Override
 	public void serialize(AMDataWriter buf, HashMap<SkillPoint, Integer> value) {
-		if (value == null) return;
+		if (value == null)
+			return;
 		buf.add(value.size());
 		for (Entry<SkillPoint, Integer> entry : value.entrySet()) {
 			buf.add(entry.getKey().getName());

@@ -8,9 +8,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class ItemManaCake extends ItemFood{
+public class ItemManaCake extends ItemFood {
 
-	public ItemManaCake(){
+	public ItemManaCake() {
 		super(3, 0.6f, false);
 	}
 
@@ -19,7 +19,7 @@ public class ItemManaCake extends ItemFood{
 		GameRegistry.register(this, new ResourceLocation("arsmagica2", name));
 		return this;
 	}
-	
+
 	@Override
 	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
 		player.addPotionEffect(new BuffEffectManaRegen(600, 0));

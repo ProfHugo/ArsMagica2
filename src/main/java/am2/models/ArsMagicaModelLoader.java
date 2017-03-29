@@ -33,11 +33,11 @@ import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ArsMagicaModelLoader implements ICustomModelLoader {
-	
+
 	public static final HashMap<Affinity, TextureAtlasSprite> sprites = new HashMap<>();
 	public static final HashMap<String, TextureAtlasSprite> particles = new HashMap<>();
 	public static final List<ResourceLocation> spellIcons = getResourceListing();
-	
+
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager) {
 		sprites.clear();
@@ -55,12 +55,11 @@ public class ArsMagicaModelLoader implements ICustomModelLoader {
 			return ModelLoaderRegistry.getMissingModel();
 		}
 		try {
-		    ImmutableList.Builder<ResourceLocation> builder = ImmutableList.builder();
-		    IResource iresource =
-	        Minecraft.getMinecraft().getResourceManager()
-	                 .getResource(new ResourceLocation(modelLocation.getResourceDomain(), modelLocation.getResourcePath() + ".json"));
-		    Reader reader = new InputStreamReader(iresource.getInputStream(), Charsets.UTF_8);
-		    for (String s : ((Map<String,String>) ModelUtils.GSON.fromJson(reader, ModelUtils.mapType)).values()) {
+			ImmutableList.Builder<ResourceLocation> builder = ImmutableList.builder();
+			IResource iresource = Minecraft.getMinecraft().getResourceManager().getResource(
+					new ResourceLocation(modelLocation.getResourceDomain(), modelLocation.getResourcePath() + ".json"));
+			Reader reader = new InputStreamReader(iresource.getInputStream(), Charsets.UTF_8);
+			for (String s : ((Map<String, String>) ModelUtils.GSON.fromJson(reader, ModelUtils.mapType)).values()) {
 				builder.add(new ResourceLocation(s));
 			}
 			IModel model = new SpellModel(builder.build());
@@ -70,12 +69,15 @@ public class ArsMagicaModelLoader implements ICustomModelLoader {
 		}
 		return ModelLoaderRegistry.getMissingModel();
 	}
-	
+
 	@SubscribeEvent
 	public void preStitch(TextureStitchEvent.Pre e) {
 		for (Affinity aff : ArsMagicaAPI.getAffinityRegistry().getValues()) {
-			e.getMap().registerSprite(new ResourceLocation("arsmagica2", "items/particles/" + aff.getName().toLowerCase() + "_hand"));
-			sprites.put(aff, e.getMap().getTextureExtry(new ResourceLocation("arsmagica2", "items/particles/" + aff.getName().toLowerCase() + "_hand").toString()));
+			e.getMap().registerSprite(
+					new ResourceLocation("arsmagica2", "items/particles/" + aff.getName().toLowerCase() + "_hand"));
+			sprites.put(aff, e.getMap().getTextureExtry(
+					new ResourceLocation("arsmagica2", "items/particles/" + aff.getName().toLowerCase() + "_hand")
+							.toString()));
 		}
 		registerParticle(e.getMap(), "arcane");
 		registerParticle(e.getMap(), "beam");
@@ -110,51 +112,55 @@ public class ArsMagicaModelLoader implements ICustomModelLoader {
 		e.getMap().registerSprite(new ResourceLocation("arsmagica2:blocks/custom/Arcane_Reconstructor"));
 		e.getMap().registerSprite(new ResourceLocation("arsmagica2:blocks/everstone"));
 		for (Affinity aff : ArsMagicaAPI.getAffinityRegistry().getValues()) {
-			e.getMap().registerSprite(new ResourceLocation(aff.getRegistryName().getResourceDomain(), "blocks/runes/rune_" + aff.getRegistryName().getResourcePath()));
+			e.getMap().registerSprite(new ResourceLocation(aff.getRegistryName().getResourceDomain(),
+					"blocks/runes/rune_" + aff.getRegistryName().getResourcePath()));
 		}
 	}
-	
+
 	private void registerParticle(TextureMap map, String name) {
 		map.registerSprite(new ResourceLocation("arsmagica2", "items/particles/" + name));
-		particles.put(name, map.getTextureExtry(new ResourceLocation("arsmagica2", "items/particles/" + name).toString()));
+		particles.put(name,
+				map.getTextureExtry(new ResourceLocation("arsmagica2", "items/particles/" + name).toString()));
 	}
-	
+
 	private static final String iconsPath = "/assets/arsmagica2/textures/items/spells/icons/";
 	private static final String iconsPrefix = "items/spells/icons/";
 
-	public static List<ResourceLocation> getResourceListing(){
+	public static List<ResourceLocation> getResourceListing() {
 		ArrayList<ResourceLocation> toReturn = new ArrayList<>();
 		try {
 			URI uri = ArsMagica2.class.getResource(iconsPath).toURI();
 			Path myPath;
-			if (uri.getScheme().equals("jar")){
+			if (uri.getScheme().equals("jar")) {
 				FileSystem fs = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
 				myPath = fs.getPath(iconsPath);
 				toReturn = processDirectory(myPath, fs);
 				fs.close();
 				return toReturn;
-			}else{
+			} else {
 				myPath = Paths.get(uri);
 				toReturn = processDirectory(myPath, FileSystems.getDefault());
 				return toReturn;
 			}
-		} catch (URISyntaxException e){
+		} catch (URISyntaxException e) {
 			e.printStackTrace();
-		} catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return Lists.newArrayList();
 	}
 
-	private static ArrayList<ResourceLocation> processDirectory(Path dir, FileSystem fs){
+	private static ArrayList<ResourceLocation> processDirectory(Path dir, FileSystem fs) {
 		ArrayList<ResourceLocation> toReturn = new ArrayList<>();
 		try {
 			Stream<Path> walk = Files.walk(dir, 1);
-			for(Iterator<Path> file = walk.iterator(); file.hasNext();){
+			for (Iterator<Path> file = walk.iterator(); file.hasNext();) {
 				String name = file.next().toString();
-				if (name.lastIndexOf(fs.getSeparator()) + 1 > name.length()) continue;
+				if (name.lastIndexOf(fs.getSeparator()) + 1 > name.length())
+					continue;
 				name = name.substring(name.lastIndexOf(fs.getSeparator()) + 1);
-				if (name.equals("")) continue;
+				if (name.equals(""))
+					continue;
 				toReturn.add(new ResourceLocation("arsmagica2:" + iconsPrefix + name.replace(".png", "")));
 			}
 		} catch (IOException e) {

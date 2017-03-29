@@ -1,7 +1,6 @@
 package am2.particles;
 
-
-public class ParticleConverge extends ParticleController{
+public class ParticleConverge extends ParticleController {
 
 	private final double originX;
 	private final double originY;
@@ -12,7 +11,7 @@ public class ParticleConverge extends ParticleController{
 	private final double motionZ;
 
 	public ParticleConverge(AMParticle particleEffect, double motionX, double motionY, double motionZ, int priority,
-							boolean exclusive){
+			boolean exclusive) {
 		super(particleEffect, priority, exclusive);
 
 		particleEffect.setNoVelocityUpdates();
@@ -27,25 +26,24 @@ public class ParticleConverge extends ParticleController{
 	}
 
 	@Override
-	public void doUpdate(){
+	public void doUpdate() {
 		particle.pushPos();
 		int maxAge = particle.GetParticleMaxAge();
-		if (maxAge == 0){
+		if (maxAge == 0) {
 			maxAge = 1;
 		}
-		float ageFactor = (float)particle.GetParticleAge() / (float)maxAge;
+		float ageFactor = (float) particle.GetParticleAge() / (float) maxAge;
 		ageFactor = 1.0F - ageFactor;
 		float verticalAgeFactor = 1.0F - ageFactor;
 		verticalAgeFactor *= verticalAgeFactor;
 		verticalAgeFactor *= verticalAgeFactor;
-		particle.setPosition(
-				this.originX + this.motionX * ageFactor,
+		particle.setPosition(this.originX + this.motionX * ageFactor,
 				this.originY + this.motionY * ageFactor - verticalAgeFactor * 1.2F,
 				this.originZ + this.motionZ * ageFactor);
 	}
 
 	@Override
-	public ParticleController clone(){
+	public ParticleController clone() {
 		return new ParticleConverge(particle, motionX, motionY, motionZ, priority, exclusive);
 	}
 

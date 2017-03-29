@@ -12,14 +12,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockFrost extends BlockIce {
-	
+
 	public BlockFrost() {
 		super();
 		setTickRandomly(true);
 		setHardness(0.5F);
 		setSoundType(SoundType.GLASS);
 	}
-	
+
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		worldIn.setBlockToAir(pos);

@@ -43,29 +43,32 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SpellParticleRender extends ItemOverrideList{
+public class SpellParticleRender extends ItemOverrideList {
 	private final Minecraft mc;
 	private final Map<Affinity, TextureAtlasSprite> icons;
 	private boolean setupIcons = false;
 	private static final ResourceLocation rLoc = TextureMap.LOCATION_BLOCKS_TEXTURE;
 
-	public SpellParticleRender(List<ItemOverride> overridesIn){
-		super (overridesIn);
+	public SpellParticleRender(List<ItemOverride> overridesIn) {
+		super(overridesIn);
 		new ModelBiped(0.0F);
 		mc = Minecraft.getMinecraft();
 		icons = new HashMap<Affinity, TextureAtlasSprite>();
 	}
-	
+
 	@Override
-	public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
+	public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world,
+			EntityLivingBase entity) {
 		if (world == null || entity == null)
 			return super.handleItemState(originalModel, stack, world, entity);
 		if (!Minecraft.getMinecraft().inGameHasFocus)
 			return super.handleItemState(originalModel, stack, world, entity);
 		renderItem(stack, entity);
-		return new BakedBlank();//model != null ? model : super.handleItemState(originalModel, stack, world, entity);
+		return new BakedBlank();// model != null ? model :
+								// super.handleItemState(originalModel, stack,
+								// world, entity);
 	}
-	
+
 	private class BakedBlank implements IBakedModel {
 
 		@Override
@@ -103,81 +106,82 @@ public class SpellParticleRender extends ItemOverrideList{
 			return new ItemOverrideList(new ArrayList<>());
 		}
 	}
-	
-	public void renderItem(ItemStack item, EntityLivingBase entity){
 
-		if (mc.thePlayer.isPotionActive(Potion.getPotionFromResourceLocation("invisibility"))) return;
+	public void renderItem(ItemStack item, EntityLivingBase entity) {
+
+		if (mc.thePlayer.isPotionActive(Potion.getPotionFromResourceLocation("invisibility")))
+			return;
 
 		ItemStack scrollStack = null;
-		if (item.getItem() instanceof ItemSpellBase){
+		if (item.getItem() instanceof ItemSpellBase) {
 			scrollStack = item;
-		}else if (item.getItem() instanceof ItemSpellBook){
-			scrollStack = ((ItemSpellBook)item.getItem()).getActiveScrollInventory(item)[((ItemSpellBook)item.getItem()).GetActiveSlot(item)];
+		} else if (item.getItem() instanceof ItemSpellBook) {
+			scrollStack = ((ItemSpellBook) item.getItem())
+					.getActiveScrollInventory(item)[((ItemSpellBook) item.getItem()).GetActiveSlot(item)];
 		}
 
-
-		if (scrollStack == null) return;
+		if (scrollStack == null)
+			return;
 
 		Affinity affinity = AffinityShiftUtils.getMainShiftForStack(scrollStack);
 
 		renderEffect(affinity, true, entity);
 	}
 
-	public void renderEffect(Affinity affinity, boolean includeArm, EntityLivingBase entity){
+	public void renderEffect(Affinity affinity, boolean includeArm, EntityLivingBase entity) {
 
-		if (!setupIcons){
+		if (!setupIcons) {
 			setupAffinityIcons();
 			setupIcons = true;
 		}
-		
+
 		GL11.glPushMatrix();
-		GL11.glEnable(32826 /*GL_RESCALE_NORMAL_EXT*/);
+		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
 		GL11.glEnable(3042);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		float scale = 3f;
-		if (entity == mc.thePlayer && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0){
+		if (entity == mc.thePlayer && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
 
 			GL11.glPushMatrix();
 
-//			if (((EntityPlayer)entity).getItemInUseCount() > 0){
-//				GL11.glRotatef(120, 1, 0, 1);
-//				GL11.glRotatef(-10, 0, 1, 0);
-//				GL11.glTranslatef(2f, 0f, 0.8f);
-//			}else{
-//				GL11.glTranslatef(3f, -1.2f, -2.5f);
-//				GL11.glScalef(scale, scale, scale);
-//				GL11.glRotatef(-45, 0, 1, 0);
-//			}
-//			GlStateManager.rotate(90, 0, 1, 0);
+			// if (((EntityPlayer)entity).getItemInUseCount() > 0){
+			// GL11.glRotatef(120, 1, 0, 1);
+			// GL11.glRotatef(-10, 0, 1, 0);
+			// GL11.glTranslatef(2f, 0f, 0.8f);
+			// }else{
+			// GL11.glTranslatef(3f, -1.2f, -2.5f);
+			// GL11.glScalef(scale, scale, scale);
+			// GL11.glRotatef(-45, 0, 1, 0);
+			// }
+			// GlStateManager.rotate(90, 0, 1, 0);
 			RenderHelper.disableStandardItemLighting();
 			GL11.glTranslatef(0.0f, 0.0f, -2.5f);
 			RenderByAffinity(affinity);
 			RenderHelper.enableStandardItemLighting();
 			GL11.glPopMatrix();
 
-			if (includeArm){
+			if (includeArm) {
 				Minecraft.getMinecraft().renderEngine.bindTexture(mc.thePlayer.getLocationSkin());
 				renderFirstPersonArm(mc.thePlayer);
 			}
-		}
-		else{
+		} else {
 			GL11.glTranslatef(-0.25f, 0.0f, 0.0f);
 			scale = 0.5f;
 			GL11.glScalef(scale, scale, scale);
-			//GL11.glRotatef(45, 0, 0, 0);
+			// GL11.glRotatef(45, 0, 0, 0);
 			RenderByAffinity(affinity);
 		}
 
-		GL11.glDisable(32826 /*GL_RESCALE_NORMAL_EXT*/);
+		GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glDisable(3042);
 
 		GL11.glPopMatrix();
 	}
 
-	private void setupAffinityIcons(){
+	private void setupAffinityIcons() {
 		icons.put(Affinity.AIR, AMParticleIcons.instance.getIconByName("air_hand"));
 		icons.put(Affinity.ARCANE, AMParticleIcons.instance.getIconByName("arcane_hand"));
 		icons.put(Affinity.EARTH, AMParticleIcons.instance.getIconByName("earth_hand"));
@@ -191,12 +195,13 @@ public class SpellParticleRender extends ItemOverrideList{
 		icons.put(Affinity.WATER, AMParticleIcons.instance.getIconByName("water_hand"));
 	}
 
-	public void RenderByAffinity(Affinity affinity){
+	public void RenderByAffinity(Affinity affinity) {
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(rLoc);
 
 		TextureAtlasSprite icon = icons.get(affinity);
-		if (icon == null) return;
+		if (icon == null)
+			return;
 
 		float TLX = icon.getMinU();
 		float BRX = icon.getMaxU();
@@ -206,9 +211,9 @@ public class SpellParticleRender extends ItemOverrideList{
 		doRender(TLX, TLY, BRX, BRY);
 	}
 
-
-	private void doRender(float TLX, float TLY, float BRX, float BRY){
-		//ItemRenderer.renderItemIn2D(Tessellator.instance, TLX, TLY, BRX, BRY, 1, 1, 0.0625F);
+	private void doRender(float TLX, float TLY, float BRX, float BRY) {
+		// ItemRenderer.renderItemIn2D(Tessellator.instance, TLX, TLY, BRX, BRY,
+		// 1, 1, 0.0625F);
 		Tessellator t = Tessellator.getInstance();
 		t.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
 		t.getBuffer().pos(0.0D, 0.0D, 0.0D).tex(TLX, BRY).normal(0.0F, 0.0F, 1.0F).endVertex();

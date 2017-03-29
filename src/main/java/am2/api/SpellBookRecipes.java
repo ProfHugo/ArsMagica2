@@ -10,7 +10,7 @@ public class SpellBookRecipes extends ShapelessOreRecipe {
 	public SpellBookRecipes(ItemStack result, Object[] recipe) {
 		super(result, recipe);
 	}
-	
+
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting var1) {
 		NBTTagCompound tag = new NBTTagCompound();

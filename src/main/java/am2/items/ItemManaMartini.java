@@ -13,10 +13,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-
 @SuppressWarnings("deprecation")
-public class ItemManaMartini extends ItemFood{
-	public ItemManaMartini(){
+public class ItemManaMartini extends ItemFood {
+	public ItemManaMartini() {
 		super(0, 0, false);
 		this.setPotionEffect(new PotionEffect(PotionEffectsDefs.burnoutReduction, 300, 0), 1.0f);
 	}
@@ -27,12 +26,12 @@ public class ItemManaMartini extends ItemFood{
 		return this;
 	}
 
-	public EnumAction getItemUseAction(ItemStack p_77661_1_){
+	public EnumAction getItemUseAction(ItemStack p_77661_1_) {
 		return EnumAction.DRINK;
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> lines, boolean iHaveNoIdea){
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> lines, boolean iHaveNoIdea) {
 		super.addInformation(stack, player, lines, iHaveNoIdea);
 		lines.add(I18n.translateToLocal("am2.tooltip.shaken"));
 	}

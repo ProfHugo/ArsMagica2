@@ -21,15 +21,15 @@ public class AbilityLeafLike extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.NATURE;
 	}
-	
+
 	@Override
 	public void applyTick(EntityPlayer player) {
-		if (player.isCollidedHorizontally){
-			if (!player.isSneaking()){
+		if (player.isCollidedHorizontally) {
+			if (!player.isSneaking()) {
 				float movement = EntityExtension.For(player).getIsFlipped() ? -0.25f : 0.25f;
 				player.moveEntity(0, movement, 0);
 				player.motionY = 0;
-			}else{
+			} else {
 				player.motionY *= 0.79999999;
 			}
 			player.fallDistance = 0;

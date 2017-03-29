@@ -33,13 +33,13 @@ public class AbilitySolidBones extends AbstractAffinityAbility {
 			}
 		}
 	}
-	
+
 	@Override
 	public void applyFall(EntityPlayer player, LivingFallEvent event) {
 		double earthDepth = AffinityData.For(player).getAffinityDepth(Affinity.EARTH);
 		event.setDistance((float) (event.getDistance() + (1.25 * (earthDepth))));
 	}
-	
+
 	@Override
 	public void applyHurt(EntityPlayer player, LivingHurtEvent event, boolean isAttacker) {
 		if (!isAttacker) {

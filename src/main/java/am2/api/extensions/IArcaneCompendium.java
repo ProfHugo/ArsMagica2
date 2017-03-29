@@ -16,30 +16,33 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 
 public interface IArcaneCompendium {
-	
+
 	/**
 	 * Unlocks a compendium entry
-	 * @param entry : id of the entry
+	 * 
+	 * @param entry
+	 *            : id of the entry
 	 */
 	public void unlockEntry(String entry);
-	
+
 	/**
 	 * Unlock related entries to this one
+	 * 
 	 * @param crafting
 	 */
 	public void unlockRelatedItems(ItemStack crafting);
-	
+
 	/**
 	 * 
 	 * @param string
 	 * @return true if the entry/category is unlocked
 	 */
 	public boolean isUnlocked(String string);
-	
+
 	public String getPath();
-	
+
 	public void setPath(String str);
-	
+
 	public static class Storage implements IStorage<IArcaneCompendium> {
 
 		@Override
@@ -60,8 +63,9 @@ public interface IArcaneCompendium {
 		}
 
 		@Override
-		public void readNBT(Capability<IArcaneCompendium> capability, IArcaneCompendium instance, EnumFacing side, NBTBase nbt) {
-			NBTTagCompound am2tag = NBTUtils.getAM2Tag((NBTTagCompound) nbt);			
+		public void readNBT(Capability<IArcaneCompendium> capability, IArcaneCompendium instance, EnumFacing side,
+				NBTBase nbt) {
+			NBTTagCompound am2tag = NBTUtils.getAM2Tag((NBTTagCompound) nbt);
 			NBTTagList unlocks = NBTUtils.addCompoundList(am2tag, "Unlocks");
 			for (int i = 0; i < unlocks.tagCount(); i++) {
 				NBTTagCompound tmp = unlocks.getCompoundTagAt(i);
@@ -72,14 +76,14 @@ public interface IArcaneCompendium {
 			instance.setPath(am2tag.getString("Path"));
 		}
 	}
-	
+
 	public static class Factory implements Callable<IArcaneCompendium> {
 
 		@Override
 		public IArcaneCompendium call() throws Exception {
 			return new ArcaneCompendium();
 		}
-		
+
 	}
 
 	public ArrayList<CompendiumEntry> getEntriesForCategory(String categoryName);

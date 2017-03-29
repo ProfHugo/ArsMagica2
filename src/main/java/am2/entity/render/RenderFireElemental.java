@@ -6,16 +6,16 @@ import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderFireElemental extends RenderBiped<EntityFireElemental>{
+public class RenderFireElemental extends RenderBiped<EntityFireElemental> {
 
 	private static final ResourceLocation rLoc = new ResourceLocation("arsmagica2", "textures/mobs/fire_elemental.png");
 
-	public RenderFireElemental(RenderManager renderManager){
+	public RenderFireElemental(RenderManager renderManager) {
 		super(renderManager, new ModelBiped(), 0.5f);
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityFireElemental par1Entity){
+	protected ResourceLocation getEntityTexture(EntityFireElemental par1Entity) {
 		return rLoc;
 	}
 

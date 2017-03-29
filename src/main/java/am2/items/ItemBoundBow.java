@@ -28,39 +28,37 @@ public class ItemBoundBow extends ItemBow implements IBoundItem {
 		this.maxStackSize = 1;
 		this.setMaxDamage(0);
 		this.setCreativeTab(null);
-		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter()
-        {
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn)
-            {
-                if (entityIn == null)
-                {
-                    return 0.0F;
-                }
-                else
-                {
-                    ItemStack itemstack = entityIn.getActiveItemStack();
-                    return itemstack != null && itemstack.getItem() == ItemDefs.BoundBow ? (float)(stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
-                }
-            }
-        });
+		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
+			@SideOnly(Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+				if (entityIn == null) {
+					return 0.0F;
+				} else {
+					ItemStack itemstack = entityIn.getActiveItemStack();
+					return itemstack != null && itemstack.getItem() == ItemDefs.BoundBow
+							? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+				}
+			}
+		});
 	}
-	
+
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
 		return false;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		if (!stack.hasTagCompound())
 			return;
 		ItemStack copiedStack = SpellUtils.merge(stack.copy());
-		copiedStack.getTagCompound().getCompoundTag("AM2").setInteger("CurrentGroup", SpellUtils.currentStage(stack) + 1);
+		copiedStack.getTagCompound().getCompoundTag("AM2").setInteger("CurrentGroup",
+				SpellUtils.currentStage(stack) + 1);
 		copiedStack.setItem(ItemDefs.spell);
 		if (entityLiving instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
 			int i = this.getMaxItemUseDuration(stack) - timeLeft;
-			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, (EntityPlayer) entityLiving, i, true);
+			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, (EntityPlayer) entityLiving, i,
+					true);
 			if (i < 0)
 				return;
 
@@ -72,7 +70,8 @@ public class ItemBoundBow extends ItemBow implements IBoundItem {
 					if (!worldIn.isRemote) {
 						ItemArrow itemarrow = ItemDefs.BoundArrow;
 						EntityArrow entityarrow = itemarrow.createArrow(worldIn, copiedStack, entityplayer);
-						entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+						entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F,
+								f * 3.0F, 1.0F);
 
 						if (f == 1.0F) {
 							entityarrow.setIsCritical(true);
@@ -84,14 +83,15 @@ public class ItemBoundBow extends ItemBow implements IBoundItem {
 						worldIn.spawnEntityInWorld(entityarrow);
 					}
 
-					worldIn.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+					worldIn.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
+							SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F,
+							1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
 					entityplayer.addStat(StatList.getObjectUseStats(this));
 				}
 			}
 		}
 	}
-
 
 	@SuppressWarnings("deprecation")
 	@Override

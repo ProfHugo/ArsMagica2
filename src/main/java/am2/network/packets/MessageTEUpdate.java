@@ -18,42 +18,44 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Created by Growlith1223 on 3/4/2017.
  */
 public class MessageTEUpdate implements IMessage {
-    public NBTTagCompound tag = new NBTTagCompound();
+	public NBTTagCompound tag = new NBTTagCompound();
 
-    public MessageTEUpdate(){
+	public MessageTEUpdate() {
 
-    }
+	}
 
-    public MessageTEUpdate(NBTTagCompound val){
-        this.tag = val;
-    }
-    @Override
-    public void fromBytes(ByteBuf byteBuf) {
-        this.tag = ByteBufUtils.readTag(byteBuf);
-    }
+	public MessageTEUpdate(NBTTagCompound val) {
+		this.tag = val;
+	}
 
-    @Override
-    public void toBytes(ByteBuf byteBuf) {
-        ByteBufUtils.writeTag(byteBuf, this.tag);
-    }
+	@Override
+	public void fromBytes(ByteBuf byteBuf) {
+		this.tag = ByteBufUtils.readTag(byteBuf);
+	}
 
-    public static class MessageHolder implements IMessageHandler<MessageTEUpdate, IMessage>{
+	@Override
+	public void toBytes(ByteBuf byteBuf) {
+		ByteBufUtils.writeTag(byteBuf, this.tag);
+	}
 
-        @SideOnly(Side.CLIENT)
-        @Override
-        public IMessage onMessage(MessageTEUpdate messageTEUpdate, MessageContext messageContext) {
-            Minecraft.getMinecraft().addScheduledTask(()-> {
-                NBTTagList list = messageTEUpdate.tag.getTagList("data", Constants.NBT.TAG_COMPOUND);
-                for (int i = 0; i < list.tagCount(); i++){
-                    NBTTagCompound tag = list.getCompoundTagAt(i);
-                    TileEntity te = Minecraft.getMinecraft().thePlayer.getEntityWorld().getTileEntity(new BlockPos(tag.getInteger("x"), tag.getInteger("y"), tag.getInteger("z")));
-                    if( te != null) {
-                        te.readFromNBT(tag);
-                        te.markDirty();
-                    }
-                }
-            });
-            return null;
-        }
-    }
+	public static class MessageHolder implements IMessageHandler<MessageTEUpdate, IMessage> {
+
+		@SideOnly(Side.CLIENT)
+		@Override
+		public IMessage onMessage(MessageTEUpdate messageTEUpdate, MessageContext messageContext) {
+			Minecraft.getMinecraft().addScheduledTask(() -> {
+				NBTTagList list = messageTEUpdate.tag.getTagList("data", Constants.NBT.TAG_COMPOUND);
+				for (int i = 0; i < list.tagCount(); i++) {
+					NBTTagCompound tag = list.getCompoundTagAt(i);
+					TileEntity te = Minecraft.getMinecraft().thePlayer.getEntityWorld()
+							.getTileEntity(new BlockPos(tag.getInteger("x"), tag.getInteger("y"), tag.getInteger("z")));
+					if (te != null) {
+						te.readFromNBT(tag);
+						te.markDirty();
+					}
+				}
+			});
+			return null;
+		}
+	}
 }

@@ -15,31 +15,30 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.world.World;
 
-public class Damage extends SpellModifier{
+public class Damage extends SpellModifier {
 	@Override
-	public EnumSet<SpellModifiers> getAspectsModified(){
+	public EnumSet<SpellModifiers> getAspectsModified() {
 		return EnumSet.of(SpellModifiers.DAMAGE);
 	}
 
 	@Override
-	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, NBTTagCompound metadata){
+	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world,
+			NBTTagCompound metadata) {
 		return 2.2f;
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				AffinityShiftUtils.getEssenceForAffinity(Affinity.ENDER),
-				Items.IRON_SWORD,
-				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.HARMING)
-		};
+	public Object[] getRecipe() {
+		return new Object[] { AffinityShiftUtils.getEssenceForAffinity(Affinity.ENDER), Items.IRON_SWORD,
+				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.HARMING) };
 	}
 
 	@Override
-	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity){
+	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity) {
 		return 1.3f * quantity;
 	}
 
 	@Override
-	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {}
+	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
+	}
 }

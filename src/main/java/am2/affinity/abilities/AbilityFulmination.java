@@ -26,7 +26,7 @@ public class AbilityFulmination extends AbstractAffinityAbility {
 	public float getMinimumDepth() {
 		return 0.5f;
 	}
-	
+
 	@Override
 	public float getMaximumDepth() {
 		return 0.95F;
@@ -41,25 +41,31 @@ public class AbilityFulmination extends AbstractAffinityAbility {
 	public void applyTick(EntityPlayer player) {
 		applyFulmintion(player, AffinityData.For(player).getAffinityDepth(getAffinity()));
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private void applyFulmintion(EntityPlayer ent, double lightningDepth){
-		//chance to light nearby TNT
-		if (!ent.worldObj.isRemote){
-			if (lightningDepth <= 0.8f){
-				BlockPos offsetPos = new BlockPos(ent.posX - 5 + ent.getRNG().nextInt(11), ent.posY - 5 + ent.getRNG().nextInt(11), ent.posZ - 5 + ent.getRNG().nextInt(11));
+	private void applyFulmintion(EntityPlayer ent, double lightningDepth) {
+		// chance to light nearby TNT
+		if (!ent.worldObj.isRemote) {
+			if (lightningDepth <= 0.8f) {
+				BlockPos offsetPos = new BlockPos(ent.posX - 5 + ent.getRNG().nextInt(11),
+						ent.posY - 5 + ent.getRNG().nextInt(11), ent.posZ - 5 + ent.getRNG().nextInt(11));
 				IBlockState block = ent.worldObj.getBlockState(offsetPos);
-				if (block.getBlock() == Blocks.TNT){
+				if (block.getBlock() == Blocks.TNT) {
 					ent.worldObj.setBlockToAir(offsetPos);
-					((BlockTNT)Blocks.TNT).explode(ent.worldObj, offsetPos, block.withProperty(BlockTNT.EXPLODE, true), ent);
+					((BlockTNT) Blocks.TNT).explode(ent.worldObj, offsetPos, block.withProperty(BlockTNT.EXPLODE, true),
+							ent);
 				}
 			}
-			//chance to supercharge nearby creepers
-			if (lightningDepth >= 0.7f && ent.getRNG().nextDouble() < 0.05f){
-				List<EntityCreeper> creepers = ent.worldObj.getEntitiesWithinAABB(EntityCreeper.class, ent.getEntityBoundingBox().expand(5, 5, 5));
-				for (EntityCreeper creeper : creepers){
+			// chance to supercharge nearby creepers
+			if (lightningDepth >= 0.7f && ent.getRNG().nextDouble() < 0.05f) {
+				List<EntityCreeper> creepers = ent.worldObj.getEntitiesWithinAABB(EntityCreeper.class,
+						ent.getEntityBoundingBox().expand(5, 5, 5));
+				for (EntityCreeper creeper : creepers) {
 					try {
-						creeper.getDataManager().set((DataParameter<Boolean>)ReflectionHelper.findField(EntityCreeper.class, "POWERED", "field_184714_b").get(creeper), true);
+						creeper.getDataManager()
+								.set((DataParameter<Boolean>) ReflectionHelper
+										.findField(EntityCreeper.class, "POWERED", "field_184714_b").get(creeper),
+										true);
 					} catch (IllegalArgumentException | IllegalAccessException e) {
 					}
 					ArsMagica2.proxy.particleManager.BoltFromEntityToEntity(ent.worldObj, ent, ent, creeper, 0, 1, -1);

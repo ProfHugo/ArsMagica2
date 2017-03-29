@@ -8,12 +8,13 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.pathfinding.Path;
 
-public class EntityAITargetNearbyInanimate extends EntityAITarget{
+public class EntityAITargetNearbyInanimate extends EntityAITarget {
 
 	private float targetDistance;
 
 	@SafeVarargs
-	public EntityAITargetNearbyInanimate(EntityCreature taskOwner, float targetDistance, boolean needsLineofSight, Class<? extends Entity>... classes){
+	public EntityAITargetNearbyInanimate(EntityCreature taskOwner, float targetDistance, boolean needsLineofSight,
+			Class<? extends Entity>... classes) {
 		super(taskOwner, needsLineofSight);
 		targetTypes = classes;
 		this.targetDistance = targetDistance;
@@ -24,23 +25,23 @@ public class EntityAITargetNearbyInanimate extends EntityAITarget{
 	private Class<? extends Entity>[] targetTypes;
 
 	@Override
-	public boolean shouldExecute(){
+	public boolean shouldExecute() {
 		return (taskOwner.getAttackTarget() == null && EntityExtension.For(taskOwner).getInanimateTarget() == null);
 	}
 
 	@Override
-	public boolean continueExecuting(){
+	public boolean continueExecuting() {
 		Entity inanimateTarget = EntityExtension.For(taskOwner).getInanimateTarget();
 
-		if (this.taskOwner.getAttackTarget() != null || inanimateTarget == null || inanimateTarget.isDead){
+		if (this.taskOwner.getAttackTarget() != null || inanimateTarget == null || inanimateTarget.isDead) {
 			return false;
-		}else if (this.taskOwner.getDistanceSqToEntity(inanimateTarget) > this.targetDistance * this.targetDistance){
+		} else if (this.taskOwner.getDistanceSqToEntity(inanimateTarget) > this.targetDistance * this.targetDistance) {
 			return false;
-		}else{
-			if (this.shouldCheckSight){
-				if (this.taskOwner.getEntitySenses().canSee(inanimateTarget)){
+		} else {
+			if (this.shouldCheckSight) {
+				if (this.taskOwner.getEntitySenses().canSee(inanimateTarget)) {
 					this.timeSinceLastSight = 0;
-				}else if (++this.timeSinceLastSight > 60){
+				} else if (++this.timeSinceLastSight > 60) {
 					return false;
 				}
 			}
@@ -50,29 +51,37 @@ public class EntityAITargetNearbyInanimate extends EntityAITarget{
 	}
 
 	@Override
-	public void resetTask(){
+	public void resetTask() {
 		EntityExtension.For(taskOwner).setInanimateTarget(null);
 		this.target = null;
 	}
 
-	protected boolean isSuitableTarget(Entity target){
-		if (target.isDead) return false;
+	protected boolean isSuitableTarget(Entity target) {
+		if (target.isDead)
+			return false;
 		for (Class<? extends Entity> c : targetTypes)
-			if (target.getClass() == c) return true;
+			if (target.getClass() == c)
+				return true;
 		return false;
 	}
 
 	@Override
-	public void startExecuting(){
+	public void startExecuting() {
 		double dist = 10000;
-		for (Class<? extends Entity> c : targetTypes){
-			List<Entity> potentialTargets = taskOwner.worldObj.getEntitiesWithinAABB(c, taskOwner.getEntityBoundingBox().expand(targetDistance, 1, targetDistance));
-			for (Entity e : potentialTargets){
-				if (isSuitableTarget(e)){ //sanity check
-					Path pe = taskOwner.getNavigator().getPathToXYZ(e.posX, e.posY, e.posZ); //can we get to the item?
-					if (pe != null){
+		for (Class<? extends Entity> c : targetTypes) {
+			List<Entity> potentialTargets = taskOwner.worldObj.getEntitiesWithinAABB(c,
+					taskOwner.getEntityBoundingBox().expand(targetDistance, 1, targetDistance));
+			for (Entity e : potentialTargets) {
+				if (isSuitableTarget(e)) { // sanity check
+					Path pe = taskOwner.getNavigator().getPathToXYZ(e.posX, e.posY, e.posZ); // can
+																								// we
+																								// get
+																								// to
+																								// the
+																								// item?
+					if (pe != null) {
 						double eDist = taskOwner.getDistanceSqToEntity(e);
-						if (eDist < dist){
+						if (eDist < dist) {
 							this.target = e;
 							dist = eDist;
 						}

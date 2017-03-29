@@ -19,19 +19,19 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
 
-public class EntityEarthGuardian extends AM2Boss{
+public class EntityEarthGuardian extends AM2Boss {
 
 	private float rodRotation = 0;
 	public boolean leftArm = false;
 
-	public EntityEarthGuardian(World par1World){
+	public EntityEarthGuardian(World par1World) {
 		super(par1World);
 		this.setSize(1.5f, 3.5f);
 		this.stepHeight = 1.02f;
 	}
 
 	@Override
-	protected void initSpecificAI(){
+	protected void initSpecificAI() {
 		this.tasks.addTask(1, new EntityAIDispel(this));
 		this.tasks.addTask(1, new EntityAIThrowRock(this, 0.5f));
 		this.tasks.addTask(2, new EntityAISmash(this, 0.5f, DamageSources.DamageSourceTypes.PHYSICAL));
@@ -39,99 +39,100 @@ public class EntityEarthGuardian extends AM2Boss{
 	}
 
 	@Override
-	protected void applyEntityAttributes(){
+	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1400D);
 	}
 
-	public boolean shouldRenderRock(){
+	public boolean shouldRenderRock() {
 		return this.currentAction == BossActions.THROWING_ROCK && ticksInCurrentAction > 5 && ticksInCurrentAction < 27;
 	}
 
 	@Override
-	public void setCurrentAction(BossActions action){
+	public void setCurrentAction(BossActions action) {
 		super.setCurrentAction(action);
 
 		if (currentAction != action && action == BossActions.STRIKE && worldObj.isRemote)
 			this.leftArm = !this.leftArm;
 
-		if (!worldObj.isRemote){
+		if (!worldObj.isRemote) {
 			AMNetHandler.INSTANCE.sendActionUpdateToAllAround(this);
 		}
 	}
 
-	public float getRodRotations(){
+	public float getRodRotations() {
 		return this.rodRotation;
 	}
 
 	@Override
-	public void onUpdate(){
-		if (ticksInCurrentAction > 40 && !worldObj.isRemote){
+	public void onUpdate() {
+		if (ticksInCurrentAction > 40 && !worldObj.isRemote) {
 			setCurrentAction(BossActions.IDLE);
 		}
 
-		if (worldObj.isRemote){
+		if (worldObj.isRemote) {
 			updateRotations();
 		}
-		
+
 		super.onUpdate();
 	}
 
-	private void updateRotations(){
+	private void updateRotations() {
 		this.rodRotation += 0.02f;
 		this.rodRotation %= 360;
 	}
 
 	@Override
-	public int getTotalArmorValue(){
+	public int getTotalArmorValue() {
 		return 23;
 	}
 
 	@Override
-	protected void dropFewItems(boolean par1, int par2){
+	protected void dropFewItems(boolean par1, int par2) {
 		if (par1)
 			this.entityDropItem(new ItemStack(ItemDefs.infinityOrb, 1, 0), 0.0f);
 
 		int i = rand.nextInt(4);
 
-		for (int j = 0; j < i; j++){
-			this.entityDropItem(new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.EARTH)), 0.0f);
+		for (int j = 0; j < i; j++) {
+			this.entityDropItem(
+					new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.EARTH)), 0.0f);
 		}
 
 		i = rand.nextInt(10);
 
-		if (i < 3){
+		if (i < 3) {
 			this.entityDropItem(ItemDefs.earthArmorEnchanted.copy(), 0.0f);
 		}
 	}
 
 	@Override
-	protected float modifyDamageAmount(DamageSource source, float damageAmt){
-		if (source instanceof DamageSourceFrost){
+	protected float modifyDamageAmount(DamageSource source, float damageAmt) {
+		if (source instanceof DamageSourceFrost) {
 			return damageAmt * 2;
-		}else if (source instanceof DamageSourceLightning){
+		} else if (source instanceof DamageSourceLightning) {
 			return damageAmt / 4;
 		}
 		return damageAmt;
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(){
+	protected SoundEvent getHurtSound() {
 		return AMSounds.EARTH_GUARDIAN_HIT;
 	}
 
 	@Override
-	protected SoundEvent getDeathSound(){
+	protected SoundEvent getDeathSound() {
 		return AMSounds.EARTH_GUARDIAN_DEATH;
 	}
 
 	@Override
-	protected SoundEvent getAmbientSound(){
+	protected SoundEvent getAmbientSound() {
 		return AMSounds.EARTH_GUARDIAN_IDLE;
 	}
 
 	@Override
-	public SoundEvent getAttackSound(){
+	public SoundEvent getAttackSound() {
 		return AMSounds.EARTH_GUARDIAN_ATTACK;
 	}
 

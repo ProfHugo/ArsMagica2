@@ -12,9 +12,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-public class BlockWitchwoodPlanks extends BlockAM{
+public class BlockWitchwoodPlanks extends BlockAM {
 
-	public BlockWitchwoodPlanks(){
+	public BlockWitchwoodPlanks() {
 		super(Material.WOOD);
 		this.setHardness(2.0f);
 		this.setResistance(2.0f);
@@ -22,13 +22,14 @@ public class BlockWitchwoodPlanks extends BlockAM{
 		this.setHarvestLevel("axe", 2);
 		this.setCreativeTab(CreativeTabsDefs.tabAM2Blocks);
 	}
+
 	@Override
 	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return 0;
 	}
 
 	@Override
-	public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List){
+	public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
 		par3List.add(new ItemStack(this));
 	}
 }

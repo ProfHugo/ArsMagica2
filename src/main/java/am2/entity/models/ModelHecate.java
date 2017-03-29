@@ -14,14 +14,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelHecate extends ModelBase{
+public class ModelHecate extends ModelBase {
 	private ModelSantaHat hat;
 
 	private static final ResourceLocation hatLoc = new ResourceLocation("arsmagica2", "textures/mobs/SantaHat.png");
 
-	//fields
+	// fields
 	ModelRenderer Main;
-	//left arm
+	// left arm
 	ModelRenderer LeftShoulder;
 	ModelRenderer LeftElbow;
 	ModelRenderer LeftHand;
@@ -34,7 +34,7 @@ public class ModelHecate extends ModelBase{
 	ModelRenderer LeftThumb;
 	ModelRenderer LT1;
 	ModelRenderer LT2;
-	//right arm
+	// right arm
 	ModelRenderer RightShoulder;
 	ModelRenderer RightElbow;
 	ModelRenderer RightHand;
@@ -51,8 +51,7 @@ public class ModelHecate extends ModelBase{
 	ModelRenderer Head;
 	ModelRenderer H1;
 
-
-	public ModelHecate(){
+	public ModelHecate() {
 		hat = new ModelSantaHat();
 
 		setupUVMapping();
@@ -61,57 +60,57 @@ public class ModelHecate extends ModelBase{
 		setupHierarchy();
 	}
 
-	private void setupHierarchy(){
-		//left arm
-		//********************************************
-		//left outer finger
+	private void setupHierarchy() {
+		// left arm
+		// ********************************************
+		// left outer finger
 		LOF1.addChild(LOF2);
 		LeftOuterFinger.addChild(LOF1);
-		//left inner finger
+		// left inner finger
 		LIF1.addChild(LIF2);
 		LeftInnerFinger.addChild(LIF1);
-		//left thumb
+		// left thumb
 		LT1.addChild(LT2);
 		LeftThumb.addChild(LT1);
-		//left hand
+		// left hand
 		LeftHand.addChild(LeftThumb);
 		LeftHand.addChild(LeftInnerFinger);
 		LeftHand.addChild(LeftOuterFinger);
-		//remainder
+		// remainder
 		LeftElbow.addChild(LeftHand);
 		LeftShoulder.addChild(LeftElbow);
-		//********************************************
-		//right arm
-		//********************************************
-		//right outer finger
+		// ********************************************
+		// right arm
+		// ********************************************
+		// right outer finger
 		ROF1.addChild(ROF2);
 		RightOuterFinger.addChild(ROF1);
-		//right inner finger
+		// right inner finger
 		RIF1.addChild(RIF2);
 		RightInnerFinger.addChild(RIF1);
-		//right thumb
+		// right thumb
 		RT1.addChild(RT2);
 		RightThumb.addChild(RT1);
-		//right hand
+		// right hand
 		RightHand.addChild(RightOuterFinger);
 		RightHand.addChild(RightInnerFinger);
 		RightHand.addChild(RightThumb);
-		//remainder
+		// remainder
 		RightElbow.addChild(RightHand);
 		RightShoulder.addChild(RightElbow);
-		//********************************************
-		//head
-		//********************************************
+		// ********************************************
+		// head
+		// ********************************************
 		Head.addChild(H1);
-		//********************************************
-		//main
-		//********************************************
+		// ********************************************
+		// main
+		// ********************************************
 		Main.addChild(LeftShoulder);
 		Main.addChild(RightShoulder);
 		Main.addChild(Head);
 	}
 
-	private void setupUVMapping(){
+	private void setupUVMapping() {
 		textureWidth = 64;
 		textureHeight = 32;
 		setTextureOffset("LeftShoulder.LeftArmUpper", 0, 8);
@@ -143,7 +142,7 @@ public class ModelHecate extends ModelBase{
 		setTextureOffset("H1.Face", 0, 0);
 	}
 
-	private void initRenderers(){
+	private void initRenderers() {
 		Main = new ModelRenderer(this, "Main");
 		Main.setRotationPoint(0F, 0F, 0F);
 		setRotation(Main, 0F, 0F, 0F);
@@ -280,15 +279,15 @@ public class ModelHecate extends ModelBase{
 		H1.mirror = true;
 	}
 
-	private void addBoxes(){
-		//body
+	private void addBoxes() {
+		// body
 		Main.addBox("Body", -4F, 0F, -1.5F, 8, 10, 4);
 
-		//head
+		// head
 		Head.addBox("Cowl", -3F, -3F, -2F, 6, 4, 4);
 		H1.addBox("Face", -2F, -2F, 0F, 4, 4, 1);
 
-		//left arm
+		// left arm
 		LeftShoulder.addBox("LeftArmUpper", -1.5F, 0F, -1F, 3, 3, 2);
 		LeftElbow.addBox("LeftArmLower", -1.5F, 0F, -1F, 3, 4, 2);
 		LeftHand.addBox("LeftPalm", -1F, 0F, -0.5F, 2, 1, 1);
@@ -302,7 +301,7 @@ public class ModelHecate extends ModelBase{
 		LT1.addBox("LeftThumbKnuckle", -0.5F, -0.5F, -1F, 1, 1, 1);
 		LT2.addBox("LeftThumbTip", -0.5F, -0.5F, -1F, 1, 1, 1);
 
-		//right arm
+		// right arm
 		RightShoulder.addBox("RightArmUpper", -1.5F, 0F, -1F, 3, 3, 2);
 		RightElbow.addBox("RightArmLower", -1.5F, 0F, -1F, 3, 4, 2);
 		RightHand.addBox("RightPalm", -1F, 0F, -0.5F, 2, 1, 1);
@@ -318,18 +317,20 @@ public class ModelHecate extends ModelBase{
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 
 		GlStateManager.pushMatrix();
 
-		if (((EntityHecate)entity).isChild()){
+		if (((EntityHecate) entity).isChild()) {
 			GlStateManager.scale(0.5, 0.5, 0.5);
 		}
 		Main.render(f5);
 
-		if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) >= 23 && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) <= 27){
+		if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER
+				&& Calendar.getInstance().get(Calendar.DAY_OF_MONTH) >= 23
+				&& Calendar.getInstance().get(Calendar.DAY_OF_MONTH) <= 27) {
 			GlStateManager.scale(0.5f, 0.5f, 0.5f);
 			GlStateManager.translate(0, -0.1f, 0.1f);
 			Minecraft.getMinecraft().renderEngine.bindTexture(hatLoc);
@@ -339,66 +340,66 @@ public class ModelHecate extends ModelBase{
 		GlStateManager.popMatrix();
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z){
+	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
 
-	public void setMainRotationAngle(float angle){
-		//base this on movement speed
+	public void setMainRotationAngle(float angle) {
+		// base this on movement speed
 		Main.rotateAngleX = angle;
 
 		setBaseRotation();
 	}
 
-	public void setLeftArmRotationOffset(float angle){
+	public void setLeftArmRotationOffset(float angle) {
 		LeftShoulder.rotateAngleX += angle;
 	}
 
-	public void setRightArmRotationOffset(float angle){
+	public void setRightArmRotationOffset(float angle) {
 		RightShoulder.rotateAngleX += angle;
 	}
 
-	private void setBaseRotation(){
+	private void setBaseRotation() {
 		Head.rotateAngleX = -Main.rotateAngleX;
 
-		LeftShoulder.rotateAngleX = (float)Math.toRadians(-80) - Main.rotateAngleX;
-		RightShoulder.rotateAngleX = (float)Math.toRadians(-80) - Main.rotateAngleX;
-		LeftElbow.rotateAngleX = (float)Math.toRadians(-15);
-		RightElbow.rotateAngleX = (float)Math.toRadians(-15);
+		LeftShoulder.rotateAngleX = (float) Math.toRadians(-80) - Main.rotateAngleX;
+		RightShoulder.rotateAngleX = (float) Math.toRadians(-80) - Main.rotateAngleX;
+		LeftElbow.rotateAngleX = (float) Math.toRadians(-15);
+		RightElbow.rotateAngleX = (float) Math.toRadians(-15);
 
-		LeftOuterFinger.rotateAngleX = (float)Math.toRadians(-19);
+		LeftOuterFinger.rotateAngleX = (float) Math.toRadians(-19);
 		LeftOuterFinger.rotateAngleY = 0;
-		LeftOuterFinger.rotateAngleZ = (float)Math.toRadians(-19);
+		LeftOuterFinger.rotateAngleZ = (float) Math.toRadians(-19);
 
 		LOF1.rotateAngleX = -LeftOuterFinger.rotateAngleX;
 		LOF2.rotateAngleX = -LeftOuterFinger.rotateAngleX;
 
-		LeftInnerFinger.rotateAngleX = (float)Math.toRadians(-19);
+		LeftInnerFinger.rotateAngleX = (float) Math.toRadians(-19);
 		LeftInnerFinger.rotateAngleY = 0;
-		LeftInnerFinger.rotateAngleZ = (float)Math.toRadians(19);
+		LeftInnerFinger.rotateAngleZ = (float) Math.toRadians(19);
 
 		LIF1.rotateAngleX = -LeftInnerFinger.rotateAngleX;
 		LIF2.rotateAngleX = -LeftInnerFinger.rotateAngleX;
 
-		LeftThumb.rotateAngleZ = (float)Math.toRadians(45);
+		LeftThumb.rotateAngleZ = (float) Math.toRadians(45);
 
-		RightOuterFinger.rotateAngleX = (float)Math.toRadians(-19);
+		RightOuterFinger.rotateAngleX = (float) Math.toRadians(-19);
 		RightOuterFinger.rotateAngleY = 0;
-		RightOuterFinger.rotateAngleZ = (float)Math.toRadians(19);
+		RightOuterFinger.rotateAngleZ = (float) Math.toRadians(19);
 
 		ROF1.rotateAngleX = -RightOuterFinger.rotateAngleX;
 		ROF2.rotateAngleX = -RightOuterFinger.rotateAngleX;
 
-		RightInnerFinger.rotateAngleX = (float)Math.toRadians(-19);
+		RightInnerFinger.rotateAngleX = (float) Math.toRadians(-19);
 		RightInnerFinger.rotateAngleY = 0;
-		RightInnerFinger.rotateAngleZ = (float)Math.toRadians(-19);
+		RightInnerFinger.rotateAngleZ = (float) Math.toRadians(-19);
 
 		RIF1.rotateAngleX = -RightInnerFinger.rotateAngleX;
 		RIF2.rotateAngleX = -RightInnerFinger.rotateAngleX;
 
-		RightThumb.rotateAngleZ = (float)Math.toRadians(-45);
+		RightThumb.rotateAngleZ = (float) Math.toRadians(-45);
 	}
 
 }

@@ -4,8 +4,8 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelMagiciansWorkbench extends ModelBase{
-	//fields
+public class ModelMagiciansWorkbench extends ModelBase {
+	// fields
 	ModelRenderer Leg4;
 	ModelRenderer tabletop;
 	ModelRenderer Leg1;
@@ -21,7 +21,7 @@ public class ModelMagiciansWorkbench extends ModelBase{
 
 	public float drawerOffset = 0;
 
-	public ModelMagiciansWorkbench(){
+	public ModelMagiciansWorkbench() {
 		textureWidth = 64;
 		textureHeight = 128;
 		setTextureOffset("Drawer.Bottom", 4, 91);
@@ -114,23 +114,17 @@ public class ModelMagiciansWorkbench extends ModelBase{
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
-		/*super.render(entity, f, f1, f2, f3, f4, f5);
-		Leg4.render(f5);
-		tabletop.render(f5);
-		Leg1.render(f5);
-		Leg2.render(f5);
-		Cloth2.render(f5);
-		Back2.render(f5);
-		Back.render(f5);
-		shelf.render(f5);
-		Leg3.render(f5);
-		Shelf2.render(f5);
-		Cloth1.render(f5);
-		Drawer.render(f5);*/
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		/*
+		 * super.render(entity, f, f1, f2, f3, f4, f5); Leg4.render(f5);
+		 * tabletop.render(f5); Leg1.render(f5); Leg2.render(f5);
+		 * Cloth2.render(f5); Back2.render(f5); Back.render(f5);
+		 * shelf.render(f5); Leg3.render(f5); Shelf2.render(f5);
+		 * Cloth1.render(f5); Drawer.render(f5);
+		 */
 	}
 
-	public void renderModel(int meta){
+	public void renderModel(int meta) {
 		float f5 = 0.0625F;
 		Leg4.render(f5);
 		tabletop.render(f5);
@@ -148,7 +142,7 @@ public class ModelMagiciansWorkbench extends ModelBase{
 		Drawer.render(f5);
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z){
+	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

@@ -14,10 +14,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 
 public interface IRiftStorage extends IInventory {
-	
-	
+
 	public static class Storage implements IStorage<IRiftStorage> {
-		
+
 		@Override
 		public NBTBase writeNBT(Capability<IRiftStorage> capability, IRiftStorage instance, EnumFacing side) {
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -39,13 +38,14 @@ public interface IRiftStorage extends IInventory {
 			NBTTagCompound am2Tag = NBTUtils.getAM2Tag((NBTTagCompound) nbt);
 			NBTTagList list = NBTUtils.addCompoundList(am2Tag, "RiftInventory");
 			for (int i = 0; i < list.tagCount(); i++) {
-				//LogHelper.info("Found a tag ");
+				// LogHelper.info("Found a tag ");
 				NBTTagCompound compound = list.getCompoundTagAt(i);
-				instance.setInventorySlotContents(compound.getInteger("Slot"), ItemStack.loadItemStackFromNBT(compound));
+				instance.setInventorySlotContents(compound.getInteger("Slot"),
+						ItemStack.loadItemStackFromNBT(compound));
 			}
 		}
 	}
-	
+
 	public static class Factory implements Callable<IRiftStorage> {
 		@Override
 		public IRiftStorage call() throws Exception {
@@ -56,5 +56,5 @@ public interface IRiftStorage extends IInventory {
 	int getAccessLevel();
 
 	void setAccessLevel(int accessLevel);
-	
+
 }

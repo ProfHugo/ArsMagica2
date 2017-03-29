@@ -1,6 +1,6 @@
 package am2.particles;
 
-public class ParticlePendulum extends ParticleController{
+public class ParticlePendulum extends ParticleController {
 
 	private double angle = 0;
 	private float amplitude = 0;
@@ -8,11 +8,11 @@ public class ParticlePendulum extends ParticleController{
 
 	private double lastDeltaX;
 	private double lastDeltaZ;
-//	private double lastDeltaY;
+	// private double lastDeltaY;
 
 	private boolean stopOnCollide = true;
 
-	public ParticlePendulum(AMParticle particleEffect, float amplitude, float speed, int priority, boolean exclusive){
+	public ParticlePendulum(AMParticle particleEffect, float amplitude, float speed, int priority, boolean exclusive) {
 		super(particleEffect, priority, exclusive);
 		this.amplitude = amplitude;
 		lastDeltaX = 0;
@@ -21,19 +21,19 @@ public class ParticlePendulum extends ParticleController{
 		this.speed = speed;
 	}
 
-	public ParticlePendulum setStopOnCollide(boolean stop){
+	public ParticlePendulum setStopOnCollide(boolean stop) {
 		this.stopOnCollide = stop;
 		return this;
 	}
 
-	private void generateNewAngle(){
+	private void generateNewAngle() {
 		angle = Math.toRadians(particle.getWorldObj().rand.nextInt(360));
 	}
 
 	@Override
-	public void doUpdate(){
+	public void doUpdate() {
 
-		if (stopOnCollide && (particle.isCollided())){
+		if (stopOnCollide && (particle.isCollided())) {
 			this.finish();
 			return;
 		}
@@ -52,7 +52,7 @@ public class ParticlePendulum extends ParticleController{
 	}
 
 	@Override
-	public ParticleController clone(){
+	public ParticleController clone() {
 		return new ParticlePendulum(particle, amplitude, speed, priority, exclusive).setStopOnCollide(stopOnCollide);
 	}
 

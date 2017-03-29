@@ -23,17 +23,19 @@ public class AbilityRooted extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.NATURE;
 	}
-	
+
 	@Override
 	public void applyTick(EntityPlayer player) {
 		IAttributeInstance attribute = player.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute, AffinityAbilityModifiers.natureAffinityRoots, true);
+		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute, AffinityAbilityModifiers.natureAffinityRoots,
+				true);
 	}
-	
+
 	@Override
 	public void removeEffects(EntityPlayer player) {
 		IAttributeInstance attribute = player.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute, AffinityAbilityModifiers.natureAffinityRoots, false);
+		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute, AffinityAbilityModifiers.natureAffinityRoots,
+				false);
 	}
 
 }

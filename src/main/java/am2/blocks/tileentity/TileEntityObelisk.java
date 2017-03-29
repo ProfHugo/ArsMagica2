@@ -36,9 +36,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.HashMap;
 import java.util.List;
 
-public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockStructureController, IInventory, ITileEntityAMBase {
-	protected static int pillarBlockID = 98; //stone brick
-	protected static int pillarBlockMeta = 3; //arcane texture
+public class TileEntityObelisk extends TileEntityAMPower
+		implements IMultiblockStructureController, IInventory, ITileEntityAMBase {
+	protected static int pillarBlockID = 98; // stone brick
+	protected static int pillarBlockMeta = 3; // arcane texture
 	protected int surroundingCheckTicks;
 	private ItemStack[] inventory;
 	protected float powerMultiplier = 1f;
@@ -64,19 +65,19 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 	protected MultiblockGroup ritual1Candles;
 	protected MultiblockGroup ritual2Chalk;
 	protected MultiblockGroup ritual2Candles;
-	
+
 	protected HashMap<Integer, IBlockState> createMap(IBlockState state) {
 		HashMap<Integer, IBlockState> states = new HashMap<>();
 		states.put(0, state);
 		return states;
 	}
-	
-	public TileEntityObelisk(){
+
+	public TileEntityObelisk() {
 		this(5000);
 		inventory = new ItemStack[this.getSizeInventory()];
 	}
 
-	protected void checkNearbyBlockState(){
+	protected void checkNearbyBlockState() {
 		List<MultiblockGroup> groups = structure.getMatchingGroups(worldObj, pos);
 
 		float capsLevel = 1;
@@ -84,7 +85,7 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 		boolean wizChalkFound = false;
 		boolean capsFound = false;
 
-		for (MultiblockGroup group : groups){
+		for (MultiblockGroup group : groups) {
 			if (group == pillars)
 				pillarsFound = true;
 			else if (group == wizardChalkCircle)
@@ -92,12 +93,12 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 			else if (group == capsGroup)
 				capsFound = true;
 		}
-		
+
 		if (pillarsFound && capsFound) {
 			IBlockState capState = worldObj.getBlockState(pos.add(2, 2, 2));
-			
-			for (IBlockState cap : caps.keySet()){
-				if (capState == cap){
+
+			for (IBlockState cap : caps.keySet()) {
+				if (capState == cap) {
 					capsLevel = caps.get(cap);
 					break;
 				}
@@ -114,7 +115,7 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 	}
 
 	@SuppressWarnings("unchecked")
-	public TileEntityObelisk(int capacity){
+	public TileEntityObelisk(int capacity) {
 		super(capacity);
 		setNoPowerRequests();
 		surroundingCheckTicks = 0;
@@ -122,28 +123,31 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 		structure = new MultiblockStructureDefinition("obelisk_structure");
 		pillars = new MultiblockGroup("pillars", Lists.newArrayList(Blocks.STONEBRICK.getDefaultState()), false);
 		caps = new HashMap<>();
-		capsGroup = new TypedMultiblockGroup("caps", Lists.newArrayList(createMap(Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED))), false);
-		caps.put(Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED), 1.35f);
-		
-		MultiblockGroup obelisk = new MultiblockGroup("obelisk", Lists.newArrayList(BlockDefs.obelisk.getDefaultState()), true);
-		
+		capsGroup = new TypedMultiblockGroup("caps", Lists.newArrayList(createMap(Blocks.STONEBRICK.getDefaultState()
+				.withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED))), false);
+		caps.put(Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT,
+				BlockStoneBrick.EnumType.CHISELED), 1.35f);
+
+		MultiblockGroup obelisk = new MultiblockGroup("obelisk",
+				Lists.newArrayList(BlockDefs.obelisk.getDefaultState()), true);
+
 		obelisk.addBlock(BlockPos.ORIGIN);
 
-		pillars.addBlock(new BlockPos (-2, 0, -2));
-		pillars.addBlock(new BlockPos (-2, 1, -2));
-		capsGroup.addBlock(new BlockPos (-2, 2, -2), 0);
+		pillars.addBlock(new BlockPos(-2, 0, -2));
+		pillars.addBlock(new BlockPos(-2, 1, -2));
+		capsGroup.addBlock(new BlockPos(-2, 2, -2), 0);
 
-		pillars.addBlock(new BlockPos (2, 0, -2));
-		pillars.addBlock(new BlockPos (2, 1, -2));
-		capsGroup.addBlock(new BlockPos (2, 2, -2), 0);
+		pillars.addBlock(new BlockPos(2, 0, -2));
+		pillars.addBlock(new BlockPos(2, 1, -2));
+		capsGroup.addBlock(new BlockPos(2, 2, -2), 0);
 
-		pillars.addBlock(new BlockPos (-2, 0, 2));
-		pillars.addBlock(new BlockPos (-2, 1, 2));
-		capsGroup.addBlock(new BlockPos (-2, 2, 2), 0);
+		pillars.addBlock(new BlockPos(-2, 0, 2));
+		pillars.addBlock(new BlockPos(-2, 1, 2));
+		capsGroup.addBlock(new BlockPos(-2, 2, 2), 0);
 
-		pillars.addBlock(new BlockPos (2, 0, 2));
-		pillars.addBlock(new BlockPos (2, 1, 2));
-		capsGroup.addBlock(new BlockPos (2, 2, 2), 0);
+		pillars.addBlock(new BlockPos(2, 0, 2));
+		pillars.addBlock(new BlockPos(2, 1, 2));
+		capsGroup.addBlock(new BlockPos(2, 2, 2), 0);
 
 		wizardChalkCircle = addWizChalkGroupToStructure(structure);
 		structure.addGroup(pillars);
@@ -155,36 +159,40 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 		rituals = new MultiblockStructureDefinition[2];
 		rituals[0] = new MultiblockStructureDefinition("obelisk_light");
 
-		ritual1Candles = new MultiblockGroup("candles", Lists.newArrayList(BlockDefs.wardingCandle.getDefaultState()), false);
+		ritual1Candles = new MultiblockGroup("candles", Lists.newArrayList(BlockDefs.wardingCandle.getDefaultState()),
+				false);
 
 		ritual1Candles.addBlock(new BlockPos(-2, 0, -2));
 		ritual1Candles.addBlock(new BlockPos(2, 0, 2));
 		ritual1Candles.addBlock(new BlockPos(2, 0, -2));
 		ritual1Candles.addBlock(new BlockPos(-2, 0, 2));
-		//rituals[0].addGroup(obelisk);
+		// rituals[0].addGroup(obelisk);
 		rituals[0].addGroup(ritual1Candles);
 		// Obelisk ritual - Dark
 		rituals[1] = new MultiblockStructureDefinition("obelisk_dark");
 	}
 
-	public boolean isActive(){
-		return burnTimeRemaining > 0 || (inventory[0] != null && ObeliskFuelHelper.instance.getFuelBurnTime(inventory[0]) > 0);
+	public boolean isActive() {
+		return burnTimeRemaining > 0
+				|| (inventory[0] != null && ObeliskFuelHelper.instance.getFuelBurnTime(inventory[0]) > 0);
 	}
 
-	public boolean isHighPowerActive(){
+	public boolean isHighPowerActive() {
 		return burnTimeRemaining > 200 && inventory[0] != null;
 	}
 
-	public int getCookProgressScaled(int par1){
+	public int getCookProgressScaled(int par1) {
 		return burnTimeRemaining * par1 / maxBurnTime;
 	}
 
-	protected MultiblockGroup addWizChalkGroupToStructure(MultiblockStructureDefinition def){
-		MultiblockGroup group = new MultiblockGroup("wizardChalkCircle", Lists.newArrayList(BlockDefs.wizardChalk.getDefaultState()), true);
+	protected MultiblockGroup addWizChalkGroupToStructure(MultiblockStructureDefinition def) {
+		MultiblockGroup group = new MultiblockGroup("wizardChalkCircle",
+				Lists.newArrayList(BlockDefs.wizardChalk.getDefaultState()), true);
 
-		for (int i = -1; i <= 1; ++i){
-			for (int j = -1; j <= 1; ++j){
-				if (i == 0 && j == 0) continue;
+		for (int i = -1; i <= 1; ++i) {
+			for (int j = -1; j <= 1; ++j) {
+				if (i == 0 && j == 0)
+					continue;
 				group.addBlock(new BlockPos(i, 0, j));
 			}
 		}
@@ -192,11 +200,11 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 		return group;
 	}
 
-	protected void callSuperUpdate(){
+	protected void callSuperUpdate() {
 		super.update();
 	}
 
-	private void setMaxBurnTime(int burnTime){
+	private void setMaxBurnTime(int burnTime) {
 		if (burnTime == 0)
 			burnTime = 1;
 		maxBurnTime = burnTime;
@@ -208,56 +216,60 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 	}
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket(){
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(pos, getBlockMetadata(), getUpdateTag());
 		return packet;
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		this.readFromNBT(pkt.getNbtCompound());
 	}
 
-	private void sendCookUpdateToClients(){
-		if (!worldObj.isRemote){
-			AMNetHandler.INSTANCE.sendObeliskUpdate(this, new AMDataWriter().add(PK_BURNTIME_CHANGE).add(this.burnTimeRemaining).generate());
+	private void sendCookUpdateToClients() {
+		if (!worldObj.isRemote) {
+			AMNetHandler.INSTANCE.sendObeliskUpdate(this,
+					new AMDataWriter().add(PK_BURNTIME_CHANGE).add(this.burnTimeRemaining).generate());
 		}
 	}
 
-	public void handlePacket(byte[] data){
+	public void handlePacket(byte[] data) {
 		AMDataReader rdr = new AMDataReader(data);
 		if (rdr.ID == TileEntityObelisk.PK_BURNTIME_CHANGE)
 			this.burnTimeRemaining = rdr.getInt();
 	}
 
 	@Override
-	public void update(){
+	public void update() {
 		surroundingCheckTicks++;
 
-		if (isActive()){
-			if (!worldObj.isRemote && surroundingCheckTicks % 100 == 0){
+		if (isActive()) {
+			if (!worldObj.isRemote && surroundingCheckTicks % 100 == 0) {
 				checkNearbyBlockState();
 				surroundingCheckTicks = 1;
-				if (PowerNodeRegistry.For(this.worldObj).checkPower(this, this.capacity * 0.1f)){
-					List<EntityPlayer> nearbyPlayers = worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(this.pos.add(-2, 0, -2), pos.add(2, 3, 2)));
-					for (EntityPlayer p : nearbyPlayers){
-						if (p.isPotionActive(PotionEffectsDefs.manaRegen)) continue;
+				if (PowerNodeRegistry.For(this.worldObj).checkPower(this, this.capacity * 0.1f)) {
+					List<EntityPlayer> nearbyPlayers = worldObj.getEntitiesWithinAABB(EntityPlayer.class,
+							new AxisAlignedBB(this.pos.add(-2, 0, -2), pos.add(2, 3, 2)));
+					for (EntityPlayer p : nearbyPlayers) {
+						if (p.isPotionActive(PotionEffectsDefs.manaRegen))
+							continue;
 						p.addPotionEffect(new BuffEffectManaRegen(600, 1));
 					}
 				}
 			}
 
 			float powerAmt = PowerNodeRegistry.For(worldObj).getPower(this, PowerTypes.NEUTRAL);
-			float powerAdded = inventory[0] != null ? ObeliskFuelHelper.instance.getFuelBurnTime(inventory[0]) * (powerBase * powerMultiplier) : 0;
+			float powerAdded = inventory[0] != null
+					? ObeliskFuelHelper.instance.getFuelBurnTime(inventory[0]) * (powerBase * powerMultiplier) : 0;
 
 			float chargeThreshold = Math.max(this.getCapacity() - powerAdded, this.getCapacity() * 0.75f);
 
-			if (burnTimeRemaining <= 0 && powerAmt < chargeThreshold){
+			if (burnTimeRemaining <= 0 && powerAmt < chargeThreshold) {
 				burnTimeRemaining = ObeliskFuelHelper.instance.getFuelBurnTime(inventory[0]);
-				if (burnTimeRemaining > 0){
+				if (burnTimeRemaining > 0) {
 					setMaxBurnTime(burnTimeRemaining);
 					if (this.inventory[0].getItem() instanceof UniversalBucket)
-						this.inventory[0] = ((UniversalBucket)this.inventory[0].getItem()).getEmpty().copy();
+						this.inventory[0] = ((UniversalBucket) this.inventory[0].getItem()).getEmpty().copy();
 					else if (this.inventory[0].getItem().hasContainerItem(this.inventory[0]))
 						this.inventory[0] = new ItemStack(this.inventory[0].getItem().getContainerItem());
 					else
@@ -266,20 +278,20 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 				}
 			}
 
-			if (burnTimeRemaining > 0){
+			if (burnTimeRemaining > 0) {
 				burnTimeRemaining--;
 				PowerNodeRegistry.For(worldObj).insertPower(this, PowerTypes.NEUTRAL, powerBase * powerMultiplier);
 
 				if (burnTimeRemaining % 20 == 0)
 					sendCookUpdateToClients();
 			}
-		}else{
+		} else {
 			surroundingCheckTicks = 1;
 		}
 
-		if (worldObj.isRemote){
+		if (worldObj.isRemote) {
 			lastOffsetY = offsetY;
-			offsetY = (float)Math.max(Math.sin(worldObj.getTotalWorldTime() / 20f) / 5, 0.25f);
+			offsetY = (float) Math.max(Math.sin(worldObj.getTotalWorldTime() / 20f) / 5, 0.25f);
 			if (burnTimeRemaining > 0)
 				burnTimeRemaining--;
 		}
@@ -289,32 +301,33 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getRenderBoundingBox(){
-		return new AxisAlignedBB(pos.getX() - 1, pos.getY(), pos.getZ() - 1, pos.getX() + 2, pos.getY() + 0.3, pos.getZ() + 2);
+	public AxisAlignedBB getRenderBoundingBox() {
+		return new AxisAlignedBB(pos.getX() - 1, pos.getY(), pos.getZ() - 1, pos.getX() + 2, pos.getY() + 0.3,
+				pos.getZ() + 2);
 	}
 
 	@Override
-	public MultiblockStructureDefinition getDefinition(){
+	public MultiblockStructureDefinition getDefinition() {
 		return structure;
 	}
 
-	public MultiblockStructureDefinition getRitual(int index){
+	public MultiblockStructureDefinition getRitual(int index) {
 		return rituals[index];
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound){
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setInteger("burnTimeRemaining", burnTimeRemaining);
 		nbttagcompound.setInteger("maxBurnTime", maxBurnTime);
 
-		if (inventory != null){
+		if (inventory != null) {
 			NBTTagList nbttaglist = new NBTTagList();
-			for (int i = 0; i < inventory.length; i++){
-				if (inventory[i] != null){
+			for (int i = 0; i < inventory.length; i++) {
+				if (inventory[i] != null) {
 					String tag = String.format("ArrayIndex", i);
 					NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-					nbttagcompound1.setByte(tag, (byte)i);
+					nbttagcompound1.setByte(tag, (byte) i);
 					inventory[i].writeToNBT(nbttagcompound1);
 					nbttaglist.appendTag(nbttagcompound1);
 				}
@@ -326,19 +339,19 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound){
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 		burnTimeRemaining = nbttagcompound.getInteger("burnTimeRemaining");
 		setMaxBurnTime(nbttagcompound.getInteger("maxBurnTime"));
 
-		if (nbttagcompound.hasKey("BurnInventory")){
+		if (nbttagcompound.hasKey("BurnInventory")) {
 			NBTTagList nbttaglist = nbttagcompound.getTagList("BurnInventory", Constants.NBT.TAG_COMPOUND);
 			inventory = new ItemStack[getSizeInventory()];
-			for (int i = 0; i < nbttaglist.tagCount(); i++){
+			for (int i = 0; i < nbttaglist.tagCount(); i++) {
 				String tag = String.format("ArrayIndex", i);
-				NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.getCompoundTagAt(i);
+				NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.getCompoundTagAt(i);
 				byte byte0 = nbttagcompound1.getByte(tag);
-				if (byte0 >= 0 && byte0 < inventory.length){
+				if (byte0 >= 0 && byte0 < inventory.length) {
 					inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 				}
 			}
@@ -346,112 +359,112 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 	}
 
 	@Override
-	public int getChargeRate(){
+	public int getChargeRate() {
 		return 0;
 	}
 
 	@Override
-	public boolean canProvidePower(PowerTypes type){
+	public boolean canProvidePower(PowerTypes type) {
 		return type == PowerTypes.NEUTRAL;
 	}
 
 	@Override
-	public List<PowerTypes> getValidPowerTypes(){
+	public List<PowerTypes> getValidPowerTypes() {
 		return Lists.newArrayList(PowerTypes.NEUTRAL);
 	}
 
 	@Override
-	public boolean canRequestPower(){
+	public boolean canRequestPower() {
 		return false;
 	}
 
 	@Override
-	public int getSizeInventory(){
+	public int getSizeInventory() {
 		return 1;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i){
+	public ItemStack getStackInSlot(int i) {
 		if (i < 0 || i >= this.getSizeInventory())
 			return null;
 		return inventory[i];
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j){
-		if (inventory[i] != null){
-			if (inventory[i].stackSize <= j){
+	public ItemStack decrStackSize(int i, int j) {
+		if (inventory[i] != null) {
+			if (inventory[i].stackSize <= j) {
 				ItemStack itemstack = inventory[i];
 				inventory[i] = null;
 				return itemstack;
 			}
 			ItemStack itemstack1 = inventory[i].splitStack(j);
-			if (inventory[i].stackSize == 0){
+			if (inventory[i].stackSize == 0) {
 				inventory[i] = null;
 			}
 			return itemstack1;
-		}else{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int i){
-		if (inventory[i] != null){
+	public ItemStack removeStackFromSlot(int i) {
+		if (inventory[i] != null) {
 			ItemStack itemstack = inventory[i];
 			inventory[i] = null;
 			return itemstack;
-		}else{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack){
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		inventory[i] = itemstack;
-		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()){
+		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
 	}
 
 	@Override
-	public String getName(){
+	public String getName() {
 		return "obelisk";
 	}
 
 	@Override
-	public boolean hasCustomName(){
+	public boolean hasCustomName() {
 		return false;
 	}
 
 	@Override
-	public int getInventoryStackLimit(){
+	public int getInventoryStackLimit() {
 		return 64;
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer){
-		if (worldObj.getTileEntity(pos) != this){
+	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+		if (worldObj.getTileEntity(pos) != this) {
 			return false;
 		}
 		return entityplayer.getDistanceSqToCenter(pos) <= 64D;
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player){
+	public void openInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player){
+	public void closeInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack){
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return ObeliskFuelHelper.instance.getFuelBurnTime(itemstack) > 0;
 	}
 
 	@Override
-	public boolean canRelayPower(PowerTypes type){
+	public boolean canRelayPower(PowerTypes type) {
 		return false;
 	}
 
@@ -470,7 +483,7 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 	@Override
 	public void setField(int id, int value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -482,7 +495,7 @@ public class TileEntityObelisk extends TileEntityAMPower implements IMultiblockS
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

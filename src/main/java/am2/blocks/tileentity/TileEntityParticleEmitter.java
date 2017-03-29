@@ -20,7 +20,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileEntityParticleEmitter extends TileEntity implements ITickable{
+public class TileEntityParticleEmitter extends TileEntity implements ITickable {
 
 	private int particleType;
 	private int particleQuantity;
@@ -38,7 +38,7 @@ public class TileEntityParticleEmitter extends TileEntity implements ITickable{
 	private int showTicks = 0;
 	boolean forceShow;
 
-	public TileEntityParticleEmitter(){
+	public TileEntityParticleEmitter() {
 		particleType = 0;
 		particleQuantity = 1;
 		spawnRate = 5;
@@ -53,56 +53,64 @@ public class TileEntityParticleEmitter extends TileEntity implements ITickable{
 	}
 
 	@Override
-	public void update(){
-		if (worldObj.isRemote && spawnTicks++ >= spawnRate){
+	public void update() {
+		if (worldObj.isRemote && spawnTicks++ >= spawnRate) {
 			for (int i = 0; i < particleQuantity; ++i)
 				doSpawn();
 			spawnTicks = 0;
 		}
-		if (!show && !worldObj.isRemote && ((forceShow && showTicks++ > 100) || !forceShow)){
+		if (!show && !worldObj.isRemote && ((forceShow && showTicks++ > 100) || !forceShow)) {
 			showTicks = 0;
 			forceShow = false;
-			for (EntityPlayer player : worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos).expandXyz(8D))) {
-				if (player != null && player.inventory.getCurrentItem() != null && player.inventory.getCurrentItem().getItem() == ItemDefs.crystalWrench){
+			for (EntityPlayer player : worldObj.getEntitiesWithinAABB(EntityPlayer.class,
+					new AxisAlignedBB(pos).expandXyz(8D))) {
+				if (player != null && player.inventory.getCurrentItem() != null
+						&& player.inventory.getCurrentItem().getItem() == ItemDefs.crystalWrench) {
 					AMVector3 myLoc = new AMVector3(pos);
 					AMVector3 playerLoc = new AMVector3(player);
-					if (myLoc.distanceSqTo(playerLoc) < 64D){
+					if (myLoc.distanceSqTo(playerLoc) < 64D) {
 						forceShow = true;
 					}
 				}
 			}
-			worldObj.setBlockState(getPos(), worldObj.getBlockState(pos).withProperty(BlockParticleEmitter.HIDDEN, !forceShow), 3);
+			worldObj.setBlockState(getPos(),
+					worldObj.getBlockState(pos).withProperty(BlockParticleEmitter.HIDDEN, !forceShow), 3);
 		}
-		worldObj.markAndNotifyBlock(pos, worldObj.getChunkFromBlockCoords(pos), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+		worldObj.markAndNotifyBlock(pos, worldObj.getChunkFromBlockCoords(pos), worldObj.getBlockState(pos),
+				worldObj.getBlockState(pos), 3);
 	}
 
-	private void doSpawn(){
-		//if (!hasReceivedFullUpdate) return;
+	private void doSpawn() {
+		// if (!hasReceivedFullUpdate) return;
 		double x = randomizeCoord(pos.getX() + 0.5);
 		double y = randomizeCoord(pos.getY() + 0.5);
 		double z = randomizeCoord(pos.getZ() + 0.5);
-		AMParticle particle = (AMParticle)ArsMagica2.proxy.particleManager.spawn(worldObj, AMParticle.particleTypes[particleType], x, y, z);
-		if (particle != null){
-			particle.AddParticleController(ArsMagica2.proxy.particleManager.createDefaultParticleController(particleBehaviour, particle, new AMVector3(x, y, z).toVec3D(), speed, getBlockMetadata()));
+		AMParticle particle = (AMParticle) ArsMagica2.proxy.particleManager.spawn(worldObj,
+				AMParticle.particleTypes[particleType], x, y, z);
+		if (particle != null) {
+			particle.AddParticleController(ArsMagica2.proxy.particleManager.createDefaultParticleController(
+					particleBehaviour, particle, new AMVector3(x, y, z).toVec3D(), speed, getBlockMetadata()));
 			particle.setParticleAge(Math.min(Math.max(spawnRate, 10), 40));
 			particle.setIgnoreMaxAge(false);
 			particle.setParticleScale(particleScale);
 			particle.SetParticleAlpha(particleAlpha);
-			if (!defaultColor){
+			if (!defaultColor) {
 				if (!randomColor)
-					particle.setRGBColorF(((particleColor >> 16) & 0xFF) / 255f, ((particleColor >> 8) & 0xFF) / 255f, (particleColor & 0xFF) / 255f);
+					particle.setRGBColorF(((particleColor >> 16) & 0xFF) / 255f, ((particleColor >> 8) & 0xFF) / 255f,
+							(particleColor & 0xFF) / 255f);
 				else
-					particle.setRGBColorF(worldObj.rand.nextFloat(), worldObj.rand.nextFloat(), worldObj.rand.nextFloat());
+					particle.setRGBColorF(worldObj.rand.nextFloat(), worldObj.rand.nextFloat(),
+							worldObj.rand.nextFloat());
 			}
 		}
 	}
 
-	private double randomizeCoord(double base){
+	private double randomizeCoord(double base) {
 		return base + worldObj.rand.nextDouble() - 0.5;
 	}
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket(){
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound compound = new NBTTagCompound();
 		this.writeToNBT(compound);
 		SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(pos, getBlockMetadata(), compound);
@@ -110,33 +118,43 @@ public class TileEntityParticleEmitter extends TileEntity implements ITickable{
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		this.readFromNBT(pkt.getNbtCompound());
 		applyParamConstraints();
 	}
 
-	private void applyParamConstraints(){
-		if (spawnRate < 1) spawnRate = 1;
-		if (particleQuantity < 1) particleQuantity = 1;
-		if (particleQuantity > 5) particleQuantity = 5;
-		if (particleType < 0) particleType = 0;
+	private void applyParamConstraints() {
+		if (spawnRate < 1)
+			spawnRate = 1;
+		if (particleQuantity < 1)
+			particleQuantity = 1;
+		if (particleQuantity > 5)
+			particleQuantity = 5;
+		if (particleType < 0)
+			particleType = 0;
 		if (particleType > AMParticleIcons.instance.numParticles())
 			particleType = AMParticleIcons.instance.numParticles() - 1;
-		if (particleBehaviour < 0) particleBehaviour = 0;
-		if (particleBehaviour > 6) particleBehaviour = 6;
-		if (particleScale < 0) particleScale = 0;
-		if (particleScale > 1) particleScale = 1;
-		if (particleAlpha < 0) particleAlpha = 0;
-		if (particleAlpha > 1) particleAlpha = 1;
+		if (particleBehaviour < 0)
+			particleBehaviour = 0;
+		if (particleBehaviour > 6)
+			particleBehaviour = 6;
+		if (particleScale < 0)
+			particleScale = 0;
+		if (particleScale > 1)
+			particleScale = 1;
+		if (particleAlpha < 0)
+			particleAlpha = 0;
+		if (particleAlpha > 1)
+			particleAlpha = 1;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound){
+	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		readSettingsFromNBT(compound);
 	}
 
-	public void readSettingsFromNBT(NBTTagCompound compound){
+	public void readSettingsFromNBT(NBTTagCompound compound) {
 		particleType = compound.getInteger("particleType");
 		particleQuantity = compound.getInteger("particleQuantity");
 		spawnRate = compound.getInteger("spawnRate");
@@ -151,13 +169,13 @@ public class TileEntityParticleEmitter extends TileEntity implements ITickable{
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound){
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		writeSettingsToNBT(compound);
 		return compound;
 	}
 
-	public void writeSettingsToNBT(NBTTagCompound compound){
+	public void writeSettingsToNBT(NBTTagCompound compound) {
 		compound.setInteger("particleType", particleType);
 		compound.setInteger("particleQuantity", particleQuantity);
 		compound.setInteger("spawnRate", spawnRate);
@@ -171,118 +189,120 @@ public class TileEntityParticleEmitter extends TileEntity implements ITickable{
 		compound.setFloat("speed", speed);
 	}
 
-	public void setParticleType(int particleType){
+	public void setParticleType(int particleType) {
 		this.particleType = particleType;
 	}
 
-	public void setParticleBehaviour(int particleBehaviour){
+	public void setParticleBehaviour(int particleBehaviour) {
 		this.particleBehaviour = particleBehaviour;
 	}
 
-	public void setColorDefault(boolean def){
+	public void setColorDefault(boolean def) {
 		this.defaultColor = def;
 	}
 
-	public void setColorRandom(boolean rand){
+	public void setColorRandom(boolean rand) {
 		this.randomColor = rand;
 	}
 
-	public void setColor(int color){
+	public void setColor(int color) {
 		this.particleColor = color;
 	}
 
-	public void setScale(float scale){
+	public void setScale(float scale) {
 		this.particleScale = scale;
 	}
 
-	public void setAlpha(float alpha){
+	public void setAlpha(float alpha) {
 		this.particleAlpha = alpha;
 	}
 
-	public void setShow(boolean show){
+	public void setShow(boolean show) {
 		this.show = show;
-		if (worldObj.isRemote && show){
+		if (worldObj.isRemote && show) {
 			forceShow = false;
 			showTicks = 0;
 			EntityPlayer localPlayer = ArsMagica2.proxy.getLocalPlayer();
-			if (localPlayer != null && localPlayer.inventory.getCurrentItem() != null && localPlayer.inventory.getCurrentItem().getItem() == ItemDefs.crystalWrench){
+			if (localPlayer != null && localPlayer.inventory.getCurrentItem() != null
+					&& localPlayer.inventory.getCurrentItem().getItem() == ItemDefs.crystalWrench) {
 				AMVector3 myLoc = new AMVector3(pos);
 				AMVector3 playerLoc = new AMVector3(localPlayer);
-				if (myLoc.distanceSqTo(playerLoc) < 64D){
+				if (myLoc.distanceSqTo(playerLoc) < 64D) {
 					forceShow = true;
 				}
 			}
 		}
 
-//		int oldMeta = getBlockMetadata();
+		// int oldMeta = getBlockMetadata();
 
-		//worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, show ? oldMeta & ~0x8 : oldMeta | 0x8, 2);
+		// worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, show ?
+		// oldMeta & ~0x8 : oldMeta | 0x8, 2);
 	}
-	
+
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
 		return oldState.getBlock() != newSate.getBlock();
 	}
-	
-	public int getParticleType(){
+
+	public int getParticleType() {
 		return this.particleType;
 	}
 
-	public int getParticleBehaviour(){
+	public int getParticleBehaviour() {
 		return this.particleBehaviour;
 	}
 
-	public boolean getColorDefault(){
+	public boolean getColorDefault() {
 		return this.defaultColor;
 	}
 
-	public boolean getColorRandom(){
+	public boolean getColorRandom() {
 		return this.randomColor;
 	}
 
-	public int getColor(){
+	public int getColor() {
 		return this.particleColor;
 	}
 
-	public float getScale(){
+	public float getScale() {
 		return this.particleScale;
 	}
 
-	public float getAlpha(){
+	public float getAlpha() {
 		return this.particleAlpha;
 	}
 
-	public boolean getShow(){
+	public boolean getShow() {
 		return this.show;
 	}
 
-	public void setQuantity(int quantity){
+	public void setQuantity(int quantity) {
 		this.particleQuantity = quantity;
 	}
 
-	public int getQuantity(){
+	public int getQuantity() {
 		return this.particleQuantity;
 	}
 
-	public void setDelay(int delay){
+	public void setDelay(int delay) {
 		this.spawnRate = delay;
 		this.spawnTicks = 0;
 	}
 
-	public int getDelay(){
+	public int getDelay() {
 		return this.spawnRate;
 	}
 
-	public void setSpeed(float speed){
+	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
 
-	public float getSpeed(){
+	public float getSpeed() {
 		return speed;
 	}
 
-	public void syncWithServer(){
-		if (this.worldObj.isRemote){
+	public void syncWithServer() {
+		if (this.worldObj.isRemote) {
 			AMDataWriter writer = new AMDataWriter();
 			writer.add(this.pos.getX());
 			writer.add(this.pos.getY());

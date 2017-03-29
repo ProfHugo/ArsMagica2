@@ -40,125 +40,124 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class Charm extends SpellComponent implements IRitualInteraction{
+public class Charm extends SpellComponent implements IRitualInteraction {
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				new ItemStack(ItemDefs.rune, 1, EnumDyeColor.RED.getDyeDamage()),
+	public Object[] getRecipe() {
+		return new Object[] { new ItemStack(ItemDefs.rune, 1, EnumDyeColor.RED.getDyeDamage()),
 				AffinityShiftUtils.getEssenceForAffinity(Affinity.LIFE),
-				new ItemStack(ItemDefs.crystalPhylactery, 1, ItemCrystalPhylactery.META_EMPTY)
-		};
+				new ItemStack(ItemDefs.crystalPhylactery, 1, ItemCrystalPhylactery.META_EMPTY) };
 	}
 
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
-		if (!(target instanceof EntityCreature) || ((EntityCreature)target).isPotionActive(PotionEffectsDefs.charme) || EntityUtils.isSummon((EntityCreature)target)){
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
+		if (!(target instanceof EntityCreature) || ((EntityCreature) target).isPotionActive(PotionEffectsDefs.charme)
+				|| EntityUtils.isSummon((EntityCreature) target)) {
 			return false;
 		}
 
-		int duration = SpellUtils.getModifiedInt_Mul(PotionEffectsDefs.default_buff_duration, stack, caster, target, world, SpellModifiers.DURATION);
-		//duration = SpellUtils.modifyDurationBasedOnArmor(caster, duration);
+		int duration = SpellUtils.getModifiedInt_Mul(PotionEffectsDefs.default_buff_duration, stack, caster, target,
+				world, SpellModifiers.DURATION);
+		// duration = SpellUtils.modifyDurationBasedOnArmor(caster, duration);
 
-		if (RitualShapeHelper.instance.matchesRitual(this, world, target.getPosition())){
+		if (RitualShapeHelper.instance.matchesRitual(this, world, target.getPosition())) {
 			duration += (3600 * (SpellUtils.countModifiers(SpellModifiers.BUFF_POWER, stack) + 1));
 			RitualShapeHelper.instance.consumeReagents(this, world, target.getPosition());
 		}
 
-		if (target instanceof EntityAnimal){
-			((EntityAnimal)target).setInLove(null);
+		if (target instanceof EntityAnimal) {
+			((EntityAnimal) target).setInLove(null);
 			return true;
 		}
 
-		if (EntityExtension.For(caster).getCanHaveMoreSummons()){
-			if (caster instanceof EntityPlayer){
-				if (target instanceof EntityCreature){
+		if (EntityExtension.For(caster).getCanHaveMoreSummons()) {
+			if (caster instanceof EntityPlayer) {
+				if (target instanceof EntityCreature) {
 					BuffEffectCharmed charmBuff = new BuffEffectCharmed(duration, BuffEffectCharmed.CHARM_TO_PLAYER);
 					charmBuff.setCharmer(caster);
-					((EntityCreature)target).addPotionEffect(charmBuff);
+					((EntityCreature) target).addPotionEffect(charmBuff);
 				}
 				return true;
-			}else if (caster instanceof EntityLiving){
-				if (target instanceof EntityCreature){
+			} else if (caster instanceof EntityLiving) {
+				if (target instanceof EntityCreature) {
 					BuffEffectCharmed charmBuff = new BuffEffectCharmed(duration, BuffEffectCharmed.CHARM_TO_MONSTER);
 					charmBuff.setCharmer(caster);
-					((EntityCreature)target).addPotionEffect(charmBuff);
+					((EntityCreature) target).addPotionEffect(charmBuff);
 				}
 				return true;
 			}
-		}else{
-			if (caster instanceof EntityPlayer){
-				((EntityPlayer)caster).addChatMessage(new TextComponentString("You cannot have any more summons."));
+		} else {
+			if (caster instanceof EntityPlayer) {
+				((EntityPlayer) caster).addChatMessage(new TextComponentString("You cannot have any more summons."));
 			}
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.of(SpellModifiers.DURATION);
 	}
 
-
 	@Override
-	public float manaCost(EntityLivingBase caster){
+	public float manaCost(EntityLivingBase caster) {
 		return 300;
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
+	public ItemStack[] reagents(EntityLivingBase caster) {
 		return null;
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
-		for (int i = 0; i < 10; ++i){
-			AMParticle particle = (AMParticle)ArsMagica2.proxy.particleManager.spawn(world, "heart", x, y, z);
-			if (particle != null){
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
+		for (int i = 0; i < 10; ++i) {
+			AMParticle particle = (AMParticle) ArsMagica2.proxy.particleManager.spawn(world, "heart", x, y, z);
+			if (particle != null) {
 				particle.addRandomOffset(1, 2, 1);
-				particle.AddParticleController(new ParticleFloatUpward(particle, 0, 0.05f + rand.nextFloat() * 0.1f, 1, false));
+				particle.AddParticleController(
+						new ParticleFloatUpward(particle, 0, 0.05f + rand.nextFloat() * 0.1f, 1, false));
 				particle.setMaxAge(20);
-				if (colorModifier > -1){
-					particle.setRGBColorF(((colorModifier >> 16) & 0xFF) / 255.0f, ((colorModifier >> 8) & 0xFF) / 255.0f, (colorModifier & 0xFF) / 255.0f);
+				if (colorModifier > -1) {
+					particle.setRGBColorF(((colorModifier >> 16) & 0xFF) / 255.0f,
+							((colorModifier >> 8) & 0xFF) / 255.0f, (colorModifier & 0xFF) / 255.0f);
 				}
 			}
 		}
 	}
 
 	@Override
-	public Set<Affinity> getAffinity(){
+	public Set<Affinity> getAffinity() {
 		return Sets.newHashSet(Affinity.LIFE);
 	}
 
 	@Override
-	public float getAffinityShift(Affinity affinity){
+	public float getAffinityShift(Affinity affinity) {
 		return 0.1f;
 	}
 
 	@Override
-	public MultiblockStructureDefinition getRitualShape(){
+	public MultiblockStructureDefinition getRitualShape() {
 		return RitualShapeHelper.instance.hourglass;
 	}
 
 	@Override
-	public ItemStack[] getReagents(){
-		return new ItemStack[]{
-				new ItemStack(Items.WHEAT),
-				new ItemStack(Items.WHEAT_SEEDS),
-				new ItemStack(Items.CARROT)
-		};
+	public ItemStack[] getReagents() {
+		return new ItemStack[] { new ItemStack(Items.WHEAT), new ItemStack(Items.WHEAT_SEEDS),
+				new ItemStack(Items.CARROT) };
 	}
 
 	@Override
-	public int getReagentSearchRadius(){
+	public int getReagentSearchRadius() {
 		return 3;
 	}
 
 	@Override
 	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

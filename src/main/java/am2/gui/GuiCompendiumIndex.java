@@ -26,7 +26,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiCompendiumIndex extends GuiScreen{
+public class GuiCompendiumIndex extends GuiScreen {
 	private CompendiumCategory currentCategory;
 	private final ImmutableList<CompendiumCategory> categories;
 
@@ -35,21 +35,22 @@ public class GuiCompendiumIndex extends GuiScreen{
 
 	int page = 0;
 	int numPages = 0;
-	
+
 	ArrayList<String> lines;
 	int lineWidth = 140;
 	int maxLines = 22;
 
 	GuiButtonCompendiumNext nextPage;
 	GuiButtonCompendiumNext prevPage;
-	
+
 	GuiSpellImageButton updateButton;
 
 	ISkillData sk;
 
-	private static final ResourceLocation background = new ResourceLocation("arsmagica2", "textures/gui/ArcaneCompendiumIndexGui.png");
+	private static final ResourceLocation background = new ResourceLocation("arsmagica2",
+			"textures/gui/ArcaneCompendiumIndexGui.png");
 
-	public GuiCompendiumIndex(){
+	public GuiCompendiumIndex() {
 		categories = CompendiumCategory.getCategories();
 		currentCategory = categories.iterator().next();
 		lines = new ArrayList<String>();
@@ -59,19 +60,18 @@ public class GuiCompendiumIndex extends GuiScreen{
 			if (category != null)
 				currentCategory = category;
 		}
-		
-		
+
 		sk = SkillData.For(Minecraft.getMinecraft().thePlayer);
 	}
 
 	@Override
-	public void initGui(){
+	public void initGui() {
 		int idCount = 0;
 		int posX = (width - xSize) / 2;
 		int posY = (height - ySize) / 2;
 		int tabY = posY + 40;
 		int tabWidth = 1;
-		
+
 		nextPage = new GuiButtonCompendiumNext(idCount++, posX + 320, posY + 13, true);
 		prevPage = new GuiButtonCompendiumNext(idCount++, posX + 33, posY + 13, false);
 		for (CompendiumCategory category : categories) {
@@ -88,25 +88,32 @@ public class GuiCompendiumIndex extends GuiScreen{
 			int buttonY = posY + 35;
 			int buttonX = posX + 40;
 			ArrayList<CompendiumCategory> sortedCategories = Lists.newArrayList(categories);
-			sortedCategories.sort(new Comparator<CompendiumCategory>() {public int compare(CompendiumCategory o1, CompendiumCategory o2) { return o1.getCategoryName().compareTo(o2.getCategoryName());}});
+			sortedCategories.sort(new Comparator<CompendiumCategory>() {
+				public int compare(CompendiumCategory o1, CompendiumCategory o2) {
+					return o1.getCategoryName().compareTo(o2.getCategoryName());
+				}
+			});
 			for (CompendiumCategory sub : sortedCategories) {
 				if (sub.getParentsString().equals(category.getID())) {
 					boolean hasSubItems = false;
 					for (CompendiumEntry entry : category.getEntries()) {
-						if (entry.getRenderObject() == null || ArcaneCompendium.For(mc.thePlayer).isUnlocked(entry.getID())) {
+						if (entry.getRenderObject() == null
+								|| ArcaneCompendium.For(mc.thePlayer).isUnlocked(entry.getID())) {
 							hasSubItems = true;
 							break;
 						}
 					}
-					if (!hasSubItems) continue;
-					GuiButtonCompendiumLink tab = new GuiButtonCompendiumLink(idCount++, buttonX, buttonY, fontRendererObj, locPage, null, sub);
+					if (!hasSubItems)
+						continue;
+					GuiButtonCompendiumLink tab = new GuiButtonCompendiumLink(idCount++, buttonX, buttonY,
+							fontRendererObj, locPage, null, sub);
 					tab.visible = sub.getParentsString().equals(currentCategory.getID()) && page == locPage;
 					buttonY += 12;
-					if (buttonY > posY + (ySize) - 25){
-						if (buttonX > posX + 40){
+					if (buttonY > posY + (ySize) - 25) {
+						if (buttonX > posX + 40) {
 							buttonX = posX + 40;
 							locPage++;
-						}else{
+						} else {
 							buttonX += 155;
 						}
 						buttonY = posY + 30;
@@ -115,18 +122,24 @@ public class GuiCompendiumIndex extends GuiScreen{
 				}
 			}
 			ArrayList<CompendiumEntry> sortedEntries = Lists.newArrayList(category.getEntries());
-			sortedEntries.sort(new Comparator<CompendiumEntry>() {public int compare(CompendiumEntry o1, CompendiumEntry o2) { return o1.getName().compareTo(o2.getName());}});
+			sortedEntries.sort(new Comparator<CompendiumEntry>() {
+				public int compare(CompendiumEntry o1, CompendiumEntry o2) {
+					return o1.getName().compareTo(o2.getName());
+				}
+			});
 			for (CompendiumEntry entry : sortedEntries) {
-				if (!mc.thePlayer.capabilities.isCreativeMode && entry.getRenderObject() != null && !ArcaneCompendium.For(mc.thePlayer).isUnlocked(entry.getID()))
+				if (!mc.thePlayer.capabilities.isCreativeMode && entry.getRenderObject() != null
+						&& !ArcaneCompendium.For(mc.thePlayer).isUnlocked(entry.getID()))
 					continue;
-				GuiButtonCompendiumLink link = new GuiButtonCompendiumLink(idCount++, buttonX, buttonY, fontRendererObj, locPage, entry, null);
+				GuiButtonCompendiumLink link = new GuiButtonCompendiumLink(idCount++, buttonX, buttonY, fontRendererObj,
+						locPage, entry, null);
 				link.visible = entry.canBeDisplayed(category.getID()) && page == locPage;
 				buttonY += 12;
-				if (buttonY > posY + (ySize) - 25){
-					if (buttonX > posX + 40){
+				if (buttonY > posY + (ySize) - 25) {
+					if (buttonX > posX + 40) {
 						buttonX = posX + 40;
 						locPage++;
-					}else{
+					} else {
 						buttonX += 155;
 					}
 					buttonY = posY + 30;
@@ -136,7 +149,7 @@ public class GuiCompendiumIndex extends GuiScreen{
 		}
 		for (GuiButton button : buttonList) {
 			if (button instanceof GuiButtonCompendiumTab)
-				((GuiButtonCompendiumTab)button).setDimensions(tabWidth, 16);
+				((GuiButtonCompendiumTab) button).setDimensions(tabWidth, 16);
 		}
 		nextPage.visible = numPages > 0;
 		prevPage.visible = false;
@@ -146,22 +159,23 @@ public class GuiCompendiumIndex extends GuiScreen{
 		super.initGui();
 	}
 
-
 	@Override
-	protected void mouseClicked(int par1, int par2, int par3) throws IOException{
-		for (int l = 0; l < this.buttonList.size(); ++l){
-			GuiButton guibutton = (GuiButton)this.buttonList.get(l);
+	protected void mouseClicked(int par1, int par2, int par3) throws IOException {
+		for (int l = 0; l < this.buttonList.size(); ++l) {
+			GuiButton guibutton = (GuiButton) this.buttonList.get(l);
 
-			if (guibutton.mousePressed(Minecraft.getMinecraft(), par1, par2)){
-//				if (guibutton.id == updateButton.id){
-//					this.storeBreadcrumb();
-//					if (par3 == 0){ //left click
-//						this.mc.displayGuiScreen(new GuiConfirmOpenLink(this, ArcaneCompendium.instance.getModDownloadLink(), 0, false));
-//					}else if (par3 == 1){ //right click
-//						this.mc.displayGuiScreen(new GuiConfirmOpenLink(this, ArcaneCompendium.instance.getPatchNotesLink(), 1, false));
-//					}
-//				}
-				if (par3 == 0){
+			if (guibutton.mousePressed(Minecraft.getMinecraft(), par1, par2)) {
+				// if (guibutton.id == updateButton.id){
+				// this.storeBreadcrumb();
+				// if (par3 == 0){ //left click
+				// this.mc.displayGuiScreen(new GuiConfirmOpenLink(this,
+				// ArcaneCompendium.instance.getModDownloadLink(), 0, false));
+				// }else if (par3 == 1){ //right click
+				// this.mc.displayGuiScreen(new GuiConfirmOpenLink(this,
+				// ArcaneCompendium.instance.getPatchNotesLink(), 1, false));
+				// }
+				// }
+				if (par3 == 0) {
 					this.actionPerformed(guibutton);
 					return;
 				}
@@ -182,9 +196,9 @@ public class GuiCompendiumIndex extends GuiScreen{
 				page = 0;
 			switchCategory(currentCategory);
 		} else if (button instanceof GuiButtonCompendiumTab) {
-			switchCategory(((GuiButtonCompendiumTab)button).category);
+			switchCategory(((GuiButtonCompendiumTab) button).category);
 		} else if (button instanceof GuiButtonCompendiumLink) {
-			GuiButtonCompendiumLink target = (GuiButtonCompendiumLink)button;
+			GuiButtonCompendiumLink target = (GuiButtonCompendiumLink) button;
 			if (target.getEntry() != null)
 				mc.displayGuiScreen(new GuiArcaneCompendium(target.getEntry()));
 			else if (target.getCategory() != null) {
@@ -193,7 +207,7 @@ public class GuiCompendiumIndex extends GuiScreen{
 		}
 		super.actionPerformed(button);
 	}
-	
+
 	private void switchCategory(CompendiumCategory category) {
 		if (category != currentCategory) {
 			page = 0;
@@ -203,7 +217,7 @@ public class GuiCompendiumIndex extends GuiScreen{
 		int numButton = 0;
 		for (GuiButton button : buttonList) {
 			if (button instanceof GuiButtonCompendiumLink) {
-				GuiButtonCompendiumLink link = (GuiButtonCompendiumLink)button;
+				GuiButtonCompendiumLink link = (GuiButtonCompendiumLink) button;
 				if (link.getEntry() != null)
 					link.visible = link.getEntry().canBeDisplayed(category.getID());
 				else if (link.getCategory() != null)
@@ -212,32 +226,32 @@ public class GuiCompendiumIndex extends GuiScreen{
 					numButton++;
 				link.visible &= page == link.getPage();
 			} else if (button instanceof GuiButtonCompendiumTab) {
-				GuiButtonCompendiumTab tab = (GuiButtonCompendiumTab)button;
+				GuiButtonCompendiumTab tab = (GuiButtonCompendiumTab) button;
 				tab.setActive(tab.category == category && page == numPages);
 			}
 		}
-		numPages = (int) Math.floor((double)numButton / 34D);
+		numPages = (int) Math.floor((double) numButton / 34D);
 		nextPage.visible = page < numPages;
 		prevPage.visible = page > 0;
 		this.currentCategory = category;
 		am2.lore.ArcaneCompendium.For(Minecraft.getMinecraft().thePlayer).setPath(category.getID());
 	}
-	
+
 	@Override
-	public boolean doesGuiPauseGame(){
+	public boolean doesGuiPauseGame() {
 		return false;
 	}
 
 	@Override
-	protected void keyTyped(char par1, int par2) throws IOException{
-		if (par2 == 1){
+	protected void keyTyped(char par1, int par2) throws IOException {
+		if (par2 == 1) {
 			onGuiClosed();
 		}
 		super.keyTyped(par1, par2);
 	}
 
 	@Override
-	public void drawScreen(int par1, int par2, float par3){
+	public void drawScreen(int par1, int par2, float par3) {
 
 		this.drawDefaultBackground();
 
@@ -261,23 +275,32 @@ public class GuiCompendiumIndex extends GuiScreen{
 		int x_start_line = l + 35;
 		int y_start_line = i1 + 35;
 
-		if (lines != null && lines.size() > page){
-			AMGuiHelper.drawCompendiumText(lines.get(page), x_start_line, y_start_line, lineWidth, 0x000000, fontRendererObj);
+		if (lines != null && lines.size() > page) {
+			AMGuiHelper.drawCompendiumText(lines.get(page), x_start_line, y_start_line, lineWidth, 0x000000,
+					fontRendererObj);
 		}
 
 		super.drawScreen(par1, par2, par3);
 	}
 
-	public void drawTexturedModalRect_Classic(int dst_x, int dst_y, int src_x, int src_y, int dst_width, int dst_height, int src_width, int src_height){
+	public void drawTexturedModalRect_Classic(int dst_x, int dst_y, int src_x, int src_y, int dst_width, int dst_height,
+			int src_width, int src_height) {
 		float var7 = 0.00390625F;
 		float var8 = 0.00390625F;
 
 		Tessellator var9 = Tessellator.getInstance();
 		var9.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX);
-		var9.getBuffer().pos(dst_x + 0, dst_y + dst_height, this.zLevel).tex((src_x + 0) * var7, (src_y + src_height) * var8).endVertex();;
-		var9.getBuffer().pos(dst_x + dst_width, dst_y + dst_height, this.zLevel).tex((src_x + src_width) * var7, (src_y + src_height) * var8).endVertex();;
-		var9.getBuffer().pos(dst_x + dst_width, dst_y + 0, this.zLevel).tex((src_x + src_width) * var7, (src_y + 0) * var8).endVertex();;
-		var9.getBuffer().pos(dst_x + 0, dst_y + 0, this.zLevel).tex((src_x + 0) * var7, (src_y + 0) * var8).endVertex();;
+		var9.getBuffer().pos(dst_x + 0, dst_y + dst_height, this.zLevel)
+				.tex((src_x + 0) * var7, (src_y + src_height) * var8).endVertex();
+		;
+		var9.getBuffer().pos(dst_x + dst_width, dst_y + dst_height, this.zLevel)
+				.tex((src_x + src_width) * var7, (src_y + src_height) * var8).endVertex();
+		;
+		var9.getBuffer().pos(dst_x + dst_width, dst_y + 0, this.zLevel)
+				.tex((src_x + src_width) * var7, (src_y + 0) * var8).endVertex();
+		;
+		var9.getBuffer().pos(dst_x + 0, dst_y + 0, this.zLevel).tex((src_x + 0) * var7, (src_y + 0) * var8).endVertex();
+		;
 		var9.draw();
 	}
 }

@@ -8,7 +8,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelFlicker extends ModelBase{
+public class ModelFlicker extends ModelBase {
 	ModelRenderer Body;
 	ModelRenderer Head;
 	ModelRenderer RightArm;
@@ -17,7 +17,7 @@ public class ModelFlicker extends ModelBase{
 	ModelRenderer LeftHorn;
 	ModelRenderer RightHorn;
 
-	public ModelFlicker(){
+	public ModelFlicker() {
 		textureWidth = 64;
 		textureHeight = 32;
 
@@ -66,12 +66,13 @@ public class ModelFlicker extends ModelBase{
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 
-		Affinity aff = ((EntityFlicker)entity).getFlickerAffinity();
+		Affinity aff = ((EntityFlicker) entity).getFlickerAffinity();
 		GL11.glPushMatrix();
-		GL11.glColor3f(((aff.getColor() >> 16) & 0xFF) / 255.0f, ((aff.getColor() >> 8) & 0xFF) / 255.0f, (aff.getColor() & 0xFF) / 255.0f);
+		GL11.glColor3f(((aff.getColor() >> 16) & 0xFF) / 255.0f, ((aff.getColor() >> 8) & 0xFF) / 255.0f,
+				(aff.getColor() & 0xFF) / 255.0f);
 		GL11.glTranslatef(-0.05f, 1.3f, -0.05f);
 		GL11.glRotatef(-entity.rotationPitch, 1, 0, 0);
 		GL11.glScalef(0.5f, 0.5f, 0.5f);
@@ -86,7 +87,7 @@ public class ModelFlicker extends ModelBase{
 		GL11.glPopMatrix();
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z){
+	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

@@ -46,18 +46,21 @@ public class PageMultiblock extends CompendiumPage<MultiblockStructureDefinition
 		super(element);
 		maxLayers = element.getHeight();
 	}
-	
+
 	@Override
 	public GuiButton[] getButtons(int id, int posX, int posY) {
 		prevLayer = new GuiButtonCompendiumNext(id++, posX, posY + 19, false);
 		nextLayer = new GuiButtonCompendiumNext(id++, posX + 125, posY + 19, true);
-		pauseCycling = new GuiButtonVariableDims(5, posX + 105, posY + 190, AMGuiHelper.instance.runCompendiumTicker ? I18n.translateToLocal("am2.gui.pause") : I18n.translateToLocal("am2.gui.cycle")).setDimensions(40, 20);
+		pauseCycling = new GuiButtonVariableDims(5,
+				posX + 105, posY + 190, AMGuiHelper.instance.runCompendiumTicker
+						? I18n.translateToLocal("am2.gui.pause") : I18n.translateToLocal("am2.gui.cycle"))
+								.setDimensions(40, 20);
 		prevLayer.visible = true;
 		nextLayer.visible = true;
 		pauseCycling.visible = true;
-		return new GuiButton[] {prevLayer, nextLayer, pauseCycling};
+		return new GuiButton[] { prevLayer, nextLayer, pauseCycling };
 	}
-	
+
 	@Override
 	public void switchButtonDisplay(boolean shouldShow) {
 		if (shouldShow) {
@@ -70,32 +73,34 @@ public class PageMultiblock extends CompendiumPage<MultiblockStructureDefinition
 			pauseCycling.visible = false;
 		}
 	}
-	
+
 	@Override
 	public void actionPerformed(GuiButton button) throws IOException {
 		if (button == nextLayer) {
 			curLayer++;
-			if (curLayer > maxLayers){
+			if (curLayer > maxLayers) {
 				curLayer = -1;
 			}
 		} else if (button == prevLayer) {
 			curLayer--;
-			if (curLayer < -1){
+			if (curLayer < -1) {
 				curLayer = maxLayers;
 			}
 		} else if (button == pauseCycling) {
 			AMGuiHelper.instance.runCompendiumTicker = !AMGuiHelper.instance.runCompendiumTicker;
-			pauseCycling.displayString = AMGuiHelper.instance.runCompendiumTicker ? I18n.translateToLocal("am2.gui.pause") : I18n.translateToLocal("am2.gui.cycle");
+			pauseCycling.displayString = AMGuiHelper.instance.runCompendiumTicker
+					? I18n.translateToLocal("am2.gui.pause") : I18n.translateToLocal("am2.gui.cycle");
 		}
 		super.actionPerformed(button);
 	}
-	
+
 	@Override
 	protected void renderPage(int posX, int posY, int mouseX, int mouseY) {
 		stackTip = null;
 		int cx = posX + 60;
 		int cy = posY + 92;
-		String label = String.format("%s: %s", I18n.translateToLocal("am2.gui.layer"), curLayer == -1 ? I18n.translateToLocal("am2.gui.all") : "" + curLayer);
+		String label = String.format("%s: %s", I18n.translateToLocal("am2.gui.layer"),
+				curLayer == -1 ? I18n.translateToLocal("am2.gui.all") : "" + curLayer);
 
 		mc.fontRendererObj.drawString(label, cx - mc.fontRendererObj.getStringWidth(label) / 2, cy - 90, 0x000000);
 
@@ -104,18 +109,21 @@ public class PageMultiblock extends CompendiumPage<MultiblockStructureDefinition
 		GlStateManager.disableCull();
 		GlStateManager.disableLighting();
 
-		/*ArrayList<IBlockState> blox = entryMultiblock.getAllowedBlocksAt(entryMultiblock.new BlockPos(0, 0, 0));
-		if (blox != null){
-			renderBlock(Block.blocksList[blox.get(0).getID()], blox.get(0).getMeta(), cx, cy);
-		}*/
+		/*
+		 * ArrayList<IBlockState> blox =
+		 * entryMultiblock.getAllowedBlocksAt(entryMultiblock.new BlockPos(0, 0,
+		 * 0)); if (blox != null){
+		 * renderBlock(Block.blocksList[blox.get(0).getID()],
+		 * blox.get(0).getMeta(), cx, cy); }
+		 */
 		BlockPos pickedBlock = getPickedBlock(cx, cy, mouseX, mouseY);
-		if (curLayer == -1){
-			for (int i = element.getMinY(); i <= element.getMaxY(); ++i){
+		if (curLayer == -1) {
+			for (int i = element.getMinY(); i <= element.getMaxY(); ++i) {
 				int y = (i - element.getMinY());
 				GlStateManager.translate(0.0f, 0.0f, 20f * y);
 				drawMultiblockLayer(cx, cy, i, pickedBlock, mouseX, mouseY);
 			}
-		}else{
+		} else {
 			int i = element.getMinY() + curLayer;
 			GlStateManager.translate(0.0f, 0.0f, 20f * curLayer);
 			drawMultiblockLayer(cx, cy, i, pickedBlock, mouseX, mouseY);
@@ -125,8 +133,8 @@ public class PageMultiblock extends CompendiumPage<MultiblockStructureDefinition
 		GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
 	}
-	
-	private BlockPos getPickedBlock(int cx, int cy, int mousex, int mousey){
+
+	private BlockPos getPickedBlock(int cx, int cy, int mousex, int mousey) {
 		BlockPos block = null;
 
 		float step_x = 14f;
@@ -139,21 +147,21 @@ public class PageMultiblock extends CompendiumPage<MultiblockStructureDefinition
 		int start = curLayer == -1 ? element.getMinY() : element.getMinY() + curLayer;
 		int end = curLayer == -1 ? element.getMaxY() : element.getMinY() + curLayer;
 
-		for (int i = start; i <= end; ++i){
+		for (int i = start; i <= end; ++i) {
 			TreeMap<BlockPos, List<IBlockState>> layerBlocksSorted = getMultiblockLayer(i);
 
 			float px = cx - (step_x * (element.getWidth() / 2));
 			float py = cy - (step_z * (element.getLength() / 2));
-						
-			for (BlockPos bc : layerBlocksSorted.keySet()){
+
+			for (BlockPos bc : layerBlocksSorted.keySet()) {
 				float x = px + ((bc.getX() - bc.getZ()) * step_x);
 				float y = py + ((bc.getZ() + bc.getX()) * step_z) + (step_y * i);
 
 				x += 20;
 				y -= 10;
 
-				if (mousex > x && mousex < x + 32){
-					if (mousey > y && mousey < y + 32){
+				if (mousex > x && mousex < x + 32) {
+					if (mousey > y && mousey < y + 32) {
 						block = bc;
 					}
 				}
@@ -161,8 +169,8 @@ public class PageMultiblock extends CompendiumPage<MultiblockStructureDefinition
 		}
 		return block;
 	}
-	
-	private void drawMultiblockLayer(int cx, int cy, int layer, BlockPos pickedBlock, int mousex, int mousey){
+
+	private void drawMultiblockLayer(int cx, int cy, int layer, BlockPos pickedBlock, int mousex, int mousey) {
 		TreeMap<BlockPos, List<IBlockState>> layerBlocksSorted = getMultiblockLayer(layer);
 		float step_x = 14f;
 		float step_y = -16.0f;
@@ -173,9 +181,10 @@ public class PageMultiblock extends CompendiumPage<MultiblockStructureDefinition
 		float px = cx - (step_x * (element.getWidth() / 2));
 		float py = cy - (step_z * (element.getLength() / 2));
 
-		for (BlockPos bc : layerBlocksSorted.keySet()){
-			//if (bc.getX() == 0 && bc.getY() == 0 && bc.getZ() == 0) continue;
-			IBlockState bd = layerBlocksSorted.get(bc).get(AMGuiHelper.instance.getSlowTicker() % layerBlocksSorted.get(bc).size());
+		for (BlockPos bc : layerBlocksSorted.keySet()) {
+			// if (bc.getX() == 0 && bc.getY() == 0 && bc.getZ() == 0) continue;
+			IBlockState bd = layerBlocksSorted.get(bc)
+					.get(AMGuiHelper.instance.getSlowTicker() % layerBlocksSorted.get(bc).size());
 			float x = px + ((bc.getX() - bc.getZ()) * step_x);
 			float y = py + ((bc.getZ() + bc.getX()) * step_z) + (step_y * layer);
 			GL11.glPushMatrix();
@@ -184,21 +193,21 @@ public class PageMultiblock extends CompendiumPage<MultiblockStructureDefinition
 			renderBlock(bd, x, y, bc.getX(), bc.getY(), bc.getZ(), picked);
 			GL11.glPopMatrix();
 
-			if (picked){
+			if (picked) {
 				ItemStack stack = new ItemStack(bd.getBlock(), 1, bd.getBlock().getMetaFromState(bd));
-				if (stack.getItem() != null){
-					stackTip  = stack;
+				if (stack.getItem() != null) {
+					stackTip = stack;
 				}
 			}
 		}
 	}
-	
-	private TreeMap<BlockPos, List<IBlockState>> getMultiblockLayer(int layer){
+
+	private TreeMap<BlockPos, List<IBlockState>> getMultiblockLayer(int layer) {
 		TreeMap<BlockPos, List<IBlockState>> layerBlocksSorted = new TreeMap<>();
 
-		for (MultiblockGroup mutex : element.getGroups()){
+		for (MultiblockGroup mutex : element.getGroups()) {
 			HashMap<BlockPos, List<IBlockState>> layerBlocks = element.getStructureLayer(mutex, layer);
-			for (BlockPos bc : layerBlocks.keySet()){
+			for (BlockPos bc : layerBlocks.keySet()) {
 				if (mutex instanceof TypedMultiblockGroup) {
 					TypedMultiblockGroup newGroup = (TypedMultiblockGroup) mutex;
 					layerBlocksSorted.put(bc, newGroup.getState(bc));
@@ -210,8 +219,9 @@ public class PageMultiblock extends CompendiumPage<MultiblockStructureDefinition
 
 		return layerBlocksSorted;
 	}
-	
-	private void renderBlock(IBlockState state, float x, float y, int offsetX, int offsetY, int offsetZ, boolean picked){
+
+	private void renderBlock(IBlockState state, float x, float y, int offsetX, int offsetY, int offsetZ,
+			boolean picked) {
 
 		RenderHelper.disableStandardItemLighting();
 
@@ -231,12 +241,17 @@ public class PageMultiblock extends CompendiumPage<MultiblockStructureDefinition
 			mc.renderEngine.bindTexture(LOCATION_BLOCKS_TEXTURE);
 		GlStateManager.enableLighting();
 		if (state.getBlock() instanceof ITileEntityProvider)
-			TileEntityRendererDispatcher.instance.renderTileEntityAt(((ITileEntityProvider)state.getBlock()).createNewTileEntity(Minecraft.getMinecraft().theWorld, state.getBlock().getMetaFromState(state)), 0, 0, 0, 0, 0);
+			TileEntityRendererDispatcher.instance
+					.renderTileEntityAt(
+							((ITileEntityProvider) state.getBlock()).createNewTileEntity(
+									Minecraft.getMinecraft().theWorld, state.getBlock().getMetaFromState(state)),
+							0, 0, 0, 0, 0);
 		GlStateManager.disableLighting();
 		Tessellator.getInstance().getBuffer().begin(7, DefaultVertexFormats.BLOCK);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(state, new BlockPos(0, 0, 0), blockAccess , Tessellator.getInstance().getBuffer());
+		Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(state, new BlockPos(0, 0, 0), blockAccess,
+				Tessellator.getInstance().getBuffer());
 		Tessellator.getInstance().draw();
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.disableBlend();

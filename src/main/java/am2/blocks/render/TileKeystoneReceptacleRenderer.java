@@ -12,58 +12,60 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 
-public class TileKeystoneReceptacleRenderer extends TileEntitySpecialRenderer<TileEntityKeystoneRecepticle>{
+public class TileKeystoneReceptacleRenderer extends TileEntitySpecialRenderer<TileEntityKeystoneRecepticle> {
 
 	private final ModelKeystoneRecepticle model;
 	private static final ResourceLocation portal = TextureMap.LOCATION_BLOCKS_TEXTURE;
 	private final ResourceLocation rLoc;
 
-	public TileKeystoneReceptacleRenderer(){
+	public TileKeystoneReceptacleRenderer() {
 		model = new ModelKeystoneRecepticle();
 
 		rLoc = new ResourceLocation("arsmagica2", "textures/blocks/custom/KeystoneReceptacle.png");
 	}
 
-	public void renderTileEntityAt(TileEntityKeystoneRecepticle tile, double x, double y, double z, float partialTicks,int destroyStage){
+	public void renderTileEntityAt(TileEntityKeystoneRecepticle tile, double x, double y, double z, float partialTicks,
+			int destroyStage) {
 		int i = 3;
 
-		if (tile.getWorld() != null){
+		if (tile.getWorld() != null) {
 			i = tile.getBlockMetadata();
 		}
 		int j = 0;
 
-		if (i == 0 || i == 4){
+		if (i == 0 || i == 4) {
 			j = 0;
 		}
 
-		if (i == 1){
+		if (i == 1) {
 			j = 270;
 		}
 
-		if (i == 2){
+		if (i == 2) {
 			j = 180;
 		}
 
-		if (i == 3){
+		if (i == 3) {
 			j = 90;
 		}
 
 		bindTexture(rLoc);
-		GL11.glPushMatrix(); //start
-		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.5F, (float)z + 0.5F); //size
-		GL11.glRotatef(j, 0.0F, 1.0F, 0.0F); //rotate based on metadata
-		GL11.glScalef(1.0F, -1F, -1F); //if you read this comment out this line and you can see what happens
-		model.renderModel(0.0625F); //renders and yes 0.0625 is a random number
-		GL11.glPopMatrix(); //end	
+		GL11.glPushMatrix(); // start
+		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F); // size
+		GL11.glRotatef(j, 0.0F, 1.0F, 0.0F); // rotate based on metadata
+		GL11.glScalef(1.0F, -1F, -1F); // if you read this comment out this line
+										// and you can see what happens
+		model.renderModel(0.0625F); // renders and yes 0.0625 is a random number
+		GL11.glPopMatrix(); // end
 
-		if (tile.isActive()){
+		if (tile.isActive()) {
 			bindTexture(portal);
 
 			GL11.glPushMatrix();
 
 			GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-			GL11.glTranslatef((float)x + 0.5f, (float)y - 2.5F, (float)z + 0.5f);
+			GL11.glTranslatef((float) x + 0.5f, (float) y - 2.5F, (float) z + 0.5f);
 			GL11.glScaled(4, 4, 4);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -71,9 +73,9 @@ public class TileKeystoneReceptacleRenderer extends TileEntitySpecialRenderer<Ti
 			GL11.glDepthMask(false);
 			Tessellator tessellator = Tessellator.getInstance();
 
-			GL11.glRotatef(j, 0.0F, 1.0F, 0.0F); //rotate based on metadata
+			GL11.glRotatef(j, 0.0F, 1.0F, 0.0F); // rotate based on metadata
 
-			//apply portal colors here
+			// apply portal colors here
 			GL11.glColor4f(1, 1, 1, 1);
 
 			renderArsMagicaEffect(tessellator);
@@ -85,7 +87,7 @@ public class TileKeystoneReceptacleRenderer extends TileEntitySpecialRenderer<Ti
 		}
 	}
 
-	private void renderArsMagicaEffect(Tessellator tessellator){
+	private void renderArsMagicaEffect(Tessellator tessellator) {
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_LIGHTING);
 		renderSprite(tessellator);
@@ -93,7 +95,7 @@ public class TileKeystoneReceptacleRenderer extends TileEntitySpecialRenderer<Ti
 		GL11.glPopMatrix();
 	}
 
-	private void renderSprite(Tessellator tessellator){
+	private void renderSprite(Tessellator tessellator) {
 
 		TextureAtlasSprite IIcon = AMGuiIcons.gatewayPortal;
 
@@ -106,8 +108,8 @@ public class TileKeystoneReceptacleRenderer extends TileEntitySpecialRenderer<Ti
 		float f5 = 0.5F;
 		float f6 = 0.25F;
 		int i = 0xF00F0;
-        int j = i >> 16 & 65535;
-        int k = i & 65535;
+		int j = i >> 16 & 65535;
+		int k = i & 65535;
 		tessellator.getBuffer().begin(7, RenderManaVortex.POS_TEX_LIGHTMAP);
 		tessellator.getBuffer().pos(0.0F - f5, 0.0F - f6, 0.0D).tex(min_u, max_v).lightmap(j, k).endVertex();
 		tessellator.getBuffer().pos(f4 - f5, 0.0F - f6, 0.0D).tex(max_u, max_v).lightmap(j, k).endVertex();

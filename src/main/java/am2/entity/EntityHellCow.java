@@ -19,16 +19,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityHellCow extends EntityMob{
+public class EntityHellCow extends EntityMob {
 
-	public EntityHellCow(World par1World){
+	public EntityHellCow(World par1World) {
 		super(par1World);
 		this.setSize(1.0f, 2.5f);
 		initAI();
 	}
 
 	@Override
-	protected void applyEntityAttributes(){
+	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
@@ -37,40 +37,40 @@ public class EntityHellCow extends EntityMob{
 	}
 
 	@Override
-	public int getTotalArmorValue(){
+	public int getTotalArmorValue() {
 		return 15;
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTablesArsMagica.HELL_COW_LOOT;
 	}
-	
+
 	@Override
 	protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier) {
 		super.dropEquipment(wasRecentlyHit, lootingModifier);
 		int i = rand.nextInt(100);
-		if (i == 1 && wasRecentlyHit){
+		if (i == 1 && wasRecentlyHit) {
 			this.entityDropItem(ItemDefs.hellCowHorn.createItemStack(), 0.0f);
 		}
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(){
+	protected SoundEvent getHurtSound() {
 		return AMSounds.MOO_HIT;
 	}
 
 	@Override
-	protected SoundEvent getDeathSound(){
+	protected SoundEvent getDeathSound() {
 		return AMSounds.MOO_DEATH;
 	}
-	
+
 	@Override
-	protected SoundEvent getAmbientSound(){
+	protected SoundEvent getAmbientSound() {
 		return AMSounds.MOO_IDLE;
 	}
 
-	private void initAI(){
+	private void initAI() {
 		this.tasks.addTask(1, new EntityAIAttackMelee(this, 0.6F, false));
 		this.tasks.addTask(4, new EntityAIManaDrainBolt(this, 0.5f, 35, 2, 0));
 		this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0F));
@@ -78,28 +78,29 @@ public class EntityHellCow extends EntityMob{
 		this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(8, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, false, false, null));
+		this.targetTasks.addTask(3,
+				new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, false, false, null));
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2){
-		if (par2 > 10) par2 = 10;
+	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
+		if (par2 > 10)
+			par2 = 10;
 		return super.attackEntityFrom(par1DamageSource, par2);
 	}
 
 	@Override
-	public boolean getCanSpawnHere(){
+	public boolean getCanSpawnHere() {
 		return true;
 	}
 
-
 	@Override
-	public int getTalkInterval(){
+	public int getTalkInterval() {
 		return 160;
 	}
 
 	@Override
-	protected float getSoundVolume(){
+	protected float getSoundVolume() {
 		return 0.4f;
 	}
 }

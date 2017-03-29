@@ -25,12 +25,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 
 @SuppressWarnings("deprecation")
-public class GuiArmorImbuer extends GuiContainer{
+public class GuiArmorImbuer extends GuiContainer {
 
 	private TileEntityArmorImbuer tileEntity;
 	private EntityPlayer player;
 
-	private static final ResourceLocation foreground = new ResourceLocation("arsmagica2", "textures/gui/ArmorUpgradeGUI.png");
+	private static final ResourceLocation foreground = new ResourceLocation("arsmagica2",
+			"textures/gui/ArmorUpgradeGUI.png");
 
 	int spriteHeight = 24;
 	int spriteWidth = 43;
@@ -48,14 +49,14 @@ public class GuiArmorImbuer extends GuiContainer{
 	GuiButton tier4Next;
 	GuiButton tier4Prev;
 
-	public GuiArmorImbuer(EntityPlayer player, TileEntityArmorImbuer infuser){
+	public GuiArmorImbuer(EntityPlayer player, TileEntityArmorImbuer infuser) {
 		super(new ContainerArmorInfuser(player, infuser));
 		this.tileEntity = infuser;
 		this.player = player;
 		xSize = 247;
 		ySize = 250;
 	}
-	
+
 	@Override
 	public void initGui() {
 		super.initGui();
@@ -88,8 +89,8 @@ public class GuiArmorImbuer extends GuiContainer{
 	}
 
 	@Override
-	protected void mouseClicked(int par1, int par2, int par3) throws IOException{
-		if (hoveredID != null){
+	protected void mouseClicked(int par1, int par2, int par3) throws IOException {
+		if (hoveredID != null) {
 			AMNetHandler.INSTANCE.sendImbueToServer(tileEntity, hoveredID.toString());
 			tileEntity.imbueCurrentArmor(hoveredID);
 		}
@@ -97,7 +98,7 @@ public class GuiArmorImbuer extends GuiContainer{
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j){
+	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		int l = (width - xSize) / 2;
 		int i1 = (height - ySize) / 2;
 
@@ -119,21 +120,28 @@ public class GuiArmorImbuer extends GuiContainer{
 
 		GL11.glColor3f(1, 1, 1);
 		hoveredID = null;
-		if (stack != null){
+		if (stack != null) {
 			EntityEquipmentSlot armorType = null;
-			if ( stack.getItem() instanceof ItemArmor) {
-				armorType = ((ItemArmor)stack.getItem()).armorType;
+			if (stack.getItem() instanceof ItemArmor) {
+				armorType = ((ItemArmor) stack.getItem()).armorType;
 			}
 
-			for (ImbuementTiers tier : ImbuementTiers.values()){
-				int offset = tier == ImbuementTiers.FIRST ? tier1Offset : tier == ImbuementTiers.SECOND ? tier2Offset : tier == ImbuementTiers.THIRD ? tier3Offset : tier4Offset;
+			for (ImbuementTiers tier : ImbuementTiers.values()) {
+				int offset = tier == ImbuementTiers.FIRST ? tier1Offset
+						: tier == ImbuementTiers.SECOND ? tier2Offset
+								: tier == ImbuementTiers.THIRD ? tier3Offset : tier4Offset;
 				int num = 0;
 				ArrayList<ArmorImbuement> infusions = new ArrayList<>();
 				for (ArmorImbuement imbuement : ImbuementRegistry.instance.getImbuementsForTier(tier, armorType)) {
-					if (imbuement.canApplyToArmor(stack, player)) infusions.add(imbuement);
+					if (imbuement.canApplyToArmor(stack, player))
+						infusions.add(imbuement);
 				}
-				GuiButton buttonNext = tier == ImbuementTiers.FIRST ? tier1Next : (tier == ImbuementTiers.SECOND ? tier2Next : (tier == ImbuementTiers.THIRD ? tier3Next : tier4Next));
-				GuiButton buttonPrev = tier == ImbuementTiers.FIRST ? tier1Prev : (tier == ImbuementTiers.SECOND ? tier2Prev :( tier == ImbuementTiers.THIRD ? tier3Prev : tier4Prev));
+				GuiButton buttonNext = tier == ImbuementTiers.FIRST ? tier1Next
+						: (tier == ImbuementTiers.SECOND ? tier2Next
+								: (tier == ImbuementTiers.THIRD ? tier3Next : tier4Next));
+				GuiButton buttonPrev = tier == ImbuementTiers.FIRST ? tier1Prev
+						: (tier == ImbuementTiers.SECOND ? tier2Prev
+								: (tier == ImbuementTiers.THIRD ? tier3Prev : tier4Prev));
 				if (infusions.size() > 4) {
 					buttonNext.visible = true;
 					buttonPrev.visible = true;
@@ -141,7 +149,7 @@ public class GuiArmorImbuer extends GuiContainer{
 					buttonNext.visible = false;
 					buttonPrev.visible = false;
 				}
-				if (offset <= 0) 
+				if (offset <= 0)
 					buttonPrev.enabled = false;
 				else
 					buttonPrev.enabled = true;
@@ -149,17 +157,19 @@ public class GuiArmorImbuer extends GuiContainer{
 					buttonNext.enabled = false;
 				else
 					buttonNext.enabled = true;
-				for (ArmorImbuement infusion : infusions){
+				for (ArmorImbuement infusion : infusions) {
 					if (num < offset || num >= offset + 4) {
 						num++;
 						continue;
 					}
-					if (num == offset + 3) drawX--;
-					mc.renderEngine.bindTexture(new ResourceLocation(infusion.getRegistryName().getResourceDomain(), "textures/armorinfusions/" + infusion.getRegistryName().getResourcePath() + ".png"));
+					if (num == offset + 3)
+						drawX--;
+					mc.renderEngine.bindTexture(new ResourceLocation(infusion.getRegistryName().getResourceDomain(),
+							"textures/armorinfusions/" + infusion.getRegistryName().getResourcePath() + ".png"));
 					drawInfusionIconAt(drawX, drawY, false);
-					
-					if (i >= drawX && i <= drawX + spriteWidth){
-						if (j >= drawY && j <= drawY + spriteHeight){
+
+					if (i >= drawX && i <= drawX + spriteWidth) {
+						if (j >= drawY && j <= drawY + spriteHeight) {
 							hoverLines.add(I18n.translateToLocal("am2.tooltip." + infusion.getID()));
 						}
 					}
@@ -174,75 +184,84 @@ public class GuiArmorImbuer extends GuiContainer{
 			drawY = startY;
 
 			int highestSelectedTier = 0;
-			for (ImbuementTiers tier : ImbuementTiers.values()){
+			for (ImbuementTiers tier : ImbuementTiers.values()) {
 				ArrayList<ArmorImbuement> infusions = new ArrayList<>();
 				for (ArmorImbuement imbuement : ImbuementRegistry.instance.getImbuementsForTier(tier, armorType)) {
-					if (imbuement.canApplyToArmor(stack, player)) infusions.add(imbuement);
+					if (imbuement.canApplyToArmor(stack, player))
+						infusions.add(imbuement);
 				}
 				ArmorImbuement[] existingInfusions = ArmorHelper.getInfusionsOnArmor(stack);
 				ArmorImbuement tierInfusion = null;
-				int offset = tier == ImbuementTiers.FIRST ? tier1Offset : tier == ImbuementTiers.SECOND ? tier2Offset : tier == ImbuementTiers.THIRD ? tier3Offset : tier4Offset;
+				int offset = tier == ImbuementTiers.FIRST ? tier1Offset
+						: tier == ImbuementTiers.SECOND ? tier2Offset
+								: tier == ImbuementTiers.THIRD ? tier3Offset : tier4Offset;
 				int num = 0;
-				for (ArmorImbuement infusion : existingInfusions){
-					if (infusion == null) continue;
-					if (infusion.getTier() == tier){
+				for (ArmorImbuement infusion : existingInfusions) {
+					if (infusion == null)
+						continue;
+					if (infusion.getTier() == tier) {
 						tierInfusion = infusion;
 						if (tier.ordinal() >= highestSelectedTier)
 							highestSelectedTier = tier.ordinal() + 1;
 						break;
 					}
 				}
-				for (ArmorImbuement infusion : infusions){
+				for (ArmorImbuement infusion : infusions) {
 					if (num < offset || num >= offset + 4) {
 						num++;
 						continue;
 					}
-					if (num == offset + 3) drawX--;
-					mc.renderEngine.bindTexture(new ResourceLocation(infusion.getRegistryName().getResourceDomain(), "textures/armorinfusions/" + infusion.getRegistryName().getResourcePath() + ".png"));
-					if ((tierInfusion == null && infusion.getTier().ordinal() <= highestSelectedTier)){
-						if (tileEntity.isCreativeAllowed() || ArmorHelper.getArmorLevel(stack) >= ArmorHelper.getImbueCost(tier)){
+					if (num == offset + 3)
+						drawX--;
+					mc.renderEngine.bindTexture(new ResourceLocation(infusion.getRegistryName().getResourceDomain(),
+							"textures/armorinfusions/" + infusion.getRegistryName().getResourcePath() + ".png"));
+					if ((tierInfusion == null && infusion.getTier().ordinal() <= highestSelectedTier)) {
+						if (tileEntity.isCreativeAllowed()
+								|| ArmorHelper.getArmorLevel(stack) >= ArmorHelper.getImbueCost(tier)) {
 							drawInfusionIconAt(drawX, drawY, true);
-							if (i >= drawX && i <= drawX + spriteWidth){
-								if (j >= drawY && j <= drawY + spriteHeight){
+							if (i >= drawX && i <= drawX + spriteWidth) {
+								if (j >= drawY && j <= drawY + spriteHeight) {
 									hoveredID = infusion.getRegistryName();
 								}
 							}
 						}
-					}else if (tierInfusion == infusion){
-						mc.renderEngine.bindTexture(new ResourceLocation(infusion.getRegistryName().getResourceDomain(), "textures/armorinfusions/" + infusion.getRegistryName().getResourcePath() + ".png"));
+					} else if (tierInfusion == infusion) {
+						mc.renderEngine.bindTexture(new ResourceLocation(infusion.getRegistryName().getResourceDomain(),
+								"textures/armorinfusions/" + infusion.getRegistryName().getResourcePath() + ".png"));
 						drawInfusionIconAt(drawX, drawY, true);
 						mc.renderEngine.bindTexture(new ResourceLocation("textures/misc/enchanted_item_glint.png"));
-						//SETUP
+						// SETUP
 						GlStateManager.enableBlend();
-				        GlStateManager.depthMask(false);
-				        //GlStateManager.depthFunc(514);
-				        GlStateManager.disableLighting();
-				        RenderUtils.color(-8372020);
-				        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE);
+						GlStateManager.depthMask(false);
+						// GlStateManager.depthFunc(514);
+						GlStateManager.disableLighting();
+						RenderUtils.color(-8372020);
+						GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE);
 						GlStateManager.matrixMode(GL11.GL_TEXTURE);
 						GlStateManager.pushMatrix();
-						
-				        float move = (float)(Minecraft.getSystemTime() % 3000L) / 3000.0F;
-				        move %= 1;
-				        GlStateManager.translate(move, 0.0F, 0.0F);
-				        GlStateManager.rotate(-50.0F, 0.0F, 0.0F, 1.0F);
+
+						float move = (float) (Minecraft.getSystemTime() % 3000L) / 3000.0F;
+						move %= 1;
+						GlStateManager.translate(move, 0.0F, 0.0F);
+						GlStateManager.rotate(-50.0F, 0.0F, 0.0F, 1.0F);
 						RenderUtils.drawBox(drawX, drawY, spriteWidth, spriteHeight, l, 0, 0, 0.125f, 0.125f);
 						GlStateManager.popMatrix();
-						
+
 						GlStateManager.pushMatrix();
-				        float move1 = (float)(Minecraft.getSystemTime() % 4873L) / 4873.0F;
-				        move1 %= 1;
-				        GlStateManager.translate(move1, 0.0F, 0.0F);
-				        GlStateManager.rotate(10.0F, 0.0F, 0.0F, 1.0F);
+						float move1 = (float) (Minecraft.getSystemTime() % 4873L) / 4873.0F;
+						move1 %= 1;
+						GlStateManager.translate(move1, 0.0F, 0.0F);
+						GlStateManager.rotate(10.0F, 0.0F, 0.0F, 1.0F);
 						RenderUtils.drawBox(drawX, drawY, spriteWidth, spriteHeight, l, 0, 0, 0.125f, 0.125f);
 						GlStateManager.popMatrix();
-						
+
 						GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-				        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-				        //GlStateManager.depthFunc(515);
-				        GlStateManager.depthMask(true);
-				        RenderUtils.color(0xffffff);
-				        GlStateManager.disableBlend();
+						GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+								GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+						// GlStateManager.depthFunc(515);
+						GlStateManager.depthMask(true);
+						RenderUtils.color(0xffffff);
+						GlStateManager.disableBlend();
 					}
 
 					num++;
@@ -268,10 +287,10 @@ public class GuiArmorImbuer extends GuiContainer{
 			AMGuiHelper.drawHoveringText(hoverLines, i, j, fontRendererObj, width, height);
 	}
 
-	private void drawInfusionIconAt(int x, int y, boolean active){
+	private void drawInfusionIconAt(int x, int y, boolean active) {
 		drawTexturedModalRect(x, y, 0, active ? 0 : spriteHeight, spriteWidth, spriteHeight);
 	}
-	
+
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button.id == 0) {
@@ -287,14 +306,14 @@ public class GuiArmorImbuer extends GuiContainer{
 		} else if (button.id == 5) {
 			tier3Offset--;
 		} else if (button.id == 6) {
-			tier4Offset++;			
+			tier4Offset++;
 		} else if (button.id == 7) {
 			tier4Offset--;
 		}
 	}
-	
+
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2){
+	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 
 	}
 

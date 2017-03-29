@@ -8,12 +8,13 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiKeystoneChest extends GuiContainer{
+public class GuiKeystoneChest extends GuiContainer {
 
-	private static final ResourceLocation background = new ResourceLocation("arsmagica2", "textures/gui/keystoneChestGUI.png");
+	private static final ResourceLocation background = new ResourceLocation("arsmagica2",
+			"textures/gui/keystoneChestGUI.png");
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j){
+	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		mc.renderEngine.bindTexture(background);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int l = (width - xSize) / 2;
@@ -21,13 +22,13 @@ public class GuiKeystoneChest extends GuiContainer{
 		drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
 	}
 
-	public GuiKeystoneChest(InventoryPlayer inventoryplayer, TileEntityKeystoneChest chest){
+	public GuiKeystoneChest(InventoryPlayer inventoryplayer, TileEntityKeystoneChest chest) {
 		super(new ContainerKeystoneChest(inventoryplayer, chest));
 		xSize = 176;
 		ySize = 180;
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2){
+	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 	}
 }

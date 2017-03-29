@@ -11,29 +11,29 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockGroundRuneSpell extends BlockGroundRune{
+public class BlockGroundRuneSpell extends BlockGroundRune {
 
-	public BlockGroundRuneSpell(){
+	public BlockGroundRuneSpell() {
 		super();
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World var1, int i){
+	public TileEntity createNewTileEntity(World var1, int i) {
 		return new TileEntityGroundRuneSpell();
 	}
 
 	@Override
-	protected boolean ActivateRune(World world, List<Entity> entitiesInRange, BlockPos pos){
+	protected boolean ActivateRune(World world, List<Entity> entitiesInRange, BlockPos pos) {
 		TileEntityGroundRuneSpell te = getTileEntity(world, pos);
 		if (te == null)
 			return false;
-		
+
 		boolean hasApplied = false;
-		
-		for (Entity e : entitiesInRange){
-			if (e instanceof EntityLivingBase){
-				if (te.canApply((EntityLivingBase)e)) {
-					hasApplied = te.applySpellEffect((EntityLivingBase)e);
+
+		for (Entity e : entitiesInRange) {
+			if (e instanceof EntityLivingBase) {
+				if (te.canApply((EntityLivingBase) e)) {
+					hasApplied = te.applySpellEffect((EntityLivingBase) e);
 					break;
 				}
 			}
@@ -42,7 +42,7 @@ public class BlockGroundRuneSpell extends BlockGroundRune{
 	}
 
 	@Override
-	protected boolean isPermanent(World world, BlockPos pos, IBlockState state){
+	protected boolean isPermanent(World world, BlockPos pos, IBlockState state) {
 		TileEntityGroundRuneSpell te = getTileEntity(world, pos);
 		if (te == null)
 			return false;
@@ -50,7 +50,7 @@ public class BlockGroundRuneSpell extends BlockGroundRune{
 	}
 
 	@Override
-	protected int getNumTriggers(World world, BlockPos pos, IBlockState state){
+	protected int getNumTriggers(World world, BlockPos pos, IBlockState state) {
 		TileEntityGroundRuneSpell te = getTileEntity(world, pos);
 		if (te == null)
 			return 1;
@@ -58,7 +58,7 @@ public class BlockGroundRuneSpell extends BlockGroundRune{
 	}
 
 	@Override
-	public void setNumTriggers(World world, BlockPos pos, IBlockState state, int numTriggers){
+	public void setNumTriggers(World world, BlockPos pos, IBlockState state, int numTriggers) {
 		TileEntityGroundRuneSpell te = getTileEntity(world, pos);
 		if (te == null)
 			return;
@@ -67,22 +67,22 @@ public class BlockGroundRuneSpell extends BlockGroundRune{
 			te.setPermanent(true);
 	}
 
-	private TileEntityGroundRuneSpell getTileEntity(World world, BlockPos pos){
+	private TileEntityGroundRuneSpell getTileEntity(World world, BlockPos pos) {
 		TileEntity te = world.getTileEntity(pos);
-		if (te instanceof TileEntityGroundRuneSpell){
-			return (TileEntityGroundRuneSpell)te;
+		if (te instanceof TileEntityGroundRuneSpell) {
+			return (TileEntityGroundRuneSpell) te;
 		}
 		return null;
 	}
 
-	public void setSpellStack(World world, BlockPos pos, ItemStack effect){
+	public void setSpellStack(World world, BlockPos pos, ItemStack effect) {
 		TileEntityGroundRuneSpell te = getTileEntity(world, pos);
 		if (te == null)
 			return;
 		te.setSpellStack(effect);
 	}
 
-	public void setPlacedBy(World world, BlockPos pos, EntityLivingBase caster){
+	public void setPlacedBy(World world, BlockPos pos, EntityLivingBase caster) {
 		TileEntityGroundRuneSpell te = getTileEntity(world, pos);
 		if (te == null)
 			return;
@@ -90,8 +90,9 @@ public class BlockGroundRuneSpell extends BlockGroundRune{
 	}
 
 	@Override
-	public boolean placeAt(World world, BlockPos pos, IBlockState state){
-		if (!canPlaceBlockAt(world, pos)) return false;
+	public boolean placeAt(World world, BlockPos pos, IBlockState state) {
+		if (!canPlaceBlockAt(world, pos))
+			return false;
 		if (!world.isRemote)
 			world.setBlockState(pos, state);
 		return true;

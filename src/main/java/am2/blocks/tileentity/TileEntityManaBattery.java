@@ -18,37 +18,37 @@ public class TileEntityManaBattery extends TileEntityAMPower implements ITileEnt
 	boolean hasUpdated = false;
 	int prevEnergy;
 
-	public TileEntityManaBattery(){
+	public TileEntityManaBattery() {
 		super(storageCapacity);
 		active = false;
 	}
 
-	public PowerTypes getPowerType(){
+	public PowerTypes getPowerType() {
 		return outputPowerType;
 	}
 
-	public void setPowerType(PowerTypes type, boolean forceSubNodes){
+	public void setPowerType(PowerTypes type, boolean forceSubNodes) {
 		this.outputPowerType = type;
 		if (worldObj != null && worldObj.isRemote) {
 			markDirty();
 		}
 	}
 
-	public void setActive(boolean active){
+	public void setActive(boolean active) {
 		this.active = active;
 	}
 
 	@Override
-	public boolean canProvidePower(PowerTypes type){
+	public boolean canProvidePower(PowerTypes type) {
 		return true;
 	}
 
 	@Override
-	public void update(){
+	public void update() {
 
-		if (worldObj.isBlockIndirectlyGettingPowered(pos) > 0){
+		if (worldObj.isBlockIndirectlyGettingPowered(pos) > 0) {
 			this.setPowerRequests();
-		}else{
+		} else {
 			this.setNoPowerRequests();
 		}
 
@@ -56,12 +56,12 @@ public class TileEntityManaBattery extends TileEntityAMPower implements ITileEnt
 			PowerTypes highest = PowerNodeRegistry.For(worldObj).getHighestPowerType(this);
 			float amt = PowerNodeRegistry.For(worldObj).getPower(this, highest);
 			if (amt > 0) {
-				if(this.outputPowerType != highest) {
+				if (this.outputPowerType != highest) {
 					this.outputPowerType = highest;
 					this.tickCounter = 0;
 				}
 			} else {
-				if(this.outputPowerType != PowerTypes.NONE) {
+				if (this.outputPowerType != PowerTypes.NONE) {
 					this.outputPowerType = PowerTypes.NONE;
 					this.tickCounter = 0;
 				}
@@ -70,18 +70,20 @@ public class TileEntityManaBattery extends TileEntityAMPower implements ITileEnt
 		this.markDirty();
 		this.getWorld().setBlockState(getPos(), this.getWorld().getBlockState(getPos()), 3);
 		this.getWorld().notifyBlockOfStateChange(getPos(), getBlockType());
-//		if(this.tickCounter == 10) {
-//			this.tickCounter++;
-//			getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
-//		} else{
-//			if(this.tickCounter < 10)
-//				this.tickCounter++;
-//		}
+		// if(this.tickCounter == 10) {
+		// this.tickCounter++;
+		// getWorld().notifyBlockUpdate(getPos(),
+		// getWorld().getBlockState(getPos()),
+		// getWorld().getBlockState(getPos()), 3);
+		// } else{
+		// if(this.tickCounter < 10)
+		// this.tickCounter++;
+		// }
 		super.update();
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound){
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setBoolean("isActive", active);
 		nbttagcompound.setInteger("outputType", outputPowerType.ID());
@@ -89,7 +91,7 @@ public class TileEntityManaBattery extends TileEntityAMPower implements ITileEnt
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound){
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 		active = nbttagcompound.getBoolean("isActive");
 		if (nbttagcompound.hasKey("outputType"))
@@ -102,29 +104,29 @@ public class TileEntityManaBattery extends TileEntityAMPower implements ITileEnt
 	}
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket(){
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), getUpdateTag());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		this.readFromNBT(pkt.getNbtCompound());
 	}
 
 	@Override
-	public int getChargeRate(){
+	public int getChargeRate() {
 		return 1000;
 	}
 
 	@Override
-	public List<PowerTypes> getValidPowerTypes(){
+	public List<PowerTypes> getValidPowerTypes() {
 		if (this.outputPowerType == PowerTypes.NONE)
 			return PowerTypes.all();
 		return Lists.newArrayList(outputPowerType);
 	}
 
 	@Override
-	public boolean canRelayPower(PowerTypes type){
+	public boolean canRelayPower(PowerTypes type) {
 		return false;
 	}
 

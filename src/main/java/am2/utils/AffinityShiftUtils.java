@@ -25,43 +25,44 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
 public class AffinityShiftUtils {
-	
-	public static void doAffinityShift(EntityLivingBase caster, SpellComponent component, SpellShape governingShape){
-		if (!(caster instanceof EntityPlayer)) return;
+
+	public static void doAffinityShift(EntityLivingBase caster, SpellComponent component, SpellShape governingShape) {
+		if (!(caster instanceof EntityPlayer))
+			return;
 		IAffinityData aff = AffinityData.For(caster);
 		Set<Affinity> affList = component.getAffinity();
-		for (Affinity affinity : affList){
+		for (Affinity affinity : affList) {
 			float shift = component.getAffinityShift(affinity) * aff.getDiminishingReturnsFactor() * 5;
 			float xp = 0.05f * aff.getDiminishingReturnsFactor();
-			if (governingShape.isChanneled()){
+			if (governingShape.isChanneled()) {
 				shift /= 4;
 				xp /= 4;
 			}
 
-			if (caster instanceof EntityPlayer){
-				if (SkillData.For((EntityPlayer)caster).hasSkill(SkillDefs.AFFINITY_GAINS.getID())){
+			if (caster instanceof EntityPlayer) {
+				if (SkillData.For((EntityPlayer) caster).hasSkill(SkillDefs.AFFINITY_GAINS.getID())) {
 					shift *= 1.1f;
 					xp *= 0.9f;
 				}
-				ItemStack chestArmor = ((EntityPlayer)caster).getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+				ItemStack chestArmor = ((EntityPlayer) caster).getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 				if (chestArmor != null && ArmorHelper.isInfusionPreset(chestArmor, GenericImbuement.magicXP))
 					xp *= 1.25f;
 			}
 
-			if (shift > 0){
-				AffinityChangingEvent event = new AffinityChangingEvent((EntityPlayer)caster, affinity, shift);
+			if (shift > 0) {
+				AffinityChangingEvent event = new AffinityChangingEvent((EntityPlayer) caster, affinity, shift);
 				MinecraftForge.EVENT_BUS.post(event);
 				if (!event.isCanceled())
 					aff.incrementAffinity(affinity, event.amount);
 			}
-			if (xp > 0){
+			if (xp > 0) {
 				xp *= caster.getAttributeMap().getAttributeInstance(ArsMagicaAPI.xpGainModifier).getAttributeValue();
 				EntityExtension.For(caster).addMagicXP(xp);
 			}
 		}
 		aff.addDiminishingReturns(governingShape.isChanneled());
 	}
-	
+
 	public static Affinity getMainShiftForStack(ItemStack stack) {
 		Affinity aff = Affinity.NONE;
 		float maxDepth = 0F;
@@ -76,7 +77,7 @@ public class AffinityShiftUtils {
 				}
 			}
 		}
-		
+
 		for (Entry<Affinity, Float> entry : customDepthMap.entrySet()) {
 			if (entry.getValue() > maxDepth) {
 				maxDepth = entry.getValue();
@@ -85,8 +86,8 @@ public class AffinityShiftUtils {
 		}
 		return aff;
 	}
-	
-	public static ItemStack getEssenceForAffinity (Affinity affinity) {
+
+	public static ItemStack getEssenceForAffinity(Affinity affinity) {
 		int meta = 0;
 		for (Affinity aff : ArsMagicaAPI.getAffinityRegistry().getValues()) {
 			if (aff.equals(affinity))

@@ -20,60 +20,63 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
-public class FlickerOperatorNaturesBounty extends AbstractFlickerFunctionality{
-	
+public class FlickerOperatorNaturesBounty extends AbstractFlickerFunctionality {
+
 	public final static FlickerOperatorNaturesBounty instance = new FlickerOperatorNaturesBounty();
 
 	@Override
-	public boolean RequiresPower(){
+	public boolean RequiresPower() {
 		return false;
 	}
 
 	@Override
-	public int PowerPerOperation(){
+	public int PowerPerOperation() {
 		return 5;
 	}
 
 	@Override
-	public boolean DoOperation(World worldObj, IFlickerController<?> habitat, boolean powered){
+	public boolean DoOperation(World worldObj, IFlickerController<?> habitat, boolean powered) {
 		return DoOperation(worldObj, habitat, powered, new Affinity[0]);
 	}
 
 	@Override
-	public boolean DoOperation(World worldObj, IFlickerController<?> habitat, boolean powered, Affinity[] flickers){
+	public boolean DoOperation(World worldObj, IFlickerController<?> habitat, boolean powered, Affinity[] flickers) {
 		int radius = 6;
 		int diameter = radius * 2 + 1;
 		boolean updatedOnce = false;
-		if (!worldObj.isRemote){
-			for (int i = 0; i < (powered ? 5 : 1); ++i){
-				BlockPos effectPos = ((TileEntity)habitat).getPos().add(- radius + (worldObj.rand.nextInt(diameter)), 0, - radius + (worldObj.rand.nextInt(diameter)));
+		if (!worldObj.isRemote) {
+			for (int i = 0; i < (powered ? 5 : 1); ++i) {
+				BlockPos effectPos = ((TileEntity) habitat).getPos().add(-radius + (worldObj.rand.nextInt(diameter)), 0,
+						-radius + (worldObj.rand.nextInt(diameter)));
 
-				while (worldObj.isAirBlock(effectPos) && effectPos.getY() > 0){
+				while (worldObj.isAirBlock(effectPos) && effectPos.getY() > 0) {
 					effectPos = effectPos.down();
 				}
 
-				while (!worldObj.isAirBlock(effectPos) && effectPos.getY() > 0){
+				while (!worldObj.isAirBlock(effectPos) && effectPos.getY() > 0) {
 					effectPos = effectPos.up();
 				}
 
 				effectPos.down();
 
-
 				Block block = worldObj.getBlockState(effectPos).getBlock();
-				if (block instanceof IPlantable || block instanceof IGrowable){
+				if (block instanceof IPlantable || block instanceof IGrowable) {
 					block.updateTick(worldObj, effectPos, worldObj.getBlockState(effectPos), worldObj.rand);
 					updatedOnce = true;
 				}
 			}
-		}else{
-			int posY = ((TileEntity)habitat).getPos().getY();
-			while (!worldObj.isAirBlock(new BlockPos(((TileEntity)habitat).getPos().getX(), posY, ((TileEntity)habitat).getPos().getZ()))){
+		} else {
+			int posY = ((TileEntity) habitat).getPos().getY();
+			while (!worldObj.isAirBlock(new BlockPos(((TileEntity) habitat).getPos().getX(), posY,
+					((TileEntity) habitat).getPos().getZ()))) {
 				posY++;
 			}
 			posY--;
-			for (int i = 0; i < ArsMagica2.config.getGFXLevel() * 2; ++i){
-				AMParticle particle = (AMParticle)ArsMagica2.proxy.particleManager.spawn(worldObj, "plant", ((TileEntity)habitat).getPos().getX() + 0.5, posY + 0.5f, ((TileEntity)habitat).getPos().getZ() + 0.5);
-				if (particle != null){
+			for (int i = 0; i < ArsMagica2.config.getGFXLevel() * 2; ++i) {
+				AMParticle particle = (AMParticle) ArsMagica2.proxy.particleManager.spawn(worldObj, "plant",
+						((TileEntity) habitat).getPos().getX() + 0.5, posY + 0.5f,
+						((TileEntity) habitat).getPos().getZ() + 0.5);
+				if (particle != null) {
 
 					particle.addRandomOffset(diameter, 0, diameter);
 					particle.AddParticleController(new ParticleFloatUpward(particle, 0.01f, 0.04f, 1, false));
@@ -83,8 +86,8 @@ public class FlickerOperatorNaturesBounty extends AbstractFlickerFunctionality{
 			}
 		}
 
-		if (powered){
-			for (Affinity aff : flickers){
+		if (powered) {
+			for (Affinity aff : flickers) {
 				if (aff == Affinity.WATER)
 					FlickerOperatorGentleRains.instance.DoOperation(worldObj, habitat, powered);
 			}
@@ -94,34 +97,33 @@ public class FlickerOperatorNaturesBounty extends AbstractFlickerFunctionality{
 	}
 
 	@Override
-	public void RemoveOperator(World worldObj, IFlickerController<?> controller, boolean powered){
+	public void RemoveOperator(World worldObj, IFlickerController<?> controller, boolean powered) {
 	}
 
 	@Override
-	public int TimeBetweenOperation(boolean powered, Affinity[] flickers){
+	public int TimeBetweenOperation(boolean powered, Affinity[] flickers) {
 		return powered ? 1 : 100;
 	}
 
 	@Override
-	public void RemoveOperator(World worldObj, IFlickerController<?> controller, boolean powered, Affinity[] flickers){
+	public void RemoveOperator(World worldObj, IFlickerController<?> controller, boolean powered, Affinity[] flickers) {
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				"BAB",
-				"LNW",
-				"BGB",
-				Character.valueOf('B'), new ItemStack(Items.DYE, 1, 15),
+	public Object[] getRecipe() {
+		return new Object[] { "BAB", "LNW", "BGB", Character.valueOf('B'), new ItemStack(Items.DYE, 1, 15),
 				Character.valueOf('G'), new ItemStack(ItemDefs.rune, 1, EnumDyeColor.GREEN.getDyeDamage()),
 				Character.valueOf('N'), AffinityShiftUtils.getEssenceForAffinity(Affinity.NATURE),
-				Character.valueOf('L'), new ItemStack(ItemDefs.flickerJar, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.LIFE)),
-				Character.valueOf('A'), new ItemStack(ItemDefs.flickerJar, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.NATURE)),
-				Character.valueOf('W'), new ItemStack(ItemDefs.flickerJar, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.WATER))
+				Character.valueOf('L'),
+				new ItemStack(ItemDefs.flickerJar, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.LIFE)),
+				Character.valueOf('A'),
+				new ItemStack(ItemDefs.flickerJar, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.NATURE)),
+				Character.valueOf('W'),
+				new ItemStack(ItemDefs.flickerJar, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.WATER))
 
 		};
 	}
-	
+
 	@Override
 	public ResourceLocation getTexture() {
 		return new ResourceLocation("arsmagica2", "FlickerOperatorNaturesBounty");
@@ -129,8 +131,7 @@ public class FlickerOperatorNaturesBounty extends AbstractFlickerFunctionality{
 
 	@Override
 	public Affinity[] getMask() {
-		return new Affinity[]{Affinity.NATURE, Affinity.WATER, Affinity.LIFE};
+		return new Affinity[] { Affinity.NATURE, Affinity.WATER, Affinity.LIFE };
 	}
-
 
 }

@@ -13,25 +13,26 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
-public class Lightstep extends ArmorImbuement{
+public class Lightstep extends ArmorImbuement {
 
 	@Override
-	public String getID(){
+	public String getID() {
 		return "lightstep";
 	}
 
 	@Override
-	public ImbuementTiers getTier(){
+	public ImbuementTiers getTier() {
 		return ImbuementTiers.FOURTH;
 	}
 
 	@Override
-	public EnumSet<ImbuementApplicationTypes> getApplicationTypes(){
+	public EnumSet<ImbuementApplicationTypes> getApplicationTypes() {
 		return EnumSet.of(ImbuementApplicationTypes.ON_TICK);
 	}
 
 	@Override
-	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType, Object... params){
+	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType,
+			Object... params) {
 
 		if (world.isRemote)
 			return false;
@@ -40,7 +41,7 @@ public class Lightstep extends ArmorImbuement{
 			return false;
 		BlockPos pos = player.getPosition().up();
 		int ll = world.getLightFor(EnumSkyBlock.BLOCK, pos);
-		if (ll < 7 && world.isAirBlock(pos)){
+		if (ll < 7 && world.isAirBlock(pos)) {
 			world.setBlockState(pos, BlockDefs.blockMageTorch.getDefaultState(), 2);
 			return true;
 		}
@@ -48,22 +49,22 @@ public class Lightstep extends ArmorImbuement{
 	}
 
 	@Override
-	public EntityEquipmentSlot[] getValidSlots(){
-		return new EntityEquipmentSlot[]{EntityEquipmentSlot.FEET};
+	public EntityEquipmentSlot[] getValidSlots() {
+		return new EntityEquipmentSlot[] { EntityEquipmentSlot.FEET };
 	}
 
 	@Override
-	public boolean canApplyOnCooldown(){
+	public boolean canApplyOnCooldown() {
 		return true;
 	}
 
 	@Override
-	public int getCooldown(){
+	public int getCooldown() {
 		return 0;
 	}
 
 	@Override
-	public int getArmorDamage(){
+	public int getArmorDamage() {
 		return 1;
 	}
 }

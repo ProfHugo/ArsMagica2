@@ -28,7 +28,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
 
-public class EntityNatureGuardian extends AM2Boss{
+public class EntityNatureGuardian extends AM2Boss {
 
 	public float tendrilRotation;
 	public boolean hasSickle;
@@ -44,26 +44,27 @@ public class EntityNatureGuardian extends AM2Boss{
 
 	public float spinRotation = 0;
 
-	public EntityNatureGuardian(World par1World){
+	public EntityNatureGuardian(World par1World) {
 		super(par1World);
 		this.setSize(1.65f, 4.75f);
 		hasSickle = true;
 	}
 
 	@Override
-	protected void applyEntityAttributes(){
+	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5000D);
 	}
 
 	@Override
-	protected void initSpecificAI(){
-		this.tasks.addTask(1, new EntityAICastSpell<EntityNatureGuardian>(this, NPCSpells.instance.dispel, 16, 23, 50, BossActions.CASTING, new ISpellCastCallback<EntityNatureGuardian>(){
-			@Override
-			public boolean shouldCast(EntityNatureGuardian host, ItemStack spell){
-				return host.getActivePotionEffects().size() > 0;
-			}
-		}));
+	protected void initSpecificAI() {
+		this.tasks.addTask(1, new EntityAICastSpell<EntityNatureGuardian>(this, NPCSpells.instance.dispel, 16, 23, 50,
+				BossActions.CASTING, new ISpellCastCallback<EntityNatureGuardian>() {
+					@Override
+					public boolean shouldCast(EntityNatureGuardian host, ItemStack spell) {
+						return host.getActivePotionEffects().size() > 0;
+					}
+				}));
 		this.tasks.addTask(3, new EntityAIPlantGuardianThrowSickle(this, 0.75f));
 		this.tasks.addTask(3, new EntityAISpinAttack(this, 0.5f, 8));
 		this.tasks.addTask(4, new EntityAIStrikeAttack(this, 0.75f, 12.0f, DamageSources.DamageSourceTypes.CACTUS));
@@ -71,8 +72,8 @@ public class EntityNatureGuardian extends AM2Boss{
 	}
 
 	@Override
-	public void onUpdate(){
-		if (worldObj.isRemote){
+	public void onUpdate() {
+		if (worldObj.isRemote) {
 			updateMovementAngles();
 			spawnParticles();
 		}
@@ -80,37 +81,39 @@ public class EntityNatureGuardian extends AM2Boss{
 	}
 
 	@Override
-	public int getTotalArmorValue(){
+	public int getTotalArmorValue() {
 		return 20;
 	}
 
-	private void spawnParticles(){
-		AMParticle leaf = (AMParticle)ArsMagica2.proxy.particleManager.spawn(worldObj, "leaf", posX + (rand.nextDouble() * 3) - 1.5f, posY + (rand.nextDouble() * 5f), posZ + (rand.nextDouble() * 3) - 1.5f);
-		if (leaf != null){
+	private void spawnParticles() {
+		AMParticle leaf = (AMParticle) ArsMagica2.proxy.particleManager.spawn(worldObj, "leaf",
+				posX + (rand.nextDouble() * 3) - 1.5f, posY + (rand.nextDouble() * 5f),
+				posZ + (rand.nextDouble() * 3) - 1.5f);
+		if (leaf != null) {
 			leaf.setMaxAge(20);
 			leaf.setIgnoreMaxAge(false);
 			leaf.AddParticleController(new ParticleFloatUpward(leaf, 0.05f, -0.02f, 1, false));
-			if (getCurrentAction() == BossActions.SPINNING){
+			if (getCurrentAction() == BossActions.SPINNING) {
 				leaf.AddParticleController(new ParticleOrbitEntity(leaf, this, 0.6f, 1, false));
 			}
 		}
 	}
 
 	@Override
-	public void setCurrentAction(BossActions action){
+	public void setCurrentAction(BossActions action) {
 		super.setCurrentAction(action);
 		this.spinRotation = 0;
 
-		if (!worldObj.isRemote){
+		if (!worldObj.isRemote) {
 			AMNetHandler.INSTANCE.sendActionUpdateToAllAround(this);
 		}
 	}
 
-	private void updateMovementAngles(){
+	private void updateMovementAngles() {
 		tendrilRotation += 0.2f;
 		tendrilRotation %= 360;
 
-		switch (currentAction){
+		switch (currentAction) {
 		case IDLE:
 			break;
 		case SPINNING:
@@ -127,64 +130,67 @@ public class EntityNatureGuardian extends AM2Boss{
 	}
 
 	@Override
-	public ItemStack getHeldItem(EnumHand hand){
+	public ItemStack getHeldItem(EnumHand hand) {
 		return null;
 	}
-	
-	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {};
+
+	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
+	};
 
 	@Override
-	public boolean isActionValid(BossActions action){
-		if (action == BossActions.STRIKE || action == BossActions.SPINNING || action == BossActions.THROWING_SICKLE){
+	public boolean isActionValid(BossActions action) {
+		if (action == BossActions.STRIKE || action == BossActions.SPINNING || action == BossActions.THROWING_SICKLE) {
 			return hasSickle;
 		}
 		return true;
 	}
 
 	@Override
-	protected void dropFewItems(boolean par1, int par2){
+	protected void dropFewItems(boolean par1, int par2) {
 		if (par1)
 			this.entityDropItem(new ItemStack(ItemDefs.infinityOrb, 1, 2), 0.0f);
 
 		int i = rand.nextInt(4);
 
-		for (int j = 0; j < i; j++){
-			this.entityDropItem(new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.NATURE)), 0.0f);
+		for (int j = 0; j < i; j++) {
+			this.entityDropItem(
+					new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.NATURE)),
+					0.0f);
 		}
 		i = rand.nextInt(10);
 
-		if (i < 3 && par1){
+		if (i < 3 && par1) {
 			this.entityDropItem(ItemDefs.natureScytheEnchanted.copy(), 0.0f);
 		}
 	}
 
 	@Override
-	protected float modifyDamageAmount(DamageSource source, float damageAmt){
-		if (source instanceof DamageSourceFire || source.isFireDamage()){
+	protected float modifyDamageAmount(DamageSource source, float damageAmt) {
+		if (source instanceof DamageSourceFire || source.isFireDamage()) {
 			damageAmt *= 2f;
-		}else if (source instanceof DamageSourceFrost){
+		} else if (source instanceof DamageSourceFrost) {
 			damageAmt *= 1.5f;
 		}
 		return damageAmt;
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(){
+	protected SoundEvent getHurtSound() {
 		return AMSounds.NATURE_GUARDIAN_HIT;
 	}
 
 	@Override
-	protected SoundEvent getDeathSound(){
+	protected SoundEvent getDeathSound() {
 		return AMSounds.NATURE_GUARDIAN_DEATH;
 	}
 
 	@Override
-	protected SoundEvent getAmbientSound(){
+	protected SoundEvent getAmbientSound() {
 		return AMSounds.NATURE_GUARDIAN_IDLE;
 	}
 
 	@Override
-	public SoundEvent getAttackSound(){
+	public SoundEvent getAttackSound() {
 		return AMSounds.NATURE_GUARDIAN_ATTACK;
 	}
 

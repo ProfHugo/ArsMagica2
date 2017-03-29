@@ -26,15 +26,15 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
-public class AM2WorldDecorator implements IWorldGenerator{
+public class AM2WorldDecorator implements IWorldGenerator {
 
-	//ores
+	// ores
 	private final WorldGenMinable vinteum;
 	private final WorldGenMinable blueTopaz;
 	private final WorldGenMinable chimerite;
 	private final WorldGenMinable sunstone;
 
-	//flowers
+	// flowers
 	private final AM2FlowerGen blueOrchid;
 	private final AM2FlowerGen desertNova;
 	private final AM2FlowerGen wakebloom;
@@ -43,23 +43,32 @@ public class AM2WorldDecorator implements IWorldGenerator{
 
 	private ArrayList<Integer> dimensionBlacklist = new ArrayList<Integer>();
 
-
-	//trees
+	// trees
 	private final WitchwoodTreeHuge witchwoodTree;
 
-	//pools
+	// pools
 	private final AM2PoolGen pools;
-	public AM2WorldDecorator(){
 
-		for (int i : ArsMagica2.config.getWorldgenBlacklist()){
-			if (i == -1) continue;
+	public AM2WorldDecorator() {
+
+		for (int i : ArsMagica2.config.getWorldgenBlacklist()) {
+			if (i == -1)
+				continue;
 			dimensionBlacklist.add(i);
 		}
 
-		vinteum = new WorldGenMinable(BlockDefs.ores.getDefaultState().withProperty(BlockArsMagicaOre.ORE_TYPE, EnumOreType.VINTEUM), 4, BlockMatcher.forBlock(Blocks.STONE));
-		chimerite = new WorldGenMinable(BlockDefs.ores.getDefaultState().withProperty(BlockArsMagicaOre.ORE_TYPE, EnumOreType.CHIMERITE), 6, BlockMatcher.forBlock(Blocks.STONE));
-		blueTopaz = new WorldGenMinable(BlockDefs.ores.getDefaultState().withProperty(BlockArsMagicaOre.ORE_TYPE, EnumOreType.BLUETOPAZ), 6, BlockMatcher.forBlock(Blocks.STONE));
-		sunstone = new WorldGenMinable(BlockDefs.ores.getDefaultState().withProperty(BlockArsMagicaOre.ORE_TYPE, EnumOreType.SUNSTONE), 3, BlockMatcher.forBlock(Blocks.LAVA));
+		vinteum = new WorldGenMinable(
+				BlockDefs.ores.getDefaultState().withProperty(BlockArsMagicaOre.ORE_TYPE, EnumOreType.VINTEUM), 4,
+				BlockMatcher.forBlock(Blocks.STONE));
+		chimerite = new WorldGenMinable(
+				BlockDefs.ores.getDefaultState().withProperty(BlockArsMagicaOre.ORE_TYPE, EnumOreType.CHIMERITE), 6,
+				BlockMatcher.forBlock(Blocks.STONE));
+		blueTopaz = new WorldGenMinable(
+				BlockDefs.ores.getDefaultState().withProperty(BlockArsMagicaOre.ORE_TYPE, EnumOreType.BLUETOPAZ), 6,
+				BlockMatcher.forBlock(Blocks.STONE));
+		sunstone = new WorldGenMinable(
+				BlockDefs.ores.getDefaultState().withProperty(BlockArsMagicaOre.ORE_TYPE, EnumOreType.SUNSTONE), 3,
+				BlockMatcher.forBlock(Blocks.LAVA));
 
 		blueOrchid = new AM2FlowerGen(BlockDefs.cerublossom);
 		desertNova = new AM2FlowerGen(BlockDefs.desertNova);
@@ -76,14 +85,16 @@ public class AM2WorldDecorator implements IWorldGenerator{
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
-			IChunkProvider chunkProvider){
+			IChunkProvider chunkProvider) {
 
 		if (!SpawnBlacklists.worldgenCanHappenInDimension(world.provider.getDimension()))
 			return;
 
-		if (world.getWorldInfo().getTerrainType() == WorldType.FLAT) return;
-		if (dimensionBlacklist.contains(world.provider.getDimension())) return;
-		switch (world.provider.getDimension()){
+		if (world.getWorldInfo().getTerrainType() == WorldType.FLAT)
+			return;
+		if (dimensionBlacklist.contains(world.provider.getDimension()))
+			return;
+		switch (world.provider.getDimension()) {
 		case -1:
 			generateNether(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider);
 			break;
@@ -95,12 +106,12 @@ public class AM2WorldDecorator implements IWorldGenerator{
 	}
 
 	public void generateNether(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
-			IChunkProvider chunkProvider){
+			IChunkProvider chunkProvider) {
 		generateOre(sunstone, 20, world, random, 5, 120, chunkX, chunkZ);
 	}
 
 	public void generateOverworld(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
-			IChunkProvider chunkProvider){
+			IChunkProvider chunkProvider) {
 		generateOre(vinteum, 6, world, random, 10, 45, chunkX, chunkZ);
 		generateOre(chimerite, 8, world, random, 10, 80, chunkX, chunkZ);
 		generateOre(blueTopaz, 8, world, random, 10, 80, chunkX, chunkZ);
@@ -110,67 +121,73 @@ public class AM2WorldDecorator implements IWorldGenerator{
 		generateFlowers(desertNova, world, random, chunkX, chunkZ);
 		generateFlowers(tarmaRoot, world, random, chunkX, chunkZ);
 
-		Biome biome = world.getBiome(new BlockPos (chunkX << 4, 0, chunkZ << 4));
+		Biome biome = world.getBiome(new BlockPos(chunkX << 4, 0, chunkZ << 4));
 		Type[] biomeTypes = BiomeDictionary.getTypesForBiome(biome);
 		boolean typeValid = false;
-		for (Type type : biomeTypes){
-			if (type == Type.BEACH || type == Type.SWAMP || type == Type.JUNGLE || type == Type.PLAINS || type == Type.WATER){
+		for (Type type : biomeTypes) {
+			if (type == Type.BEACH || type == Type.SWAMP || type == Type.JUNGLE || type == Type.PLAINS
+					|| type == Type.WATER) {
 				typeValid = true;
-			}else if (type == Type.SNOWY){
+			} else if (type == Type.SNOWY) {
 				typeValid = false;
 				break;
 			}
 		}
 
-		if (biome != Biome.REGISTRY.getObject(new ResourceLocation("minecraft:ocean")) && typeValid && random.nextInt(10) < 7){
+		if (biome != Biome.REGISTRY.getObject(new ResourceLocation("minecraft:ocean")) && typeValid
+				&& random.nextInt(10) < 7) {
 			generateFlowers(wakebloom, world, random, chunkX, chunkZ);
 		}
 
-		if (random.nextInt(35) == 0){
+		if (random.nextInt(35) == 0) {
 			generateTree(witchwoodTree, world, random, chunkX, chunkZ);
 		}
 
-		if (random.nextInt(25) == 0){
+		if (random.nextInt(25) == 0) {
 			generatePools(world, random, chunkX, chunkZ);
 		}
 
-		if ((BiomeDictionary.isBiomeOfType(biome, Type.MAGICAL) || BiomeDictionary.isBiomeOfType(biome, Type.FOREST)) && random.nextInt(4) == 0 && TerrainGen.populate(chunkGenerator, world, random, chunkX, chunkZ, true, LAKE)){
+		if ((BiomeDictionary.isBiomeOfType(biome, Type.MAGICAL) || BiomeDictionary.isBiomeOfType(biome, Type.FOREST))
+				&& random.nextInt(4) == 0
+				&& TerrainGen.populate(chunkGenerator, world, random, chunkX, chunkZ, true, LAKE)) {
 			int lakeGenX = (chunkX * 16) + random.nextInt(16) + 8;
 			int lakeGenY = random.nextInt(128);
 			int lakeGenZ = (chunkZ * 16) + random.nextInt(16) + 8;
-			(new WorldGenEssenceLakes(BlockDefs.liquid_essence.getBlock())).generate(world, random, new BlockPos (lakeGenX, lakeGenY, lakeGenZ));
+			(new WorldGenEssenceLakes(BlockDefs.liquid_essence.getBlock())).generate(world, random,
+					new BlockPos(lakeGenX, lakeGenY, lakeGenZ));
 		}
 	}
 
-	private void generateFlowers(AM2FlowerGen flowers, World world, Random random, int chunkX, int chunkZ){
+	private void generateFlowers(AM2FlowerGen flowers, World world, Random random, int chunkX, int chunkZ) {
 		int x = (chunkX << 4) + random.nextInt(16) + 8;
 		int y = random.nextInt(128);
 		int z = (chunkZ << 4) + random.nextInt(16) + 8;
 
-		flowers.generate(world, random, new BlockPos (x, y, z));
+		flowers.generate(world, random, new BlockPos(x, y, z));
 	}
 
-	private void generateOre(WorldGenMinable mineable, int amount, World world, Random random, int minY, int maxY, int chunkX, int chunkZ){
-		for (int i = 0; i < amount; ++i){
+	private void generateOre(WorldGenMinable mineable, int amount, World world, Random random, int minY, int maxY,
+			int chunkX, int chunkZ) {
+		for (int i = 0; i < amount; ++i) {
 			int x = (chunkX << 4) + random.nextInt(16);
 			int y = random.nextInt(maxY - minY) + minY;
 			int z = (chunkZ << 4) + random.nextInt(16);
 
-			mineable.generate(world, random, new BlockPos (x, y, z));
+			mineable.generate(world, random, new BlockPos(x, y, z));
 		}
 	}
 
-	private void generateTree(WorldGenerator trees, World world, Random random, int chunkX, int chunkZ){
+	private void generateTree(WorldGenerator trees, World world, Random random, int chunkX, int chunkZ) {
 		int x = (chunkX * 16) + random.nextInt(16);
 		int z = (chunkZ * 16) + random.nextInt(16);
 		BlockPos y = world.getHeight(new BlockPos(x, 0, z));
 
-		if (new WitchwoodTreeHuge(true).generate(world, random, y)){
+		if (new WitchwoodTreeHuge(true).generate(world, random, y)) {
 			aum.generate(world, random, y);
 		}
 	}
 
-	private void generatePools(World world, Random random, int chunkX, int chunkZ){
+	private void generatePools(World world, Random random, int chunkX, int chunkZ) {
 		int x = (chunkX * 16) + random.nextInt(16);
 		int z = (chunkZ * 16) + random.nextInt(16);
 		BlockPos y = world.getHeight(new BlockPos(x, 0, z));

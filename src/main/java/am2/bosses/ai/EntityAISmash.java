@@ -14,7 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 
-public class EntityAISmash extends EntityAIBase{
+public class EntityAISmash extends EntityAIBase {
 
 	EntityLiving host;
 	private EntityLivingBase target;
@@ -22,20 +22,22 @@ public class EntityAISmash extends EntityAIBase{
 	private int cooldownTicks = 0;
 	private final DamageSources.DamageSourceTypes damageType;
 
-	public EntityAISmash(IArsMagicaBoss host, float moveSpeed, DamageSources.DamageSourceTypes damageType){
-		this.host = (EntityLiving)host;
+	public EntityAISmash(IArsMagicaBoss host, float moveSpeed, DamageSources.DamageSourceTypes damageType) {
+		this.host = (EntityLiving) host;
 		this.moveSpeed = moveSpeed;
 		this.setMutexBits(1);
 		this.damageType = damageType;
 	}
 
 	@Override
-	public boolean shouldExecute(){
-		if (cooldownTicks-- > 0 || ((IArsMagicaBoss)host).getCurrentAction() != BossActions.IDLE || !((IArsMagicaBoss)host).isActionValid(BossActions.SMASH))
+	public boolean shouldExecute() {
+		if (cooldownTicks-- > 0 || ((IArsMagicaBoss) host).getCurrentAction() != BossActions.IDLE
+				|| !((IArsMagicaBoss) host).isActionValid(BossActions.SMASH))
 			return false;
 		EntityLivingBase AITarget = host.getAttackTarget();
-		if (AITarget == null || AITarget.isDead) return false;
-		if (AITarget != null && host.getDistanceSqToEntity(AITarget) > 4D){
+		if (AITarget == null || AITarget.isDead)
+			return false;
+		if (AITarget != null && host.getDistanceSqToEntity(AITarget) > 4D) {
 			if (!host.getNavigator().tryMoveToEntityLiving(AITarget, moveSpeed))
 				return false;
 		}
@@ -44,14 +46,16 @@ public class EntityAISmash extends EntityAIBase{
 	}
 
 	@Override
-	public boolean continueExecuting(){
+	public boolean continueExecuting() {
 		EntityLivingBase AITarget = host.getAttackTarget();
-		if (AITarget != null && host.getDistanceSqToEntity(AITarget) > 4D){
+		if (AITarget != null && host.getDistanceSqToEntity(AITarget) > 4D) {
 			if (host.onGround)
 				return host.getNavigator().tryMoveToEntityLiving(AITarget, moveSpeed);
 		}
-		if (AITarget == null || AITarget.isDead || (((IArsMagicaBoss)host).getCurrentAction() == BossActions.SMASH && ((IArsMagicaBoss)host).getTicksInCurrentAction() > ((IArsMagicaBoss)host).getCurrentAction().getMaxActionTime())){
-			((IArsMagicaBoss)host).setCurrentAction(BossActions.IDLE);
+		if (AITarget == null || AITarget.isDead
+				|| (((IArsMagicaBoss) host).getCurrentAction() == BossActions.SMASH && ((IArsMagicaBoss) host)
+						.getTicksInCurrentAction() > ((IArsMagicaBoss) host).getCurrentAction().getMaxActionTime())) {
+			((IArsMagicaBoss) host).setCurrentAction(BossActions.IDLE);
 			cooldownTicks = 100;
 			return false;
 		}
@@ -59,30 +63,34 @@ public class EntityAISmash extends EntityAIBase{
 	}
 
 	@Override
-	public void updateTask(){
+	public void updateTask() {
 		host.getLookHelper().setLookPositionWithEntity(host.getAttackTarget(), 30, 30);
 		host.getNavigator().tryMoveToEntityLiving(target, moveSpeed);
 		if (host.getDistanceSqToEntity(target) < 16)
-			if (((IArsMagicaBoss)host).getCurrentAction() != BossActions.SMASH)
-				((IArsMagicaBoss)host).setCurrentAction(BossActions.SMASH);
+			if (((IArsMagicaBoss) host).getCurrentAction() != BossActions.SMASH)
+				((IArsMagicaBoss) host).setCurrentAction(BossActions.SMASH);
 
-		if (((IArsMagicaBoss)host).getCurrentAction() == BossActions.SMASH && ((IArsMagicaBoss)host).getTicksInCurrentAction() == 18){
+		if (((IArsMagicaBoss) host).getCurrentAction() == BossActions.SMASH
+				&& ((IArsMagicaBoss) host).getTicksInCurrentAction() == 18) {
 
 			if (!host.worldObj.isRemote)
-				host.worldObj.playSound(host.posX, host.posY, host.posZ, ((IArsMagicaBoss)host).getAttackSound(), SoundCategory.HOSTILE, 1.0f, 1.0f, false);
+				host.worldObj.playSound(host.posX, host.posY, host.posZ, ((IArsMagicaBoss) host).getAttackSound(),
+						SoundCategory.HOSTILE, 1.0f, 1.0f, false);
 
-			List<EntityLivingBase> aoeEntities = host.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, host.getEntityBoundingBox().expand(4, 2, 4));
-			for (EntityLivingBase ent : aoeEntities){
-				if (ent == host) continue;
+			List<EntityLivingBase> aoeEntities = host.worldObj.getEntitiesWithinAABB(EntityLivingBase.class,
+					host.getEntityBoundingBox().expand(4, 2, 4));
+			for (EntityLivingBase ent : aoeEntities) {
+				if (ent == host)
+					continue;
 				ent.attackEntityFrom(DamageSources.causeDamage(damageType, host, true), 8);
-				if (ent instanceof EntityPlayer){
+				if (ent instanceof EntityPlayer) {
 					AMNetHandler.INSTANCE.sendVelocityAddPacket(host.worldObj, ent, 0, 1.3f, 0);
-				}else{
+				} else {
 					ent.addVelocity(0, 1.4f, 0);
 				}
 			}
-			if (!host.worldObj.isRemote){
-				for (int i = 0; i < 4; ++i){
+			if (!host.worldObj.isRemote) {
+				for (int i = 0; i < 4; ++i) {
 					EntityShockwave shockwave = new EntityShockwave(host.worldObj);
 					shockwave.setPosition(host.posX, host.posY, host.posZ);
 					shockwave.setMoveSpeedAndAngle(0.5f, MathHelper.wrapDegrees(host.rotationYaw + (90 * i)));

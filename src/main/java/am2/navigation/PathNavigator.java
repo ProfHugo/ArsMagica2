@@ -8,7 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class PathNavigator{
+public class PathNavigator {
 	private BreadCrumb pathData;
 	private Point3D currentWaypoint;
 	private final EntityLivingBase pathEntity;
@@ -21,7 +21,7 @@ public class PathNavigator{
 
 	private static final int MaxPathDistance = 19;
 
-	public PathNavigator(EntityLivingBase entity){
+	public PathNavigator(EntityLivingBase entity) {
 		this.pathEntity = entity;
 		PathUpdateTicks = 0;
 		currentWaypoint = null;
@@ -29,28 +29,28 @@ public class PathNavigator{
 		pathIsLongRange = false;
 	}
 
-	public boolean HasWaypoint(){
+	public boolean HasWaypoint() {
 		return currentWaypoint != null;
 	}
 
-	public boolean HasPath(){
+	public boolean HasPath() {
 		return pathData != null;
 	}
 
-	public void tryMoveFlying(World world, Entity entity){
-		if (pathEntity.isDead){
+	public void tryMoveFlying(World world, Entity entity) {
+		if (pathEntity.isDead) {
 			return;
 		}
 		getEntityLocation(world);
-		if (!HasWaypoint() || !HasPath()){
+		if (!HasWaypoint() || !HasPath()) {
 			return;
 		}
-		if (PathUpdateTicks++ >= 20){
+		if (PathUpdateTicks++ >= 20) {
 			PathUpdateTicks = 0;
 			GetPathToWaypoint(world, entity);
 		}
 
-		if (!HasPath()){
+		if (!HasPath()) {
 			return;
 		}
 
@@ -60,16 +60,18 @@ public class PathNavigator{
 		checkStuck();
 	}
 
-	public void GenerateNewRandomWaypoint(World world, Entity entity){
+	public void GenerateNewRandomWaypoint(World world, Entity entity) {
 		int newX, newY, newZ;
 
-		for (int i = 0; i < 5; ++i){
-			newX = (int)Math.round(pathEntity.posX + (world.rand.nextDouble() * MaxPathDistance - (MaxPathDistance / 2)));
-			newY = (int)Math.round(pathEntity.posY + (world.rand.nextDouble() * 8 - (4)));
-			newZ = (int)Math.round(pathEntity.posZ + (world.rand.nextDouble() * MaxPathDistance - (MaxPathDistance / 2)));
+		for (int i = 0; i < 5; ++i) {
+			newX = (int) Math
+					.round(pathEntity.posX + (world.rand.nextDouble() * MaxPathDistance - (MaxPathDistance / 2)));
+			newY = (int) Math.round(pathEntity.posY + (world.rand.nextDouble() * 8 - (4)));
+			newZ = (int) Math
+					.round(pathEntity.posZ + (world.rand.nextDouble() * MaxPathDistance - (MaxPathDistance / 2)));
 
-			BlockPos pos = new BlockPos (newX, newY, newZ);
-			if (world.getBlockState(pos).getBlock() == Blocks.AIR && newY > 5){
+			BlockPos pos = new BlockPos(newX, newY, newZ);
+			if (world.getBlockState(pos).getBlock() == Blocks.AIR && newY > 5) {
 				getEntityLocation(world);
 				SetWaypoint(world, pos, entity);
 				GetPathToWaypoint(world, entity);
@@ -78,15 +80,17 @@ public class PathNavigator{
 		}
 	}
 
-	public void GenerateNewRandomWaypoint(World world, Entity entity, int minY, int maxY){
+	public void GenerateNewRandomWaypoint(World world, Entity entity, int minY, int maxY) {
 		int newX, newY, newZ;
 
-		for (int i = 0; i < 5; ++i){
-			newX = (int)Math.round(pathEntity.posX + (world.rand.nextDouble() * MaxPathDistance - (MaxPathDistance / 2)));
-			newY = (int)Math.round(minY + (world.rand.nextDouble() * (maxY - minY)));
-			newZ = (int)Math.round(pathEntity.posZ + (world.rand.nextDouble() * MaxPathDistance - (MaxPathDistance / 2)));
-			BlockPos pos = new BlockPos (newX, newY, newZ);
-			if (world.getBlockState(pos).getBlock() == Blocks.AIR && newY > 5){
+		for (int i = 0; i < 5; ++i) {
+			newX = (int) Math
+					.round(pathEntity.posX + (world.rand.nextDouble() * MaxPathDistance - (MaxPathDistance / 2)));
+			newY = (int) Math.round(minY + (world.rand.nextDouble() * (maxY - minY)));
+			newZ = (int) Math
+					.round(pathEntity.posZ + (world.rand.nextDouble() * MaxPathDistance - (MaxPathDistance / 2)));
+			BlockPos pos = new BlockPos(newX, newY, newZ);
+			if (world.getBlockState(pos).getBlock() == Blocks.AIR && newY > 5) {
 				getEntityLocation(world);
 				SetWaypoint(world, pos, entity);
 				GetPathToWaypoint(world, entity);
@@ -95,16 +99,16 @@ public class PathNavigator{
 		}
 	}
 
-	public void GenerateNewRandomWaypoint(World world){
+	public void GenerateNewRandomWaypoint(World world) {
 		GenerateNewRandomWaypoint(world, null);
 	}
 
-	public void GenerateNewRandomWaypoint(World world, int minY, int maxY){
+	public void GenerateNewRandomWaypoint(World world, int minY, int maxY) {
 		GenerateNewRandomWaypoint(world, null, minY, maxY);
 	}
 
-	public boolean GenerateWaypointToEntity(Entity entityTarget, World world, Entity entity){
-		if (pathEntity.getDistanceSqToEntity(entityTarget) > 225){
+	public boolean GenerateWaypointToEntity(Entity entityTarget, World world, Entity entity) {
+		if (pathEntity.getDistanceSqToEntity(entityTarget) > 225) {
 			return false;
 		}
 		getEntityLocation(world);
@@ -112,11 +116,11 @@ public class PathNavigator{
 		return true;
 	}
 
-	public boolean GenerateWaypointToEntity(Entity entityTarget, World world){
+	public boolean GenerateWaypointToEntity(Entity entityTarget, World world) {
 		return GenerateWaypointToEntity(entityTarget, world, null);
 	}
 
-	public void SetWaypoint(World world, BlockPos pos, Entity entity){
+	public void SetWaypoint(World world, BlockPos pos, Entity entity) {
 
 		getEntityLocation(world);
 
@@ -125,28 +129,28 @@ public class PathNavigator{
 
 		Point3D estimatedLocation = Point3D.fromDoubleCoordinates(pathEntity.posX, pathEntity.posY, pathEntity.posZ);
 
-		//is the path too far?  Do we need to set up a long range waypoint?
-		if (estimatedLocation.GetDistanceSq(this.longRangeWaypoint) > 400){
+		// is the path too far? Do we need to set up a long range waypoint?
+		if (estimatedLocation.GetDistanceSq(this.longRangeWaypoint) > 400) {
 			this.pathIsLongRange = true;
 			double posX;
 			double posZ;
 			double posY = pathEntity.posY;
 			float moveSpeed = 15;
 
-			//calculate deltas
+			// calculate deltas
 			double deltaZ = (longRangeWaypoint.z + 0.5f) - pathEntity.posZ;
 			double deltaX = (longRangeWaypoint.x + 0.5f) - pathEntity.posX;
 			double deltaY = posY - (longRangeWaypoint.y + 0.5f);
 			double horizontalDistance = MathHelper.sqrt_double(deltaX * deltaX + deltaZ * deltaZ);
 
-			float radiansYaw = (float)Math.atan2(deltaZ, deltaX);
-			float radiansPitch = (float)(-Math.atan2(deltaY, horizontalDistance));
+			float radiansYaw = (float) Math.atan2(deltaZ, deltaX);
+			float radiansPitch = (float) (-Math.atan2(deltaY, horizontalDistance));
 
 			posX = pathEntity.posX + MathHelper.cos(radiansYaw) * moveSpeed;
 			posZ = pathEntity.posZ + MathHelper.sin(radiansYaw) * moveSpeed;
 			posY = pathEntity.posY + MathHelper.sin(radiansPitch) * moveSpeed;
 
-			while (!BlockIsAir(world, Point3D.fromDoubleCoordinates(posX, posY, posZ))){
+			while (!BlockIsAir(world, Point3D.fromDoubleCoordinates(posX, posY, posZ))) {
 				posY++;
 			}
 			currentWaypoint = Point3D.fromDoubleCoordinates(posX, posY, posZ);
@@ -154,27 +158,27 @@ public class PathNavigator{
 		GetPathToWaypoint(world, entity);
 	}
 
-	private void MoveEntityTowardBreadCrumbFlying(){
+	private void MoveEntityTowardBreadCrumbFlying() {
 		float moveSpeed = pathEntity.getAIMoveSpeed() * 2;
 
-
 		AMVector3 current = new AMVector3(pathEntity.posX, pathEntity.posY, pathEntity.posZ);
-		AMVector3 target = new AMVector3(pathData.position.x + 0.5f, pathData.position.y + 0.5f, pathData.position.z + 0.5f);
+		AMVector3 target = new AMVector3(pathData.position.x + 0.5f, pathData.position.y + 0.5f,
+				pathData.position.z + 0.5f);
 
 		AMVector3 movement = target.sub(current).normalize();
 
 		pathEntity.moveEntity(movement.x * moveSpeed, movement.y * moveSpeed, movement.z * moveSpeed);
 	}
 
-	private void checkDistance(World world, Entity entity){
+	private void checkDistance(World world, Entity entity) {
 		double distance = currentLocation.GetDistanceSq(pathData.position);
-		if (distance < 0.8f){
+		if (distance < 0.8f) {
 			pathData = pathData.next;
-			if (pathData != null){
+			if (pathData != null) {
 				pathData.unshift();
-			}else{
-				//here we are at the end of the path sequence
-				if (pathIsLongRange){
+			} else {
+				// here we are at the end of the path sequence
+				if (pathIsLongRange) {
 					SetWaypoint(world, this.longRangeWaypoint.toBlockPos(), entity);
 					GetPathToWaypoint(world, entity);
 				}
@@ -182,36 +186,44 @@ public class PathNavigator{
 		}
 	}
 
-	private void FaceEntityToBreadCrumb(){
-		if (!HasPath() || !HasWaypoint()){
+	private void FaceEntityToBreadCrumb() {
+		if (!HasPath() || !HasWaypoint()) {
 			return;
 		}
 		double deltaZ = currentWaypoint.z - currentLocation.z;
 		double deltaX = currentWaypoint.x - currentLocation.x;
 		double angle = Math.atan2(deltaZ, deltaX) * 180 / Math.PI;
 
-		pathEntity.rotationYaw = (float)angle;
+		pathEntity.rotationYaw = (float) angle;
 	}
 
-	private void getEntityLocation(World world){
+	private void getEntityLocation(World world) {
 
-		currentLocation = new Point3D((int)Math.floor(pathEntity.posX), (int)Math.floor(pathEntity.posY), (int)Math.floor(pathEntity.posZ));
-		if (!BlockIsAir(world, currentLocation)){
-			currentLocation = new Point3D((int)Math.ceil(pathEntity.posX), (int)Math.floor(pathEntity.posY), (int)Math.floor(pathEntity.posZ));
-			if (!BlockIsAir(world, currentLocation)){
-				currentLocation = new Point3D((int)Math.floor(pathEntity.posX), (int)Math.ceil(pathEntity.posY), (int)Math.floor(pathEntity.posZ));
-				if (!BlockIsAir(world, currentLocation)){
-					currentLocation = new Point3D((int)Math.floor(pathEntity.posX), (int)Math.floor(pathEntity.posY), (int)Math.ceil(pathEntity.posZ));
-					if (!BlockIsAir(world, currentLocation)){
-						currentLocation = new Point3D((int)Math.ceil(pathEntity.posX), (int)Math.ceil(pathEntity.posY), (int)Math.floor(pathEntity.posZ));
-						if (!BlockIsAir(world, currentLocation)){
-							currentLocation = new Point3D((int)Math.ceil(pathEntity.posX), (int)Math.floor(pathEntity.posY), (int)Math.ceil(pathEntity.posZ));
-							if (!BlockIsAir(world, currentLocation)){
-								currentLocation = new Point3D((int)Math.floor(pathEntity.posX), (int)Math.ceil(pathEntity.posY), (int)Math.ceil(pathEntity.posZ));
-								if (!BlockIsAir(world, currentLocation)){
-									currentLocation = new Point3D((int)Math.ceil(pathEntity.posX), (int)Math.ceil(pathEntity.posY), (int)Math.ceil(pathEntity.posZ));
-									if (!BlockIsAir(world, currentLocation)){
-										//stuck!
+		currentLocation = new Point3D((int) Math.floor(pathEntity.posX), (int) Math.floor(pathEntity.posY),
+				(int) Math.floor(pathEntity.posZ));
+		if (!BlockIsAir(world, currentLocation)) {
+			currentLocation = new Point3D((int) Math.ceil(pathEntity.posX), (int) Math.floor(pathEntity.posY),
+					(int) Math.floor(pathEntity.posZ));
+			if (!BlockIsAir(world, currentLocation)) {
+				currentLocation = new Point3D((int) Math.floor(pathEntity.posX), (int) Math.ceil(pathEntity.posY),
+						(int) Math.floor(pathEntity.posZ));
+				if (!BlockIsAir(world, currentLocation)) {
+					currentLocation = new Point3D((int) Math.floor(pathEntity.posX), (int) Math.floor(pathEntity.posY),
+							(int) Math.ceil(pathEntity.posZ));
+					if (!BlockIsAir(world, currentLocation)) {
+						currentLocation = new Point3D((int) Math.ceil(pathEntity.posX),
+								(int) Math.ceil(pathEntity.posY), (int) Math.floor(pathEntity.posZ));
+						if (!BlockIsAir(world, currentLocation)) {
+							currentLocation = new Point3D((int) Math.ceil(pathEntity.posX),
+									(int) Math.floor(pathEntity.posY), (int) Math.ceil(pathEntity.posZ));
+							if (!BlockIsAir(world, currentLocation)) {
+								currentLocation = new Point3D((int) Math.floor(pathEntity.posX),
+										(int) Math.ceil(pathEntity.posY), (int) Math.ceil(pathEntity.posZ));
+								if (!BlockIsAir(world, currentLocation)) {
+									currentLocation = new Point3D((int) Math.ceil(pathEntity.posX),
+											(int) Math.ceil(pathEntity.posY), (int) Math.ceil(pathEntity.posZ));
+									if (!BlockIsAir(world, currentLocation)) {
+										// stuck!
 										pathEntity.setPosition(pathEntity.posX, pathEntity.posY + 1, pathEntity.posZ);
 									}
 								}
@@ -222,21 +234,21 @@ public class PathNavigator{
 			}
 		}
 
-		if (lastLocation != null && currentLocation.GetDistanceSq(lastLocation) < 1.0f && HasPath() && HasWaypoint()){
+		if (lastLocation != null && currentLocation.GetDistanceSq(lastLocation) < 1.0f && HasPath() && HasWaypoint()) {
 			ticksStuck++;
-		}else{
+		} else {
 			lastLocation = currentLocation;
 			ticksStuck = 0;
 		}
 
 	}
 
-	private boolean BlockIsAir(World world, Point3D point){
+	private boolean BlockIsAir(World world, Point3D point) {
 		return world.isAirBlock(point.toBlockPos());
 	}
 
-	private void checkStuck(){
-		if (ticksStuck > 40){
+	private void checkStuck() {
+		if (ticksStuck > 40) {
 			currentWaypoint = null;
 			longRangeWaypoint = null;
 			pathData = null;
@@ -244,19 +256,19 @@ public class PathNavigator{
 		}
 	}
 
-	private void GetPathToWaypoint(World world, Entity entity){
-		try{
-			if (currentLocation == null){
+	private void GetPathToWaypoint(World world, Entity entity) {
+		try {
+			if (currentLocation == null) {
 				return;
 			}
 			pathData = PathFinder.FindPath(world, currentLocation.Unshift(), currentWaypoint.Unshift(), entity);
-			if (pathData != null){
+			if (pathData != null) {
 				pathData.unshift();
 			}
-			if (currentWaypoint != null){
+			if (currentWaypoint != null) {
 				currentWaypoint.Unshift();
 			}
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			currentWaypoint = null;
 		}

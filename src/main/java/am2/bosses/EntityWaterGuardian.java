@@ -32,11 +32,12 @@ public class EntityWaterGuardian extends AM2Boss {
 	private float orbitRotation;
 	private boolean uberSpinAvailable = false;
 
-	private static final DataParameter<Boolean> IS_CLONE = EntityDataManager.createKey(EntityWaterGuardian.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_CLONE = EntityDataManager.createKey(EntityWaterGuardian.class,
+			DataSerializers.BOOLEAN);
 
 	public float spinRotation = 0;
 
-	public EntityWaterGuardian(World par1World){
+	public EntityWaterGuardian(World par1World) {
 		super(par1World);
 		currentAction = BossActions.IDLE;
 		master = null;
@@ -46,123 +47,126 @@ public class EntityWaterGuardian extends AM2Boss {
 	}
 
 	@Override
-	protected void applyEntityAttributes(){
+	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(750D);
 	}
 
-	public void setClones(EntityWaterGuardian clone1, EntityWaterGuardian clone2){
+	public void setClones(EntityWaterGuardian clone1, EntityWaterGuardian clone2) {
 		clones[0] = clone1;
 		clones[1] = clone2;
 	}
 
-	private boolean hasClones(){
+	private boolean hasClones() {
 		return clones[0] != null || clones[1] != null;
 	}
 
-	public void clearClones(){
-		if (clones[0] != null){
+	public void clearClones() {
+		if (clones[0] != null) {
 			clones[0].setDead();
 		}
-		if (clones[1] != null){
+		if (clones[1] != null) {
 			clones[1].setDead();
 		}
 		clones[0] = null;
 		clones[1] = null;
 	}
 
-	private void enableUberAttack(){
+	private void enableUberAttack() {
 		uberSpinAvailable = true;
 	}
 
-	public void setMaster(EntityWaterGuardian master){
+	public void setMaster(EntityWaterGuardian master) {
 		dataManager.set(IS_CLONE, true);
 		this.master = master;
 	}
 
-	public boolean isClone(){
+	public boolean isClone() {
 		return dataManager.get(IS_CLONE);
 	}
 
-	public void clearMaster(){
+	public void clearMaster() {
 		this.master = null;
 	}
 
 	@Override
-	protected void initSpecificAI(){
+	protected void initSpecificAI() {
 		this.tasks.addTask(2, new EntityAIChaosWaterBolt(this));
 		this.tasks.addTask(3, new EntityAICloneSelf(this));
-		this.tasks.addTask(4, new EntityAICastSpell<EntityWaterGuardian>(this, NPCSpells.instance.waterBolt, 12, 23, 5, BossActions.CASTING));
+		this.tasks.addTask(4, new EntityAICastSpell<EntityWaterGuardian>(this, NPCSpells.instance.waterBolt, 12, 23, 5,
+				BossActions.CASTING));
 		this.tasks.addTask(3, new EntityAISpinAttack(this, 0.5f, 4));
 	}
 
 	@Override
-	public void onUpdate(){
+	public void onUpdate() {
 
-		if (currentAction == BossActions.CASTING){
+		if (currentAction == BossActions.CASTING) {
 			uberSpinAvailable = false;
 		}
 
-		if (!worldObj.isRemote && uberSpinAvailable && currentAction != BossActions.CASTING && currentAction != BossActions.IDLE){
+		if (!worldObj.isRemote && uberSpinAvailable && currentAction != BossActions.CASTING
+				&& currentAction != BossActions.IDLE) {
 			setCurrentAction(BossActions.IDLE);
 		}
 
-		if (!worldObj.isRemote && isClone() && (master == null || ticksExisted > 400)){
+		if (!worldObj.isRemote && isClone() && (master == null || ticksExisted > 400)) {
 			setDead();
 		}
 
-		if (worldObj.isRemote){
+		if (worldObj.isRemote) {
 			updateRotations();
 		}
 		super.onUpdate();
 	}
 
 	@Override
-	protected void entityInit(){
+	protected void entityInit() {
 		super.entityInit();
 
 		this.dataManager.register(IS_CLONE, false);
 	}
 
-	private void updateRotations(){
+	private void updateRotations() {
 		if (!isClone())
 			orbitRotation += 2f;
 		else
 			orbitRotation -= 2f;
 		orbitRotation %= 360;
 
-		if (this.getCurrentAction() == BossActions.SPINNING || this.getCurrentAction() == BossActions.CASTING){
+		if (this.getCurrentAction() == BossActions.SPINNING || this.getCurrentAction() == BossActions.CASTING) {
 			this.spinRotation = (this.spinRotation - 30) % 360;
 		}
 	}
 
-	public float getOrbitRotation(){
+	public float getOrbitRotation() {
 		return orbitRotation;
 	}
 
 	@Override
-	public void setCurrentAction(BossActions action){
+	public void setCurrentAction(BossActions action) {
 		super.setCurrentAction(action);
 		this.spinRotation = 0;
 
-		if (!worldObj.isRemote){
+		if (!worldObj.isRemote) {
 			AMNetHandler.INSTANCE.sendActionUpdateToAllAround(this);
 		}
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2){
+	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
 		if (par1DamageSource.getSourceOfDamage() instanceof EntityWaterGuardian)
 			return false;
-		if (isClone() && master != null){
+		if (isClone() && master != null) {
 			master.enableUberAttack();
 			master.clearClones();
-		}else if (hasClones()){
+		} else if (hasClones()) {
 			clearClones();
 		}
 
-		if (!isClone() && rand.nextInt(10) < 6){
-			worldObj.playSound(posX, posY, posZ, getAmbientSound(), SoundCategory.HOSTILE, 1.0f, 0.4f + rand.nextFloat() * 0.6f, false);
+		if (!isClone() && rand.nextInt(10) < 6) {
+			worldObj.playSound(posX, posY, posZ, getAmbientSound(), SoundCategory.HOSTILE, 1.0f,
+					0.4f + rand.nextFloat() * 0.6f, false);
 			return false;
 		}
 
@@ -170,7 +174,7 @@ public class EntityWaterGuardian extends AM2Boss {
 	}
 
 	@Override
-	protected float modifyDamageAmount(DamageSource source, float damageAmt){
+	protected float modifyDamageAmount(DamageSource source, float damageAmt) {
 		if (source instanceof DamageSourceLightning)
 			damageAmt *= 2.0f;
 		if (source.getSourceOfDamage() != null && source.getSourceOfDamage() instanceof EntityWaterGuardian)
@@ -182,72 +186,73 @@ public class EntityWaterGuardian extends AM2Boss {
 	}
 
 	@Override
-	public boolean isActionValid(BossActions action){
-		if (uberSpinAvailable && action != BossActions.CASTING) return false;
-		if (action == BossActions.CASTING){
+	public boolean isActionValid(BossActions action) {
+		if (uberSpinAvailable && action != BossActions.CASTING)
+			return false;
+		if (action == BossActions.CASTING) {
 			return uberSpinAvailable;
 		}
-		if (action == BossActions.CLONE){
+		if (action == BossActions.CLONE) {
 			return !isClone();
 		}
 		return true;
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound par1nbtTagCompound){
+	public void writeEntityToNBT(NBTTagCompound par1nbtTagCompound) {
 		super.writeEntityToNBT(par1nbtTagCompound);
 
 		par1nbtTagCompound.setBoolean("isClone", isClone());
 	}
 
 	@Override
-	public int getTotalArmorValue(){
+	public int getTotalArmorValue() {
 		return 10;
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound par1nbtTagCompound){
+	public void readEntityFromNBT(NBTTagCompound par1nbtTagCompound) {
 		super.readEntityFromNBT(par1nbtTagCompound);
 
 		dataManager.set(IS_CLONE, par1nbtTagCompound.getBoolean("isClone"));
 	}
 
-
 	@Override
-	protected void dropFewItems(boolean par1, int par2){
+	protected void dropFewItems(boolean par1, int par2) {
 		if (par1)
 			this.entityDropItem(new ItemStack(ItemDefs.infinityOrb, 1, 0), 0.0f);
 
 		int i = rand.nextInt(4);
 
-		for (int j = 0; j < i; j++){
-			this.entityDropItem(new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.WATER)), 0.0f);
+		for (int j = 0; j < i; j++) {
+			this.entityDropItem(
+					new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.WATER)), 0.0f);
 		}
-		
+
 		i = rand.nextInt(10);
 
-		if (i < 3){
+		if (i < 3) {
 			this.entityDropItem(ItemDefs.waterOrbsEnchanted.copy(), 0.0f);
 		}
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(){
+	protected SoundEvent getHurtSound() {
 		return AMSounds.WATER_GUARDIAN_HIT;
 	}
 
 	@Override
-	protected SoundEvent getDeathSound(){
+	protected SoundEvent getDeathSound() {
 		return AMSounds.WATER_GUARDIAN_DEATH;
 	}
 
 	@Override
-	protected SoundEvent getAmbientSound(){
+	protected SoundEvent getAmbientSound() {
 		return AMSounds.WATER_GUARDIAN_IDLE;
 	}
 
 	@Override
-	public SoundEvent getAttackSound(){
+	public SoundEvent getAttackSound() {
 		return AMSounds.WATER_GUARDIAN_ATTACK;
 	}
 

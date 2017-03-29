@@ -8,5 +8,5 @@ import net.minecraft.tileentity.TileEntity;
  * @author Edwin
  *
  */
-public class TileEntityCandle extends TileEntity{
+public class TileEntityCandle extends TileEntity {
 }

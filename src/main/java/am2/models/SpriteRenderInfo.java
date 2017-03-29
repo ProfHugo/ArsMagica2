@@ -1,6 +1,6 @@
 package am2.models;
 
-public class SpriteRenderInfo{
+public class SpriteRenderInfo {
 	public int startFrame;
 	public int endFrame;
 	public int speed;
@@ -10,7 +10,7 @@ public class SpriteRenderInfo{
 
 	public boolean isDone;
 
-	public SpriteRenderInfo(int StartFrame, int EndFrame, int Speed){
+	public SpriteRenderInfo(int StartFrame, int EndFrame, int Speed) {
 		startFrame = StartFrame;
 		endFrame = EndFrame;
 		speed = Speed;
@@ -18,30 +18,30 @@ public class SpriteRenderInfo{
 		shouldReverse = false;
 	}
 
-	public void incrementIndex(){
-		if (!isReversing){
+	public void incrementIndex() {
+		if (!isReversing) {
 			curFrame++;
-			if (curFrame >= endFrame){
-				if (!shouldReverse){
+			if (curFrame >= endFrame) {
+				if (!shouldReverse) {
 					isDone = true;
-				}else{
+				} else {
 					isReversing = true;
 				}
 			}
-		}else{
+		} else {
 			curFrame--;
-			if (curFrame <= startFrame){
+			if (curFrame <= startFrame) {
 				isDone = true;
 			}
 		}
 	}
 
-	public void reset(boolean resetToPlayBackwards){
-		if (!resetToPlayBackwards){
+	public void reset(boolean resetToPlayBackwards) {
+		if (!resetToPlayBackwards) {
 			curFrame = startFrame;
 			isDone = false;
 			isReversing = false;
-		}else{
+		} else {
 			curFrame = endFrame;
 			isReversing = true;
 			isDone = false;

@@ -14,8 +14,8 @@ import thehippomaster.AnimationAPI.client.Animator;
 //
 //import thehippomaster.AnimationAPI.client.Animator;
 
-public class ModelLightningGuardian extends ModelBase{
-	//fields
+public class ModelLightningGuardian extends ModelBase {
+	// fields
 	AM2ModelRenderer ChestLower;
 	AM2ModelRenderer leftarmwristband3;
 	AM2ModelRenderer leftarmlower;
@@ -55,7 +55,7 @@ public class ModelLightningGuardian extends ModelBase{
 
 	private Animator animator;
 
-	public ModelLightningGuardian(ResourceLocation armor, ResourceLocation lightning){
+	public ModelLightningGuardian(ResourceLocation armor, ResourceLocation lightning) {
 		textureWidth = 256;
 		textureHeight = 256;
 
@@ -72,7 +72,7 @@ public class ModelLightningGuardian extends ModelBase{
 		animator = new Animator(this);
 	}
 
-	private void initializeParts(){
+	private void initializeParts() {
 		ChestLower = new AM2ModelRenderer(this, 49, 32);
 		leftarmwristband3 = new AM2ModelRenderer(this, 80, 12);
 		leftarmlower = new AM2ModelRenderer(this, 98, 32);
@@ -108,7 +108,7 @@ public class ModelLightningGuardian extends ModelBase{
 		ChestUpper = new AM2ModelRenderer(this, 0, 32);
 	}
 
-	private void addBoxes(){
+	private void addBoxes() {
 		ChestLower.addBox(-1F, 0F, -1.5F, 2, 6, 1);
 		leftarmlower.addBox(-1F, 0F, -1F, 2, 6, 2);
 		leftarmupper.addBox(-1F, 0F, -1F, 2, 5, 2);
@@ -145,7 +145,7 @@ public class ModelLightningGuardian extends ModelBase{
 		ChestArmor1.addBox(-3.5F, 0F, -2F, 7, 5, 0);
 	}
 
-	private void setRotationPoints(){
+	private void setRotationPoints() {
 		ChestMiddle.setRotationPoint(0F, 11F, 1F);
 		ChestUpper.setRotationPoint(0F, -4F, -1F);
 		Head.setRotationPoint(0F, -3F, 0F);
@@ -188,44 +188,44 @@ public class ModelLightningGuardian extends ModelBase{
 		rightarmwristband6.setRotationPoint(2F, 4F, 0F);
 
 	}
-	
-//	private void setTextureSizes(){
-//		ChestLower.setTextureSize(256, 256);
-//		leftarmwristband3.setTextureSize(256, 256);
-//		leftarmlower.setTextureSize(256, 256);
-//		leftarmwristband.setTextureSize(256, 256);
-//		leftarmwristband6.setTextureSize(256, 256);
-//		leftarmwristband2.setTextureSize(256, 256);
-//		leftarmwristband4.setTextureSize(256, 256);
-//		leftarmwristband5.setTextureSize(256, 256);
-//		leftarmwristband1.setTextureSize(256, 256);
-//		leftarmupper.setTextureSize(256, 256);
-//		leftshoulder.setTextureSize(256, 256);
-//		ChestArmor3.setTextureSize(256, 256);
-//		ChestMiddle.setTextureSize(256, 256);
-//		rightshoulder.setTextureSize(256, 256);
-//		rightarmupper.setTextureSize(256, 256);
-//		rightarmlower.setTextureSize(256, 256);
-//		rightarmwristband5.setTextureSize(256, 256);
-//		rightarmwristband.setTextureSize(256, 256);
-//		rightarmwristband2.setTextureSize(256, 256);
-//		rightarmwristband6.setTextureSize(256, 256);
-//		rightarmwristband1.setTextureSize(256, 256);
-//		rightarmwristband3.setTextureSize(256, 256);
-//		rightarmwristband4.setTextureSize(256, 256);
-//		Head.setTextureSize(256, 256);
-//		ChestArmor9.setTextureSize(256, 256);
-//		ChestArmor6.setTextureSize(256, 256);
-//		ChestArmor8.setTextureSize(256, 256);
-//		ChestArmor2.setTextureSize(256, 256);
-//		ChestArmor4.setTextureSize(256, 256);
-//		ChestArmor7.setTextureSize(256, 256);
-//		ChestArmor5.setTextureSize(256, 256);
-//		ChestArmor1.setTextureSize(256, 256);
-//		ChestUpper.setTextureSize(256, 256);
-//	}
 
-	private void setMirrorStates(){
+	// private void setTextureSizes(){
+	// ChestLower.setTextureSize(256, 256);
+	// leftarmwristband3.setTextureSize(256, 256);
+	// leftarmlower.setTextureSize(256, 256);
+	// leftarmwristband.setTextureSize(256, 256);
+	// leftarmwristband6.setTextureSize(256, 256);
+	// leftarmwristband2.setTextureSize(256, 256);
+	// leftarmwristband4.setTextureSize(256, 256);
+	// leftarmwristband5.setTextureSize(256, 256);
+	// leftarmwristband1.setTextureSize(256, 256);
+	// leftarmupper.setTextureSize(256, 256);
+	// leftshoulder.setTextureSize(256, 256);
+	// ChestArmor3.setTextureSize(256, 256);
+	// ChestMiddle.setTextureSize(256, 256);
+	// rightshoulder.setTextureSize(256, 256);
+	// rightarmupper.setTextureSize(256, 256);
+	// rightarmlower.setTextureSize(256, 256);
+	// rightarmwristband5.setTextureSize(256, 256);
+	// rightarmwristband.setTextureSize(256, 256);
+	// rightarmwristband2.setTextureSize(256, 256);
+	// rightarmwristband6.setTextureSize(256, 256);
+	// rightarmwristband1.setTextureSize(256, 256);
+	// rightarmwristband3.setTextureSize(256, 256);
+	// rightarmwristband4.setTextureSize(256, 256);
+	// Head.setTextureSize(256, 256);
+	// ChestArmor9.setTextureSize(256, 256);
+	// ChestArmor6.setTextureSize(256, 256);
+	// ChestArmor8.setTextureSize(256, 256);
+	// ChestArmor2.setTextureSize(256, 256);
+	// ChestArmor4.setTextureSize(256, 256);
+	// ChestArmor7.setTextureSize(256, 256);
+	// ChestArmor5.setTextureSize(256, 256);
+	// ChestArmor1.setTextureSize(256, 256);
+	// ChestUpper.setTextureSize(256, 256);
+	// }
+
+	private void setMirrorStates() {
 		ChestLower.mirror = true;
 		leftarmwristband3.mirror = true;
 		leftarmlower.mirror = true;
@@ -261,7 +261,7 @@ public class ModelLightningGuardian extends ModelBase{
 		ChestUpper.mirror = true;
 	}
 
-	private void setInitialRotations(){
+	private void setInitialRotations() {
 		setRotation(ChestLower, 0F, 0F, 0F);
 		setRotation(leftarmwristband3, 0F, 0F, 0F);
 		setRotation(leftarmlower, 0F, 0F, 0F);
@@ -331,7 +331,7 @@ public class ModelLightningGuardian extends ModelBase{
 		ChestUpper.storeRestRotations();
 	}
 
-	private void setupHierarchy(){
+	private void setupHierarchy() {
 		ChestMiddle.addChild(ChestLower);
 		ChestMiddle.addChild(ChestUpper);
 
@@ -369,8 +369,8 @@ public class ModelLightningGuardian extends ModelBase{
 		rightarmlower.addChild(rightarmwristband6);
 	}
 
-	private void setupModelForRenderPass(int pass){
-		if (pass == 0){ //lightning pass
+	private void setupModelForRenderPass(int pass) {
+		if (pass == 0) { // lightning pass
 
 			ChestArmor1.showModel = false;
 			ChestArmor2.showModel = false;
@@ -397,7 +397,7 @@ public class ModelLightningGuardian extends ModelBase{
 			rightarmwristband4.showModel = false;
 			rightarmwristband5.showModel = false;
 			rightarmwristband6.showModel = false;
-		}else{ //armor Pass
+		} else { // armor Pass
 
 			ChestArmor1.showModel = true;
 			ChestArmor2.showModel = true;
@@ -428,15 +428,15 @@ public class ModelLightningGuardian extends ModelBase{
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
-		animate((IAnimatedEntity)entity, f, f1, f2, f3, f4, f5);
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
 
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0, -2, 0);
 		GL11.glScalef(2, 2, 2);
 		GL11.glEnable(GL11.GL_BLEND);
 
-		//render lightning layer
+		// render lightning layer
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
@@ -450,7 +450,7 @@ public class ModelLightningGuardian extends ModelBase{
 		setupModelForRenderPass(0);
 		ChestMiddle.render(f5);
 
-		//render armor layer
+		// render armor layer
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -466,14 +466,14 @@ public class ModelLightningGuardian extends ModelBase{
 		GL11.glPopMatrix();
 	}
 
-	public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5){
+	public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		animator.update(entity);
 		setToRestRotations();
 
-		//animations
-		//braces are used purely for organization
+		// animations
+		// braces are used purely for organization
 
-		//idle
+		// idle
 		animator.setAnim(BossActions.IDLE.ordinal());
 		{
 			animator.startPhase(25);
@@ -510,10 +510,10 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.endPhase();
 			animator.resetPhase(25);
 		}
-		//basic attack
+		// basic attack
 		animator.setAnim(BossActions.STRIKE.ordinal());
 		{
-			animator.startPhase(4); //wind up
+			animator.startPhase(4); // wind up
 			animator.rotate(ChestUpper, 0, -Angles.RADS_15, 0);
 			animator.rotate(leftshoulder, Angles.RADS_45, Angles.RADS_15, 0);
 			animator.rotate(leftarmlower, -Angles.RADS_90, 0, 0);
@@ -521,7 +521,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.rotate(rightshoulder, -Angles.RADS_15, 0, 0);
 			animator.rotate(rightarmlower, -Angles.RADS_15, 0, 0);
 			animator.endPhase();
-			animator.startPhase(3); //boom
+			animator.startPhase(3); // boom
 			animator.rotate(ChestUpper, 0, Angles.RADS_15, 0);
 			animator.rotate(leftshoulder, -Angles.RADS_75, 0, 0);
 
@@ -531,10 +531,10 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.setStationaryPhase(4);
 			animator.resetPhase(4);
 		}
-		//dive into lightning
+		// dive into lightning
 		animator.setAnim(BossActions.SPINNING.ordinal());
 		{
-			animator.startPhase(5); //setup
+			animator.startPhase(5); // setup
 			animator.rotate(leftshoulder, Angles.RADS_45, Angles.RADS_15, 0);
 			animator.rotate(leftarmlower, -Angles.RADS_90, 0, 0);
 
@@ -543,16 +543,16 @@ public class ModelLightningGuardian extends ModelBase{
 
 			animator.rotate(ChestUpper, Angles.RADS_15, 0, 0);
 			animator.endPhase();
-			animator.startPhase(10); //arms up, into spin
+			animator.startPhase(10); // arms up, into spin
 			animator.rotate(rightshoulder, -Angles.RADS_145, 0, 0);
 			animator.rotate(leftshoulder, -Angles.RADS_145, 0, 0);
 
 			animator.rotate(rightarmlower, -Angles.RADS_15, 0, 0);
 			animator.rotate(leftarmlower, -Angles.RADS_15, 0, 0);
 			animator.endPhase();
-			animator.setStationaryPhase(30); //hold for the spin
+			animator.setStationaryPhase(30); // hold for the spin
 		}
-		//continue lightning
+		// continue lightning
 		animator.setAnim(BossActions.SHIELD_BASH.ordinal());
 		{
 			animator.startPhase(0);
@@ -562,12 +562,12 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.rotate(rightarmlower, -Angles.RADS_15, 0, 0);
 			animator.rotate(leftarmlower, -Angles.RADS_15, 0, 0);
 			animator.endPhase();
-			animator.setStationaryPhase(600); //max 30 seconds
+			animator.setStationaryPhase(600); // max 30 seconds
 		}
-		//exit lightning
+		// exit lightning
 		animator.setAnim(BossActions.LAUNCHING.ordinal());
 		{
-			animator.startPhase(0);//set initial anim
+			animator.startPhase(0);// set initial anim
 			animator.rotate(rightshoulder, -Angles.RADS_145, 0, 0);
 			animator.rotate(leftshoulder, -Angles.RADS_145, 0, 0);
 
@@ -576,10 +576,10 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.endPhase();
 			animator.resetPhase(10);
 		}
-		//static charge
+		// static charge
 		animator.setAnim(BossActions.CHARGE.ordinal());
 		{
-			animator.startPhase(40); //charge up
+			animator.startPhase(40); // charge up
 			animator.rotate(rightshoulder, -Angles.RADS_30, Angles.RADS_45, 0);
 			animator.rotate(leftshoulder, -Angles.RADS_30, -Angles.RADS_45, 0);
 
@@ -587,7 +587,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.rotate(leftarmlower, -Angles.RADS_15, 0, 0);
 			animator.endPhase();
 			animator.setStationaryPhase(15);
-			animator.startPhase(6); //cross arms
+			animator.startPhase(6); // cross arms
 
 			animator.rotate(rightshoulder, -Angles.RADS_45, -Angles.RADS_30, 0);
 			animator.rotate(leftshoulder, -Angles.RADS_45, Angles.RADS_30, 0);
@@ -599,7 +599,7 @@ public class ModelLightningGuardian extends ModelBase{
 
 			animator.endPhase();
 			animator.setStationaryPhase(5);
-			animator.startPhase(6); //release
+			animator.startPhase(6); // release
 
 			animator.rotate(rightarmupper, 0, 0, Angles.RADS_75);
 			animator.rotate(leftarmupper, 0, 0, -Angles.RADS_75);
@@ -613,10 +613,10 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.setStationaryPhase(20);
 			animator.resetPhase(15);
 		}
-		//lightning rune
+		// lightning rune
 		animator.setAnim(BossActions.CASTING.ordinal());
 		{
-			animator.startPhase(10); //wind up
+			animator.startPhase(10); // wind up
 			animator.rotate(ChestUpper, 0, -Angles.RADS_15, 0);
 			animator.rotate(rightshoulder, Angles.RADS_45, Angles.RADS_15, 0);
 			animator.rotate(rightarmlower, -Angles.RADS_90, 0, 0);
@@ -624,7 +624,8 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.rotate(leftshoulder, -Angles.RADS_15, 0, 0);
 			animator.rotate(leftarmlower, -Angles.RADS_15, 0, 0);
 			animator.endPhase();
-			animator.startPhase(3); //cast_1 (the 4 casts cause a circle motion with the arm)
+			animator.startPhase(3); // cast_1 (the 4 casts cause a circle motion
+									// with the arm)
 			animator.rotate(ChestUpper, 0, 0, 0);
 			animator.rotate(rightshoulder, -Angles.RADS_45, Angles.RADS_15, Angles.RADS_15);
 			animator.rotate(rightarmlower, -Angles.RADS_45, 0, 0);
@@ -632,7 +633,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.rotate(leftshoulder, 0, 0, 0);
 			animator.rotate(leftarmlower, 0, 0, 0);
 			animator.endPhase();
-			animator.startPhase(3); //cast_2
+			animator.startPhase(3); // cast_2
 			animator.rotate(ChestUpper, 0, 0, 0);
 			animator.rotate(rightshoulder, -Angles.RADS_75, 0, Angles.RADS_15);
 			animator.rotate(rightarmlower, -Angles.RADS_45, 0, 0);
@@ -640,7 +641,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.rotate(leftshoulder, Angles.RADS_15, Angles.RADS_15, 0);
 			animator.rotate(leftarmlower, -Angles.RADS_15, Angles.RADS_15, 0);
 			animator.endPhase();
-			animator.startPhase(3); //cast_3
+			animator.startPhase(3); // cast_3
 			animator.rotate(ChestUpper, 0, Angles.RADS_15, 0);
 			animator.rotate(rightshoulder, -Angles.RADS_45, -Angles.RADS_30, Angles.RADS_15);
 			animator.rotate(rightarmlower, -Angles.RADS_45, 0, 0);
@@ -648,7 +649,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.rotate(leftshoulder, 0, 0, 0);
 			animator.rotate(leftarmlower, 0, 0, 0);
 			animator.endPhase();
-			animator.startPhase(3); //cast_4
+			animator.startPhase(3); // cast_4
 
 			animator.rotate(rightshoulder, -Angles.RADS_30, 0, Angles.RADS_15);
 			animator.rotate(rightarmlower, -Angles.RADS_45, 0, 0);
@@ -659,10 +660,10 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.endPhase();
 			animator.resetPhase(5);
 		}
-		//lightning rod
+		// lightning rod
 		animator.setAnim(BossActions.LONG_CASTING.ordinal());
 		{
-			animator.startPhase(20); //prepare
+			animator.startPhase(20); // prepare
 			animator.rotate(ChestUpper, 0, -Angles.RADS_15, 0);
 			animator.rotate(leftshoulder, Angles.RADS_45, Angles.RADS_15, 0);
 			animator.rotate(leftarmlower, -Angles.RADS_90, 0, 0);
@@ -670,7 +671,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.rotate(rightshoulder, -Angles.RADS_15, 0, 0);
 			animator.rotate(rightarmlower, -Angles.RADS_15, 0, 0);
 			animator.endPhase();
-			animator.startPhase(5); //extend arm
+			animator.startPhase(5); // extend arm
 			animator.rotate(ChestUpper, 0, Angles.RADS_15, 0);
 			animator.rotate(leftshoulder, -Angles.RADS_75, 0, 0);
 			animator.rotate(leftarmlower, -Angles.RADS_15, 0, 0);
@@ -678,21 +679,21 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.rotate(rightshoulder, Angles.RADS_15, 0, 0);
 			animator.rotate(rightarmlower, -Angles.RADS_30, 0, 0);
 			animator.endPhase();
-			animator.startPhase(60); //slow arm raise
+			animator.startPhase(60); // slow arm raise
 			animator.rotate(leftshoulder, -Angles.RADS_90, 0, 0);
 			animator.rotate(leftarmlower, -Angles.RADS_30, 0, 0);
 
 			animator.rotate(rightshoulder, Angles.RADS_15, 0, 0);
 			animator.rotate(rightarmlower, -Angles.RADS_30, 0, 0);
 			animator.endPhase();
-			animator.startPhase(20); //right arm draw back
+			animator.startPhase(20); // right arm draw back
 			animator.rotate(leftshoulder, -Angles.RADS_90, 0, 0);
 			animator.rotate(leftarmlower, -Angles.RADS_30, 0, 0);
 
 			animator.rotate(rightshoulder, Angles.RADS_45, Angles.RADS_15, 0);
 			animator.rotate(rightarmlower, -Angles.RADS_90, 0, 0);
 			animator.endPhase();
-			animator.startPhase(5); //ZAP!
+			animator.startPhase(5); // ZAP!
 
 			animator.rotate(leftshoulder, -Angles.RADS_90, 0, 0);
 			animator.rotate(leftarmlower, -Angles.RADS_30, 0, 0);
@@ -702,7 +703,7 @@ public class ModelLightningGuardian extends ModelBase{
 
 			animator.endPhase();
 			animator.setStationaryPhase(40);
-			animator.startPhase(5); //slam down lead-in
+			animator.startPhase(5); // slam down lead-in
 
 			animator.rotate(ChestUpper, Angles.RADS_15, 0, 0);
 			animator.rotate(Head, Angles.RADS_15, 0, 0);
@@ -714,7 +715,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.rotate(rightarmlower, -Angles.RADS_75, 0, 0);
 
 			animator.endPhase();
-			animator.startPhase(3); //slam down
+			animator.startPhase(3); // slam down
 
 			animator.rotate(ChestUpper, Angles.RADS_30, 0, 0);
 			animator.rotate(Head, Angles.RADS_15, 0, 0);
@@ -728,10 +729,10 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.endPhase();
 			animator.resetPhase(15);
 		}
-		//scramble synapses
+		// scramble synapses
 		animator.setAnim(BossActions.SMASH.ordinal());
 		{
-			animator.startPhase(40); //arms up
+			animator.startPhase(40); // arms up
 
 			animator.rotate(leftshoulder, -Angles.RADS_75, 0, -Angles.RADS_75);
 			animator.rotate(leftarmupper, -Angles.RADS_90, Angles.RADS_90, -Angles.RADS_75);
@@ -744,12 +745,12 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.rotate(ChestUpper, Angles.RADS_30, 0, 0);
 
 			animator.endPhase();
-			animator.setStationaryPhase(10); //hold pose for effect
+			animator.setStationaryPhase(10); // hold pose for effect
 			animator.resetPhase(10);
 		}
 	}
 
-	private void setToRestRotations(){
+	private void setToRestRotations() {
 		ChestLower.resetToRestRotations();
 		leftarmwristband3.resetToRestRotations();
 		leftarmlower.resetToRestRotations();
@@ -785,7 +786,7 @@ public class ModelLightningGuardian extends ModelBase{
 		ChestUpper.resetToRestRotations();
 	}
 
-	private void setRotation(AM2ModelRenderer model, float x, float y, float z){
+	private void setRotation(AM2ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

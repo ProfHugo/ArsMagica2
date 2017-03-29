@@ -1,4 +1,5 @@
 package am2.models;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -17,8 +18,8 @@ import org.lwjgl.opengl.GL11;
 
 import am2.blocks.tileentity.TileEntitySummoner;
 
-public class ModelSummoner extends ModelBase{
-	//fields
+public class ModelSummoner extends ModelBase {
+	// fields
 	IBakedModel bakedModel;
 	IModel modelCrystal;
 	ModelRenderer Shape1;
@@ -32,7 +33,7 @@ public class ModelSummoner extends ModelBase{
 	ModelRenderer Shape8;
 	ModelRenderer Shape9;
 	ModelRenderer Shape11;
-	
+
 	private void createModel() {
 		try {
 			modelCrystal = ModelLoaderRegistry.getModel(new ResourceLocation("arsmagica2", "block/crystal.obj"));
@@ -42,8 +43,8 @@ public class ModelSummoner extends ModelBase{
 		bakedModel = modelCrystal.bake(TRSRTransformation.identity(), DefaultVertexFormats.ITEM,
 				location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString()));
 	}
-	
-	public ModelSummoner(){
+
+	public ModelSummoner() {
 		textureWidth = 64;
 		textureHeight = 32;
 
@@ -116,7 +117,7 @@ public class ModelSummoner extends ModelBase{
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 		Shape1.render(f5);
 		Shape2.render(f5);
@@ -131,7 +132,7 @@ public class ModelSummoner extends ModelBase{
 		Shape11.render(f5);
 	}
 
-	public void renderModel(float f5){
+	public void renderModel(float f5) {
 		Shape1.render(f5);
 		Shape2.render(f5);
 		Shape4.render(f5);
@@ -145,7 +146,7 @@ public class ModelSummoner extends ModelBase{
 		Shape11.render(f5);
 	}
 
-	public void renderCrystal(TileEntitySummoner summoner, float f5){
+	public void renderCrystal(TileEntitySummoner summoner, float f5) {
 		createModel();
 		if (summoner.getWorld() == null)
 			return;
@@ -153,24 +154,26 @@ public class ModelSummoner extends ModelBase{
 		GlStateManager.disableLighting();
 		GlStateManager.translate(0f, 0.6f, 0f);
 		GlStateManager.scale(2f, -2f, 2f);
-		if (summoner.hasSummon()){
+		if (summoner.hasSummon()) {
 			GL11.glColor3f(0.14902f, 0.48627f, 0.70196f);
-		}else if (summoner.canSummon()){
+		} else if (summoner.canSummon()) {
 			GL11.glColor3f(0, 1, 0);
-		}else{
+		} else {
 			GL11.glColor3f(1, 0, 0);
 		}
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		Tessellator tesselator = Tessellator.getInstance();
 		GlStateManager.translate(-summoner.getPos().getX(), -summoner.getPos().getY(), -summoner.getPos().getZ());
 		tesselator.getBuffer().begin(7, DefaultVertexFormats.BLOCK);
-		Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(summoner.getWorld(), bakedModel, summoner.getWorld().getBlockState(summoner.getPos()), summoner.getPos(), tesselator.getBuffer(), false);
+		Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(summoner.getWorld(),
+				bakedModel, summoner.getWorld().getBlockState(summoner.getPos()), summoner.getPos(),
+				tesselator.getBuffer(), false);
 		tesselator.draw();
 		GlStateManager.enableLighting();
 		GlStateManager.popMatrix();
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z){
+	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-public class EntityAIRangedAttackSpell extends EntityAIBase{
+public class EntityAIRangedAttackSpell extends EntityAIBase {
 	World worldObj;
 
 	/**
@@ -18,21 +18,22 @@ public class EntityAIRangedAttackSpell extends EntityAIBase{
 	EntityLivingBase attackTarget;
 
 	/**
-	 * A decrementing tick that spawns a ranged attack once this value reaches 0. It is then set back to the
-	 * maxRangedAttackTime.
+	 * A decrementing tick that spawns a ranged attack once this value reaches
+	 * 0. It is then set back to the maxRangedAttackTime.
 	 */
 	int rangedAttackTime;
 	float field_48370_e;
 	int field_48367_f;
 
 	/**
-	 * The maximum time the AI has to wait before peforming another ranged attack.
+	 * The maximum time the AI has to wait before peforming another ranged
+	 * attack.
 	 */
 	int maxRangedAttackTime;
 
 	ItemStack spellStack;
 
-	public EntityAIRangedAttackSpell(EntityCreature host, float moveSpeed, int cooldown, ItemStack spellStack){
+	public EntityAIRangedAttackSpell(EntityCreature host, float moveSpeed, int cooldown, ItemStack spellStack) {
 		rangedAttackTime = 0;
 		field_48367_f = 0;
 		entityHost = host;
@@ -47,14 +48,14 @@ public class EntityAIRangedAttackSpell extends EntityAIBase{
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
 	@Override
-	public boolean shouldExecute(){
+	public boolean shouldExecute() {
 		if (entityHost == null)
 			return false;
 		EntityLivingBase entityliving = entityHost.getAttackTarget();
 
-		if (entityliving == null){
+		if (entityliving == null) {
 			return false;
-		}else{
+		} else {
 			attackTarget = entityliving;
 			return true;
 		}
@@ -64,7 +65,7 @@ public class EntityAIRangedAttackSpell extends EntityAIBase{
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	@Override
-	public boolean continueExecuting(){
+	public boolean continueExecuting() {
 		return shouldExecute() && !entityHost.getNavigator().noPath();
 	}
 
@@ -72,7 +73,7 @@ public class EntityAIRangedAttackSpell extends EntityAIBase{
 	 * Resets the task
 	 */
 	@Override
-	public void resetTask(){
+	public void resetTask() {
 		attackTarget = null;
 	}
 
@@ -80,18 +81,19 @@ public class EntityAIRangedAttackSpell extends EntityAIBase{
 	 * Updates the task
 	 */
 	@Override
-	public void updateTask(){
+	public void updateTask() {
 		double d = 225D;
-		double d1 = entityHost.getDistanceSq(attackTarget.posX, attackTarget.getEntityBoundingBox().minY, attackTarget.posZ);
+		double d1 = entityHost.getDistanceSq(attackTarget.posX, attackTarget.getEntityBoundingBox().minY,
+				attackTarget.posZ);
 		boolean flag = entityHost.getEntitySenses().canSee(attackTarget);
 
-		if (flag){
+		if (flag) {
 			field_48367_f++;
-		}else{
+		} else {
 			field_48367_f = 0;
 		}
 
-		if (d1 > d || field_48367_f > 20){
+		if (d1 > d || field_48367_f > 20) {
 			double deltaZ = attackTarget.posZ - entityHost.posZ;
 			double deltaX = attackTarget.posX - entityHost.posX;
 
@@ -100,11 +102,11 @@ public class EntityAIRangedAttackSpell extends EntityAIBase{
 			double newX = attackTarget.posX + (Math.cos(angle) * 6);
 			double newZ = attackTarget.posZ + (Math.sin(angle) * 6);
 
-			if (!entityHost.getNavigator().tryMoveToXYZ(newX, attackTarget.posY, newZ, 0.5f)){
+			if (!entityHost.getNavigator().tryMoveToXYZ(newX, attackTarget.posY, newZ, 0.5f)) {
 				entityHost.getNavigator().clearPathEntity();
 				entityHost.setAttackTarget(null);
 			}
-		}else{
+		} else {
 			entityHost.getNavigator().clearPathEntity();
 		}
 
@@ -112,13 +114,13 @@ public class EntityAIRangedAttackSpell extends EntityAIBase{
 
 		rangedAttackTime = Math.max(rangedAttackTime - 1, 0);
 
-		if (rangedAttackTime > 0){
+		if (rangedAttackTime > 0) {
 			return;
 		}
 
-		if (d1 > d || !flag){
+		if (d1 > d || !flag) {
 			return;
-		}else{
+		} else {
 			doRangedAttack();
 			rangedAttackTime = maxRangedAttackTime;
 			return;
@@ -128,11 +130,12 @@ public class EntityAIRangedAttackSpell extends EntityAIBase{
 	/**
 	 * Performs a ranged attack according to the AI's rangedAttackID.
 	 */
-	private void doRangedAttack(){
+	private void doRangedAttack() {
 		if (entityHost.getAttackTarget() == null)
 			return;
 		entityHost.faceEntity(entityHost.getAttackTarget(), 180, 180);
-		SpellUtils.applyStackStage(spellStack, entityHost, entityHost.getAttackTarget(), entityHost.posX, entityHost.posY, entityHost.posZ, null, entityHost.worldObj, true, false, 0);
+		SpellUtils.applyStackStage(spellStack, entityHost, entityHost.getAttackTarget(), entityHost.posX,
+				entityHost.posY, entityHost.posZ, null, entityHost.worldObj, true, false, 0);
 		entityHost.swingArm(EnumHand.MAIN_HAND);
 	}
 }

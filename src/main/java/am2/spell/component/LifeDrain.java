@@ -14,7 +14,6 @@ import am2.defs.ItemDefs;
 import am2.items.ItemOre;
 import am2.particles.AMParticle;
 import am2.particles.ParticleApproachEntity;
-import am2.particles.ParticleArcToEntity;
 import am2.particles.ParticleFadeOut;
 import am2.utils.SpellUtils;
 import net.minecraft.entity.Entity;
@@ -28,24 +27,27 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class LifeDrain extends SpellComponent{
+public class LifeDrain extends SpellComponent {
 
 	@Override
-	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster){
+	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX,
+			double impactY, double impactZ, EntityLivingBase caster) {
 		return false;
 	}
 
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
-		if (world.isRemote || !(target instanceof EntityLivingBase) || ((EntityLivingBase)target).getCreatureAttribute() == EnumCreatureAttribute.UNDEAD){
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
+		if (world.isRemote || !(target instanceof EntityLivingBase)
+				|| ((EntityLivingBase) target).getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
 			return true;
 		}
 		int magnitude = SpellUtils.getModifiedInt_Add(4, stack, caster, target, world, SpellModifiers.DAMAGE);
 
-		boolean success = SpellUtils.attackTargetSpecial(stack, target, DamageSource.causeIndirectMagicDamage(caster, caster), SpellUtils.modifyDamage(caster, magnitude));
+		boolean success = SpellUtils.attackTargetSpecial(stack, target,
+				DamageSource.causeIndirectMagicDamage(caster, caster), SpellUtils.modifyDamage(caster, magnitude));
 
-		if (success){
-			caster.heal((int)Math.ceil(magnitude / 4));
+		if (success) {
+			caster.heal((int) Math.ceil(magnitude / 4));
 			return true;
 		}
 
@@ -53,23 +55,25 @@ public class LifeDrain extends SpellComponent{
 	}
 
 	@Override
-	public float manaCost(EntityLivingBase caster){
+	public float manaCost(EntityLivingBase caster) {
 		return 300;
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
+	public ItemStack[] reagents(EntityLivingBase caster) {
 		return null;
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
-		double snapAngle = (2 * Math.PI) / (ArsMagica2.config.getGFXLevel() + 1)* 5;
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
+		double snapAngle = (2 * Math.PI) / (ArsMagica2.config.getGFXLevel() + 1) * 5;
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < (ArsMagica2.config.getGFXLevel() + 1) * 5; i++) {
 				double posX = x + (Math.cos(snapAngle * i) * (j * 0.5));
 				double posZ = z + (Math.sin(snapAngle * i) * (j * 0.5));
-				AMParticle particle = (AMParticle) ArsMagica2.proxy.particleManager.spawn(world, "sparkle2", posX, target.posY + target.height / 2 + j * 0.5, posZ);
+				AMParticle particle = (AMParticle) ArsMagica2.proxy.particleManager.spawn(world, "sparkle2", posX,
+						target.posY + target.height / 2 + j * 0.5, posZ);
 				if (particle != null) {
 					particle.setIgnoreMaxAge(true);
 					particle.AddParticleController(new ParticleApproachEntity(particle, target, 0.15f, 0.1, 1, false));
@@ -79,35 +83,33 @@ public class LifeDrain extends SpellComponent{
 			}
 		}
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.of(SpellModifiers.DAMAGE);
 	}
 
-
 	@Override
-	public Set<Affinity> getAffinity(){
+	public Set<Affinity> getAffinity() {
 		return Sets.newHashSet(Affinity.LIFE);
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				new ItemStack(ItemDefs.rune, 1, EnumDyeColor.BLACK.getDyeDamage()),
+	public Object[] getRecipe() {
+		return new Object[] { new ItemStack(ItemDefs.rune, 1, EnumDyeColor.BLACK.getDyeDamage()),
 				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_SUNSTONE),
-				//TODO BlocksCommonProxy.aum
+				// TODO BlocksCommonProxy.aum
 		};
 	}
 
 	@Override
-	public float getAffinityShift(Affinity affinity){
+	public float getAffinityShift(Affinity affinity) {
 		return 0.01f;
 	}
 
 	@Override
 	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

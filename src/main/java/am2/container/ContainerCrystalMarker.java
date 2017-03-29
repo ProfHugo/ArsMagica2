@@ -12,18 +12,19 @@ import net.minecraft.entity.player.EntityPlayer;
 /**
  * @author Zero
  */
-public class ContainerCrystalMarker extends AM2Container{
+public class ContainerCrystalMarker extends AM2Container {
 
 	private TileEntityCrystalMarker crystalMarker;
 
-	public ContainerCrystalMarker(EntityPlayer player, TileEntityCrystalMarker crystalMarker){
+	public ContainerCrystalMarker(EntityPlayer player, TileEntityCrystalMarker crystalMarker) {
 		this.crystalMarker = crystalMarker;
 
-		for (int i = 0; i < 3; i++){
-			for (int j = 0; j < 3; j++){
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
 				SlotGhostItem slot = new SlotGhostItem(crystalMarker, i + j * 3, 62 + i * 18, 19 + j * 18);
 
-				if (this.crystalMarker.getMarkerType() == BlockCrystalMarker.META_REGULATE_EXPORT || this.crystalMarker.getMarkerType() == BlockCrystalMarker.META_REGULATE_MULTI){
+				if (this.crystalMarker.getMarkerType() == BlockCrystalMarker.META_REGULATE_EXPORT
+						|| this.crystalMarker.getMarkerType() == BlockCrystalMarker.META_REGULATE_MULTI) {
 					slot.setSlotStackLimit(128);
 				}
 
@@ -37,9 +38,8 @@ public class ContainerCrystalMarker extends AM2Container{
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer){
+	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return this.crystalMarker.isUseableByPlayer(entityplayer);
 	}
-
 
 }

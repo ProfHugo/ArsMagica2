@@ -31,19 +31,23 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class Freeze extends SpellComponent implements IRitualInteraction{
+public class Freeze extends SpellComponent implements IRitualInteraction {
 
 	@Override
-	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster){
+	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos pos, EnumFacing blockFace, double impactX,
+			double impactY, double impactZ, EntityLivingBase caster) {
 		Block block = world.getBlockState(pos).getBlock();
-		if (block.equals(Blocks.WATER) || block.equals(Blocks.FLOWING_WATER)) //flowing or still water
+		if (block.equals(Blocks.WATER) || block.equals(Blocks.FLOWING_WATER)) // flowing
+																				// or
+																				// still
+																				// water
 		{
 			world.setBlockState(pos, Blocks.ICE.getDefaultState());
 			return true;
-		}else if (block.equals(Blocks.LAVA)){
+		} else if (block.equals(Blocks.LAVA)) {
 			world.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
 			return true;
-		}else if (block.equals(Blocks.FLOWING_LAVA)){
+		} else if (block.equals(Blocks.FLOWING_LAVA)) {
 			world.setBlockState(pos, Blocks.COBBLESTONE.getDefaultState());
 			return true;
 		}
@@ -51,94 +55,95 @@ public class Freeze extends SpellComponent implements IRitualInteraction{
 	}
 
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
-		if (target instanceof EntityLivingBase){
-			int duration = SpellUtils.getModifiedInt_Mul(PotionEffectsDefs.default_buff_duration, stack, caster, target, world, SpellModifiers.DURATION);
-			//duration = SpellUtils.modifyDurationBasedOnArmor(caster, duration);
-			
-			if (RitualShapeHelper.instance.matchesRitual(this, world, target.getPosition())){
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
+		if (target instanceof EntityLivingBase) {
+			int duration = SpellUtils.getModifiedInt_Mul(PotionEffectsDefs.default_buff_duration, stack, caster, target,
+					world, SpellModifiers.DURATION);
+			// duration = SpellUtils.modifyDurationBasedOnArmor(caster,
+			// duration);
+
+			if (RitualShapeHelper.instance.matchesRitual(this, world, target.getPosition())) {
 				duration += (3600 * (SpellUtils.countModifiers(SpellModifiers.BUFF_POWER, stack) + 1));
 				RitualShapeHelper.instance.consumeReagents(this, world, target.getPosition());
 			}
 
 			if (!world.isRemote)
-				((EntityLivingBase)target).addPotionEffect(new BuffEffectFrostSlowed(duration, SpellUtils.countModifiers(SpellModifiers.BUFF_POWER, stack)));
+				((EntityLivingBase) target).addPotionEffect(new BuffEffectFrostSlowed(duration,
+						SpellUtils.countModifiers(SpellModifiers.BUFF_POWER, stack)));
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.of(SpellModifiers.DURATION, SpellModifiers.BUFF_POWER);
 	}
 
-
 	@Override
-	public float manaCost(EntityLivingBase caster){
+	public float manaCost(EntityLivingBase caster) {
 		return 29;
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
+	public ItemStack[] reagents(EntityLivingBase caster) {
 		return null;
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
-		for (int i = 0; i < 5; ++i){
-			AMParticle particle = (AMParticle)ArsMagica2.proxy.particleManager.spawn(world, "snowflakes", x + 0.5, y + 0.5, z + 0.5);
-			if (particle != null){
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
+		for (int i = 0; i < 5; ++i) {
+			AMParticle particle = (AMParticle) ArsMagica2.proxy.particleManager.spawn(world, "snowflakes", x + 0.5,
+					y + 0.5, z + 0.5);
+			if (particle != null) {
 				particle.addRandomOffset(1, 0.5, 1);
 				particle.addVelocity(rand.nextDouble() * 0.2 - 0.1, 0.3, rand.nextDouble() * 0.2 - 0.1);
 				particle.setAffectedByGravity();
 				particle.setDontRequireControllers();
 				particle.setMaxAge(10);
 				particle.setParticleScale(0.1f);
-				if (colorModifier > -1){
-					particle.setRGBColorF(((colorModifier >> 16) & 0xFF) / 255.0f, ((colorModifier >> 8) & 0xFF) / 255.0f, (colorModifier & 0xFF) / 255.0f);
+				if (colorModifier > -1) {
+					particle.setRGBColorF(((colorModifier >> 16) & 0xFF) / 255.0f,
+							((colorModifier >> 8) & 0xFF) / 255.0f, (colorModifier & 0xFF) / 255.0f);
 				}
 			}
 		}
 	}
 
 	@Override
-	public Set<Affinity> getAffinity(){
+	public Set<Affinity> getAffinity() {
 		return Sets.newHashSet(Affinity.ICE);
-	}
-	
-	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				new ItemStack(ItemDefs.rune, 1, EnumDyeColor.BLUE.getDyeDamage()),
-				Blocks.SNOW
-		};
 	}
 
 	@Override
-	public float getAffinityShift(Affinity affinity){
+	public Object[] getRecipe() {
+		return new Object[] { new ItemStack(ItemDefs.rune, 1, EnumDyeColor.BLUE.getDyeDamage()), Blocks.SNOW };
+	}
+
+	@Override
+	public float getAffinityShift(Affinity affinity) {
 		return 0.02f;
 	}
 
 	@Override
-	public MultiblockStructureDefinition getRitualShape(){
+	public MultiblockStructureDefinition getRitualShape() {
 		return RitualShapeHelper.instance.hourglass;
 	}
 
 	@Override
-	public ItemStack[] getReagents(){
-		return new ItemStack[]{
-				new ItemStack(Blocks.ICE)
-		};
+	public ItemStack[] getReagents() {
+		return new ItemStack[] { new ItemStack(Blocks.ICE) };
 	}
 
 	@Override
-	public int getReagentSearchRadius(){
+	public int getReagentSearchRadius() {
 		return 3;
 	}
 
 	@Override
-	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {}
+	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)

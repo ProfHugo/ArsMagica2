@@ -12,26 +12,28 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageCapabilities implements IMessage, IMessageHandler<MessageCapabilities, IMessage> {
-	
+
 	public EntityPlayer player;
 	public boolean state;
 	public int id;
-	
-	
+
 	/**
 	 * 
-	 * @param player : The entity player to modify
-	 * @param id     : the id of the capability (0 = isFlying, 1 = allowFlying)
-	 * @param state  : true / false
+	 * @param player
+	 *            : The entity player to modify
+	 * @param id
+	 *            : the id of the capability (0 = isFlying, 1 = allowFlying)
+	 * @param state
+	 *            : true / false
 	 */
 	public MessageCapabilities(EntityPlayer player, int id, boolean state) {
 		this.player = player;
 		this.id = id;
 		this.state = state;
 	}
-	
+
 	public MessageCapabilities() {
-		
+
 	}
 
 	@Override
@@ -50,7 +52,7 @@ public class MessageCapabilities implements IMessage, IMessageHandler<MessageCap
 
 	@Override
 	public IMessage onMessage(final MessageCapabilities message, final MessageContext ctx) {
-		((WorldServer)ctx.getServerHandler().playerEntity.worldObj).addScheduledTask(new Runnable () {
+		((WorldServer) ctx.getServerHandler().playerEntity.worldObj).addScheduledTask(new Runnable() {
 			@Override
 			public void run() {
 				if (message.player == null)

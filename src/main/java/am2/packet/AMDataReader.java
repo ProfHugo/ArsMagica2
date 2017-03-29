@@ -11,139 +11,139 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
-public class AMDataReader{
+public class AMDataReader {
 	ByteArrayInputStream input;
 	DataInputStream dataStream;
 	public byte ID;
 
-	public AMDataReader(byte[] data){
+	public AMDataReader(byte[] data) {
 		this(data, true);
 	}
 
-	public AMDataReader(byte[] data, boolean getID){
+	public AMDataReader(byte[] data, boolean getID) {
 		input = new ByteArrayInputStream(data);
 		dataStream = new DataInputStream(input);
 
-		//get id byte
-		if (getID){
-			try{
+		// get id byte
+		if (getID) {
+			try {
 				ID = dataStream.readByte();
-			}catch (IOException e){
+			} catch (IOException e) {
 				LogHelper.error("AMDataReader (getID): " + e.toString());
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public int getInt(){
+	public int getInt() {
 		int value = 0;
-		try{
+		try {
 			value = dataStream.readInt();
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataReader (getInt): " + e.toString());
 			e.printStackTrace();
 		}
 		return value;
 	}
 
-	public float getFloat(){
+	public float getFloat() {
 		float value = 0;
-		try{
+		try {
 			value = dataStream.readFloat();
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataReader (getFloat): " + e.toString());
 			e.printStackTrace();
 		}
 		return value;
 	}
 
-	public double getDouble(){
+	public double getDouble() {
 		double value = 0;
-		try{
+		try {
 			value = dataStream.readDouble();
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataReader (getDouble): " + e.toString());
 			e.printStackTrace();
 		}
 		return value;
 	}
 
-	public boolean getBoolean(){
+	public boolean getBoolean() {
 		boolean value = false;
-		try{
+		try {
 			value = dataStream.readBoolean();
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataReader (getBoolean): " + e.toString());
 			e.printStackTrace();
 		}
 		return value;
 	}
 
-	public String getString(){
+	public String getString() {
 		String value = "";
-		try{
+		try {
 			value = dataStream.readUTF();
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataReader (getString): " + e.toString());
 			e.printStackTrace();
 		}
 		return value;
 	}
 
-	public byte getByte(){
+	public byte getByte() {
 		byte value = 0;
-		try{
+		try {
 			value = dataStream.readByte();
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataReader (getByte): " + e.toString());
 			e.printStackTrace();
 		}
 		return value;
 	}
 
-	public short getShort(){
+	public short getShort() {
 		short value = 0;
-		try{
+		try {
 			value = dataStream.readShort();
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataReader (getShort): " + e.toString());
 			e.printStackTrace();
 		}
 		return value;
 	}
 
-	public long getLong(){
+	public long getLong() {
 		long value = 0;
-		try{
+		try {
 			value = dataStream.readLong();
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataReader (getLong): " + e.toString());
 			e.printStackTrace();
 		}
 		return value;
 	}
 
-	public NBTTagCompound getNBTTagCompound(){
+	public NBTTagCompound getNBTTagCompound() {
 		NBTTagCompound data = null;
-		try{
+		try {
 			int len = dataStream.readInt();
 			byte[] bytes = new byte[len];
 			dataStream.read(bytes);
 			ByteBuf buf = Unpooled.copiedBuffer(bytes);
 			data = ByteBufUtils.readTag(buf);
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataReader (getNBTTagCompound): " + e.toString());
 			e.printStackTrace();
 		}
 		return data;
 	}
 
-	public byte[] getRemainingBytes(){
+	public byte[] getRemainingBytes() {
 		byte[] remaining = null;
-		try{
+		try {
 			remaining = new byte[dataStream.available()];
 			dataStream.read(remaining);
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataReader (getRemainingBytes): " + e.toString());
 			e.printStackTrace();
 		}
@@ -151,20 +151,21 @@ public class AMDataReader{
 		return remaining;
 	}
 
-	public ItemStack getItemStack(){
+	public ItemStack getItemStack() {
 		NBTTagCompound compound = getNBTTagCompound();
-		if (compound == null) return null;
+		if (compound == null)
+			return null;
 		ItemStack stack = ItemStack.loadItemStackFromNBT(compound);
 		return stack;
 	}
 
-	public int[] getIntArray(){
-		try{
+	public int[] getIntArray() {
+		try {
 			int[] arr = new int[dataStream.readInt()];
 			for (int i = 0; i < arr.length; ++i)
 				arr[i] = dataStream.readInt();
 			return arr;
-		}catch (IOException e){
+		} catch (IOException e) {
 			LogHelper.error("AMDataReader (getIntArray): " + e.toString());
 			e.printStackTrace();
 		}

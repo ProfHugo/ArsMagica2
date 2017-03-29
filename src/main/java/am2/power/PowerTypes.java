@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import net.minecraft.util.text.TextFormatting;
 
 public class PowerTypes {
-	
+
 	private static int nextID = 1;
 	private static ArrayList<PowerTypes> types = new ArrayList<>();
 	public static final PowerTypes NONE = new PowerTypes("None");
@@ -18,7 +18,7 @@ public class PowerTypes {
 	private int color;
 	private float inputCostMultiplier;
 	private float outputMultiplier;
-	
+
 	private PowerTypes(String name) {
 		ID = 0;
 		this.name = name;
@@ -27,7 +27,7 @@ public class PowerTypes {
 		this.inputCostMultiplier = 1f;
 		this.outputMultiplier = 1f;
 	}
-	
+
 	public PowerTypes(String name, String chatColor, float inputCostMultiplier, float outputMultiplier, int color) {
 		ID = nextID;
 		nextID *= 2;
@@ -38,31 +38,31 @@ public class PowerTypes {
 		this.outputMultiplier = outputMultiplier;
 		types.add(this);
 	}
-	
+
 	public int ID() {
 		return ID;
 	}
-	
+
 	public String name() {
 		return name.toLowerCase();
 	}
-	
+
 	public static ArrayList<PowerTypes> all() {
 		return types;
 	}
-	
+
 	public int getColor() {
 		return color;
 	}
-	
+
 	public String getChatColor() {
 		return chatColor;
 	}
-	
+
 	public float getInputCostMultiplier() {
 		return inputCostMultiplier;
 	}
-	
+
 	public float getOutputMultiplier() {
 		return outputMultiplier;
 	}

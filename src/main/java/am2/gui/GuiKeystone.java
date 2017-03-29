@@ -25,12 +25,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 
-
 @SuppressWarnings("deprecation")
-public class GuiKeystone extends GuiContainer{
+public class GuiKeystone extends GuiContainer {
 
-	private static final ResourceLocation background = new ResourceLocation("arsmagica2", "textures/gui/keystone_GUI.png");
-	private static final ResourceLocation extras = new ResourceLocation("arsmagica2", "textures/gui/spellBookGui_2.png");
+	private static final ResourceLocation background = new ResourceLocation("arsmagica2",
+			"textures/gui/keystone_GUI.png");
+	private static final ResourceLocation extras = new ResourceLocation("arsmagica2",
+			"textures/gui/spellBookGui_2.png");
 
 	private GuiTextField combinationName;
 	private GuiStatedImageButton addCombination;
@@ -49,34 +50,35 @@ public class GuiKeystone extends GuiContainer{
 	private int comboScrollOffset = 0;
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j){
+	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		mc.renderEngine.bindTexture(background);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int l = (width - xSize) / 2;
 		int i1 = (height - ySize) / 2;
-		if (((ContainerKeystone)this.inventorySlots).runebagSlot > -1){
+		if (((ContainerKeystone) this.inventorySlots).runebagSlot > -1) {
 			drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
-		}else{
+		} else {
 			drawTexturedModalRect(l, i1, 0, 0, xSize, 107);
 			drawTexturedModalRect(l, i1 + 107, 0, 144, xSize, 96);
 		}
 		drawTexturedModalRect(l + xSize, i1 + 5, 176, 6, 76, 176);
 
 		hoveredCombo = -1;
-		int numCombos = ItemDefs.keystone.numCombinations(((ContainerKeystone)this.inventorySlots).getKeystoneStack());
+		int numCombos = ItemDefs.keystone.numCombinations(((ContainerKeystone) this.inventorySlots).getKeystoneStack());
 
-		if (i >= l + xSize && i <= l + xSize + 50){
-			if (j >= i1 && j <= i1 + 175){
-				int comboIndex = (int)Math.floor(((j - 20) / 18)) + comboScrollOffset;
-				if (comboIndex >= 0 && comboIndex < numCombos){
+		if (i >= l + xSize && i <= l + xSize + 50) {
+			if (j >= i1 && j <= i1 + 175) {
+				int comboIndex = (int) Math.floor(((j - 20) / 18)) + comboScrollOffset;
+				if (comboIndex >= 0 && comboIndex < numCombos) {
 					hoveredCombo = comboIndex;
 				}
 			}
 		}
 	}
 
-	private void recalculateSlider(){
-		int sliderMax = Math.max(0, ItemDefs.keystone.numCombinations(((ContainerKeystone)this.inventorySlots).getKeystoneStack()) - 9);
+	private void recalculateSlider() {
+		int sliderMax = Math.max(0,
+				ItemDefs.keystone.numCombinations(((ContainerKeystone) this.inventorySlots).getKeystoneStack()) - 9);
 		scrollBar.setMaximum(Math.max(sliderMax, 1));
 
 		if (sliderMax == 0)
@@ -86,14 +88,15 @@ public class GuiKeystone extends GuiContainer{
 	}
 
 	@Override
-	public void initGui(){
+	public void initGui() {
 		super.initGui();
 		int l = (width - xSize) / 2;
 		int i1 = (height - ySize) / 2;
 
 		combinationName = new GuiTextField(0, fontRendererObj, 44, 86, 88, 16);
 
-		int sliderMax = Math.max(0, ItemDefs.keystone.numCombinations(((ContainerKeystone)this.inventorySlots).getKeystoneStack()) - 9);
+		int sliderMax = Math.max(0,
+				ItemDefs.keystone.numCombinations(((ContainerKeystone) this.inventorySlots).getKeystoneStack()) - 9);
 
 		scrollBar = new GuiSlideControl(4, l + xSize + 58, i1 + 14, 159, "", 0, 0, Math.max(sliderMax, 1));
 		scrollBar.setVertical();
@@ -134,23 +137,23 @@ public class GuiKeystone extends GuiContainer{
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button){
-		if (button == scrollBar){
+	protected void actionPerformed(GuiButton button) {
+		if (button == scrollBar) {
 			comboScrollOffset = Math.round(scrollBar.getShiftedValue());
 			return;
 		}
-		if (button == addCombination){
-			if (combinationName.getText() == null || combinationName.getText().trim().equals("")){
+		if (button == addCombination) {
+			if (combinationName.getText() == null || combinationName.getText().trim().equals("")) {
 				displayMessage = I18n.translateToLocal("am2.gui.nameRequired");
 				displayTime = AMGuiHelper.instance.getSlowTicker() + 3;
 				displayColor = 0xff0000;
-			}else{
+			} else {
 				displayMessage = I18n.translateToLocal("am2.gui.comboStored");
 				displayTime = AMGuiHelper.instance.getSlowTicker() + 3;
 				displayColor = 0x00ff00;
 
 				int[] metas = new int[InventoryKeyStone.inventorySize];
-				for (int i = 0; i < InventoryKeyStone.inventorySize; ++i){
+				for (int i = 0; i < InventoryKeyStone.inventorySize; ++i) {
 					ItemStack stack = this.keystoneInventory.getStackInSlot(i);
 					metas[i] = stack != null ? stack.getItemDamage() : -1;
 				}
@@ -161,17 +164,18 @@ public class GuiKeystone extends GuiContainer{
 					writer.add(metas[i]);
 				AMNetHandler.INSTANCE.sendPacketToServer(AMPacketIDs.SAVE_KEYSTONE_COMBO, writer.generate());
 
-				ItemDefs.keystone.addCombination(((ContainerKeystone)this.inventorySlots).getKeystoneStack(), combinationName.getText(), metas);
+				ItemDefs.keystone.addCombination(((ContainerKeystone) this.inventorySlots).getKeystoneStack(),
+						combinationName.getText(), metas);
 
 				recalculateSlider();
 			}
-		}else if (button == forgetCombination){
-			KeystoneCombination matchedCombo = ((ContainerKeystone)this.inventorySlots).getCurrentMatchedCombination();
-			if (matchedCombo == null){
+		} else if (button == forgetCombination) {
+			KeystoneCombination matchedCombo = ((ContainerKeystone) this.inventorySlots).getCurrentMatchedCombination();
+			if (matchedCombo == null) {
 				displayMessage = I18n.translateToLocal("am2.gui.comboNotSaved");
 				displayTime = AMGuiHelper.instance.getSlowTicker() + 3;
 				displayColor = 0xff0000;
-			}else{
+			} else {
 				displayMessage = I18n.translateToLocal("am2.gui.comboRemoved");
 				displayTime = AMGuiHelper.instance.getSlowTicker() + 3;
 				displayColor = 0x00ff00;
@@ -185,52 +189,55 @@ public class GuiKeystone extends GuiContainer{
 					writer.add(matchedCombo.metas[i]);
 				AMNetHandler.INSTANCE.sendPacketToServer(AMPacketIDs.SAVE_KEYSTONE_COMBO, writer.generate());
 
-				ItemDefs.keystone.removeCombination(((ContainerKeystone)this.inventorySlots).getKeystoneStack(), matchedCombo.name);
+				ItemDefs.keystone.removeCombination(((ContainerKeystone) this.inventorySlots).getKeystoneStack(),
+						matchedCombo.name);
 
 				recalculateSlider();
 			}
-		}else{
+		} else {
 
-			int numCombinatons = ItemDefs.keystone.numCombinations(((ContainerKeystone)this.inventorySlots).getKeystoneStack());
+			int numCombinatons = ItemDefs.keystone
+					.numCombinations(((ContainerKeystone) this.inventorySlots).getKeystoneStack());
 
 			int originalCombo = currentCombination;
 			boolean changed = false;
 			boolean skipped = false;
 
-			if (numCombinatons == 0) return;
-			if (numCombinatons == 1){
+			if (numCombinatons == 0)
+				return;
+			if (numCombinatons == 1) {
 				currentCombination = 0;
-				if (((ContainerKeystone)this.inventorySlots).setInventoryToCombination(currentCombination))
+				if (((ContainerKeystone) this.inventorySlots).setInventoryToCombination(currentCombination))
 					changed = true;
-			}else{
-				if (button == nextCombination){
+			} else {
+				if (button == nextCombination) {
 					currentCombination++;
 					if (currentCombination >= numCombinatons)
 						currentCombination = 0;
 
-					while (currentCombination != originalCombo){
-						if (!((ContainerKeystone)this.inventorySlots).setInventoryToCombination(currentCombination)){
+					while (currentCombination != originalCombo) {
+						if (!((ContainerKeystone) this.inventorySlots).setInventoryToCombination(currentCombination)) {
 							currentCombination++;
 							if (currentCombination >= numCombinatons)
 								currentCombination = 0;
 							skipped = true;
-						}else{
+						} else {
 							changed = true;
 							break;
 						}
 					}
-				}else if (button == prevCombination){
+				} else if (button == prevCombination) {
 					currentCombination--;
 					if (currentCombination < 0)
 						currentCombination = numCombinatons - 1;
 
-					while (currentCombination != originalCombo){
-						if (!((ContainerKeystone)this.inventorySlots).setInventoryToCombination(currentCombination)){
+					while (currentCombination != originalCombo) {
+						if (!((ContainerKeystone) this.inventorySlots).setInventoryToCombination(currentCombination)) {
 							currentCombination--;
 							if (currentCombination < 0)
 								currentCombination = numCombinatons - 1;
 							skipped = true;
-						}else{
+						} else {
 							changed = true;
 							break;
 						}
@@ -238,11 +245,11 @@ public class GuiKeystone extends GuiContainer{
 				}
 			}
 
-			if (!changed){
+			if (!changed) {
 				displayMessage = I18n.translateToLocal("am2.gui.comboMissingRunes");
 				displayTime = AMGuiHelper.instance.getSlowTicker() + 3;
 				displayColor = 0xff0000;
-			}else if (skipped){
+			} else if (skipped) {
 				displayMessage = I18n.translateToLocal("am2.gui.oneOrMoreSkipped");
 				displayTime = AMGuiHelper.instance.getSlowTicker() + 3;
 				displayColor = 0xff0000;
@@ -252,7 +259,7 @@ public class GuiKeystone extends GuiContainer{
 	}
 
 	@Override
-	protected void mouseClicked(int par1, int par2, int par3) throws IOException{
+	protected void mouseClicked(int par1, int par2, int par3) throws IOException {
 		super.mouseClicked(par1, par2, par3);
 
 		int l = (width - xSize) / 2;
@@ -262,8 +269,8 @@ public class GuiKeystone extends GuiContainer{
 		par2 -= i1;
 		combinationName.mouseClicked(par1, par2, par3);
 
-		if (hoveredCombo > -1){
-			if (!((ContainerKeystone)this.inventorySlots).setInventoryToCombination(hoveredCombo)){
+		if (hoveredCombo > -1) {
+			if (!((ContainerKeystone) this.inventorySlots).setInventoryToCombination(hoveredCombo)) {
 				displayMessage = I18n.translateToLocal("am2.gui.comboMissingRunes");
 				displayTime = AMGuiHelper.instance.getSlowTicker() + 3;
 				displayColor = 0xff0000;
@@ -272,57 +279,62 @@ public class GuiKeystone extends GuiContainer{
 	}
 
 	@Override
-	protected void mouseReleased(int par1, int par2, int par3){
+	protected void mouseReleased(int par1, int par2, int par3) {
 		super.mouseReleased(par1, par2, par3);
-		for (Object button : this.buttonList){
-			((GuiButton)button).mouseReleased(par1, par2);
+		for (Object button : this.buttonList) {
+			((GuiButton) button).mouseReleased(par1, par2);
 		}
 	}
 
 	@Override
-	protected void mouseClickMove(int par1, int par2, int par3, long par4){
+	protected void mouseClickMove(int par1, int par2, int par3, long par4) {
 		super.mouseClickMove(par1, par2, par3, par4);
-		if (scrollBar.dragging){
+		if (scrollBar.dragging) {
 			comboScrollOffset = Math.round(scrollBar.getShiftedValue());
 			return;
 		}
 	}
 
 	@Override
-	protected void keyTyped(char par1, int par2) throws IOException{
-		if (combinationName.isFocused()){
+	protected void keyTyped(char par1, int par2) throws IOException {
+		if (combinationName.isFocused()) {
 			combinationName.textboxKeyTyped(par1, par2);
-		}else{
+		} else {
 			if (!Character.isDigit(par1))
 				super.keyTyped(par1, par2);
 		}
 	}
 
-	public GuiKeystone(InventoryPlayer inventoryplayer, ItemStack keystoneStack, ItemStack runebagStack, InventoryKeyStone inventorykeystone, InventoryRuneBag runeBag, int runeBagIndex){
-		super(new ContainerKeystone(inventoryplayer, keystoneStack, runebagStack, inventorykeystone, runeBag, runeBagIndex));
+	public GuiKeystone(InventoryPlayer inventoryplayer, ItemStack keystoneStack, ItemStack runebagStack,
+			InventoryKeyStone inventorykeystone, InventoryRuneBag runeBag, int runeBagIndex) {
+		super(new ContainerKeystone(inventoryplayer, keystoneStack, runebagStack, inventorykeystone, runeBag,
+				runeBagIndex));
 		keystoneInventory = inventorykeystone;
 		xSize = 176;
 		ySize = 240;
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2){
+	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		mc.renderEngine.bindTexture(new ResourceLocation("textures/atlas/items.png"));
 
-		int numCombos = Math.min(ItemDefs.keystone.numCombinations(((ContainerKeystone)this.inventorySlots).getKeystoneStack()), comboScrollOffset + 9);
+		int numCombos = Math.min(
+				ItemDefs.keystone.numCombinations(((ContainerKeystone) this.inventorySlots).getKeystoneStack()),
+				comboScrollOffset + 9);
 
 		int cx = xSize;
 		int cy = 13;
 
-		KeystoneCombination matchedCombo = ((ContainerKeystone)this.inventorySlots).getCurrentMatchedCombination();
+		KeystoneCombination matchedCombo = ((ContainerKeystone) this.inventorySlots).getCurrentMatchedCombination();
 
-		for (int i = comboScrollOffset; i < numCombos; ++i){
-			KeystoneCombination combo = ItemDefs.keystone.getCombinationAt(((ContainerKeystone)this.inventorySlots).getKeystoneStack(), i);
+		for (int i = comboScrollOffset; i < numCombos; ++i) {
+			KeystoneCombination combo = ItemDefs.keystone
+					.getCombinationAt(((ContainerKeystone) this.inventorySlots).getKeystoneStack(), i);
 
-			if (matchedCombo != null && combo.equals(matchedCombo)){
+			if (matchedCombo != null && combo.equals(matchedCombo)) {
 				currentCombination = i;
-				for (int n = 0; n < combo.metas.length; ++n){
-					if (combo.metas[n] > -1){
+				for (int n = 0; n < combo.metas.length; ++n) {
+					if (combo.metas[n] > -1) {
 						TextureAtlasSprite icon = AMGuiIcons.selectedRunes;
 						AMGuiHelper.DrawIconAtXY(icon, cx, cy, this.zLevel, 16, 16, true);
 					}
@@ -331,9 +343,10 @@ public class GuiKeystone extends GuiContainer{
 				mc.renderEngine.bindTexture(new ResourceLocation("textures/atlas/items.png"));
 				cx = xSize;
 			}
-			for (int n = 0; n < combo.metas.length; ++n){
-				if (combo.metas[n] > -1){
-					TextureAtlasSprite icon = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getParticleIcon(ItemDefs.rune, combo.metas[n]);
+			for (int n = 0; n < combo.metas.length; ++n) {
+				if (combo.metas[n] > -1) {
+					TextureAtlasSprite icon = Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
+							.getParticleIcon(ItemDefs.rune, combo.metas[n]);
 					AMGuiHelper.DrawIconAtXY(icon, cx, cy, this.zLevel, 16, 16, true);
 				}
 				cx += 18;
@@ -344,43 +357,43 @@ public class GuiKeystone extends GuiContainer{
 
 		mc.renderEngine.bindTexture(extras);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.5F);
-		//special slot(s)
+		// special slot(s)
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		int index = ((ContainerKeystone)this.inventorySlots).specialSlotIndex - 32;
+		int index = ((ContainerKeystone) this.inventorySlots).specialSlotIndex - 32;
 		int x = 8 + 18 * index;
-		int y = (((ContainerKeystone)this.inventorySlots).runebagSlot > -1) ? 216 : 179;
+		int y = (((ContainerKeystone) this.inventorySlots).runebagSlot > -1) ? 216 : 179;
 		drawTexturedModalRect(x, y, 0, 20, 16, 16);
 
-		if (((ContainerKeystone)this.inventorySlots).runebagSlot > -1){
-			index = ((ContainerKeystone)this.inventorySlots).runebagSlot;
+		if (((ContainerKeystone) this.inventorySlots).runebagSlot > -1) {
+			index = ((ContainerKeystone) this.inventorySlots).runebagSlot;
 			x = 8 + 18 * (index % 9);
-			y = index < 9 ? 216 : 140 + 18 * (int)Math.floor(index / 9f);
+			y = index < 9 ? 216 : 140 + 18 * (int) Math.floor(index / 9f);
 			drawTexturedModalRect(x, y, 0, 20, 16, 16);
 		}
 		GL11.glDisable(GL11.GL_BLEND);
 
 		combinationName.drawTextBox();
 
-		if (AMGuiHelper.instance.getSlowTicker() < displayTime){
+		if (AMGuiHelper.instance.getSlowTicker() < displayTime) {
 			fontRendererObj.drawSplitString(displayMessage, -90, 0, 90, displayColor);
-		}else{
+		} else {
 			displayTime = 0;
 		}
 
-
-		if (matchedCombo != null){
+		if (matchedCombo != null) {
 			combinationName.setText(matchedCombo.name);
 		}
 
-
-		if (hoveredCombo > -1){
-			KeystoneCombination combo = ItemDefs.keystone.getCombinationAt(((ContainerKeystone)this.inventorySlots).getKeystoneStack(), hoveredCombo);
+		if (hoveredCombo > -1) {
+			KeystoneCombination combo = ItemDefs.keystone
+					.getCombinationAt(((ContainerKeystone) this.inventorySlots).getKeystoneStack(), hoveredCombo);
 			ArrayList<String> lines = new ArrayList<String>();
 			lines.add(combo.name);
 			lines.add("\2477\247o" + I18n.translateToLocal("am2.gui.keystoneComboClick"));
 			lines.add("\2477\247o" + I18n.translateToLocal("am2.gui.keystoneComboClick2") + "\247r");
-			AMGuiHelper.drawHoveringText(lines, par1 - 25, par2 + 18, Minecraft.getMinecraft().fontRendererObj, this.xSize, this.ySize);
+			AMGuiHelper.drawHoveringText(lines, par1 - 25, par2 + 18, Minecraft.getMinecraft().fontRendererObj,
+					this.xSize, this.ySize);
 		}
 	}
 

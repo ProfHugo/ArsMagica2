@@ -12,11 +12,11 @@ import net.minecraft.entity.player.EntityPlayer;
 /**
  * @author Mithion
  */
-public class ContainerInertSpawner extends AM2Container{
+public class ContainerInertSpawner extends AM2Container {
 
 	private TileEntityInertSpawner spawner;
 
-	public ContainerInertSpawner(EntityPlayer player, TileEntityInertSpawner habitat){
+	public ContainerInertSpawner(EntityPlayer player, TileEntityInertSpawner habitat) {
 		this.spawner = habitat;
 		SlotSpecifiedItemsOnly slot;
 
@@ -31,7 +31,7 @@ public class ContainerInertSpawner extends AM2Container{
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer){
+	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return this.spawner.isUseableByPlayer(entityplayer);
 	}
 

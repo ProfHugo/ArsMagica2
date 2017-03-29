@@ -23,37 +23,40 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityCelestialPrism extends TileEntityObelisk implements IMultiblockStructureController{
+public class TileEntityCelestialPrism extends TileEntityObelisk implements IMultiblockStructureController {
 
 	private int particleCounter = 0;
 
 	private boolean onlyChargeAtNight = false;
 
-	
 	@SuppressWarnings("unchecked")
-	public TileEntityCelestialPrism(){
+	public TileEntityCelestialPrism() {
 		super(2500);
 
 		powerBase = 1.0f;
 
 		structure = new MultiblockStructureDefinition("celestialprism_structure");
-		
-		capsGroup = new TypedMultiblockGroup("caps", Lists.newArrayList(
-				createMap(Blocks.GLASS.getDefaultState()),
-				createMap(Blocks.GOLD_BLOCK.getDefaultState()),
-				createMap(Blocks.DIAMOND_BLOCK.getDefaultState()),
-				createMap(BlockDefs.blocks.getDefaultState().withProperty(BlockArsMagicaBlock.BLOCK_TYPE, BlockArsMagicaBlock.EnumBlockType.MOONSTONE))
-				), false);
+
+		capsGroup = new TypedMultiblockGroup(
+				"caps", Lists
+						.newArrayList(createMap(Blocks.GLASS.getDefaultState()),
+								createMap(Blocks.GOLD_BLOCK.getDefaultState()),
+								createMap(Blocks.DIAMOND_BLOCK.getDefaultState()),
+								createMap(BlockDefs.blocks.getDefaultState().withProperty(
+										BlockArsMagicaBlock.BLOCK_TYPE, BlockArsMagicaBlock.EnumBlockType.MOONSTONE))),
+				false);
 
 		pillars = new MultiblockGroup("pillars", Lists.newArrayList(Blocks.QUARTZ_BLOCK.getDefaultState()), false);
-		
+
 		this.caps = new HashMap<IBlockState, Float>();
 		this.caps.put(Blocks.GLASS.getDefaultState(), 1.1f);
 		this.caps.put(Blocks.GOLD_BLOCK.getDefaultState(), 1.4f);
 		this.caps.put(Blocks.DIAMOND_BLOCK.getDefaultState(), 2f);
-		this.caps.put(BlockDefs.blocks.getDefaultState().withProperty(BlockArsMagicaBlock.BLOCK_TYPE, BlockArsMagicaBlock.EnumBlockType.MOONSTONE), 3f);
-		
-		MultiblockGroup prism = new MultiblockGroup("prism", Lists.newArrayList(BlockDefs.celestialPrism.getDefaultState()), true);
+		this.caps.put(BlockDefs.blocks.getDefaultState().withProperty(BlockArsMagicaBlock.BLOCK_TYPE,
+				BlockArsMagicaBlock.EnumBlockType.MOONSTONE), 3f);
+
+		MultiblockGroup prism = new MultiblockGroup("prism",
+				Lists.newArrayList(BlockDefs.celestialPrism.getDefaultState()), true);
 		prism.addBlock(BlockPos.ORIGIN);
 
 		pillars.addBlock(new BlockPos(-2, 0, -2));
@@ -81,7 +84,7 @@ public class TileEntityCelestialPrism extends TileEntityObelisk implements IMult
 	}
 
 	@Override
-	protected void checkNearbyBlockState(){
+	protected void checkNearbyBlockState() {
 		List<MultiblockGroup> groups = structure.getMatchingGroups(worldObj, pos);
 
 		float capsLevel = 1;
@@ -89,7 +92,7 @@ public class TileEntityCelestialPrism extends TileEntityObelisk implements IMult
 		boolean wizChalkFound = false;
 		boolean capsFound = false;
 
-		for (MultiblockGroup group : groups){
+		for (MultiblockGroup group : groups) {
 			if (group == pillars)
 				pillarsFound = true;
 			else if (group == wizardChalkCircle)
@@ -97,14 +100,15 @@ public class TileEntityCelestialPrism extends TileEntityObelisk implements IMult
 			else if (group == capsGroup)
 				capsFound = true;
 		}
-		
+
 		if (pillarsFound && capsFound) {
 			IBlockState capState = worldObj.getBlockState(pos.add(2, 2, 2));
-			
-			for (IBlockState cap : caps.keySet()){
-				if (capState == cap){
+
+			for (IBlockState cap : caps.keySet()) {
+				if (capState == cap) {
 					capsLevel = caps.get(cap);
-					if (cap.getBlock() == BlockDefs.blocks && cap.getValue(BlockArsMagicaBlock.BLOCK_TYPE) == EnumBlockType.MOONSTONE)
+					if (cap.getBlock() == BlockDefs.blocks
+							&& cap.getValue(BlockArsMagicaBlock.BLOCK_TYPE) == EnumBlockType.MOONSTONE)
 						onlyChargeAtNight = true;
 					else
 						onlyChargeAtNight = false;
@@ -122,39 +126,39 @@ public class TileEntityCelestialPrism extends TileEntityObelisk implements IMult
 			powerMultiplier *= capsLevel;
 	}
 
-	private boolean isNight(){
+	private boolean isNight() {
 		long ticks = worldObj.getWorldTime() % 24000;
 		return ticks >= 12500 && ticks <= 23500;
 	}
 
 	@Override
-	public void update(){
+	public void update() {
 
-		if (surroundingCheckTicks++ % 100 == 0){
+		if (surroundingCheckTicks++ % 100 == 0) {
 			checkNearbyBlockState();
 			surroundingCheckTicks = 1;
-			if (!worldObj.isRemote && PowerNodeRegistry.For(this.worldObj).checkPower(this, this.capacity * 0.1f)){
-				List<EntityPlayer> nearbyPlayers = worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(this.pos.add(-2, 0, -2), pos.add(2, 3, 2)));
-				for (EntityPlayer p : nearbyPlayers){
-					if (p.isPotionActive(PotionEffectsDefs.manaRegen)) continue;
+			if (!worldObj.isRemote && PowerNodeRegistry.For(this.worldObj).checkPower(this, this.capacity * 0.1f)) {
+				List<EntityPlayer> nearbyPlayers = worldObj.getEntitiesWithinAABB(EntityPlayer.class,
+						new AxisAlignedBB(this.pos.add(-2, 0, -2), pos.add(2, 3, 2)));
+				for (EntityPlayer p : nearbyPlayers) {
+					if (p.isPotionActive(PotionEffectsDefs.manaRegen))
+						continue;
 					p.addPotionEffect(new BuffEffectManaRegen(600, 0));
 				}
 			}
 		}
 
-		if (onlyChargeAtNight == isNight()){
+		if (onlyChargeAtNight == isNight()) {
 			PowerNodeRegistry.For(this.worldObj).insertPower(this, PowerTypes.LIGHT, 0.25f * powerMultiplier);
-			if (worldObj.isRemote){
+			if (worldObj.isRemote) {
 
-				if (particleCounter++ % (ArsMagica2.config.FullGFX() ? 60 : ArsMagica2.config.NoGFX() ? 180 : 120) == 0){
+				if (particleCounter++
+						% (ArsMagica2.config.FullGFX() ? 60 : ArsMagica2.config.NoGFX() ? 180 : 120) == 0) {
 					particleCounter = 1;
 					ArsMagica2.proxy.particleManager.RibbonFromPointToPoint(worldObj,
-							pos.getX() + worldObj.rand.nextFloat(),
-							pos.getY() + (worldObj.rand.nextFloat() * 2),
-							pos.getZ() + worldObj.rand.nextFloat(),
-							pos.getX() + worldObj.rand.nextFloat(),
-							pos.getY() + (worldObj.rand.nextFloat() * 2),
-							pos.getZ() + worldObj.rand.nextFloat());
+							pos.getX() + worldObj.rand.nextFloat(), pos.getY() + (worldObj.rand.nextFloat() * 2),
+							pos.getZ() + worldObj.rand.nextFloat(), pos.getX() + worldObj.rand.nextFloat(),
+							pos.getY() + (worldObj.rand.nextFloat() * 2), pos.getZ() + worldObj.rand.nextFloat());
 				}
 			}
 		}
@@ -162,27 +166,27 @@ public class TileEntityCelestialPrism extends TileEntityObelisk implements IMult
 	}
 
 	@Override
-	public MultiblockStructureDefinition getDefinition(){
+	public MultiblockStructureDefinition getDefinition() {
 		return structure;
 	}
 
 	@Override
-	public boolean canRequestPower(){
+	public boolean canRequestPower() {
 		return false;
 	}
 
 	@Override
-	public boolean canProvidePower(PowerTypes type){
+	public boolean canProvidePower(PowerTypes type) {
 		return type == PowerTypes.LIGHT;
 	}
 
 	@Override
-	public List<PowerTypes> getValidPowerTypes(){
+	public List<PowerTypes> getValidPowerTypes() {
 		return Lists.newArrayList(PowerTypes.LIGHT);
 	}
 
 	@Override
-	public int getSizeInventory(){
+	public int getSizeInventory() {
 		return 0;
 	}
 }

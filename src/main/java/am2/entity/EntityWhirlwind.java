@@ -15,31 +15,32 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-public class EntityWhirlwind extends EntityFlying{
+public class EntityWhirlwind extends EntityFlying {
 
 	private final HashMap<EntityPlayer, Integer> cooldownList;
 	private AMVector3 currentTarget;
 	private final PathNavigator nav;
 
-	public EntityWhirlwind(World par1World){
+	public EntityWhirlwind(World par1World) {
 		super(par1World);
 		cooldownList = new HashMap<EntityPlayer, Integer>();
 		nav = new PathNavigator(this);
 	}
 
 	@Override
-	public void onCollideWithPlayer(EntityPlayer player){
-		if (!worldObj.isRemote){
+	public void onCollideWithPlayer(EntityPlayer player) {
+		if (!worldObj.isRemote) {
 			Integer cd = cooldownList.get(player);
-			if (cd == null || cd <= 0){
-				if (!worldObj.isRemote && rand.nextInt(100) < 10){
+			if (cd == null || cd <= 0) {
+				if (!worldObj.isRemote && rand.nextInt(100) < 10) {
 					int slot = player.inventory.mainInventory.length + rand.nextInt(4);
-					if (player.inventory.getStackInSlot(slot) != null){
+					if (player.inventory.getStackInSlot(slot) != null) {
 						ItemStack armorStack = player.inventory.getStackInSlot(slot).copy();
-						if (!player.inventory.addItemStackToInventory(armorStack)){
+						if (!player.inventory.addItemStackToInventory(armorStack)) {
 							EntityItem item = new EntityItem(worldObj);
 							item.setPosition(player.posX, player.posY, player.posZ);
-							item.setVelocity(rand.nextDouble() * 0.2 - 0.1, rand.nextDouble() * 0.2 - 0.1, rand.nextDouble() * 0.2 - 0.1);
+							item.setVelocity(rand.nextDouble() * 0.2 - 0.1, rand.nextDouble() * 0.2 - 0.1,
+									rand.nextDouble() * 0.2 - 0.1);
 							worldObj.spawnEntityInWorld(item);
 						}
 						player.inventory.setInventorySlotContents(slot, null);
@@ -57,12 +58,12 @@ public class EntityWhirlwind extends EntityFlying{
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2){
+	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
 		return false;
 	}
 
 	@Override
-	public void onUpdate(){
+	public void onUpdate() {
 		if (currentTarget == null || new AMVector3(this).distanceSqTo(currentTarget) < 2)
 			generateNewTarget();
 
@@ -71,50 +72,52 @@ public class EntityWhirlwind extends EntityFlying{
 		if (this.ticksExisted > 140 && !this.worldObj.isRemote)
 			this.setDead();
 
-
 		tickCooldowns();
 
 		super.onUpdate();
 	}
 
-	private void generateNewTarget(){
+	private void generateNewTarget() {
 		EntityPlayer closest = null;
-		for (Object player : this.worldObj.playerEntities){
-			if (closest == null || ((EntityPlayer)player).getDistanceSqToEntity(this) < this.getDistanceSqToEntity(closest)){
-				closest = (EntityPlayer)player;
+		for (Object player : this.worldObj.playerEntities) {
+			if (closest == null
+					|| ((EntityPlayer) player).getDistanceSqToEntity(this) < this.getDistanceSqToEntity(closest)) {
+				closest = (EntityPlayer) player;
 			}
 		}
 		if (closest != null && this.getDistanceSqToEntity(closest) < 64D)
 			currentTarget = new AMVector3(closest);
 		else
-			currentTarget = new AMVector3(this).add(new AMVector3(worldObj.rand.nextInt(10) - 5, 0, worldObj.rand.nextInt(10) - 5));
+			currentTarget = new AMVector3(this)
+					.add(new AMVector3(worldObj.rand.nextInt(10) - 5, 0, worldObj.rand.nextInt(10) - 5));
 
 		nav.SetWaypoint(worldObj, currentTarget.toBlockPos(), this);
 	}
 
-	private void setCooldownFor(EntityPlayer player){
+	private void setCooldownFor(EntityPlayer player) {
 		cooldownList.put(player, 20);
 	}
 
-	private void tickCooldowns(){
-		for (EntityPlayer player : cooldownList.keySet()){
+	private void tickCooldowns() {
+		for (EntityPlayer player : cooldownList.keySet()) {
 			Integer current = cooldownList.get(player);
-			if (current <= 0) continue;
+			if (current <= 0)
+				continue;
 			cooldownList.put(player, --current);
 		}
 	}
-	
+
 	@Override
 	public ItemStack getHeldItem(EnumHand hand) {
 		return null;
 	}
-	
+
 	@Override
 	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
 	}
 
 	@Override
-	public boolean canBePushed(){
+	public boolean canBePushed() {
 		return false;
 	}
 

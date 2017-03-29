@@ -45,11 +45,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class AMGuiHelper{
+public class AMGuiHelper {
 
 	protected static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 
-	private AMGuiHelper(){
+	private AMGuiHelper() {
 	}
 
 	public static final AMGuiHelper instance = new AMGuiHelper();
@@ -62,7 +62,7 @@ public class AMGuiHelper{
 	private static int fractalLineDetail = 2;
 
 	// Buff flashing variables (for the UI)
-	//=========================================
+	// =========================================
 	public float slowFlashAlpha = 1.0f;
 	public float fastFlashAlpha = 1.0f;
 	private int flashCounter = 0;
@@ -70,25 +70,25 @@ public class AMGuiHelper{
 	private int magicXPBarShowTimer = 0;
 	private float magicXPBarAlpha = 0;
 	public float playerRunesAlpha = 0;
-	//=========================================
-	//Blackout variables (for the UI)
-	//=========================================
+	// =========================================
+	// Blackout variables (for the UI)
+	// =========================================
 	private final short[] flashTimers = new short[5];
 	private final int[] blackoutTimers = new int[5];
 	private final int[] blackoutTimersMax = new int[5];
-	//=========================================
+	// =========================================
 	// Compendium Variables
-	//=========================================
+	// =========================================
 	private int slowUITicker = 0;
 	private static int fastUITicker = 0;
 	public boolean runCompendiumTicker = true;
-	//=========================================
+	// =========================================
 
 	public EntityItem dummyItem;
-	
+
 	private static final Random rand = new Random();
 
-	public void blackoutArmorPiece(int index, int duration){
+	public void blackoutArmorPiece(int index, int duration) {
 		flashTimers[index] = flashDuration;
 		if (duration > blackoutTimers[index]) {
 			blackoutTimers[index] = duration;
@@ -96,81 +96,85 @@ public class AMGuiHelper{
 		}
 	}
 
-	public void flashArmorPiece(int index){
+	public void flashArmorPiece(int index) {
 		flashTimers[index] = flashDuration;
 	}
 
-	public void flashManaBar(){
+	public void flashManaBar() {
 		if (flashTimers[4] <= 1)
 			flashTimers[4] = flashDuration;
 	}
 
-	public short getFlashTimer(int index){
+	public short getFlashTimer(int index) {
 		return flashTimers[index];
 	}
 
-	public int getBlackoutTimer(int index){
+	public int getBlackoutTimer(int index) {
 		return blackoutTimers[index];
 	}
 
-	public int getBlackoutTimerMax(int index){
+	public int getBlackoutTimerMax(int index) {
 		return blackoutTimersMax[index];
 	}
 
-	public int getSlowTicker(){
+	public int getSlowTicker() {
 		return slowUITicker;
 	}
 
-	public int getFastTicker(){
+	public int getFastTicker() {
 		return fastUITicker;
 	}
 
-	public float getMagicXPBarAlpha(){
+	public float getMagicXPBarAlpha() {
 		return this.magicXPBarAlpha;
 	}
 
-	public void showMagicXPBar(){
+	public void showMagicXPBar() {
 		this.magicXPBarAlpha = 1.0f;
 		this.magicXPBarShowTimer = 100;
 	}
 
-	public void tick(){
+	public void tick() {
 
-		if (dummyItem == null){
+		if (dummyItem == null) {
 			dummyItem = new EntityItem(Minecraft.getMinecraft().theWorld);
-		}else{
+		} else {
 			dummyItem.rotationYaw += 0.1f;
-			ReflectionHelper.setPrivateValue(EntityItem.class, dummyItem, (Integer)ReflectionHelper.getPrivateValue(EntityItem.class, dummyItem, "age", "field_70292_b", "d") + 1, "age", "field_70292_b", "d");
+			ReflectionHelper.setPrivateValue(EntityItem.class, dummyItem,
+					(Integer) ReflectionHelper.getPrivateValue(EntityItem.class, dummyItem, "age", "field_70292_b", "d")
+							+ 1,
+					"age", "field_70292_b", "d");
 		}
 
-		for (int i = 0; i < this.flashTimers.length; ++i){
+		for (int i = 0; i < this.flashTimers.length; ++i) {
 			if (this.flashTimers[i] > 0)
 				this.flashTimers[i]--;
 		}
 
-		for (int i = 0; i < this.blackoutTimers.length; ++i){
-			if (this.blackoutTimers[i] > 0){
+		for (int i = 0; i < this.blackoutTimers.length; ++i) {
+			if (this.blackoutTimers[i] > 0) {
 				this.blackoutTimers[i]--;
-				if (this.blackoutTimers[i] == 0){
+				if (this.blackoutTimers[i] == 0) {
 					flashArmorPiece(i);
 				}
-			}else{
+			} else {
 				this.blackoutTimersMax[i] = 0;
 			}
 		}
 
 		flashCounter++;
-		if (flashCounter > 20) flashCounter = 0;
+		if (flashCounter > 20)
+			flashCounter = 0;
 
-		if (magicXPBarShowTimer > 0){
+		if (magicXPBarShowTimer > 0) {
 			magicXPBarShowTimer--;
 			if (magicXPBarShowTimer < 20)
 				magicXPBarAlpha -= 0.05f;
 		}
 
-		if (runCompendiumTicker){
+		if (runCompendiumTicker) {
 			fastUITicker++;
-			if (fastUITicker > 40){
+			if (fastUITicker > 40) {
 				fastUITicker = 0;
 				slowUITicker++;
 			}
@@ -183,32 +187,33 @@ public class AMGuiHelper{
 		millis = System.currentTimeMillis();
 	}
 
-	public void guiTick(){
+	public void guiTick() {
 		lastmillis = millis;
 		millis = System.currentTimeMillis();
 		accumulatedMillis += (millis - lastmillis);
-		if (accumulatedMillis >= 50){
+		if (accumulatedMillis >= 50) {
 			tick();
 			accumulatedMillis = 0;
 		}
 	}
 
-	public static void OpenBookGUI(ItemStack stack){
-		
+	public static void OpenBookGUI(ItemStack stack) {
+
 	}
 
-	public static void OpenCompendiumGui(ItemStack stack){
+	public static void OpenCompendiumGui(ItemStack stack) {
 		Minecraft.getMinecraft().displayGuiScreen(new GuiCompendiumIndex());
 	}
 
-	public static void DrawIconAtXY(TextureAtlasSprite IIcon, float x, float y, float zLevel, int w, int h, boolean semitransparent){
+	public static void DrawIconAtXY(TextureAtlasSprite IIcon, float x, float y, float zLevel, int w, int h,
+			boolean semitransparent) {
 
 		if (IIcon == null)
 			return;
 
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.pushMatrix();
-		if (semitransparent){
+		if (semitransparent) {
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		}
@@ -217,7 +222,7 @@ public class AMGuiHelper{
 		Tessellator tessellator = Tessellator.getInstance();
 
 		boolean drawing = false;
-		try{
+		try {
 			tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX);
 		} catch (IllegalStateException e) {
 			drawing = true;
@@ -225,14 +230,14 @@ public class AMGuiHelper{
 			tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX);
 		}
 
-		tessellator.getBuffer().pos(x, y + h, zLevel).tex( IIcon.getMinU(), IIcon.getMaxV()).endVertex();
-		tessellator.getBuffer().pos(x + w, y + h, zLevel).tex( IIcon.getMaxU(), IIcon.getMaxV()).endVertex();
-		tessellator.getBuffer().pos(x + w, y, zLevel).tex( IIcon.getMaxU(), IIcon.getMinV()).endVertex();
-		tessellator.getBuffer().pos(x, y, zLevel).tex( IIcon.getMinU(), IIcon.getMinV()).endVertex();
-		
+		tessellator.getBuffer().pos(x, y + h, zLevel).tex(IIcon.getMinU(), IIcon.getMaxV()).endVertex();
+		tessellator.getBuffer().pos(x + w, y + h, zLevel).tex(IIcon.getMaxU(), IIcon.getMaxV()).endVertex();
+		tessellator.getBuffer().pos(x + w, y, zLevel).tex(IIcon.getMaxU(), IIcon.getMinV()).endVertex();
+		tessellator.getBuffer().pos(x, y, zLevel).tex(IIcon.getMinU(), IIcon.getMinV()).endVertex();
+
 		tessellator.draw();
 
-		if (semitransparent){
+		if (semitransparent) {
 			GlStateManager.disableBlend();
 		}
 		GlStateManager.popMatrix();
@@ -241,51 +246,52 @@ public class AMGuiHelper{
 		if (drawing)
 			tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX);
 	}
-	
-	public static void DrawIconAtXY(TextureAtlasSprite IIcon, float x, float y, float zLevel, int w, int h, int color){
+
+	public static void DrawIconAtXY(TextureAtlasSprite IIcon, float x, float y, float zLevel, int w, int h, int color) {
 
 		if (IIcon == null)
 			return;
-		//GlStateManager.matrixMode(GL11.GL_TEXTURE);
-		//GlStateManager.pushMatrix();
+		// GlStateManager.matrixMode(GL11.GL_TEXTURE);
+		// GlStateManager.pushMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		Tessellator tessellator = Tessellator.getInstance();
 
-		boolean drawing = ReflectionHelper.getPrivateValue(VertexBuffer.class, tessellator.getBuffer(), "isDrawing", "field_179010_r");
+		boolean drawing = ReflectionHelper.getPrivateValue(VertexBuffer.class, tessellator.getBuffer(), "isDrawing",
+				"field_179010_r");
 		if (drawing)
 			tessellator.draw();
 
 		tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-		
-		//LogHelper.info(color);
-		
-		tessellator.getBuffer().pos(x, y + h, zLevel).tex( IIcon.getMinU(), IIcon.getMaxV())
-		.color(RenderUtils.getRed(color), RenderUtils.getGreen(color), RenderUtils.getBlue(color), 1.0f)
-		.endVertex();
-		tessellator.getBuffer().pos(x + w, y + h, zLevel).tex( IIcon.getMaxU(), IIcon.getMaxV())
-		.color(RenderUtils.getRed(color), RenderUtils.getGreen(color), RenderUtils.getBlue(color), 1.0f)
-		.endVertex();
-		tessellator.getBuffer().pos(x + w, y, zLevel).tex( IIcon.getMaxU(), IIcon.getMinV())
-		.color(RenderUtils.getRed(color), RenderUtils.getGreen(color), RenderUtils.getBlue(color), 1.0f)
-		.endVertex();
-		tessellator.getBuffer().pos(x, y, zLevel).tex( IIcon.getMinU(), IIcon.getMinV())
-		.color(RenderUtils.getRed(color), RenderUtils.getGreen(color), RenderUtils.getBlue(color), 1.0f)
-		.endVertex();
-		
+
+		// LogHelper.info(color);
+
+		tessellator.getBuffer().pos(x, y + h, zLevel).tex(IIcon.getMinU(), IIcon.getMaxV())
+				.color(RenderUtils.getRed(color), RenderUtils.getGreen(color), RenderUtils.getBlue(color), 1.0f)
+				.endVertex();
+		tessellator.getBuffer().pos(x + w, y + h, zLevel).tex(IIcon.getMaxU(), IIcon.getMaxV())
+				.color(RenderUtils.getRed(color), RenderUtils.getGreen(color), RenderUtils.getBlue(color), 1.0f)
+				.endVertex();
+		tessellator.getBuffer().pos(x + w, y, zLevel).tex(IIcon.getMaxU(), IIcon.getMinV())
+				.color(RenderUtils.getRed(color), RenderUtils.getGreen(color), RenderUtils.getBlue(color), 1.0f)
+				.endVertex();
+		tessellator.getBuffer().pos(x, y, zLevel).tex(IIcon.getMinU(), IIcon.getMinV())
+				.color(RenderUtils.getRed(color), RenderUtils.getGreen(color), RenderUtils.getBlue(color), 1.0f)
+				.endVertex();
+
 		tessellator.draw();
-		//GlStateManager.popMatrix();
-		//GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+		// GlStateManager.popMatrix();
+		// GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 
 		if (drawing)
 			tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_TEX);
 	}
 
-	public static void DrawItemAtXY(ItemStack stack, float x, float y, float zLevel){
+	public static void DrawItemAtXY(ItemStack stack, float x, float y, float zLevel) {
 		DrawItemAtXY(stack, x, y, zLevel, 1.0f);
 	}
 
-	public static void DrawItemAtXY(ItemStack stack, float x, float y, float zLevel, float scale){
+	public static void DrawItemAtXY(ItemStack stack, float x, float y, float zLevel, float scale) {
 		Minecraft.getMinecraft().renderEngine.bindTexture(LOCATION_BLOCKS_TEXTURE);
 		if (stack == null)
 			return;
@@ -294,24 +300,26 @@ public class AMGuiHelper{
 
 		RenderHelper.disableStandardItemLighting();
 		RenderHelper.enableGUIStandardItemLighting();
-		//GL11.glDisable(GL11.GL_BLEND);
-		//GL11.glDisable(GL11.GL_LIGHTING);
+		// GL11.glDisable(GL11.GL_BLEND);
+		// GL11.glDisable(GL11.GL_LIGHTING);
 
-		if (scale != 1.0f){
+		if (scale != 1.0f) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y, zLevel);
 			GlStateManager.scale(scale, scale, 1);
 			itemRenderer.renderItemIntoGUI(stack, 0, 0);
 			GlStateManager.popMatrix();
-		}else {
+		} else {
 			if (stack.getItem() instanceof ItemSpellComponent) {
 				Minecraft.getMinecraft().renderEngine.bindTexture(LOCATION_BLOCKS_TEXTURE);
-				TextureAtlasSprite icon = SpellIconManager.INSTANCE.getSprite(ArsMagicaAPI.getSpellRegistry().getValue(ArsMagicaAPI.getSkillRegistry().getObjectById(stack.getItemDamage()).getRegistryName()).getRegistryName().toString());
+				TextureAtlasSprite icon = SpellIconManager.INSTANCE.getSprite(ArsMagicaAPI.getSpellRegistry()
+						.getValue(
+								ArsMagicaAPI.getSkillRegistry().getObjectById(stack.getItemDamage()).getRegistryName())
+						.getRegistryName().toString());
 				GlStateManager.color(1, 1, 1, 1);
 				if (icon != null)
 					DrawIconAtXY(icon, x, y, zLevel + 1, 16, 16, false);
-			} 
-			else if (stack.getItem().equals(ItemDefs.etherium)) {
+			} else if (stack.getItem().equals(ItemDefs.etherium)) {
 				Minecraft.getMinecraft().renderEngine.bindTexture(LOCATION_BLOCKS_TEXTURE);
 				TextureAtlasSprite icon = AMParticleIcons.instance.getIconByName("lights");
 				int color = 0;
@@ -320,20 +328,21 @@ public class AMGuiHelper{
 						color |= type.getColor();
 					}
 				}
-				if (icon != null);
-					DrawIconAtXY(icon, x, y, zLevel, 16, 16, color);
-			} 
-			else {
+				if (icon != null)
+					;
+				DrawIconAtXY(icon, x, y, zLevel, 16, 16, color);
+			} else {
 				RenderHelper.enableGUIStandardItemLighting();
-				itemRenderer.renderItemIntoGUI(stack, (int)x, (int)y);
+				itemRenderer.renderItemIntoGUI(stack, (int) x, (int) y);
 			}
 		}
 		RenderHelper.enableStandardItemLighting();
-		//GL11.glDisable(GL11.GL_ALPHA_TEST);
+		// GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GlStateManager.popAttrib();
 	}
 
-	public static void drawCompendiumText(String text, int x_start, int y_start, int max_width, int start_color, FontRenderer fontRenderer){
+	public static void drawCompendiumText(String text, int x_start, int y_start, int max_width, int start_color,
+			FontRenderer fontRenderer) {
 		int cur_color = start_color;
 		text = text.replaceAll("!d", "\n\n").replace("!l", "\n").replaceAll("-", "- ");
 		String[] words = text.split(" ");
@@ -341,29 +350,30 @@ public class AMGuiHelper{
 		int posX = x_start;
 		int posY = y_start;
 
-		for (String word : words){
-			if (word.equals("")) continue;
+		for (String word : words) {
+			if (word.equals(""))
+				continue;
 			int linesBefore = 0;
 			int linesAfter = 0;
 
 			int wordLength = fontRenderer.getStringWidth(word.replaceAll("#.", "") + " ");
-			if (lineLength + wordLength > max_width){
+			if (lineLength + wordLength > max_width) {
 				posY += fontRenderer.FONT_HEIGHT;
 				posX = x_start;
 				lineLength = 0;
 			}
 
-			while (word.startsWith("\n")){
+			while (word.startsWith("\n")) {
 				linesBefore++;
 				word = word.substring(1);
 			}
-			while (word.endsWith("\n")){
+			while (word.endsWith("\n")) {
 				linesAfter++;
 				word = word.substring(0, word.length() - 1);
 			}
-			//word = word.replaceAll("\n", "");
-			
-			if (linesBefore > 0){
+			// word = word.replaceAll("\n", "");
+
+			if (linesBefore > 0) {
 				posY += fontRenderer.FONT_HEIGHT * linesBefore;
 				posX = x_start - 13;
 				lineLength = 0;
@@ -374,7 +384,7 @@ public class AMGuiHelper{
 			posX += wordLength;
 			lineLength += wordLength;
 
-			if (linesAfter > 0){
+			if (linesAfter > 0) {
 				posY += fontRenderer.FONT_HEIGHT * linesAfter;
 				posX = x_start;
 				lineLength = 0;
@@ -382,8 +392,9 @@ public class AMGuiHelper{
 		}
 	}
 
-	protected static void drawHoveringText(List<String> par1List, int par2, int par3, FontRenderer font, int width, int height){
-		if (!par1List.isEmpty()){
+	protected static void drawHoveringText(List<String> par1List, int par2, int par3, FontRenderer font, int width,
+			int height) {
+		if (!par1List.isEmpty()) {
 			GlStateManager.disableRescaleNormal();
 			RenderHelper.disableStandardItemLighting();
 			GlStateManager.disableLighting();
@@ -391,11 +402,11 @@ public class AMGuiHelper{
 			int k = 0;
 			Iterator<String> iterator = par1List.iterator();
 
-			while (iterator.hasNext()){
-				String s = (String)iterator.next();
+			while (iterator.hasNext()) {
+				String s = (String) iterator.next();
 				int l = font.getStringWidth(s);
 
-				if (l > k){
+				if (l > k) {
 					k = l;
 				}
 			}
@@ -404,15 +415,15 @@ public class AMGuiHelper{
 			int j1 = par3 - 12;
 			int k1 = 8;
 
-			if (par1List.size() > 1){
+			if (par1List.size() > 1) {
 				k1 += 2 + (par1List.size() - 1) * 10;
 			}
 
-			if (i1 + k > width){
+			if (i1 + k > width) {
 				i1 -= 28 + k;
 			}
 
-			if (j1 + k1 + 6 > height){
+			if (j1 + k1 + 6 > height) {
 				j1 = height - k1 - 6;
 			}
 
@@ -429,11 +440,11 @@ public class AMGuiHelper{
 			drawGradientRect(i1 - 3, j1 - 3, i1 + k + 3, j1 - 3 + 1, i2, i2);
 			drawGradientRect(i1 - 3, j1 + k1 + 2, i1 + k + 3, j1 + k1 + 3, j2, j2);
 
-			for (int k2 = 0; k2 < par1List.size(); ++k2){
-				String s1 = (String)par1List.get(k2);
+			for (int k2 = 0; k2 < par1List.size(); ++k2) {
+				String s1 = (String) par1List.get(k2);
 				font.drawStringWithShadow(s1, i1, j1, -1);
 
-				if (k2 == 0){
+				if (k2 == 0) {
 					j1 += 2;
 				}
 
@@ -446,7 +457,7 @@ public class AMGuiHelper{
 		}
 	}
 
-	protected static void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6){
+	protected static void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6) {
 		float f = (par5 >> 24 & 255) / 255.0F;
 		float f1 = (par5 >> 16 & 255) / 255.0F;
 		float f2 = (par5 >> 8 & 255) / 255.0F;
@@ -463,7 +474,8 @@ public class AMGuiHelper{
 		Tessellator tessellator = Tessellator.getInstance();
 		tessellator.getBuffer().begin(7, DefaultVertexFormats.POSITION_COLOR);
 		tessellator.getBuffer().pos(par3, par2, zLevel).color(f1, f2, f3, f).endVertex();
-		tessellator.getBuffer().pos(par1, par2, zLevel).color(f1, f2, f3, f).endVertex();;
+		tessellator.getBuffer().pos(par1, par2, zLevel).color(f1, f2, f3, f).endVertex();
+		;
 		tessellator.getBuffer().pos(par1, par4, zLevel).color(f5, f6, f7, f4).endVertex();
 		tessellator.getBuffer().pos(par3, par4, zLevel).color(f5, f6, f7, f4).endVertex();
 		tessellator.draw();
@@ -473,10 +485,11 @@ public class AMGuiHelper{
 		GlStateManager.enableTexture2D();
 	}
 
-	public static void line2d(float src_x, float src_y, float dst_x, float dst_y, float zLevel, int color){
+	public static void line2d(float src_x, float src_y, float dst_x, float dst_y, float zLevel, int color) {
 		GlStateManager.disableTexture2D();
 		GlStateManager.glLineWidth(1f);
-		GlStateManager.color(((color & 0xFF0000) >> 16) / 255.0f, ((color & 0x00FF00) >> 8) / 255.0f, (color & 0x0000FF) / 255.0f);
+		GlStateManager.color(((color & 0xFF0000) >> 16) / 255.0f, ((color & 0x00FF00) >> 8) / 255.0f,
+				(color & 0x0000FF) / 255.0f);
 		GlStateManager.glBegin(GL11.GL_LINES);
 		GlStateManager.glVertex3f(src_x, src_y, zLevel);
 		GlStateManager.glVertex3f(dst_x, dst_y, zLevel);
@@ -485,10 +498,12 @@ public class AMGuiHelper{
 		GlStateManager.enableTexture2D();
 	}
 
-	public static void line2d(float src_x, float src_y, float dst_x, float dst_y, float zLevel, float weight, int color){
+	public static void line2d(float src_x, float src_y, float dst_x, float dst_y, float zLevel, float weight,
+			int color) {
 		GlStateManager.disableTexture2D();
 		GlStateManager.glLineWidth(weight);
-		GlStateManager.color(((color & 0xFF0000) >> 16) / 255.0f, ((color & 0x00FF00) >> 8) / 255.0f, (color & 0x0000FF) / 255.0f);
+		GlStateManager.color(((color & 0xFF0000) >> 16) / 255.0f, ((color & 0x00FF00) >> 8) / 255.0f,
+				(color & 0x0000FF) / 255.0f);
 		GlStateManager.glBegin(GL11.GL_LINES);
 		GlStateManager.glVertex3f(src_x, src_y, zLevel);
 		GlStateManager.glVertex3f(dst_x, dst_y, zLevel);
@@ -497,7 +512,8 @@ public class AMGuiHelper{
 		GlStateManager.enableTexture2D();
 	}
 
-	public static void gradientline2d(float src_x, float src_y, float dst_x, float dst_y, float zLevel, int color1, int color2){
+	public static void gradientline2d(float src_x, float src_y, float dst_x, float dst_y, float zLevel, int color1,
+			int color2) {
 		GlStateManager.disableTexture2D();
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.glLineWidth(1f);
@@ -512,14 +528,16 @@ public class AMGuiHelper{
 		GlStateManager.enableTexture2D();
 	}
 
-	public static void fractalLine2d(int src_x, int src_y, int dst_x, int dst_y, float zLevel, int color, float displace){
+	public static void fractalLine2d(int src_x, int src_y, int dst_x, int dst_y, float zLevel, int color,
+			float displace) {
 		fractalLine2d(src_x, src_y, dst_x, dst_y, zLevel, color, displace, fractalLineDetail);
 	}
 
-	public static void fractalLine2d(int src_x, int src_y, int dst_x, int dst_y, float zLevel, int color, float displace, float fractalDetail){
-		if (displace < fractalDetail){
+	public static void fractalLine2d(int src_x, int src_y, int dst_x, int dst_y, float zLevel, int color,
+			float displace, float fractalDetail) {
+		if (displace < fractalDetail) {
 			line2d(src_x, src_y, dst_x, dst_y, zLevel, color);
-		}else{
+		} else {
 			int mid_x = (dst_x + src_x) / 2;
 			int mid_y = (dst_y + src_y) / 2;
 			mid_x += (rand.nextFloat() - 0.5) * displace;
@@ -529,17 +547,17 @@ public class AMGuiHelper{
 		}
 	}
 
-	private static int parseColorAndDraw(String word, int posX, int posY, int cur_color, FontRenderer fontRenderer){
+	private static int parseColorAndDraw(String word, int posX, int posY, int cur_color, FontRenderer fontRenderer) {
 		int index = word.indexOf("#");
 		int color = cur_color;
-		while (index > -1 && index < word.length() - 1){
+		while (index > -1 && index < word.length() - 1) {
 
 			String toRender = word.substring(0, index);
 			fontRenderer.drawString(toRender, posX, posY, color);
 			posX += fontRenderer.getStringWidth(toRender);
 
 			char nextChar = word.charAt(index + 1);
-			switch (nextChar){
+			switch (nextChar) {
 			case '0':
 				color = 0x000000;
 				break;
@@ -599,40 +617,59 @@ public class AMGuiHelper{
 		return color;
 	}
 
-	public static int createRenderTexture(){
+	public static int createRenderTexture() {
 		int colorTextureID = GL11.glGenTextures();
-		GlStateManager.bindTexture(colorTextureID);                                    // Bind the colorbuffer texture
-		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);                // make it linear filterd
-		GlStateManager.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, 512, 512, 0, GL11.GL_RGBA, GL11.GL_INT, null);    // Create the texture data
+		GlStateManager.bindTexture(colorTextureID); // Bind the colorbuffer
+													// texture
+		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR); // make
+																										// it
+																										// linear
+																										// filterd
+		GlStateManager.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, 512, 512, 0, GL11.GL_RGBA, GL11.GL_INT, null); // Create
+																															// the
+																															// texture
+																															// data
 
 		return colorTextureID;
 	}
 
-	public static int createFBO(int textureID, int w, int h, boolean depthBuffer){
+	public static int createFBO(int textureID, int w, int h, boolean depthBuffer) {
 		boolean FBOEnabled = GLContext.getCapabilities().GL_EXT_framebuffer_object;
 		if (!FBOEnabled)
 			return -1;
-		IntBuffer buffer = ByteBuffer.allocateDirect(1 * 4).order(ByteOrder.nativeOrder()).asIntBuffer(); // allocate a 1 int byte buffer
+		IntBuffer buffer = ByteBuffer.allocateDirect(1 * 4).order(ByteOrder.nativeOrder()).asIntBuffer(); // allocate
+																											// a
+																											// 1
+																											// int
+																											// byte
+																											// buffer
 		EXTFramebufferObject.glGenFramebuffersEXT(buffer); // generate
 		int myFBOId = buffer.get();
 		EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, myFBOId);
-		EXTFramebufferObject.glFramebufferTexture2DEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, EXTFramebufferObject.GL_COLOR_ATTACHMENT0_EXT, GL11.GL_TEXTURE_2D, textureID, 0);
+		EXTFramebufferObject.glFramebufferTexture2DEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT,
+				EXTFramebufferObject.GL_COLOR_ATTACHMENT0_EXT, GL11.GL_TEXTURE_2D, textureID, 0);
 		int framebuffer = EXTFramebufferObject.glCheckFramebufferStatusEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT);
-		switch (framebuffer){
+		switch (framebuffer) {
 		case EXTFramebufferObject.GL_FRAMEBUFFER_COMPLETE_EXT:
 			break;
 		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-			throw new RuntimeException("FrameBuffer: " + myFBOId + ", has caused a GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT exception");
+			throw new RuntimeException(
+					"FrameBuffer: " + myFBOId + ", has caused a GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT exception");
 		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-			throw new RuntimeException("FrameBuffer: " + myFBOId + ", has caused a GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT exception");
+			throw new RuntimeException("FrameBuffer: " + myFBOId
+					+ ", has caused a GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT exception");
 		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-			throw new RuntimeException("FrameBuffer: " + myFBOId + ", has caused a GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT exception");
+			throw new RuntimeException(
+					"FrameBuffer: " + myFBOId + ", has caused a GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT exception");
 		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-			throw new RuntimeException("FrameBuffer: " + myFBOId + ", has caused a GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT exception");
+			throw new RuntimeException(
+					"FrameBuffer: " + myFBOId + ", has caused a GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT exception");
 		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
-			throw new RuntimeException("FrameBuffer: " + myFBOId + ", has caused a GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT exception");
+			throw new RuntimeException(
+					"FrameBuffer: " + myFBOId + ", has caused a GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT exception");
 		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-			throw new RuntimeException("FrameBuffer: " + myFBOId + ", has caused a GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT exception");
+			throw new RuntimeException(
+					"FrameBuffer: " + myFBOId + ", has caused a GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT exception");
 		default:
 			throw new RuntimeException("Unexpected reply from glCheckFramebufferStatusEXT: " + framebuffer);
 		}
@@ -640,129 +677,132 @@ public class AMGuiHelper{
 		return myFBOId;
 	}
 
-	public static boolean bindFBOTexture(int FBOId, int w, int h){
-		try{
+	public static boolean bindFBOTexture(int FBOId, int w, int h) {
+		try {
 			EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, FBOId);
 			GlStateManager.pushAttrib();
 			GlStateManager.viewport(0, 0, w, h);
 			GlStateManager.popAttrib();
 
 			return true;
-		}catch (Throwable t){
+		} catch (Throwable t) {
 			return false;
 		}
 	}
 
-	public static boolean unbindFBOTexture(){
-		try{
+	public static boolean unbindFBOTexture() {
+		try {
 			EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, 0);
 			GlStateManager.popAttrib();
 
 			return true;
-		}catch (Throwable t){
+		} catch (Throwable t) {
 			return false;
 		}
 	}
 
-	public static void flipView(float f){
+	public static void flipView(float f) {
 		float flip = EntityExtension.For(Minecraft.getMinecraft().thePlayer).getFlipRotation();
 		float lastFlip = EntityExtension.For(Minecraft.getMinecraft().thePlayer).getPrevFlipRotation();
 		GlStateManager.rotate(lastFlip + (flip - lastFlip) * f, 0, 0, 1);
 	}
 
-	public static void shiftView(float f){
+	public static void shiftView(float f) {
 		EntityPlayer entity = Minecraft.getMinecraft().thePlayer;
-//		int viewSet = Minecraft.getMinecraft().gameSettings.thirdPersonView;
-//		if (viewSet == 0){
-//			EntityExtension exProps = EntityExtension.For(entity);
-//			if (exProps.getShrinkPct() > 0f){
-//				float amt = exProps.getPrevShrinkPct() + (exProps.getShrinkPct() - exProps.getPrevShrinkPct()) * f;
-//				GlStateManager.translate(0, 1 * amt, 0);
-//			}
-//		}
+		// int viewSet = Minecraft.getMinecraft().gameSettings.thirdPersonView;
+		// if (viewSet == 0){
+		// EntityExtension exProps = EntityExtension.For(entity);
+		// if (exProps.getShrinkPct() > 0f){
+		// float amt = exProps.getPrevShrinkPct() + (exProps.getShrinkPct() -
+		// exProps.getPrevShrinkPct()) * f;
+		// GlStateManager.translate(0, 1 * amt, 0);
+		// }
+		// }
 
 		float flip = EntityExtension.For(entity).getFlipRotation();
 		float lastFlip = EntityExtension.For(entity).getPrevFlipRotation();
-		if (flip > 0){
-			//float smoothedFlip = lastFlip + ((flip - lastFlip) * f);
-			//GlStateManager.translate(0, (entity.eyeHeight * (smoothedFlip / 180f) - 0.1f), 0);
+		if (flip > 0) {
+			// float smoothedFlip = lastFlip + ((flip - lastFlip) * f);
+			// GlStateManager.translate(0, (entity.eyeHeight * (smoothedFlip /
+			// 180f) - 0.1f), 0);
 			GlStateManager.rotate(lastFlip + (flip - lastFlip) * f, 0, 0, 1);
-			//flipView(f);
+			// flipView(f);
 		}
 	}
 
-	public static void overrideKeyboardInput(){
+	public static void overrideKeyboardInput() {
 		Minecraft mc = Minecraft.getMinecraft();
-		if (mc.thePlayer != null && mc.theWorld != null && EntityExtension.For(mc.thePlayer).shouldReverseInput()){
+		if (mc.thePlayer != null && mc.theWorld != null && EntityExtension.For(mc.thePlayer).shouldReverseInput()) {
 			EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-			if (mc.gameSettings.keyBindLeft.isKeyDown()){
+			if (mc.gameSettings.keyBindLeft.isKeyDown()) {
 				LogHelper.debug("Override Left");
 				player.movementInput.moveStrafe -= 2;
 			}
 
-			if (mc.gameSettings.keyBindRight.isKeyDown()){
+			if (mc.gameSettings.keyBindRight.isKeyDown()) {
 				LogHelper.debug("Override Rights");
 				player.movementInput.moveStrafe += 2;
 			}
 
-			if (mc.thePlayer.isPotionActive(PotionEffectsDefs.scrambleSynapses)){
-				if (mc.gameSettings.keyBindForward.isKeyDown()){
+			if (mc.thePlayer.isPotionActive(PotionEffectsDefs.scrambleSynapses)) {
+				if (mc.gameSettings.keyBindForward.isKeyDown()) {
 					player.movementInput.moveForward -= 2;
 				}
-				if (mc.gameSettings.keyBindBack.isKeyDown()){
+				if (mc.gameSettings.keyBindBack.isKeyDown()) {
 					player.movementInput.moveForward += 2;
 				}
 			}
 		}
 	}
 
-	public static boolean overrideMouseInput(EntityRenderer renderer, float f, boolean b){
+	public static boolean overrideMouseInput(EntityRenderer renderer, float f, boolean b) {
 		Minecraft mc = Minecraft.getMinecraft();
 
 		if (!mc.inGameHasFocus || mc.thePlayer == null || mc.theWorld == null)
 			return true;
 
-		if (!mc.thePlayer.isPotionActive(PotionEffectsDefs.scrambleSynapses)){
+		if (!mc.thePlayer.isPotionActive(PotionEffectsDefs.scrambleSynapses)) {
 			return true;
 		}
 
 		mc.mouseHelper.mouseXYChange();
 		float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
 		float f2 = f1 * f1 * f1 * 8.0F;
-		float f3 = (float)mc.mouseHelper.deltaX * f2;
-		float f4 = (float)mc.mouseHelper.deltaY * f2;
+		float f3 = (float) mc.mouseHelper.deltaX * f2;
+		float f4 = (float) mc.mouseHelper.deltaY * f2;
 		byte b0 = -1;
 
-		if (mc.gameSettings.invertMouse){
+		if (mc.gameSettings.invertMouse) {
 			b0 = 1;
 		}
 
-		if (mc.gameSettings.smoothCamera){
-			String[] scy = {"field_78496_H", "smoothCamYaw"};
-			String[] scp = {"field_78521_m", "smoothCamPitch"};
-			String[] scpt = {"field_78533_p", "smoothCamPartialTicks"};
-			String[] scfx = {"field_78518_n", "smoothCamFilterX"};
-			String[] scfy = {"field_78499_K", "smoothCamFilterY"};
+		if (mc.gameSettings.smoothCamera) {
+			String[] scy = { "field_78496_H", "smoothCamYaw" };
+			String[] scp = { "field_78521_m", "smoothCamPitch" };
+			String[] scpt = { "field_78533_p", "smoothCamPartialTicks" };
+			String[] scfx = { "field_78518_n", "smoothCamFilterX" };
+			String[] scfy = { "field_78499_K", "smoothCamFilterY" };
 
-			//renderer.smoothCamYaw += f3;
-			ReflectionHelper.setPrivateValue(EntityRenderer.class, renderer, (Float)ReflectionHelper.getPrivateValue(EntityRenderer.class, renderer, scy) - f3, scy);
-			//renderer.smoothCamPitch += f4;
-			ReflectionHelper.setPrivateValue(EntityRenderer.class, renderer, (Float)ReflectionHelper.getPrivateValue(EntityRenderer.class, renderer, scp) - f4, scp);
-			//float f5 = f - renderer.smoothCamPartialTicks;
-			float f5 = f - (Float)ReflectionHelper.getPrivateValue(EntityRenderer.class, renderer, scpt);
-			//renderer.smoothCamPartialTicks = f;
+			// renderer.smoothCamYaw += f3;
+			ReflectionHelper.setPrivateValue(EntityRenderer.class, renderer,
+					(Float) ReflectionHelper.getPrivateValue(EntityRenderer.class, renderer, scy) - f3, scy);
+			// renderer.smoothCamPitch += f4;
+			ReflectionHelper.setPrivateValue(EntityRenderer.class, renderer,
+					(Float) ReflectionHelper.getPrivateValue(EntityRenderer.class, renderer, scp) - f4, scp);
+			// float f5 = f - renderer.smoothCamPartialTicks;
+			float f5 = f - (Float) ReflectionHelper.getPrivateValue(EntityRenderer.class, renderer, scpt);
+			// renderer.smoothCamPartialTicks = f;
 			ReflectionHelper.setPrivateValue(EntityRenderer.class, renderer, f, scpt);
-			//f3 = renderer.smoothCamFilterX * f5;
-			f3 = (Float)ReflectionHelper.getPrivateValue(EntityRenderer.class, renderer, scfx) * f5;
-			//f4 = renderer.smoothCamFilterY * f5;
-			f4 = (Float)ReflectionHelper.getPrivateValue(EntityRenderer.class, renderer, scfy) * f5;
-			mc.thePlayer.setAngles(-f3, f4 * (float)b0);
-		}else{
-			mc.thePlayer.setAngles(-f3, f4 * (float)b0);
+			// f3 = renderer.smoothCamFilterX * f5;
+			f3 = (Float) ReflectionHelper.getPrivateValue(EntityRenderer.class, renderer, scfx) * f5;
+			// f4 = renderer.smoothCamFilterY * f5;
+			f4 = (Float) ReflectionHelper.getPrivateValue(EntityRenderer.class, renderer, scfy) * f5;
+			mc.thePlayer.setAngles(-f3, f4 * (float) b0);
+		} else {
+			mc.thePlayer.setAngles(-f3, f4 * (float) b0);
 		}
 
 		return false;
 	}
-	
 
 }

@@ -21,20 +21,21 @@ public class AbilityPhotosynthesis extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.NATURE;
 	}
-	
+
 	@Override
 	public void applyTick(EntityPlayer player) {
 		AffinityData affinityData = AffinityData.For(player);
-		if (player.worldObj.isRemote) return;
-		
-		if (player.worldObj.canBlockSeeSky(player.getPosition()) && player.worldObj.isDaytime()){
+		if (player.worldObj.isRemote)
+			return;
+
+		if (player.worldObj.canBlockSeeSky(player.getPosition()) && player.worldObj.isDaytime()) {
 			affinityData.accumulatedHungerRegen += 0.02f;
-			if (affinityData.accumulatedHungerRegen > 1.0f){
-				((EntityPlayer)player).getFoodStats().addStats(1, 0.025f);
+			if (affinityData.accumulatedHungerRegen > 1.0f) {
+				((EntityPlayer) player).getFoodStats().addStats(1, 0.025f);
 				affinityData.accumulatedHungerRegen -= 1;
 			}
-		}else{
-			((EntityPlayer)player).addExhaustion(0.025f);
+		} else {
+			((EntityPlayer) player).addExhaustion(0.025f);
 		}
 	}
 

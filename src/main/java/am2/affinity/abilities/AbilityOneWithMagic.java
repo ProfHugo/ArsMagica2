@@ -22,13 +22,13 @@ public class AbilityOneWithMagic extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.ARCANE;
 	}
-	
+
 	@Override
 	public void applyPreSpellCast(EntityPlayer player, Pre event) {
 		event.manaCost *= 0.95f;
 		event.burnout *= 0.95f;
 
-		if (event.entityLiving.isPotionActive(PotionEffectsDefs.clarity)){
+		if (event.entityLiving.isPotionActive(PotionEffectsDefs.clarity)) {
 			event.manaCost = 0f;
 			event.burnout = 0f;
 		}

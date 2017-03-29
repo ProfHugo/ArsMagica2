@@ -8,8 +8,8 @@ import am2.entity.render.AM2ModelRenderer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 
-public class ModelPlantGuardian extends ModelBase{
-	//fields
+public class ModelPlantGuardian extends ModelBase {
+	// fields
 	AM2ModelRenderer Head;
 	AM2ModelRenderer Tendril1;
 	AM2ModelRenderer Tendril2;
@@ -48,7 +48,7 @@ public class ModelPlantGuardian extends ModelBase{
 
 	int z_interp_ticks = 20;
 
-	public ModelPlantGuardian(){
+	public ModelPlantGuardian() {
 		textureWidth = 128;
 		textureHeight = 128;
 		setTextureOffset("Head.Shape34", 7, 51);
@@ -282,14 +282,15 @@ public class ModelPlantGuardian extends ModelBase{
 		setRotation(Shield, -0.0872665F, 0.6806784F, 0.0872665F, true);
 	}
 
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
-		if (!(entity instanceof EntityNatureGuardian)) return;
-		updateRotations((EntityNatureGuardian)entity, f, f1, f2, f3, f4, f5);
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		if (!(entity instanceof EntityNatureGuardian))
+			return;
+		updateRotations((EntityNatureGuardian) entity, f, f1, f2, f3, f4, f5);
 
 		GL11.glPushMatrix();
 
-		EntityNatureGuardian guardian = (EntityNatureGuardian)entity;
-		if (guardian.getCurrentAction() == BossActions.SPINNING){
+		EntityNatureGuardian guardian = (EntityNatureGuardian) entity;
+		if (guardian.getCurrentAction() == BossActions.SPINNING) {
 			GL11.glRotatef(guardian.spinRotation + (f2 - guardian.ticksExisted) * -40f, 0, 1, 0);
 		}
 		setHeadRotation(f3, f4);
@@ -323,7 +324,7 @@ public class ModelPlantGuardian extends ModelBase{
 		Tendril15.render(f5);
 		Tendril16.render(f5);
 
-		if (((EntityNatureGuardian)entity).hasSickle){
+		if (((EntityNatureGuardian) entity).hasSickle) {
 			Shape39.render(f5);
 			Sickle2.render(f5);
 			Sickle3.render(f5);
@@ -337,7 +338,8 @@ public class ModelPlantGuardian extends ModelBase{
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	private void updateRotations(EntityNatureGuardian guardian, float f, float f1, float f2, float f3, float f4, float f5){
+	private void updateRotations(EntityNatureGuardian guardian, float f, float f1, float f2, float f3, float f4,
+			float f5) {
 		setTendrilRotations(guardian.tendrilRotation + (f2 - guardian.ticksExisted) * 0.2f);
 
 		float main_arm_rotation_z = 0;
@@ -349,69 +351,89 @@ public class ModelPlantGuardian extends ModelBase{
 		float main_arm_rotation_y = 0;
 		float shield_arm_rotation_y = 0;
 
-		switch (guardian.getCurrentAction()){
+		switch (guardian.getCurrentAction()) {
 		case IDLE:
-			if (guardian.getTicksInCurrentAction() < 20){
-				if (guardian.last_rotation_z_main != 0){
-					main_arm_rotation_z = guardian.last_rotation_z_main / ((float)z_interp_ticks - ((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)));
+			if (guardian.getTicksInCurrentAction() < 20) {
+				if (guardian.last_rotation_z_main != 0) {
+					main_arm_rotation_z = guardian.last_rotation_z_main / ((float) z_interp_ticks
+							- ((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)));
 				}
-				if (guardian.last_rotation_z_shield != 0){
-					shield_arm_rotation_z = guardian.last_rotation_z_shield / ((float)z_interp_ticks - ((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)));
+				if (guardian.last_rotation_z_shield != 0) {
+					shield_arm_rotation_z = guardian.last_rotation_z_shield / ((float) z_interp_ticks
+							- ((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)));
 				}
 			}
 			break;
 		case SPINNING:
-			float degrees = guardian.getTicksInCurrentAction() < 20 ? 60f * (((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / 20f) : 60;
-			main_arm_rotation_z = (float)-Math.toRadians(degrees);
-			shield_arm_rotation_z = (float)Math.toRadians(degrees);
+			float degrees = guardian.getTicksInCurrentAction() < 20
+					? 60f * (((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / 20f) : 60;
+			main_arm_rotation_z = (float) -Math.toRadians(degrees);
+			shield_arm_rotation_z = (float) Math.toRadians(degrees);
 			break;
 		case STRIKE:
 			float max_degrees_x = 120;
 			float max_degrees_y = 60;
 			float action_ticks = 10;
 			float fast_action_ticks = 3;
-			if (guardian.getTicksInCurrentAction() < action_ticks){
-				main_arm_rotation_x = (float)Math.toRadians(-max_degrees_x * (((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
-				main_arm_rotation_y = (float)Math.toRadians(max_degrees_y * (((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
-			}else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)){
-				main_arm_rotation_x = (float)Math.toRadians(-max_degrees_x + (max_degrees_x * ((float)(guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks) / fast_action_ticks)));
-				main_arm_rotation_y = (float)Math.toRadians(max_degrees_y - (max_degrees_y * ((float)(guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks) / fast_action_ticks)));
+			if (guardian.getTicksInCurrentAction() < action_ticks) {
+				main_arm_rotation_x = (float) Math.toRadians(-max_degrees_x
+						* (((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
+				main_arm_rotation_y = (float) Math.toRadians(max_degrees_y
+						* (((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
+			} else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)) {
+				main_arm_rotation_x = (float) Math.toRadians(-max_degrees_x + (max_degrees_x
+						* ((float) (guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks)
+								/ fast_action_ticks)));
+				main_arm_rotation_y = (float) Math.toRadians(max_degrees_y - (max_degrees_y
+						* ((float) (guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks)
+								/ fast_action_ticks)));
 			}
 			shield_arm_rotation_y = main_arm_rotation_y;
-			GL11.glRotatef((float)Math.toDegrees(shield_arm_rotation_y), 0, 1, 0);
+			GL11.glRotatef((float) Math.toDegrees(shield_arm_rotation_y), 0, 1, 0);
 			break;
 		case SHIELD_BASH:
 			max_degrees_x = 120;
 			max_degrees_y = 60;
 			action_ticks = 10;
 			fast_action_ticks = 3;
-			if (guardian.getTicksInCurrentAction() < action_ticks){
-				//main_arm_rotation_x = (float) Math.toRadians(-max_degrees_x * ((float)guardian.getTicksInCurrentAction() / action_ticks));
-				shield_arm_rotation_y = (float)Math.toRadians(-max_degrees_y * (((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
-			}else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)){
-				//main_arm_rotation_x = (float) Math.toRadians(-max_degrees_x + (max_degrees_x * ((float)(guardian.getTicksInCurrentAction() - action_ticks) / fast_action_ticks)));
-				shield_arm_rotation_y = (float)Math.toRadians(-max_degrees_y + (max_degrees_y * ((float)(guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks) / fast_action_ticks)));
+			if (guardian.getTicksInCurrentAction() < action_ticks) {
+				// main_arm_rotation_x = (float) Math.toRadians(-max_degrees_x *
+				// ((float)guardian.getTicksInCurrentAction() / action_ticks));
+				shield_arm_rotation_y = (float) Math.toRadians(-max_degrees_y
+						* (((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
+			} else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)) {
+				// main_arm_rotation_x = (float) Math.toRadians(-max_degrees_x +
+				// (max_degrees_x * ((float)(guardian.getTicksInCurrentAction()
+				// - action_ticks) / fast_action_ticks)));
+				shield_arm_rotation_y = (float) Math.toRadians(-max_degrees_y + (max_degrees_y
+						* ((float) (guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks)
+								/ fast_action_ticks)));
 			}
 			main_arm_rotation_y = shield_arm_rotation_y / 2;
-			GL11.glRotatef((float)Math.toDegrees(shield_arm_rotation_y), 0, 1, 0);
+			GL11.glRotatef((float) Math.toDegrees(shield_arm_rotation_y), 0, 1, 0);
 			break;
 		case THROWING_SICKLE:
 			degrees = 0;
 			float max_degrees = 180;
 			action_ticks = 10;
 			fast_action_ticks = 3;
-			if (guardian.getTicksInCurrentAction() < action_ticks){
-				if (guardian.last_rotation_z_main != 0){
-					main_arm_rotation_z = guardian.last_rotation_z_main / ((float)z_interp_ticks - ((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)));
+			if (guardian.getTicksInCurrentAction() < action_ticks) {
+				if (guardian.last_rotation_z_main != 0) {
+					main_arm_rotation_z = guardian.last_rotation_z_main / ((float) z_interp_ticks
+							- ((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)));
 				}
-				if (guardian.last_rotation_z_shield != 0){
-					shield_arm_rotation_z = guardian.last_rotation_z_shield / ((float)z_interp_ticks - ((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)));
+				if (guardian.last_rotation_z_shield != 0) {
+					shield_arm_rotation_z = guardian.last_rotation_z_shield / ((float) z_interp_ticks
+							- ((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)));
 				}
-				degrees = -max_degrees * (((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks);
-			}else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)){
-				degrees = -max_degrees + (max_degrees * ((float)(guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks) / fast_action_ticks));
+				degrees = -max_degrees
+						* (((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks);
+			} else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)) {
+				degrees = -max_degrees + (max_degrees
+						* ((float) (guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks)
+								/ fast_action_ticks));
 			}
-			main_arm_rotation_x = (float)Math.toRadians(degrees);
+			main_arm_rotation_x = (float) Math.toRadians(degrees);
 			break;
 		}
 
@@ -461,13 +483,13 @@ public class ModelPlantGuardian extends ModelBase{
 		Shield.rotateAngleY = Shield.getRestRotationY() + shield_arm_rotation_y;
 	}
 
-//	private void interp_to_zero_zrot(AM2ModelRenderer model, int ticks){
-//		float delta = model.rotateAngleZ / (z_interp_ticks - ticks);
-//		model.rotateAngleZ -= delta;
-//	}
+	// private void interp_to_zero_zrot(AM2ModelRenderer model, int ticks){
+	// float delta = model.rotateAngleZ / (z_interp_ticks - ticks);
+	// model.rotateAngleZ -= delta;
+	// }
 
-	private void setTendrilRotations(float r){
-		//r = (float) Math.toRadians(r);
+	private void setTendrilRotations(float r) {
+		// r = (float) Math.toRadians(r);
 		Tendril1.rotateAngleY = r;
 		Tendril2.rotateAngleY = r;
 		Tendril3.rotateAngleY = r;
@@ -486,17 +508,17 @@ public class ModelPlantGuardian extends ModelBase{
 		Tendril16.rotateAngleY = r;
 	}
 
-	private void setHeadRotation(float y, float p){
-		Head.rotateAngleY = (float)Math.toRadians(y);
-		Head.rotateAngleX = (float)Math.toRadians(p);
+	private void setHeadRotation(float y, float p) {
+		Head.rotateAngleY = (float) Math.toRadians(y);
+		Head.rotateAngleX = (float) Math.toRadians(p);
 	}
 
-	private void setRotation(AM2ModelRenderer model, float x, float y, float z, boolean storeRest){
+	private void setRotation(AM2ModelRenderer model, float x, float y, float z, boolean storeRest) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 
-		if (storeRest){
+		if (storeRest) {
 			model.storeRestRotations();
 		}
 	}

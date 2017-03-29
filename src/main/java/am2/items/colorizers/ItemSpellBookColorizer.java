@@ -3,7 +3,7 @@ package am2.items.colorizers;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
 
-public class ItemSpellBookColorizer implements IItemColor{
+public class ItemSpellBookColorizer implements IItemColor {
 
 	@Override
 	public int getColorFromItemstack(ItemStack stack, int tintIndex) {

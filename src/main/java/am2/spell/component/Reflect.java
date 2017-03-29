@@ -26,82 +26,87 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class Reflect extends SpellComponent{
+public class Reflect extends SpellComponent {
 
 	@Override
-	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos blockPos, EnumFacing blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster){
+	public boolean applyEffectBlock(ItemStack stack, World world, BlockPos blockPos, EnumFacing blockFace,
+			double impactX, double impactY, double impactZ, EntityLivingBase caster) {
 		return false;
 	}
 
 	@Override
-	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
-		if (target instanceof EntityLivingBase){
+	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target) {
+		if (target instanceof EntityLivingBase) {
 
-			if (((EntityLivingBase)target).isPotionActive(PotionEffectsDefs.magicShield)){
+			if (((EntityLivingBase) target).isPotionActive(PotionEffectsDefs.magicShield)) {
 				return true;
 			}
 
-			int duration = SpellUtils.getModifiedInt_Mul(PotionEffectsDefs.default_buff_duration, stack, caster, target, world, SpellModifiers.DURATION);
-			//duration = SpellUtils.instance.modifyDurationBasedOnArmor(caster, duration);
+			int duration = SpellUtils.getModifiedInt_Mul(PotionEffectsDefs.default_buff_duration, stack, caster, target,
+					world, SpellModifiers.DURATION);
+			// duration = SpellUtils.instance.modifyDurationBasedOnArmor(caster,
+			// duration);
 			if (!world.isRemote)
-				((EntityLivingBase)target).addPotionEffect(new BuffEffectSpellReflect(duration, SpellUtils.countModifiers(SpellModifiers.BUFF_POWER, stack)));
+				((EntityLivingBase) target).addPotionEffect(new BuffEffectSpellReflect(duration,
+						SpellUtils.countModifiers(SpellModifiers.BUFF_POWER, stack)));
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.of(SpellModifiers.BUFF_POWER, SpellModifiers.DURATION);
 	}
 
 	@Override
-	public float manaCost(EntityLivingBase caster){
+	public float manaCost(EntityLivingBase caster) {
 		return 1440;
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
+	public ItemStack[] reagents(EntityLivingBase caster) {
 		return null;
 	}
 
 	@Override
-	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
-		for (int i = 0; i < 25; ++i){
-			AMParticle particle = (AMParticle)ArsMagica2.proxy.particleManager.spawn(world, "lens_flare", x, y, z);
-			if (particle != null){
+	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target,
+			Random rand, int colorModifier) {
+		for (int i = 0; i < 25; ++i) {
+			AMParticle particle = (AMParticle) ArsMagica2.proxy.particleManager.spawn(world, "lens_flare", x, y, z);
+			if (particle != null) {
 				particle.addRandomOffset(1, 2, 1);
 				particle.AddParticleController(new ParticleHoldPosition(particle, 20, 1, false));
 				particle.setMaxAge(20);
 				particle.setParticleScale(0.2f);
 				particle.setRGBColorF(0.5f + rand.nextFloat() * 0.5f, 0.1f, 0.5f + rand.nextFloat() * 0.5f);
-				if (colorModifier > -1){
-					particle.setRGBColorF(((colorModifier >> 16) & 0xFF) / 255.0f, ((colorModifier >> 8) & 0xFF) / 255.0f, (colorModifier & 0xFF) / 255.0f);
+				if (colorModifier > -1) {
+					particle.setRGBColorF(((colorModifier >> 16) & 0xFF) / 255.0f,
+							((colorModifier >> 8) & 0xFF) / 255.0f, (colorModifier & 0xFF) / 255.0f);
 				}
 			}
 		}
 	}
 
 	@Override
-	public Set<Affinity> getAffinity(){
+	public Set<Affinity> getAffinity() {
 		return Sets.newHashSet(Affinity.ARCANE);
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				new ItemStack(ItemDefs.rune, 1, EnumDyeColor.WHITE.getDyeDamage()),
-				Blocks.GLASS,
+	public Object[] getRecipe() {
+		return new Object[] { new ItemStack(ItemDefs.rune, 1, EnumDyeColor.WHITE.getDyeDamage()), Blocks.GLASS,
 				Blocks.IRON_BLOCK,
-				//TODO BlocksCommonProxy.witchwoodLog
+				// TODO BlocksCommonProxy.witchwoodLog
 		};
 	}
 
 	@Override
-	public float getAffinityShift(Affinity affinity){
+	public float getAffinityShift(Affinity affinity) {
 		return 0.05f;
 	}
 
 	@Override
-	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {}
+	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
+	}
 }

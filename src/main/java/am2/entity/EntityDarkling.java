@@ -21,43 +21,45 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityDarkling extends EntityMob{
-	
-	private static final DataParameter<Boolean> IS_ANGRY = EntityDataManager.createKey(EntityDarkling.class, DataSerializers.BOOLEAN);
+public class EntityDarkling extends EntityMob {
 
-	public EntityDarkling(World par1World){
+	private static final DataParameter<Boolean> IS_ANGRY = EntityDataManager.createKey(EntityDarkling.class,
+			DataSerializers.BOOLEAN);
+
+	public EntityDarkling(World par1World) {
 		super(par1World);
 		initAI();
 		this.setSize(0.5f, 0.5f);
 	}
 
 	@Override
-	protected void applyEntityAttributes(){
+	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(7D);
 	}
 
 	@Override
-	protected void entityInit(){
+	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(IS_ANGRY, false);
 	}
 
-	public boolean isAngry(){
+	public boolean isAngry() {
 		return this.dataManager.get(IS_ANGRY);
 	}
 
 	@Override
-	public boolean isAIDisabled(){
+	public boolean isAIDisabled() {
 		return false;
 	}
 
-	private void initAI(){
+	private void initAI() {
 		this.targetTasks.taskEntries.clear();
 		this.tasks.taskEntries.clear();
 
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, false, true, null));
+		this.targetTasks.addTask(2,
+				new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, false, true, null));
 
 		this.setPathPriority(PathNodeType.WATER, -1F);
 		this.tasks.addTask(1, new EntityAISwimming(this));
@@ -69,15 +71,15 @@ public class EntityDarkling extends EntityMob{
 	}
 
 	@Override
-	public void onUpdate(){
-		if (this.getAttackTarget() != null){
+	public void onUpdate() {
+		if (this.getAttackTarget() != null) {
 			this.dataManager.set(IS_ANGRY, true);
-		}else{
+		} else {
 			this.dataManager.set(IS_ANGRY, false);
 		}
 		super.onUpdate();
 	}
-	
+
 	@Override
 	public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, ItemStack stack, EnumHand hand) {
 		return EnumActionResult.PASS;

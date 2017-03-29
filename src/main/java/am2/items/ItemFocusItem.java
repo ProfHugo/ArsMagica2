@@ -7,33 +7,26 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 
-public class ItemFocusItem extends ItemFilterFocus{
+public class ItemFocusItem extends ItemFilterFocus {
 
-	public ItemFocusItem(){
+	public ItemFocusItem() {
 		super();
 	}
 
 	@Override
-	public Class<? extends Entity> getFilterClass(){
+	public Class<? extends Entity> getFilterClass() {
 		return EntityItem.class;
 	}
 
 	@Override
-	public Object[] getRecipeItems(){
-		return new Object[]{
-				" C ",
-				"PFS",
-				" W ",
-				Character.valueOf('C'), Blocks.COBBLESTONE,
-				Character.valueOf('B'), Items.STONE_PICKAXE,
-				Character.valueOf('F'), ItemDefs.standardFocus,
-				Character.valueOf('T'), Items.IRON_SHOVEL,
-				Character.valueOf('W'), Blocks.CRAFTING_TABLE
-		};
+	public Object[] getRecipeItems() {
+		return new Object[] { " C ", "PFS", " W ", Character.valueOf('C'), Blocks.COBBLESTONE, Character.valueOf('B'),
+				Items.STONE_PICKAXE, Character.valueOf('F'), ItemDefs.standardFocus, Character.valueOf('T'),
+				Items.IRON_SHOVEL, Character.valueOf('W'), Blocks.CRAFTING_TABLE };
 	}
 
 	@Override
-	public String getInGameName(){
+	public String getInGameName() {
 		return "Item Focus";
 	}
 }

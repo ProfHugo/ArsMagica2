@@ -28,24 +28,25 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
-public class BlockEssenceGenerator extends BlockAMPowered{
+public class BlockEssenceGenerator extends BlockAMPowered {
 
 	private int NexusType;
 
 	public static final int NEXUS_STANDARD = 0;
 	public static final int NEXUS_DARK = 1;
 	public static final int NEXUS_LIGHT = 2;
-	
-	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
 
-	public BlockEssenceGenerator(int nexusType){
+	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class,
+			EnumFacing.HORIZONTALS);
+
+	public BlockEssenceGenerator(int nexusType) {
 		super(Material.CLOTH);
 		setLightLevel(0.73f);
 		setTickRandomly(true);
 		setHardness(2f);
 		setResistance(2f);
 		this.NexusType = nexusType;
-		switch (this.NexusType){
+		switch (this.NexusType) {
 		case NEXUS_STANDARD:
 			setBlockBounds(0f, 0.0f, 0f, 1f, 2f, 1f);
 			break;
@@ -58,24 +59,24 @@ public class BlockEssenceGenerator extends BlockAMPowered{
 		}
 	}
 
-	private TileEntityObelisk getTileEntity(IBlockAccess blockAccess, BlockPos pos){
+	private TileEntityObelisk getTileEntity(IBlockAccess blockAccess, BlockPos pos) {
 		TileEntity te = blockAccess.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityObelisk){
-			return (TileEntityObelisk)te;
+		if (te != null && te instanceof TileEntityObelisk) {
+			return (TileEntityObelisk) te;
 		}
 		return null;
 	}
-	
+
 	@Override
 	public boolean canProvidePower(IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public int quantityDropped(Random random){
+	public int quantityDropped(Random random) {
 		return 1;
 	}
-	
+
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
@@ -87,33 +88,36 @@ public class BlockEssenceGenerator extends BlockAMPowered{
 			drops.add(new ItemStack(BlockDefs.celestialPrism));
 		return drops;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox,
+			List<AxisAlignedBB> collidingBoxes, Entity entityIn) {
 		if (this == BlockDefs.blackAurem)
 			return;
 		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn);
 	}
-	
+
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		if (this == BlockDefs.blackAurem)
 			return null;
 		return super.getCollisionBoundingBox(blockState, worldIn, pos);
 	}
-	
+
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (HandleSpecialItems(worldIn, playerIn, pos))
 			return true;
 		if (worldIn.getBlockState(pos).getBlock() == BlockDefs.obelisk)
-			FMLNetworkHandler.openGui(playerIn, ArsMagica2.instance, IDDefs.GUI_OBELISK, worldIn, pos.getX(), pos.getY(), pos.getZ());
+			FMLNetworkHandler.openGui(playerIn, ArsMagica2.instance, IDDefs.GUI_OBELISK, worldIn, pos.getX(),
+					pos.getY(), pos.getZ());
 		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World par1World, int i){
+	public TileEntity createNewTileEntity(World par1World, int i) {
 		if (this.NexusType == NEXUS_DARK)
 			return new TileEntityBlackAurem();
 		else if (this.NexusType == NEXUS_LIGHT)
@@ -121,64 +125,68 @@ public class BlockEssenceGenerator extends BlockAMPowered{
 		else
 			return new TileEntityObelisk();
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING);
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(FACING).ordinal() - 2;
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(FACING, EnumFacing.HORIZONTALS[meta]);
 	}
-	
+
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 
-		if (worldIn.isRemote){
+		if (worldIn.isRemote) {
 			super.breakBlock(worldIn, pos, state);
 			return;
 		}
 		TileEntityObelisk obelisk = getTileEntity(worldIn, pos);
-		if (obelisk == null) return;
-		for (int l = 0; l < obelisk.getSizeInventory(); l++){
+		if (obelisk == null)
+			return;
+		for (int l = 0; l < obelisk.getSizeInventory(); l++) {
 			ItemStack itemstack = obelisk.getStackInSlot(l);
-			if (itemstack == null){
+			if (itemstack == null) {
 				continue;
 			}
 			float f = worldIn.rand.nextFloat() * 0.8F + 0.1F;
 			float f1 = worldIn.rand.nextFloat() * 0.8F + 0.1F;
 			float f2 = worldIn.rand.nextFloat() * 0.8F + 0.1F;
-			do{
-				if (itemstack.stackSize <= 0){
+			do {
+				if (itemstack.stackSize <= 0) {
 					break;
 				}
 				int i1 = worldIn.rand.nextInt(21) + 10;
-				if (i1 > itemstack.stackSize){
+				if (i1 > itemstack.stackSize) {
 					i1 = itemstack.stackSize;
 				}
 				itemstack.stackSize -= i1;
 				ItemStack newItem = new ItemStack(itemstack.getItem(), i1, itemstack.getItemDamage());
 				newItem.setTagCompound(itemstack.getTagCompound());
-				EntityItem entityitem = new EntityItem(worldIn, pos.getX() + f, pos.getY() + f1, pos.getZ() + f2, newItem);
+				EntityItem entityitem = new EntityItem(worldIn, pos.getX() + f, pos.getY() + f1, pos.getZ() + f2,
+						newItem);
 				float f3 = 0.05F;
-				entityitem.motionX = (float)worldIn.rand.nextGaussian() * f3;
-				entityitem.motionY = (float)worldIn.rand.nextGaussian() * f3 + 0.2F;
-				entityitem.motionZ = (float)worldIn.rand.nextGaussian() * f3;
+				entityitem.motionX = (float) worldIn.rand.nextGaussian() * f3;
+				entityitem.motionY = (float) worldIn.rand.nextGaussian() * f3 + 0.2F;
+				entityitem.motionZ = (float) worldIn.rand.nextGaussian() * f3;
 				worldIn.spawnEntityInWorld(entityitem);
-			}while (true);
+			} while (true);
 		}
 		super.breakBlock(worldIn, pos, state);
 	}
-	
+
 	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing());
+	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
+			int meta, EntityLivingBase placer) {
+		return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING,
+				placer.getHorizontalFacing());
 	}
 
 }

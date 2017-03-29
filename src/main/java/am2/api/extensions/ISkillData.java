@@ -18,24 +18,23 @@ import am2.extensions.SkillData;
 import am2.utils.NBTUtils;
 
 public interface ISkillData {
-	
-	public boolean hasSkill (String name);
-	
-	public void unlockSkill (String name);
-	
+
+	public boolean hasSkill(String name);
+
+	public void unlockSkill(String name);
+
 	public HashMap<Skill, Boolean> getSkills();
-	
+
 	public HashMap<SkillPoint, Integer> getSkillPoints();
-	
+
 	public int getSkillPoint(SkillPoint skill);
-	
+
 	public void setSkillPoint(SkillPoint point, int num);
 
 	public boolean canLearn(String name);
-	
-	
+
 	public static class Storage implements IStorage<ISkillData> {
-		
+
 		@Override
 		public NBTBase writeNBT(Capability<ISkillData> capability, ISkillData instance, EnumFacing side) {
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -56,7 +55,7 @@ public interface ISkillData {
 				NBTTagCompound tmp = new NBTTagCompound();
 				tmp.setString("Type", skill.getKey().getName());
 				tmp.setInteger("Number", skill.getValue());
-				skillPointList.appendTag(tmp);				
+				skillPointList.appendTag(tmp);
 			}
 			am2Tag.setTag("Skills", skillList);
 			am2Tag.setTag("SkillPoints", skillPointList);
@@ -79,7 +78,7 @@ public interface ISkillData {
 			}
 		}
 	}
-	
+
 	public static class Factory implements Callable<ISkillData> {
 		@Override
 		public ISkillData call() throws Exception {

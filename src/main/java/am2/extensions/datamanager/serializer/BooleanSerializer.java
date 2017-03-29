@@ -5,11 +5,12 @@ import am2.packet.AMDataReader;
 import am2.packet.AMDataWriter;
 
 public class BooleanSerializer implements TypeSerializer<Boolean> {
-	
+
 	public static BooleanSerializer INSTANCE = new BooleanSerializer();
-	
-	private BooleanSerializer() {}
-	
+
+	private BooleanSerializer() {
+	}
+
 	@Override
 	public void serialize(AMDataWriter buf, Boolean value) {
 		buf.add(value == null ? false : value.booleanValue());

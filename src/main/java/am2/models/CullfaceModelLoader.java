@@ -11,9 +11,10 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
 
 public class CullfaceModelLoader implements ICustomModelLoader {
-	
+
 	@Override
-	public void onResourceManagerReload(IResourceManager resourceManager) {}
+	public void onResourceManagerReload(IResourceManager resourceManager) {
+	}
 
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
@@ -25,7 +26,8 @@ public class CullfaceModelLoader implements ICustomModelLoader {
 		if (!Loader.instance().hasReachedState(LoaderState.POSTINITIALIZATION)) {
 			return ModelLoaderRegistry.getMissingModel();
 		}
-		IModel newModel = OBJLoader.INSTANCE.loadModel(new ResourceLocation(modelLocation.getResourceDomain(), modelLocation.getResourcePath().replaceAll("_cullface", "").replaceAll(".json", ".obj")));
+		IModel newModel = OBJLoader.INSTANCE.loadModel(new ResourceLocation(modelLocation.getResourceDomain(),
+				modelLocation.getResourcePath().replaceAll("_cullface", "").replaceAll(".json", ".obj")));
 		return new ModelCullface(newModel);
 	}
 

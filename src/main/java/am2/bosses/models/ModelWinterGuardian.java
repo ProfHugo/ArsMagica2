@@ -7,8 +7,8 @@ import am2.entity.render.AM2ModelRenderer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 
-public class ModelWinterGuardian extends ModelBase{
-	//fields
+public class ModelWinterGuardian extends ModelBase {
+	// fields
 	AM2ModelRenderer Shape1;
 	AM2ModelRenderer Shape2;
 	AM2ModelRenderer Shape3;
@@ -44,7 +44,7 @@ public class ModelWinterGuardian extends ModelBase{
 	AM2ModelRenderer lefthand1;
 	AM2ModelRenderer righthand1;
 
-	public ModelWinterGuardian(){
+	public ModelWinterGuardian() {
 		textureWidth = 128;
 		textureHeight = 128;
 
@@ -292,13 +292,13 @@ public class ModelWinterGuardian extends ModelBase{
 		righthand1.storeRestRotations();
 	}
 
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
-		if (!(entity instanceof EntityWinterGuardian)){
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		if (!(entity instanceof EntityWinterGuardian)) {
 			return;
 		}
 
 		setHeadRotations(f3, f4);
-		setRotations((EntityWinterGuardian)entity, f, f1,  f2, f3, f4, f5);
+		setRotations((EntityWinterGuardian) entity, f, f1, f2, f3, f4, f5);
 
 		Shape1.render(f5);
 		Shape2.render(f5);
@@ -325,7 +325,7 @@ public class ModelWinterGuardian extends ModelBase{
 		ornament2.render(f5);
 		ornament3.render(f5);
 
-		if (((EntityWinterGuardian)entity).hasLeftArm()){
+		if (((EntityWinterGuardian) entity).hasLeftArm()) {
 			leftarm.render(f5);
 			lefthand1.render(f5);
 			lefthand2.render(f5);
@@ -333,8 +333,7 @@ public class ModelWinterGuardian extends ModelBase{
 			lefthand4.render(f5);
 		}
 
-
-		if (((EntityWinterGuardian)entity).hasRightArm()){
+		if (((EntityWinterGuardian) entity).hasRightArm()) {
 			rightarm.render(f5);
 			righthand1.render(f5);
 			righthand2.render(f5);
@@ -344,9 +343,10 @@ public class ModelWinterGuardian extends ModelBase{
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	private void setRotations(EntityWinterGuardian guardian, float f, float f1, float f2, float f3, float f4, float f5){
+	private void setRotations(EntityWinterGuardian guardian, float f, float f1, float f2, float f3, float f4,
+			float f5) {
 
-		float rot1 = (float)Math.toRadians(guardian.getOrbitRotation() + (f2 - guardian.ticksExisted));
+		float rot1 = (float) Math.toRadians(guardian.getOrbitRotation() + (f2 - guardian.ticksExisted));
 
 		ornament1.rotateAngleY = ornament1.getRestRotationY() + rot1;
 		ornament2.rotateAngleY = ornament2.getRestRotationY() + rot1;
@@ -377,7 +377,7 @@ public class ModelWinterGuardian extends ModelBase{
 		float left_arm_rotation_x = 0;
 		float right_arm_rotation_x = 0;
 
-		switch (guardian.getCurrentAction()){
+		switch (guardian.getCurrentAction()) {
 		case SMASH:
 			float max_degrees_x = 120;
 			float final_degrees = 90;
@@ -385,23 +385,26 @@ public class ModelWinterGuardian extends ModelBase{
 			float fast_action_ticks = 4;
 			float hold_ticks = 10;
 			float rise_ticks = 10;
-			if (guardian.getTicksInCurrentAction() < action_ticks){
-				left_arm_rotation_x = (float)Math.toRadians(-max_degrees_x * (((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
-			}else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)){
-				float pct = ((float)(guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks) / fast_action_ticks);
+			if (guardian.getTicksInCurrentAction() < action_ticks) {
+				left_arm_rotation_x = (float) Math.toRadians(-max_degrees_x
+						* (((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
+			} else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)) {
+				float pct = ((float) (guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks)
+						/ fast_action_ticks);
 				float degrees = -max_degrees_x + (final_degrees * pct);
-				left_arm_rotation_x = (float)Math.toRadians(degrees);
+				left_arm_rotation_x = (float) Math.toRadians(degrees);
 				GL11.glRotatef((max_degrees_x + degrees) / 2, 1, 0, 0);
 				GL11.glTranslatef(0, 1f * pct, 0);
-			}else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks + hold_ticks)){
-				left_arm_rotation_x = (float)Math.toRadians(-final_degrees);
+			} else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks + hold_ticks)) {
+				left_arm_rotation_x = (float) Math.toRadians(-final_degrees);
 				GL11.glRotatef(final_degrees / 2, 1, 0, 0);
 				GL11.glTranslatef(0, 1f, 0);
-			}else{
-				float pct = 1.0f - ((float)(guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks - fast_action_ticks - hold_ticks) / rise_ticks);
+			} else {
+				float pct = 1.0f - ((float) (guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)
+						- action_ticks - fast_action_ticks - hold_ticks) / rise_ticks);
 				float degrees = -max_degrees_x + (final_degrees * pct);
 				float degrees2 = -max_degrees_x + (final_degrees * (1.0f - pct));
-				left_arm_rotation_x = (float)Math.toRadians(degrees2);
+				left_arm_rotation_x = (float) Math.toRadians(degrees2);
 				GL11.glRotatef((max_degrees_x + degrees) / 2, 1, 0, 0);
 				GL11.glTranslatef(0, 1f * pct, 0);
 			}
@@ -411,19 +414,21 @@ public class ModelWinterGuardian extends ModelBase{
 			max_degrees_x = -110;
 			action_ticks = 9;
 			fast_action_ticks = 6;
-			if (guardian.getTicksInCurrentAction() < action_ticks){
-				left_arm_rotation_x = (float)Math.toRadians(max_degrees_x * (((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
-			}else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)){
-				float pct = ((float)(guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks) / fast_action_ticks);
+			if (guardian.getTicksInCurrentAction() < action_ticks) {
+				left_arm_rotation_x = (float) Math.toRadians(max_degrees_x
+						* (((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
+			} else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)) {
+				float pct = ((float) (guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks)
+						/ fast_action_ticks);
 				float degrees = max_degrees_x + (-max_degrees_x * pct);
-				left_arm_rotation_x = (float)Math.toRadians(degrees);
+				left_arm_rotation_x = (float) Math.toRadians(degrees);
 				GL11.glRotatef(40 * pct, 1, 0, 0);
 				if (guardian.hasLeftArm())
 					GL11.glRotatef(40 * pct, 0, 1, 0);
 				else
 					GL11.glRotatef(-40 * pct, 0, 1, 0);
 			}
-			if (!guardian.hasLeftArm()){
+			if (!guardian.hasLeftArm()) {
 				right_arm_rotation_x = left_arm_rotation_x;
 				left_arm_rotation_x = 0;
 			}
@@ -432,26 +437,29 @@ public class ModelWinterGuardian extends ModelBase{
 			max_degrees_x = -95;
 			action_ticks = 12;
 			fast_action_ticks = 4;
-			if (guardian.getTicksInCurrentAction() < action_ticks){
-				left_arm_rotation_x = (float)Math.toRadians(max_degrees_x * (((float)guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
-			}else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)){
-				float pct = ((float)(guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks) / fast_action_ticks);
-				if (guardian.hasLeftArm()){
+			if (guardian.getTicksInCurrentAction() < action_ticks) {
+				left_arm_rotation_x = (float) Math.toRadians(max_degrees_x
+						* (((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
+			} else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)) {
+				float pct = ((float) (guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks)
+						/ fast_action_ticks);
+				if (guardian.hasLeftArm()) {
 					GL11.glRotatef(-40 * pct, 0, 1, 0);
-				}else{
+				} else {
 					GL11.glRotatef(40 * pct, 0, 1, 0);
 				}
-				left_arm_rotation_x = (float)Math.toRadians(max_degrees_x);
-			}else{
-				float pct = ((float)(guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks - fast_action_ticks) / fast_action_ticks);
-				if (guardian.hasLeftArm()){
+				left_arm_rotation_x = (float) Math.toRadians(max_degrees_x);
+			} else {
+				float pct = ((float) (guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks
+						- fast_action_ticks) / fast_action_ticks);
+				if (guardian.hasLeftArm()) {
 					GL11.glRotatef(-40 + (40 * pct), 0, 1, 0);
-				}else{
+				} else {
 					GL11.glRotatef(40 - (40 * pct), 0, 1, 0);
 				}
-				left_arm_rotation_x = (float)Math.toRadians(max_degrees_x);
+				left_arm_rotation_x = (float) Math.toRadians(max_degrees_x);
 			}
-			if (!guardian.hasLeftArm()){
+			if (!guardian.hasLeftArm()) {
 				right_arm_rotation_x = left_arm_rotation_x;
 				left_arm_rotation_x = 0;
 			}
@@ -460,15 +468,17 @@ public class ModelWinterGuardian extends ModelBase{
 			max_degrees_x = 50;
 			action_ticks = 4;
 			fast_action_ticks = 11;
-			if (guardian.getTicksInCurrentAction() < action_ticks){
-				left_arm_rotation_x = (float)Math.toRadians(-max_degrees_x * (((float)guardian.getTicksInCurrentAction() + (f2 -  guardian.ticksExisted)) / action_ticks));
-			}else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)){
-				float pct = ((float)(guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks) / fast_action_ticks);
+			if (guardian.getTicksInCurrentAction() < action_ticks) {
+				left_arm_rotation_x = (float) Math.toRadians(-max_degrees_x
+						* (((float) guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted)) / action_ticks));
+			} else if (guardian.getTicksInCurrentAction() < (action_ticks + fast_action_ticks)) {
+				float pct = ((float) (guardian.getTicksInCurrentAction() + (f2 - guardian.ticksExisted) - action_ticks)
+						/ fast_action_ticks);
 				float degrees = -max_degrees_x + (max_degrees_x * pct);
-				left_arm_rotation_x = (float)Math.toRadians(degrees);
+				left_arm_rotation_x = (float) Math.toRadians(degrees);
 				GL11.glRotatef(guardian.hasLeftArm() ? 360 * pct : -360 * pct, 0, 1, 0);
 			}
-			if (!guardian.hasLeftArm()){
+			if (!guardian.hasLeftArm()) {
 				right_arm_rotation_x = -left_arm_rotation_x;
 			}
 			break;
@@ -488,24 +498,24 @@ public class ModelWinterGuardian extends ModelBase{
 
 	}
 
-	private void setHeadRotations(float yaw, float pitch){
-		head1.rotateAngleX = (float)Math.toRadians(pitch);
-		head1.rotateAngleY = (float)Math.toRadians(yaw);
+	private void setHeadRotations(float yaw, float pitch) {
+		head1.rotateAngleX = (float) Math.toRadians(pitch);
+		head1.rotateAngleY = (float) Math.toRadians(yaw);
 
-		head2.rotateAngleX = (float)Math.toRadians(pitch);
-		head2.rotateAngleY = (float)Math.toRadians(yaw);
+		head2.rotateAngleX = (float) Math.toRadians(pitch);
+		head2.rotateAngleY = (float) Math.toRadians(yaw);
 
-		head3.rotateAngleX = (float)Math.toRadians(pitch);
-		head3.rotateAngleY = (float)Math.toRadians(yaw);
+		head3.rotateAngleX = (float) Math.toRadians(pitch);
+		head3.rotateAngleY = (float) Math.toRadians(yaw);
 
-		head4.rotateAngleX = (float)Math.toRadians(pitch);
-		head4.rotateAngleY = (float)Math.toRadians(yaw);
+		head4.rotateAngleX = (float) Math.toRadians(pitch);
+		head4.rotateAngleY = (float) Math.toRadians(yaw);
 
-		head5.rotateAngleX = (float)Math.toRadians(pitch);
-		head5.rotateAngleY = (float)Math.toRadians(yaw);
+		head5.rotateAngleX = (float) Math.toRadians(pitch);
+		head5.rotateAngleY = (float) Math.toRadians(yaw);
 	}
 
-	private void setRotation(AM2ModelRenderer model, float x, float y, float z){
+	private void setRotation(AM2ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

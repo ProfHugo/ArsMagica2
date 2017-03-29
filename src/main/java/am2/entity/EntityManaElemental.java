@@ -21,75 +21,76 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityManaElemental extends EntityMob{
+public class EntityManaElemental extends EntityMob {
 
 	private final float hostileSpeed;
-	
-	public EntityManaElemental(World par1World){
+
+	public EntityManaElemental(World par1World) {
 		super(par1World);
 		this.setAIMoveSpeed(0.2f);
 		this.hostileSpeed = 0.25F;
-		//this.attackStrength = 4;
+		// this.attackStrength = 4;
 		this.setSize(0.8f, 2.5f);
 		EntityExtension.For(this).setMagicLevelWithMana(15);
 		initAI();
 	}
 
-	public void setOnGroudFloat(float onGround){
+	public void setOnGroudFloat(float onGround) {
 	}
 
-
 	@Override
-	public boolean isAIDisabled(){
+	public boolean isAIDisabled() {
 		return false;
 	}
 
 	@Override
-	public int getTotalArmorValue(){
+	public int getTotalArmorValue() {
 		return 12;
 	}
 
 	@Override
-	public void onUpdate(){
-		if (this.worldObj != null){
-			if (this.worldObj.isRemote){
-			}else{
-				if (EntityExtension.For(this).getCurrentMana() <= 0){
+	public void onUpdate() {
+		if (this.worldObj != null) {
+			if (this.worldObj.isRemote) {
+			} else {
+				if (EntityExtension.For(this).getCurrentMana() <= 0) {
 					this.attackEntityFrom(DamageSource.generic, 500);
 				}
 			}
 		}
 		super.onUpdate();
 	}
-	
+
 	@Override
 	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
 		if (getRNG().nextInt(10) == 0)
-			this.entityDropItem(new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.ARCANE)), 0.0f);
+			this.entityDropItem(
+					new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.ARCANE)),
+					0.0f);
 		super.dropFewItems(wasRecentlyHit, lootingModifier);
 	}
-	
+
 	@Override
-	protected Item getDropItem(){
+	protected Item getDropItem() {
 		return ItemDefs.manaCake;
 	}
 
 	@Override
-	protected SoundEvent getAmbientSound(){
+	protected SoundEvent getAmbientSound() {
 		return AMSounds.MANA_ELEMENTAL_IDLE;
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(){
+	protected SoundEvent getHurtSound() {
 		return AMSounds.MANA_ELEMENTAL_DEATH;
 	}
 
 	@Override
-	protected SoundEvent getDeathSound(){
+	protected SoundEvent getDeathSound() {
 		return AMSounds.MANA_ELEMENTAL_DEATH;
 	}
 
-	private void initAI(){
+	private void initAI() {
 		this.setPathPriority(PathNodeType.WATER, -1F);
 		this.tasks.addTask(3, new EntityAIManaDrainBolt(this, this.hostileSpeed, 35, 1, 10));
 		this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, this.getAIMoveSpeed()));
@@ -97,11 +98,12 @@ public class EntityManaElemental extends EntityMob{
 		this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(8, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, true, false, null));
+		this.targetTasks.addTask(3,
+				new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, true, false, null));
 	}
 
 	@Override
-	public boolean getCanSpawnHere(){
+	public boolean getCanSpawnHere() {
 		if (!SpawnBlacklists.entityCanSpawnHere(this.getPosition(), worldObj, this))
 			return false;
 		return super.getCanSpawnHere();

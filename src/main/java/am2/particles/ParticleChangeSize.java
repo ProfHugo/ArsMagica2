@@ -1,12 +1,12 @@
 package am2.particles;
 
-public class ParticleChangeSize extends ParticleController{
+public class ParticleChangeSize extends ParticleController {
 
 	private float start;
 	private float end;
 	private int time;
 
-	public ParticleChangeSize(AMParticle star, float start, float end, int time, int priority, boolean exclusive){
+	public ParticleChangeSize(AMParticle star, float start, float end, int time, int priority, boolean exclusive) {
 		super(star, priority, exclusive);
 		this.start = start;
 		this.end = end;
@@ -14,21 +14,21 @@ public class ParticleChangeSize extends ParticleController{
 	}
 
 	@Override
-	public void doUpdate(){
+	public void doUpdate() {
 
-		if (particle.GetParticleAge() > time){
+		if (particle.GetParticleAge() > time) {
 			this.finish();
 			return;
 		}
 
-		float pct = (float)particle.GetParticleAge() / (float)time;
+		float pct = (float) particle.GetParticleAge() / (float) time;
 		float scale = start + pct * (end - start);
 
 		particle.setParticleScale(scale);
 	}
 
 	@Override
-	public ParticleController clone(){
+	public ParticleController clone() {
 		return new ParticleChangeSize(particle, start, end, time, time, exclusive);
 	}
 

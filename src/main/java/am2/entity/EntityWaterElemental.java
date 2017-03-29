@@ -20,11 +20,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class EntityWaterElemental extends EntityMob{
+public class EntityWaterElemental extends EntityMob {
 
 	private float hostileSpeed;
 
-	public EntityWaterElemental(World par1World){
+	public EntityWaterElemental(World par1World) {
 		super(par1World);
 		this.hostileSpeed = 0.46F;
 		initAI();
@@ -32,39 +32,39 @@ public class EntityWaterElemental extends EntityMob{
 		EntityExtension.For(this).setCurrentMana(300);
 	}
 
-	private void initAI(){
+	private void initAI() {
 
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(3, new EntityAIWaterElementalAttack(this, EntityPlayer.class, this.hostileSpeed, false));
 		this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(8, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, true, false, null));
+		this.targetTasks.addTask(3,
+				new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, true, false, null));
 	}
 
 	@Override
-	public void onUpdate(){
-		if (this.worldObj != null){
-			if (this.worldObj.isRemote){
+	public void onUpdate() {
+		if (this.worldObj != null) {
+			if (this.worldObj.isRemote) {
 				spawnLivingParticles();
 			}
 		}
 		super.onUpdate();
 	}
-	
+
 	@Override
 	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
-		this.entityDropItem(new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.WATER)), 0.0f);
+		this.entityDropItem(
+				new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.WATER)), 0.0f);
 	}
 
-	private void spawnLivingParticles(){
-		if (rand.nextBoolean()){
+	private void spawnLivingParticles() {
+		if (rand.nextBoolean()) {
 			double yPos = this.posY + 1.1;
-			AMParticle effect = (AMParticle)ArsMagica2.proxy.particleManager.spawn(worldObj, "water_ball",
-					this.posX + ((rand.nextFloat() * 0.2) - 0.1f),
-					yPos,
-					this.posZ + ((rand.nextFloat() * 0.4) - 0.2f));
-			if (effect != null){
+			AMParticle effect = (AMParticle) ArsMagica2.proxy.particleManager.spawn(worldObj, "water_ball",
+					this.posX + ((rand.nextFloat() * 0.2) - 0.1f), yPos, this.posZ + ((rand.nextFloat() * 0.4) - 0.2f));
+			if (effect != null) {
 				effect.AddParticleController(new ParticleFloatUpward(effect, 0.1f, -0.06f, 1, false));
 				effect.AddParticleController(new ParticleFadeOut(effect, 2, false).setFadeSpeed(0.04f));
 				effect.setMaxAge(25);
@@ -74,16 +74,18 @@ public class EntityWaterElemental extends EntityMob{
 		}
 	}
 
-	/* Checks if this entity is inside water (if inWater field is true as a result of handleWaterMovement() returning
-	 * true)
+	/*
+	 * Checks if this entity is inside water (if inWater field is true as a
+	 * result of handleWaterMovement() returning true)
 	 */
 	@Override
-	public boolean isInWater(){
-		return this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox().expand(0.0D, -0.6000000238418579D, 0.0D), Material.WATER, this);
+	public boolean isInWater() {
+		return this.worldObj.handleMaterialAcceleration(
+				this.getEntityBoundingBox().expand(0.0D, -0.6000000238418579D, 0.0D), Material.WATER, this);
 	}
 
 	@Override
-	public boolean getCanSpawnHere(){
+	public boolean getCanSpawnHere() {
 		if (!SpawnBlacklists.entityCanSpawnHere(this.getPosition(), worldObj, this))
 			return false;
 		return super.getCanSpawnHere();

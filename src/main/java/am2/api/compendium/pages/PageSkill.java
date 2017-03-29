@@ -23,7 +23,7 @@ public class PageSkill extends CompendiumPage<Skill> {
 	}
 
 	@Override
-	protected void renderPage(int posX, int posY, int mouseX, int mouseY) {	
+	protected void renderPage(int posX, int posY, int mouseX, int mouseY) {
 		int cx = posX + 60;
 		int cy = posY + 92;
 		RenderHelper.disableStandardItemLighting();
@@ -32,9 +32,10 @@ public class PageSkill extends CompendiumPage<Skill> {
 		GlStateManager.color(1, 1, 1, 1);
 		if (icon != null)
 			AMGuiHelper.DrawIconAtXY(icon, cx, cy, zLevel, 16, 16, false);
-		if (mouseX > cx && mouseX < cx + 16){
-			if (mouseY > cy && mouseY < cy + 16){
-				renderItemToolTip(new ItemStack(ItemDefs.spell_component, 1, ArsMagicaAPI.getSkillRegistry().getId(element.getRegistryName())), mouseX, mouseY);
+		if (mouseX > cx && mouseX < cx + 16) {
+			if (mouseY > cy && mouseY < cy + 16) {
+				renderItemToolTip(new ItemStack(ItemDefs.spell_component, 1,
+						ArsMagicaAPI.getSkillRegistry().getId(element.getRegistryName())), mouseX, mouseY);
 			}
 		}
 		mc.renderEngine.bindTexture(new ResourceLocation("arsmagica2", "textures/gui/ArcaneCompendiumGuiExtras.png"));
@@ -42,13 +43,13 @@ public class PageSkill extends CompendiumPage<Skill> {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		this.drawTexturedModalRect_Classic(posX + 125, posY + 15, 112, 145, 60, 40, 40, 40);
-		this.drawTexturedModalRect_Classic(posX , posY + 200, 112, 175, 60, 40, 40, 40);
+		this.drawTexturedModalRect_Classic(posX, posY + 200, 112, 175, 60, 40, 40, 40);
 		drawExtra(cx, cy);
 		GlStateManager.enableAlpha();
 		mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		RenderHelper.enableStandardItemLighting();
 	}
-	
+
 	private void drawExtra(int cx, int cy) {
 		GlStateManager.disableBlend();
 		GlStateManager.pushMatrix();
@@ -56,7 +57,7 @@ public class PageSkill extends CompendiumPage<Skill> {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		this.drawTexturedModalRect_Classic(cx - 77, cy - 68, 0, 101, 150, 150, 100, 147);
 		GlStateManager.disableBlend();
-		GlStateManager.popMatrix();	
+		GlStateManager.popMatrix();
 	}
-	
+
 }

@@ -2,7 +2,7 @@ package am2.particles.ribbon;
 
 import java.util.Random;
 
-public class PerlinNoise{
+public class PerlinNoise {
 	// Constants for setting up the Perlin-1 noise functions
 	private static final int B = 0x1000;
 	private static final int BM = 0xff;
@@ -10,7 +10,6 @@ public class PerlinNoise{
 	private static final int N = 0x1000;
 
 	private Random rand;
-
 
 	/**
 	 * Default seed to use for the random number generation
@@ -35,20 +34,20 @@ public class PerlinNoise{
 	private float[][] g2;
 	private float[] g1;
 
-
 	/**
 	 * Create a new noise creator with the default seed value
 	 */
-	public PerlinNoise(){
+	public PerlinNoise() {
 		this(DEFAULT_SEED);
 	}
 
 	/**
 	 * Create a new noise creator with the given seed value for the randomness
 	 *
-	 * @param seed The seed value to use
+	 * @param seed
+	 *            The seed value to use
 	 */
-	public PerlinNoise(int seed){
+	public PerlinNoise(int seed) {
 		rand = new Random();
 		p_imp = new int[DEFAULT_SAMPLE_SIZE << 1];
 
@@ -59,7 +58,7 @@ public class PerlinNoise{
 			p_imp[i] = i;
 
 		// generate the psuedo-random permutation table.
-		while (--i > 0){
+		while (--i > 0) {
 			k = p_imp[i];
 			j = (rand.nextInt(DEFAULT_SAMPLE_SIZE));
 			p_imp[i] = p_imp[j];
@@ -72,16 +71,19 @@ public class PerlinNoise{
 	/**
 	 * Computes noise function for three dimensions at the point (x,y,z).
 	 *
-	 * @param x x dimension parameter
-	 * @param y y dimension parameter
-	 * @param z z dimension parameter
+	 * @param x
+	 *            x dimension parameter
+	 * @param y
+	 *            y dimension parameter
+	 * @param z
+	 *            z dimension parameter
 	 * @return the noise value at the point (x, y, z)
 	 */
-	public double improvedNoise(double x, double y, double z){
+	public double improvedNoise(double x, double y, double z) {
 		// Constraint the point to a unit cube
-		int uc_x = (int)Math.floor(x) & 255;
-		int uc_y = (int)Math.floor(y) & 255;
-		int uc_z = (int)Math.floor(z) & 255;
+		int uc_x = (int) Math.floor(x) & 255;
+		int uc_y = (int) Math.floor(y) & 255;
+		int uc_z = (int) Math.floor(z) & 255;
 
 		// Relative location of the point in the unit cube
 		double xo = x - Math.floor(x);
@@ -113,21 +115,21 @@ public class PerlinNoise{
 		double c7 = grad(p_imp[ab + 1], xo, yo - 1, zo - 1);
 		double c8 = grad(p_imp[bb + 1], xo - 1, yo - 1, zo - 1);
 
-		return lerp(w, lerp(v, lerp(u, c1, c2), lerp(u, c3, c4)),
-				lerp(v, lerp(u, c5, c6), lerp(u, c7, c8)));
+		return lerp(w, lerp(v, lerp(u, c1, c2), lerp(u, c3, c4)), lerp(v, lerp(u, c5, c6), lerp(u, c7, c8)));
 	}
 
 	/**
 	 * 1-D noise generation function using the original perlin algorithm.
 	 *
-	 * @param x Seed for the noise function
+	 * @param x
+	 *            Seed for the noise function
 	 * @return The noisy output
 	 */
-	public float noise1(float x){
+	public float noise1(float x) {
 		float t = x + N;
-		int bx0 = ((int)t) & BM;
+		int bx0 = ((int) t) & BM;
 		int bx1 = (bx0 + 1) & BM;
-		float rx0 = t - (int)t;
+		float rx0 = t - (int) t;
 		float rx1 = rx0 - 1;
 
 		float sx = sCurve(rx0);
@@ -141,21 +143,23 @@ public class PerlinNoise{
 	/**
 	 * Create noise in a 2D space using the orignal perlin noise algorithm.
 	 *
-	 * @param x The X coordinate of the location to sample
-	 * @param y The Y coordinate of the location to sample
+	 * @param x
+	 *            The X coordinate of the location to sample
+	 * @param y
+	 *            The Y coordinate of the location to sample
 	 * @return A noisy value at the given position
 	 */
-	public float noise2(float x, float y){
+	public float noise2(float x, float y) {
 		float t = x + N;
-		int bx0 = ((int)t) & BM;
+		int bx0 = ((int) t) & BM;
 		int bx1 = (bx0 + 1) & BM;
-		float rx0 = t - (int)t;
+		float rx0 = t - (int) t;
 		float rx1 = rx0 - 1;
 
 		t = y + N;
-		int by0 = ((int)t) & BM;
+		int by0 = ((int) t) & BM;
 		int by1 = (by0 + 1) & BM;
-		float ry0 = t - (int)t;
+		float ry0 = t - (int) t;
 		float ry1 = ry0 - 1;
 
 		int i = p[bx0];
@@ -187,28 +191,31 @@ public class PerlinNoise{
 	/**
 	 * Create noise in a 3D space using the orignal perlin noise algorithm.
 	 *
-	 * @param x The X coordinate of the location to sample
-	 * @param y The Y coordinate of the location to sample
-	 * @param z The Z coordinate of the location to sample
+	 * @param x
+	 *            The X coordinate of the location to sample
+	 * @param y
+	 *            The Y coordinate of the location to sample
+	 * @param z
+	 *            The Z coordinate of the location to sample
 	 * @return A noisy value at the given position
 	 */
-	public float noise3(float x, float y, float z){
+	public float noise3(float x, float y, float z) {
 		float t = x + N;
-		int bx0 = ((int)t) & BM;
+		int bx0 = ((int) t) & BM;
 		int bx1 = (bx0 + 1) & BM;
-		float rx0 = t - (int)t;
+		float rx0 = t - (int) t;
 		float rx1 = rx0 - 1;
 
 		t = y + N;
-		int by0 = ((int)t) & BM;
+		int by0 = ((int) t) & BM;
 		int by1 = (by0 + 1) & BM;
-		float ry0 = t - (int)t;
+		float ry0 = t - (int) t;
 		float ry1 = ry0 - 1;
 
 		t = z + N;
-		int bz0 = ((int)t) & BM;
+		int bz0 = ((int) t) & BM;
 		int bz1 = (bz0 + 1) & BM;
-		float rz0 = t - (int)t;
+		float rz0 = t - (int) t;
 		float rz1 = rz0 - 1;
 
 		int i = p[bx0];
@@ -254,32 +261,28 @@ public class PerlinNoise{
 		return lerp(sz, c, d);
 	}
 
-	public float noise3(double x, double y, double z){
-		return noise3((float)x, (float)y, (float)z);
+	public float noise3(double x, double y, double z) {
+		return noise3((float) x, (float) y, (float) z);
 	}
-
 
 	/**
 	 * Create a turbulent noise output based on the core noise function. This
 	 * uses the noise as a base function and is suitable for creating clouds,
 	 * marble and explosion effects. For example, a typical marble effect would
 	 * set the colour to be:
+	 * 
 	 * <pre>
-	 *    sin(point + turbulence(point) * point.x);
+	 * sin(point + turbulence(point) * point.x);
 	 * </pre>
 	 */
-	public double imporvedTurbulence(double x,
-									 double y,
-									 double z,
-									 float loF,
-									 float hiF){
+	public double imporvedTurbulence(double x, double y, double z, float loF, float hiF) {
 		double p_x = x + 123.456f;
 		double p_y = y;
 		double p_z = z;
 		double t = 0;
 		double f;
 
-		for (f = loF; f < hiF; f *= 2){
+		for (f = loF; f < hiF; f *= 2) {
 			t += Math.abs(improvedNoise(p_x, p_y, p_z)) / f;
 
 			p_x *= 2;
@@ -294,19 +297,21 @@ public class PerlinNoise{
 	 * Create a turbulance function in 2D using the original perlin noise
 	 * function.
 	 *
-	 * @param x    The X coordinate of the location to sample
-	 * @param y    The Y coordinate of the location to sample
-	 * @param freq The frequency of the turbluance to create
+	 * @param x
+	 *            The X coordinate of the location to sample
+	 * @param y
+	 *            The Y coordinate of the location to sample
+	 * @param freq
+	 *            The frequency of the turbluance to create
 	 * @return The value at the given coordinates
 	 */
-	public float turbulence2(float x, float y, float freq){
+	public float turbulence2(float x, float y, float freq) {
 		float t = 0;
 
-		do{
+		do {
 			t += noise2(freq * x, freq * y) / freq;
 			freq *= 0.5f;
-		}
-		while (freq >= 1);
+		} while (freq >= 1);
 
 		return t;
 	}
@@ -315,20 +320,23 @@ public class PerlinNoise{
 	 * Create a turbulance function in 3D using the original perlin noise
 	 * function.
 	 *
-	 * @param x    The X coordinate of the location to sample
-	 * @param y    The Y coordinate of the location to sample
-	 * @param z    The Z coordinate of the location to sample
-	 * @param freq The frequency of the turbluance to create
+	 * @param x
+	 *            The X coordinate of the location to sample
+	 * @param y
+	 *            The Y coordinate of the location to sample
+	 * @param z
+	 *            The Z coordinate of the location to sample
+	 * @param freq
+	 *            The frequency of the turbluance to create
 	 * @return The value at the given coordinates
 	 */
-	public float turbulence3(float x, float y, float z, float freq){
+	public float turbulence3(float x, float y, float z, float freq) {
 		float t = 0;
 
-		do{
+		do {
 			t += noise3(freq * x, freq * y, freq * z) / freq;
 			freq *= 0.5f;
-		}
-		while (freq >= 1);
+		} while (freq >= 1);
 
 		return t;
 	}
@@ -336,86 +344,85 @@ public class PerlinNoise{
 	/**
 	 * Create a 1D tileable noise function for the given width.
 	 *
-	 * @param x The X coordinate to generate the noise for
-	 * @param w The width of the tiled block
+	 * @param x
+	 *            The X coordinate to generate the noise for
+	 * @param w
+	 *            The width of the tiled block
 	 * @return The value of the noise at the given coordinate
 	 */
-	public float tileableNoise1(float x, float w){
-		return (noise1(x) * (w - x) +
-				noise1(x - w) * x) / w;
+	public float tileableNoise1(float x, float w) {
+		return (noise1(x) * (w - x) + noise1(x - w) * x) / w;
 	}
 
 	/**
 	 * Create a 2D tileable noise function for the given width and height.
 	 *
-	 * @param x The X coordinate to generate the noise for
-	 * @param y The Y coordinate to generate the noise for
-	 * @param w The width of the tiled block
-	 * @param h The height of the tiled block
+	 * @param x
+	 *            The X coordinate to generate the noise for
+	 * @param y
+	 *            The Y coordinate to generate the noise for
+	 * @param w
+	 *            The width of the tiled block
+	 * @param h
+	 *            The height of the tiled block
 	 * @return The value of the noise at the given coordinate
 	 */
-	public float tileableNoise2(float x, float y, float w, float h){
-		return (noise2(x, y) * (w - x) * (h - y) +
-				noise2(x - w, y) * x * (h - y) +
-				noise2(x, y - h) * (w - x) * y +
-				noise2(x - w, y - h) * x * y) / (w * h);
+	public float tileableNoise2(float x, float y, float w, float h) {
+		return (noise2(x, y) * (w - x) * (h - y) + noise2(x - w, y) * x * (h - y) + noise2(x, y - h) * (w - x) * y
+				+ noise2(x - w, y - h) * x * y) / (w * h);
 	}
 
 	/**
 	 * Create a 3D tileable noise function for the given width, height and
 	 * depth.
 	 *
-	 * @param x The X coordinate to generate the noise for
-	 * @param y The Y coordinate to generate the noise for
-	 * @param z The Z coordinate to generate the noise for
-	 * @param w The width of the tiled block
-	 * @param h The height of the tiled block
-	 * @param d The depth of the tiled block
+	 * @param x
+	 *            The X coordinate to generate the noise for
+	 * @param y
+	 *            The Y coordinate to generate the noise for
+	 * @param z
+	 *            The Z coordinate to generate the noise for
+	 * @param w
+	 *            The width of the tiled block
+	 * @param h
+	 *            The height of the tiled block
+	 * @param d
+	 *            The depth of the tiled block
 	 * @return The value of the noise at the given coordinate
 	 */
-	public float tileableNoise3(float x,
-								float y,
-								float z,
-								float w,
-								float h,
-								float d){
+	public float tileableNoise3(float x, float y, float z, float w, float h, float d) {
 		x = x % w;
 		y = y % h;
 		z = z % d;
 
-		return (noise3(x, y, z) * (w - x) * (h - y) * (d - z) +
-				noise3(x - w, y, z) * x * (h - y) * (d - z) +
-				noise3(x, y - h, z) * (w - x) * y * (d - z) +
-				noise3(x - w, y - h, z) * x * y * (d - z) +
-				noise3(x, y, z - d) * (w - x) * (h - y) * z +
-				noise3(x - w, y, z - d) * x * (h - y) * z +
-				noise3(x, y - h, z - d) * (w - x) * y * z +
-				noise3(x - w, y - h, z - d) * x * y * z) /
-				(w * h * d);
+		return (noise3(x, y, z) * (w - x) * (h - y) * (d - z) + noise3(x - w, y, z) * x * (h - y) * (d - z)
+				+ noise3(x, y - h, z) * (w - x) * y * (d - z) + noise3(x - w, y - h, z) * x * y * (d - z)
+				+ noise3(x, y, z - d) * (w - x) * (h - y) * z + noise3(x - w, y, z - d) * x * (h - y) * z
+				+ noise3(x, y - h, z - d) * (w - x) * y * z + noise3(x - w, y - h, z - d) * x * y * z) / (w * h * d);
 	}
 
 	/**
 	 * Create a turbulance function that can be tiled across a surface in 2D.
 	 *
-	 * @param x    The X coordinate of the location to sample
-	 * @param y    The Y coordinate of the location to sample
-	 * @param w    The width to tile over
-	 * @param h    The height to tile over
-	 * @param freq The frequency of the turbluance to create
+	 * @param x
+	 *            The X coordinate of the location to sample
+	 * @param y
+	 *            The Y coordinate of the location to sample
+	 * @param w
+	 *            The width to tile over
+	 * @param h
+	 *            The height to tile over
+	 * @param freq
+	 *            The frequency of the turbluance to create
 	 * @return The value at the given coordinates
 	 */
-	public float tileableTurbulence2(float x,
-									 float y,
-									 float w,
-									 float h,
-									 float freq){
+	public float tileableTurbulence2(float x, float y, float w, float h, float freq) {
 		float t = 0;
 
-		do{
+		do {
 			t += tileableNoise2(freq * x, freq * y, w * freq, h * freq) / freq;
 			freq *= 0.5f;
-		}
-		while (freq >= 1);
+		} while (freq >= 1);
 
 		return t;
 	}
@@ -423,50 +430,44 @@ public class PerlinNoise{
 	/**
 	 * Create a turbulance function that can be tiled across a surface in 3D.
 	 *
-	 * @param x    The X coordinate of the location to sample
-	 * @param y    The Y coordinate of the location to sample
-	 * @param z    The Z coordinate of the location to sample
-	 * @param w    The width to tile over
-	 * @param h    The height to tile over
-	 * @param d    The depth to tile over
-	 * @param freq The frequency of the turbluance to create
+	 * @param x
+	 *            The X coordinate of the location to sample
+	 * @param y
+	 *            The Y coordinate of the location to sample
+	 * @param z
+	 *            The Z coordinate of the location to sample
+	 * @param w
+	 *            The width to tile over
+	 * @param h
+	 *            The height to tile over
+	 * @param d
+	 *            The depth to tile over
+	 * @param freq
+	 *            The frequency of the turbluance to create
 	 * @return The value at the given coordinates
 	 */
-	public float tileableTurbulence3(float x,
-									 float y,
-									 float z,
-									 float w,
-									 float h,
-									 float d,
-									 float freq){
+	public float tileableTurbulence3(float x, float y, float z, float w, float h, float d, float freq) {
 		float t = 0;
 
-		do{
-			t += tileableNoise3(freq * x,
-					freq * y,
-					freq * z,
-					w * freq,
-					h * freq,
-					d * freq) / freq;
+		do {
+			t += tileableNoise3(freq * x, freq * y, freq * z, w * freq, h * freq, d * freq) / freq;
 			freq *= 0.5f;
-		}
-		while (freq >= 1);
+		} while (freq >= 1);
 
 		return t;
 	}
 
-
 	/**
 	 * Simple lerp function using doubles.
 	 */
-	private double lerp(double t, double a, double b){
+	private double lerp(double t, double a, double b) {
 		return a + t * (b - a);
 	}
 
 	/**
 	 * Simple lerp function using floats.
 	 */
-	private float lerp(float t, float a, float b){
+	private float lerp(float t, float a, float b) {
 		return a + t * (b - a);
 	}
 
@@ -474,17 +475,18 @@ public class PerlinNoise{
 	 * Fade curve calculation which is 6t^5 - 15t^4 + 10t^3. This is the new
 	 * algorithm, where the old one used to be 3t^2 - 2t^3.
 	 *
-	 * @param t The t parameter to calculate the fade for
+	 * @param t
+	 *            The t parameter to calculate the fade for
 	 * @return the drop-off amount.
 	 */
-	private double fade(double t){
+	private double fade(double t) {
 		return t * t * t * (t * (t * 6 - 15) + 10);
 	}
 
 	/**
 	 * Calculate the gradient function based on the hash code.
 	 */
-	private double grad(int hash, double x, double y, double z){
+	private double grad(int hash, double x, double y, double z) {
 		// Convert low 4 bits of hash code into 12 gradient directions.
 		int h = hash & 15;
 		double u = (h < 8 || h == 12 || h == 13) ? x : y;
@@ -496,15 +498,15 @@ public class PerlinNoise{
 	/**
 	 * S-curve function for value distribution for Perlin-1 noise function.
 	 */
-	private float sCurve(float t){
+	private float sCurve(float t) {
 		return (t * t * (3 - 2 * t));
 	}
 
 	/**
 	 * 2D-vector normalisation function.
 	 */
-	private void normalize2(float[] v){
-		float s = (float)(1 / Math.sqrt(v[0] * v[0] + v[1] * v[1]));
+	private void normalize2(float[] v) {
+		float s = (float) (1 / Math.sqrt(v[0] * v[0] + v[1] * v[1]));
 		v[0] *= s;
 		v[1] *= s;
 	}
@@ -512,8 +514,8 @@ public class PerlinNoise{
 	/**
 	 * 3D-vector normalisation function.
 	 */
-	private void normalize3(float[] v){
-		float s = (float)(1 / Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]));
+	private void normalize3(float[] v) {
+		float s = (float) (1 / Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]));
 		v[0] *= s;
 		v[1] *= s;
 		v[2] *= s;
@@ -522,35 +524,35 @@ public class PerlinNoise{
 	/**
 	 * Initialise the lookup arrays used by Perlin 1 function.
 	 */
-	private void initPerlin1(){
+	private void initPerlin1() {
 		p = new int[B + B + 2];
 		g3 = new float[B + B + 2][3];
 		g2 = new float[B + B + 2][2];
 		g1 = new float[B + B + 2];
 		int i, j, k;
 
-		for (i = 0; i < B; i++){
+		for (i = 0; i < B; i++) {
 			p[i] = i;
 
-			g1[i] = (float)((rand.nextInt(B + B)) - B) / B;
+			g1[i] = (float) ((rand.nextInt(B + B)) - B) / B;
 
 			for (j = 0; j < 2; j++)
-				g2[i][j] = (float)((rand.nextInt(B + B)) - B) / B;
+				g2[i][j] = (float) ((rand.nextInt(B + B)) - B) / B;
 			normalize2(g2[i]);
 
 			for (j = 0; j < 3; j++)
-				g3[i][j] = (float)((rand.nextInt(B + B)) - B) / B;
+				g3[i][j] = (float) ((rand.nextInt(B + B)) - B) / B;
 			normalize3(g3[i]);
 		}
 
-		while (--i > 0){
+		while (--i > 0) {
 			k = p[i];
 			j = (rand.nextInt(B));
 			p[i] = p[j];
 			p[j] = k;
 		}
 
-		for (i = 0; i < B + 2; i++){
+		for (i = 0; i < B + 2; i++) {
 			p[B + i] = p[i];
 			g1[B + i] = g1[i];
 			for (j = 0; j < 2; j++)

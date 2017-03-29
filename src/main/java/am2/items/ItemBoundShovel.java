@@ -21,19 +21,22 @@ public class ItemBoundShovel extends ItemSpade implements IBoundItem {
 		this.setMaxDamage(0);
 		this.setCreativeTab(null);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos,
+			EntityLivingBase entityLiving) {
 		if (!stack.hasTagCompound())
 			return true;
 		ItemStack copiedStack = SpellUtils.merge(stack.copy());
-		copiedStack.getTagCompound().getCompoundTag("AM2").setInteger("CurrentGroup", SpellUtils.currentStage(stack) + 1);
+		copiedStack.getTagCompound().getCompoundTag("AM2").setInteger("CurrentGroup",
+				SpellUtils.currentStage(stack) + 1);
 		copiedStack.setItem(ItemDefs.spell);
-		SpellUtils.applyStackStage(copiedStack, entityLiving, null, pos.getX(), pos.getY(), pos.getZ(), null, worldIn, true, true, 0);
+		SpellUtils.applyStackStage(copiedStack, entityLiving, null, pos.getX(), pos.getY(), pos.getZ(), null, worldIn,
+				true, true, 0);
 		return true;
 	}
-	
+
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
 		return false;
 	}

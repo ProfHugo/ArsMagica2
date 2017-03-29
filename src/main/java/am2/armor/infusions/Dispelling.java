@@ -13,25 +13,26 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
-public class Dispelling extends ArmorImbuement{
+public class Dispelling extends ArmorImbuement {
 
 	@Override
-	public String getID(){
+	public String getID() {
 		return "dispel";
 	}
 
 	@Override
-	public ImbuementTiers getTier(){
+	public ImbuementTiers getTier() {
 		return ImbuementTiers.FOURTH;
 	}
 
 	@Override
-	public EnumSet<ImbuementApplicationTypes> getApplicationTypes(){
+	public EnumSet<ImbuementApplicationTypes> getApplicationTypes() {
 		return EnumSet.of(ImbuementApplicationTypes.ON_TICK);
 	}
 
 	@Override
-	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType, Object... params){
+	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType,
+			Object... params) {
 		if (player.getActivePotionEffects().size() == 0)
 			return false;
 
@@ -40,36 +41,37 @@ public class Dispelling extends ArmorImbuement{
 
 		ArrayList<Potion> effectsToRemove = new ArrayList<>();
 		Object[] safeCopy = player.getActivePotionEffects().toArray();
-		for (Object o : safeCopy){
-			PotionEffect pe = (PotionEffect)o;
+		for (Object o : safeCopy) {
+			PotionEffect pe = (PotionEffect) o;
 			boolean badEffect = pe.getPotion().isBadEffect();
-			if (pe.getIsAmbient() || !badEffect) continue;
+			if (pe.getIsAmbient() || !badEffect)
+				continue;
 			effectsToRemove.add(pe.getPotion());
 		}
 
-		for (Potion i : effectsToRemove){
+		for (Potion i : effectsToRemove) {
 			player.removePotionEffect(i);
 		}
 		return effectsToRemove.size() > 0;
 	}
 
 	@Override
-	public EntityEquipmentSlot[] getValidSlots(){
-		return new EntityEquipmentSlot[]{EntityEquipmentSlot.LEGS};
+	public EntityEquipmentSlot[] getValidSlots() {
+		return new EntityEquipmentSlot[] { EntityEquipmentSlot.LEGS };
 	}
 
 	@Override
-	public boolean canApplyOnCooldown(){
+	public boolean canApplyOnCooldown() {
 		return false;
 	}
 
 	@Override
-	public int getCooldown(){
+	public int getCooldown() {
 		return 600;
 	}
 
 	@Override
-	public int getArmorDamage(){
+	public int getArmorDamage() {
 		return 75;
 	}
 }

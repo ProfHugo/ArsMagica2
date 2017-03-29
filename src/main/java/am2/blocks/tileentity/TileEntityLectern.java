@@ -20,7 +20,7 @@ import net.minecraft.tileentity.TileEntityEnchantmentTable;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.MathHelper;
 
-public class TileEntityLectern extends TileEntityEnchantmentTable implements ITickable{
+public class TileEntityLectern extends TileEntityEnchantmentTable implements ITickable {
 	private ItemStack stack;
 	private ItemStack tooltipStack;
 	private boolean needsBook;
@@ -28,49 +28,55 @@ public class TileEntityLectern extends TileEntityEnchantmentTable implements ITi
 	public int particleAge;
 	public int particleMaxAge = 150;
 	private boolean increasing = true;
-	public TileEntityLectern(){
+
+	public TileEntityLectern() {
 	}
 
-	public void resetParticleAge(){
+	public void resetParticleAge() {
 		particleAge = 0;
 		increasing = true;
 	}
 
-	public ItemStack getTooltipStack(){
+	public ItemStack getTooltipStack() {
 		return tooltipStack;
 	}
 
-	public void setTooltipStack(ItemStack stack){
+	public void setTooltipStack(ItemStack stack) {
 		this.tooltipStack = stack;
 	}
 
 	@Override
-	public void update(){
-		if (worldObj.isRemote){
+	public void update() {
+		if (worldObj.isRemote) {
 			updateBookRender();
-			if (tooltipStack != null && tickCount % 2 == 0){
-				AMParticle particle = (AMParticle)ArsMagica2.proxy.particleManager.spawn(worldObj, "sparkle", pos.getX() + 0.5 + ((worldObj.rand.nextDouble() * 0.2) - 0.1), pos.getY() + 1, pos.getZ() + 0.5 + ((worldObj.rand.nextDouble() * 0.2) - 0.1));
-				if (particle != null){
-					particle.AddParticleController(new ParticleMoveOnHeading(particle, worldObj.rand.nextDouble() * 360, -45 - worldObj.rand.nextInt(90), 0.05f, 1, false));
-					particle.AddParticleController(new ParticleFadeOut(particle, 2, false).setFadeSpeed(0.05f).setKillParticleOnFinish(true));
+			if (tooltipStack != null && tickCount % 2 == 0) {
+				AMParticle particle = (AMParticle) ArsMagica2.proxy.particleManager.spawn(worldObj, "sparkle",
+						pos.getX() + 0.5 + ((worldObj.rand.nextDouble() * 0.2) - 0.1), pos.getY() + 1,
+						pos.getZ() + 0.5 + ((worldObj.rand.nextDouble() * 0.2) - 0.1));
+				if (particle != null) {
+					particle.AddParticleController(new ParticleMoveOnHeading(particle, worldObj.rand.nextDouble() * 360,
+							-45 - worldObj.rand.nextInt(90), 0.05f, 1, false));
+					particle.AddParticleController(
+							new ParticleFadeOut(particle, 2, false).setFadeSpeed(0.05f).setKillParticleOnFinish(true));
 					particle.setIgnoreMaxAge(true);
-					if (getOverpowered()){
+					if (getOverpowered()) {
 						particle.setRGBColorF(1.0f, 0.2f, 0.2f);
 					}
 				}
 			}
 		}
-		
-		worldObj.markAndNotifyBlock(pos, worldObj.getChunkFromBlockCoords(pos), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+
+		worldObj.markAndNotifyBlock(pos, worldObj.getChunkFromBlockCoords(pos), worldObj.getBlockState(pos),
+				worldObj.getBlockState(pos), 3);
 	}
 
 	private void updateBookRender() {
 		particleAge++;
-		if (increasing){
+		if (increasing) {
 			particleMaxAge += 2;
 			if (particleMaxAge - particleAge > 120)
 				increasing = false;
-		}else{
+		} else {
 			if (particleMaxAge - particleAge < 5)
 				increasing = true;
 		}
@@ -79,91 +85,92 @@ public class TileEntityLectern extends TileEntityEnchantmentTable implements ITi
 
 		this.bookSpread += 0.1F;
 
-		if (this.bookSpread < 0.5F || worldObj.rand.nextInt(40) == 0){
+		if (this.bookSpread < 0.5F || worldObj.rand.nextInt(40) == 0) {
 			float f1 = this.flipT;
 
-			do{
-				this.flipT += (float)(worldObj.rand.nextInt(4) - worldObj.rand.nextInt(4));
-			}
-			while (f1 == this.flipT);
+			do {
+				this.flipT += (float) (worldObj.rand.nextInt(4) - worldObj.rand.nextInt(4));
+			} while (f1 == this.flipT);
 		}
 
-		while (this.bookRotation >= (float)Math.PI){
-			this.bookRotation -= ((float)Math.PI * 2F);
+		while (this.bookRotation >= (float) Math.PI) {
+			this.bookRotation -= ((float) Math.PI * 2F);
 		}
 
-		while (this.bookRotation < -(float)Math.PI){
-			this.bookRotation += ((float)Math.PI * 2F);
+		while (this.bookRotation < -(float) Math.PI) {
+			this.bookRotation += ((float) Math.PI * 2F);
 		}
 
-		while (this.tRot >= (float)Math.PI){
-			this.tRot -= ((float)Math.PI * 2F);
+		while (this.tRot >= (float) Math.PI) {
+			this.tRot -= ((float) Math.PI * 2F);
 		}
 
-		while (this.tRot < -(float)Math.PI){
-			this.tRot += ((float)Math.PI * 2F);
+		while (this.tRot < -(float) Math.PI) {
+			this.tRot += ((float) Math.PI * 2F);
 		}
 
 		float f2;
 
-		for (f2 = this.tRot - this.bookRotation; f2 >= (float)Math.PI; f2 -= ((float)Math.PI * 2F));
+		for (f2 = this.tRot - this.bookRotation; f2 >= (float) Math.PI; f2 -= ((float) Math.PI * 2F))
+			;
 
-		while (f2 < -(float)Math.PI){
-			f2 += ((float)Math.PI * 2F);
+		while (f2 < -(float) Math.PI) {
+			f2 += ((float) Math.PI * 2F);
 		}
 
 		this.bookRotation += f2 * 0.4F;
 
-		if (this.bookSpread < 0.0F){
+		if (this.bookSpread < 0.0F) {
 			this.bookSpread = 0.0F;
 		}
 
-		if (this.bookSpread > 1.0F){
+		if (this.bookSpread > 1.0F) {
 			this.bookSpread = 1.0F;
 		}
 
 		++this.tickCount;
-        this.pageFlipPrev = this.pageFlip;
-        float f = (this.flipT - this.pageFlip) * 0.4F;
+		this.pageFlipPrev = this.pageFlip;
+		float f = (this.flipT - this.pageFlip) * 0.4F;
 		float f3 = 0.2F;
 		f = MathHelper.clamp_float(f, -f3, f3);
-        this.flipA += (f - this.flipA) * 0.9F;
-        this.pageFlip += this.flipA;
+		this.flipA += (f - this.flipA) * 0.9F;
+		this.pageFlip += this.flipA;
 	}
-	
-	public ItemStack getStack(){
+
+	public ItemStack getStack() {
 		return stack;
 	}
 
-	public boolean setStack(ItemStack stack){
-		if (stack == null || getValidItems().contains(stack.getItem())){
+	public boolean setStack(ItemStack stack) {
+		if (stack == null || getValidItems().contains(stack.getItem())) {
 			if (stack != null)
 				stack.stackSize = 1;
 			this.stack = stack;
-			if (!this.worldObj.isRemote){
+			if (!this.worldObj.isRemote) {
 				AMDataWriter writer = new AMDataWriter();
 				writer.add(pos.getX());
 				writer.add(pos.getY());
 				writer.add(pos.getZ());
-				if (stack == null){
+				if (stack == null) {
 					writer.add(false);
-				}else{
+				} else {
 					writer.add(true);
 					writer.add(stack);
 				}
-				AMNetHandler.INSTANCE.sendPacketToAllClientsNear(worldObj.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32, AMPacketIDs.LECTERN_DATA, writer.generate());
+				AMNetHandler.INSTANCE.sendPacketToAllClientsNear(worldObj.provider.getDimension(), pos.getX(),
+						pos.getY(), pos.getZ(), 32, AMPacketIDs.LECTERN_DATA, writer.generate());
 			}
 			return true;
 		}
 		return false;
 	}
 
-	public boolean hasStack(){
+	public boolean hasStack() {
 		return stack != null;
 	}
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket(){
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound compound = new NBTTagCompound();
 		writeToNBT(compound);
 		SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(pos, getBlockMetadata(), compound);
@@ -171,39 +178,40 @@ public class TileEntityLectern extends TileEntityEnchantmentTable implements ITi
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		this.readFromNBT(pkt.getNbtCompound());
 	}
 
-	private ArrayList<Item> getValidItems(){
+	private ArrayList<Item> getValidItems() {
 		ArrayList<Item> validItems = new ArrayList<Item>();
 
 		validItems.add(Items.WRITTEN_BOOK);
 		validItems.add(ItemDefs.arcaneCompendium);
 
-//		if (Loader.isModLoaded("Thaumcraft")){
-//			ItemStack item = thaumcraft.api.ItemApi.getItem("itemThaumonomicon", 0);
-//			if (item != null){
-//				validItems.add(item.getItem());
-//			}
-//		}
+		// if (Loader.isModLoaded("Thaumcraft")){
+		// ItemStack item = thaumcraft.api.ItemApi.getItem("itemThaumonomicon",
+		// 0);
+		// if (item != null){
+		// validItems.add(item.getItem());
+		// }
+		// }
 
 		return validItems;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound comp){
+	public void readFromNBT(NBTTagCompound comp) {
 		super.readFromNBT(comp);
-		if (comp.hasKey("placedBook")){
+		if (comp.hasKey("placedBook")) {
 			NBTTagCompound bewk = comp.getCompoundTag("placedBook");
 			stack = ItemStack.loadItemStackFromNBT(bewk);
 		}
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound comp){
+	public NBTTagCompound writeToNBT(NBTTagCompound comp) {
 		super.writeToNBT(comp);
-		if (stack != null){
+		if (stack != null) {
 			NBTTagCompound bewk = new NBTTagCompound();
 			stack.writeToNBT(bewk);
 			comp.setTag("placedBook", bewk);
@@ -211,19 +219,19 @@ public class TileEntityLectern extends TileEntityEnchantmentTable implements ITi
 		return comp;
 	}
 
-	public void setNeedsBook(boolean b){
+	public void setNeedsBook(boolean b) {
 		this.needsBook = b;
 	}
 
-	public boolean getNeedsBook(){
+	public boolean getNeedsBook() {
 		return this.needsBook;
 	}
 
-	public void setOverpowered(boolean b){
+	public void setOverpowered(boolean b) {
 		this.overPowered = b;
 	}
 
-	public boolean getOverpowered(){
+	public boolean getOverpowered() {
 		return this.overPowered;
 	}
 

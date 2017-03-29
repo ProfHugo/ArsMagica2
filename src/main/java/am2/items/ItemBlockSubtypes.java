@@ -10,7 +10,7 @@ public class ItemBlockSubtypes extends ItemBlock {
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
 	}
-	
+
 	@Override
 	public int getMetadata(int damage) {
 		return damage;

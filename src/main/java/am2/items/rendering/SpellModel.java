@@ -19,13 +19,13 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
 public class SpellModel implements IModel {
-	
+
 	private ImmutableList<ResourceLocation> textures;
 
 	public SpellModel(ImmutableList<ResourceLocation> textures) {
 		this.textures = textures;
 	}
-	
+
 	@Override
 	public Collection<ResourceLocation> getDependencies() {
 		return ImmutableList.of();
@@ -37,7 +37,8 @@ public class SpellModel implements IModel {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(IModelState state, VertexFormat format,
+			Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		ImmutableMap<TransformType, TRSRTransformation> map = IPerspectiveAwareModel.MapWrapper.getTransforms(state);
 		IBakedModel model = new ItemLayerModel(textures).bake(state, format, bakedTextureGetter);
 		return new SpellBakedModel(model, map);

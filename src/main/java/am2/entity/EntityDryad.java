@@ -23,9 +23,9 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityDryad extends EntityCreature{
+public class EntityDryad extends EntityCreature {
 
-	public EntityDryad(World par1World){
+	public EntityDryad(World par1World) {
 		super(par1World);
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
 		tasks.addTask(0, new EntityAISwimming(this));
@@ -35,38 +35,40 @@ public class EntityDryad extends EntityCreature{
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6F));
 		tasks.addTask(7, new EntityAILookIdle(this));
 	}
+
 	@Override
-	public boolean canTriggerWalking(){
+	public boolean canTriggerWalking() {
 		return false;
 	}
 
-
 	@Override
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound){
+	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeEntityToNBT(par1NBTTagCompound);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound){
+	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readEntityFromNBT(par1NBTTagCompound);
 	}
 
 	@Override
-	protected Item getDropItem(){
+	protected Item getDropItem() {
 		return null;
 	}
-	
+
 	@Override
-	public void onUpdate(){
+	public void onUpdate() {
 		World world = this.worldObj;
 		super.onUpdate();
-		if (!world.isRemote || world == null){
+		if (!world.isRemote || world == null) {
 			return;
 		}
-		if (worldObj.rand.nextInt(100) == 3){
-			AMParticle effect = (AMParticle)ArsMagica2.proxy.particleManager.spawn(world, "hr_sparkles_1", this.posX, this.posY + 2, this.posZ);
-			if (effect != null){
-				effect.AddParticleController(new ParticleOrbitEntity(effect, this, worldObj.rand.nextDouble() * 0.2 + 0.2, 1, false));
+		if (worldObj.rand.nextInt(100) == 3) {
+			AMParticle effect = (AMParticle) ArsMagica2.proxy.particleManager.spawn(world, "hr_sparkles_1", this.posX,
+					this.posY + 2, this.posZ);
+			if (effect != null) {
+				effect.AddParticleController(
+						new ParticleOrbitEntity(effect, this, worldObj.rand.nextDouble() * 0.2 + 0.2, 1, false));
 				effect.setIgnoreMaxAge(false);
 				effect.setRGBColorF(0.1f, 0.8f, 0.1f);
 			}
@@ -74,35 +76,37 @@ public class EntityDryad extends EntityCreature{
 	}
 
 	@Override
-	protected boolean canDespawn(){
+	protected boolean canDespawn() {
 		return ArsMagica2.config.canDraydsDespawn();
 	}
 
 	@Override
-	protected void dropFewItems(boolean par1, int par2){
+	protected void dropFewItems(boolean par1, int par2) {
 		int i = rand.nextInt(1);
 
-		for (int j = 0; j < i; j++){
-			this.entityDropItem(new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.EARTH)), 0.0f);
+		for (int j = 0; j < i; j++) {
+			this.entityDropItem(
+					new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.EARTH)), 0.0f);
 		}
 
 		i = rand.nextInt(10);
 
-		if (i == 3){
-			this.entityDropItem(new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.LIFE)), 0.0f);
+		if (i == 3) {
+			this.entityDropItem(
+					new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.LIFE)), 0.0f);
 		}
 	}
 
 	@Override
-	public void onDeath(DamageSource par1DamageSource){
-		if (par1DamageSource.getSourceOfDamage() instanceof EntityPlayer){
+	public void onDeath(DamageSource par1DamageSource) {
+		if (par1DamageSource.getSourceOfDamage() instanceof EntityPlayer) {
 			BossSpawnHelper.instance.onDryadKilled(this);
 		}
 		super.onDeath(par1DamageSource);
 	}
 
 	@Override
-	public boolean getCanSpawnHere(){
+	public boolean getCanSpawnHere() {
 		if (!SpawnBlacklists.entityCanSpawnHere(this.getPosition(), worldObj, this))
 			return false;
 		return super.getCanSpawnHere();

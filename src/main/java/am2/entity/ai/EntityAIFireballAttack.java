@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.world.World;
 
-public class EntityAIFireballAttack extends EntityAIBase{
+public class EntityAIFireballAttack extends EntityAIBase {
 	World worldObj;
 
 	/**
@@ -17,24 +17,26 @@ public class EntityAIFireballAttack extends EntityAIBase{
 	EntityLivingBase attackTarget;
 
 	/**
-	 * A decrementing tick that spawns a ranged attack once this value reaches 0. It is then set back to the
-	 * maxRangedAttackTime.
+	 * A decrementing tick that spawns a ranged attack once this value reaches
+	 * 0. It is then set back to the maxRangedAttackTime.
 	 */
 	int rangedAttackTime;
 	float field_48370_e;
 	int field_48367_f;
 
 	/**
-	 * The ID of this ranged attack AI. This chooses which entity is to be used as a ranged attack.
+	 * The ID of this ranged attack AI. This chooses which entity is to be used
+	 * as a ranged attack.
 	 */
 	int rangedAttackID;
 
 	/**
-	 * The maximum time the AI has to wait before peforming another ranged attack.
+	 * The maximum time the AI has to wait before peforming another ranged
+	 * attack.
 	 */
 	int maxRangedAttackTime;
 
-	public EntityAIFireballAttack(EntityCreature par1EntityLiving, float par2, int par3, int par4){
+	public EntityAIFireballAttack(EntityCreature par1EntityLiving, float par2, int par3, int par4) {
 		rangedAttackTime = 0;
 		field_48367_f = 0;
 		entityHost = par1EntityLiving;
@@ -49,14 +51,15 @@ public class EntityAIFireballAttack extends EntityAIBase{
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
 	@Override
-	public boolean shouldExecute(){
+	public boolean shouldExecute() {
 		EntityLivingBase entityliving = entityHost.getAttackTarget();
 
-		if (entityliving == null){
+		if (entityliving == null) {
 			return false;
-		}else{
+		} else {
 			attackTarget = entityliving;
-			if (this.entityHost.getDistanceSqToEntity(attackTarget) < 4) return false;
+			if (this.entityHost.getDistanceSqToEntity(attackTarget) < 4)
+				return false;
 			return true;
 		}
 	}
@@ -65,7 +68,7 @@ public class EntityAIFireballAttack extends EntityAIBase{
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	@Override
-	public boolean continueExecuting(){
+	public boolean continueExecuting() {
 		return shouldExecute() || !entityHost.getNavigator().noPath();
 	}
 
@@ -73,7 +76,7 @@ public class EntityAIFireballAttack extends EntityAIBase{
 	 * Resets the task
 	 */
 	@Override
-	public void resetTask(){
+	public void resetTask() {
 		attackTarget = null;
 	}
 
@@ -81,36 +84,37 @@ public class EntityAIFireballAttack extends EntityAIBase{
 	 * Updates the task
 	 */
 	@Override
-	public void updateTask(){
+	public void updateTask() {
 		double d = 225D;
-		double d1 = entityHost.getDistanceSq(attackTarget.posX, attackTarget.getEntityBoundingBox().minY, attackTarget.posZ);
+		double d1 = entityHost.getDistanceSq(attackTarget.posX, attackTarget.getEntityBoundingBox().minY,
+				attackTarget.posZ);
 		boolean flag = entityHost.getEntitySenses().canSee(attackTarget);
 
-		if (flag){
+		if (flag) {
 			field_48367_f++;
-		}else{
+		} else {
 			field_48367_f = 0;
 		}
 
-		if (d1 > d || field_48367_f > 20){
-			if (!entityHost.getNavigator().tryMoveToEntityLiving(attackTarget, field_48370_e)){
+		if (d1 > d || field_48367_f > 20) {
+			if (!entityHost.getNavigator().tryMoveToEntityLiving(attackTarget, field_48370_e)) {
 				entityHost.getNavigator().clearPathEntity();
 				entityHost.setAttackTarget(null);
 			}
-		}else{
+		} else {
 			entityHost.getNavigator().clearPathEntity();
 		}
 
 		entityHost.getLookHelper().setLookPositionWithEntity(attackTarget, 30F, 30F);
 		rangedAttackTime = Math.max(rangedAttackTime - 1, 0);
 
-		if (rangedAttackTime > 0){
+		if (rangedAttackTime > 0) {
 			return;
 		}
 
-		if (d1 > d || !flag){
+		if (d1 > d || !flag) {
 			return;
-		}else{
+		} else {
 			doRangedAttack();
 			rangedAttackTime = maxRangedAttackTime;
 			return;
@@ -120,7 +124,8 @@ public class EntityAIFireballAttack extends EntityAIBase{
 	/**
 	 * Performs a ranged attack according to the AI's rangedAttackID.
 	 */
-	private void doRangedAttack(){
-		SpellUtils.applyStackStage(NPCSpells.instance.fireBolt, entityHost, null, entityHost.posX, entityHost.posY, entityHost.posZ, null, worldObj, false, false, 0);
+	private void doRangedAttack() {
+		SpellUtils.applyStackStage(NPCSpells.instance.fireBolt, entityHost, null, entityHost.posX, entityHost.posY,
+				entityHost.posZ, null, worldObj, false, false, 0);
 	}
 }

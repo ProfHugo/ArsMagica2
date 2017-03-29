@@ -22,10 +22,10 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.TRSRTransformation;
 
 public class TileCelestialPrismRenderer extends TileEntitySpecialRenderer<TileEntityCelestialPrism> {
-	
+
 	IModel model;
 	IBakedModel bakedModel;
-	
+
 	private IBakedModel getBakedModel() {
 		try {
 			model = ModelLoaderRegistry.getModel(new ResourceLocation("arsmagica2", "block/celestial_prism.obj"));
@@ -36,9 +36,10 @@ public class TileCelestialPrismRenderer extends TileEntitySpecialRenderer<TileEn
 				location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString()));
 		return bakedModel;
 	}
-	
+
 	@Override
-	public void renderTileEntityAt(TileEntityCelestialPrism te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void renderTileEntityAt(TileEntityCelestialPrism te, double x, double y, double z, float partialTicks,
+			int destroyStage) {
 		GlStateManager.pushAttrib();
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
@@ -66,9 +67,13 @@ public class TileCelestialPrismRenderer extends TileEntitySpecialRenderer<TileEn
 		Tessellator tessellator = Tessellator.getInstance();
 		tessellator.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 		if (x != 0 || y != 0 || z != 0) {
-			Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(te.getWorld(), getBakedModel(), te.getWorld().getBlockState(te.getPos()), te.getPos(), tessellator.getBuffer(), false);
+			Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(te.getWorld(),
+					getBakedModel(), te.getWorld().getBlockState(te.getPos()), te.getPos(), tessellator.getBuffer(),
+					false);
 		} else {
-			Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(Minecraft.getMinecraft().theWorld, getBakedModel(), BlockDefs.celestialPrism.getDefaultState(), BlockPos.ORIGIN, tessellator.getBuffer(), false);
+			Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(
+					Minecraft.getMinecraft().theWorld, getBakedModel(), BlockDefs.celestialPrism.getDefaultState(),
+					BlockPos.ORIGIN, tessellator.getBuffer(), false);
 		}
 		tessellator.draw();
 		RenderHelper.enableStandardItemLighting();

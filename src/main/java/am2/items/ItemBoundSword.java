@@ -24,11 +24,13 @@ public class ItemBoundSword extends ItemSword implements IBoundItem {
 		if (!stack.hasTagCompound())
 			return true;
 		ItemStack copiedStack = SpellUtils.merge(stack.copy());
-		copiedStack.getTagCompound().getCompoundTag("AM2").setInteger("CurrentGroup", SpellUtils.currentStage(stack) + 1);
+		copiedStack.getTagCompound().getCompoundTag("AM2").setInteger("CurrentGroup",
+				SpellUtils.currentStage(stack) + 1);
 		copiedStack.setItem(ItemDefs.spell);
 		int hurtResist = target.hurtResistantTime;
 		target.hurtResistantTime = 0;
-		SpellUtils.applyStackStage(copiedStack, attacker, target, target.posX, target.posY, target.posZ, null, attacker.worldObj, true, true, 0);
+		SpellUtils.applyStackStage(copiedStack, attacker, target, target.posX, target.posY, target.posZ, null,
+				attacker.worldObj, true, true, 0);
 		target.hurtResistantTime = hurtResist;
 		return true;
 	}

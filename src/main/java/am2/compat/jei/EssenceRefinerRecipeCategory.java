@@ -14,9 +14,10 @@ import net.minecraft.util.text.translation.I18n;
 public class EssenceRefinerRecipeCategory implements IRecipeCategory<EssenceRefinerRecipeWrapper> {
 
 	IDrawableStatic background;
-	
+
 	public EssenceRefinerRecipeCategory(IGuiHelper helpers) {
-		this.background = helpers.createDrawable(new ResourceLocation("arsmagica2:textures/gui/essenceExtractorGui.png"), 3, 25, 170, 114);
+		this.background = helpers.createDrawable(
+				new ResourceLocation("arsmagica2:textures/gui/essenceExtractorGui.png"), 3, 25, 170, 114);
 	}
 
 	@Override
@@ -28,7 +29,7 @@ public class EssenceRefinerRecipeCategory implements IRecipeCategory<EssenceRefi
 	public String getUid() {
 		return "am2.essence_refiner";
 	}
-	
+
 	@Override
 	public IDrawable getBackground() {
 		return background;
@@ -36,12 +37,12 @@ public class EssenceRefinerRecipeCategory implements IRecipeCategory<EssenceRefi
 
 	@Override
 	public void drawExtras(Minecraft minecraft) {
-		
+
 	}
 
 	@Override
 	public void drawAnimations(Minecraft minecraft) {
-		
+
 	}
 
 	@Override
@@ -52,13 +53,13 @@ public class EssenceRefinerRecipeCategory implements IRecipeCategory<EssenceRefi
 		recipeLayout.getItemStacks().init(3, true, 108, 48);
 		recipeLayout.getItemStacks().init(4, true, 76, 81);
 		recipeLayout.getItemStacks().init(5, false, 139, 84);
-		
-		recipeLayout.getItemStacks().set(0, (ItemStack)recipeWrapper.getInputs().get(0));
-		recipeLayout.getItemStacks().set(1, (ItemStack)recipeWrapper.getInputs().get(1));
-		recipeLayout.getItemStacks().set(2, (ItemStack)recipeWrapper.getInputs().get(2));
-		recipeLayout.getItemStacks().set(3, (ItemStack)recipeWrapper.getInputs().get(3));
-		recipeLayout.getItemStacks().set(4, (ItemStack)recipeWrapper.getInputs().get(4));
-		recipeLayout.getItemStacks().set(5, (ItemStack)recipeWrapper.getOutputs().get(0));
+
+		recipeLayout.getItemStacks().set(0, (ItemStack) recipeWrapper.getInputs().get(0));
+		recipeLayout.getItemStacks().set(1, (ItemStack) recipeWrapper.getInputs().get(1));
+		recipeLayout.getItemStacks().set(2, (ItemStack) recipeWrapper.getInputs().get(2));
+		recipeLayout.getItemStacks().set(3, (ItemStack) recipeWrapper.getInputs().get(3));
+		recipeLayout.getItemStacks().set(4, (ItemStack) recipeWrapper.getInputs().get(4));
+		recipeLayout.getItemStacks().set(5, (ItemStack) recipeWrapper.getOutputs().get(0));
 	}
 
 }

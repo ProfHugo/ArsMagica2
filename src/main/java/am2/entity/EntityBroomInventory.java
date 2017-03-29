@@ -9,105 +9,105 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.util.Constants;
 
-public class EntityBroomInventory implements IInventory{
+public class EntityBroomInventory implements IInventory {
 
 	private ItemStack[] inventory;
 
-	public EntityBroomInventory(){
+	public EntityBroomInventory() {
 		inventory = new ItemStack[getSizeInventory()];
 	}
 
 	@Override
-	public int getSizeInventory(){
+	public int getSizeInventory() {
 		return 10;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i){
+	public ItemStack getStackInSlot(int i) {
 		if (i >= inventory.length)
 			return null;
 		return inventory[i];
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j){
-		if (inventory[i] != null){
-			if (inventory[i].stackSize <= j){
+	public ItemStack decrStackSize(int i, int j) {
+		if (inventory[i] != null) {
+			if (inventory[i].stackSize <= j) {
 				ItemStack itemstack = inventory[i];
 				inventory[i] = null;
 				return itemstack;
 			}
 			ItemStack itemstack1 = inventory[i].splitStack(j);
-			if (inventory[i].stackSize == 0){
+			if (inventory[i].stackSize == 0) {
 				inventory[i] = null;
 			}
 			return itemstack1;
-		}else{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int i){
-		if (inventory[i] != null){
+	public ItemStack removeStackFromSlot(int i) {
+		if (inventory[i] != null) {
 			ItemStack itemstack = inventory[i];
 			inventory[i] = null;
 			return itemstack;
-		}else{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack){
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		inventory[i] = itemstack;
-		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()){
+		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
 	}
 
 	@Override
-	public String getName(){
+	public String getName() {
 		return "DaBroom";
 	}
 
 	@Override
-	public boolean hasCustomName(){
+	public boolean hasCustomName() {
 		return false;
 	}
 
 	@Override
-	public int getInventoryStackLimit(){
+	public int getInventoryStackLimit() {
 		return 64;
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer){
+	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 		return false;
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player){
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player){
+	public void closeInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack){
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
 
-	public void saveBroomInventory(NBTTagCompound compound){
+	public void saveBroomInventory(NBTTagCompound compound) {
 		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < inventory.length; i++){
-			if (inventory[i] != null){
+		for (int i = 0; i < inventory.length; i++) {
+			if (inventory[i] != null) {
 				String tag = String.format("ArrayIndex", i);
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte(tag, (byte)i);
+				nbttagcompound1.setByte(tag, (byte) i);
 				inventory[i].writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}
@@ -117,21 +117,21 @@ public class EntityBroomInventory implements IInventory{
 
 	}
 
-	public void loadBroomInventory(NBTTagCompound compound){
+	public void loadBroomInventory(NBTTagCompound compound) {
 		NBTTagList nbttaglist = compound.getTagList("DaBroomInventory", Constants.NBT.TAG_COMPOUND);
 		inventory = new ItemStack[getSizeInventory()];
-		for (int i = 0; i < nbttaglist.tagCount(); i++){
+		for (int i = 0; i < nbttaglist.tagCount(); i++) {
 			String tag = String.format("ArrayIndex", i);
-			NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.getCompoundTagAt(i);
+			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.getCompoundTagAt(i);
 			byte byte0 = nbttagcompound1.getByte(tag);
-			if (byte0 >= 0 && byte0 < inventory.length){
+			if (byte0 >= 0 && byte0 < inventory.length) {
 				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 			}
 		}
 	}
 
 	@Override
-	public void markDirty(){
+	public void markDirty() {
 	}
 
 	@Override
@@ -148,7 +148,7 @@ public class EntityBroomInventory implements IInventory{
 	@Override
 	public void setField(int id, int value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -160,8 +160,7 @@ public class EntityBroomInventory implements IInventory{
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 }

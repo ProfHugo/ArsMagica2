@@ -8,25 +8,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 
 @SuppressWarnings("deprecation")
-public class ItemInscriptionTableUpgrade extends ItemArsMagica{
+public class ItemInscriptionTableUpgrade extends ItemArsMagica {
 
-	public ItemInscriptionTableUpgrade(){
+	public ItemInscriptionTableUpgrade() {
 		super();
 		setMaxDamage(0);
 		setMaxStackSize(1);
 		this.setHasSubtypes(true);
 	}
+
 	@Override
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List){
-		for (int i = 0; i < 3; ++i){
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
+		for (int i = 0; i < 3; ++i) {
 			par3List.add(new ItemStack(this, 1, i));
 		}
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack stack){
+	public String getItemStackDisplayName(ItemStack stack) {
 		int meta = stack.getItemDamage();
-		switch (meta){
+		switch (meta) {
 		case 2:
 			return I18n.translateToLocal("item.arsmagica2:inscup_3.name");
 		case 1:

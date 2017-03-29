@@ -16,64 +16,78 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.math.Vec3d;
 
 public class NBTUtils {
-	
-	public static NBTTagCompound getAM2Tag (NBTTagCompound baseTag) {
+
+	public static NBTTagCompound getAM2Tag(NBTTagCompound baseTag) {
 		return addTag(baseTag, "AM2");
 	}
-	
-	public static NBTTagCompound getEssenceTag (NBTTagCompound baseTag) {
+
+	public static NBTTagCompound getEssenceTag(NBTTagCompound baseTag) {
 		return addTag(getAM2Tag(baseTag), "Essence");
 	}
-	
+
 	public static void writeVecToNBT(Vec3d vec, NBTTagCompound nbt) {
 		nbt.setDouble("X", vec.xCoord);
 		nbt.setDouble("Y", vec.yCoord);
 		nbt.setDouble("Z", vec.zCoord);
 	}
-	
+
 	public static Vec3d readVecFromNBT(NBTTagCompound nbt) {
 		Vec3d vec = new Vec3d(nbt.getDouble("X"), nbt.getDouble("Y"), nbt.getDouble("Z"));
-		//LogHelper.info(vec);
+		// LogHelper.info(vec);
 		return vec;
 	}
-	
-	public static Object getValueAt (NBTTagCompound baseTag, String tagName) {
+
+	public static Object getValueAt(NBTTagCompound baseTag, String tagName) {
 		NBTBase base = baseTag.getTag(tagName);
 		switch (base.getId()) {
-		case 0: return null;
-		case 1: return ((NBTTagByte)base).getByte();
-		case 2: return ((NBTTagShort)base).getShort();
-		case 3: return ((NBTTagInt)base).getInt();
-		case 4: return ((NBTTagLong)base).getLong();
-		case 5: return ((NBTTagFloat)base).getFloat();
-		case 6: return ((NBTTagDouble)base).getDouble();
-		case 7: return ((NBTTagByteArray)base).getByteArray();
-		case 8: return ((NBTTagString)base).getString();
-		case 9: return ((NBTTagCompound)base);
-		case 10: return ((NBTTagIntArray)base).getIntArray();
+		case 0:
+			return null;
+		case 1:
+			return ((NBTTagByte) base).getByte();
+		case 2:
+			return ((NBTTagShort) base).getShort();
+		case 3:
+			return ((NBTTagInt) base).getInt();
+		case 4:
+			return ((NBTTagLong) base).getLong();
+		case 5:
+			return ((NBTTagFloat) base).getFloat();
+		case 6:
+			return ((NBTTagDouble) base).getDouble();
+		case 7:
+			return ((NBTTagByteArray) base).getByteArray();
+		case 8:
+			return ((NBTTagString) base).getString();
+		case 9:
+			return ((NBTTagCompound) base);
+		case 10:
+			return ((NBTTagIntArray) base).getIntArray();
 		default:
 			return null;
 		}
 	}
-	
-	public static NBTTagCompound addTag (NBTTagCompound upper, String name) {
-		if (upper == null) throw new IllegalStateException("Base Tag must exist");
+
+	public static NBTTagCompound addTag(NBTTagCompound upper, String name) {
+		if (upper == null)
+			throw new IllegalStateException("Base Tag must exist");
 		NBTTagCompound newTag = new NBTTagCompound();
 		if (upper.getCompoundTag(name) != null) {
 			newTag = upper.getCompoundTag(name);
 		}
 		upper.setTag(name, newTag);
-		return newTag;		
+		return newTag;
 	}
-	
-	public static NBTTagCompound addTag (NBTTagCompound upper, NBTTagCompound compound, String name) {
-		if (upper == null) throw new IllegalStateException("Base Tag must exist");
+
+	public static NBTTagCompound addTag(NBTTagCompound upper, NBTTagCompound compound, String name) {
+		if (upper == null)
+			throw new IllegalStateException("Base Tag must exist");
 		upper.setTag(name, compound);
-		return upper;		
+		return upper;
 	}
-	
-	public static NBTTagList addList (NBTTagCompound upper, int type, String name) {
-		if (upper == null) throw new IllegalStateException("Base Tag must exist");
+
+	public static NBTTagList addList(NBTTagCompound upper, int type, String name) {
+		if (upper == null)
+			throw new IllegalStateException("Base Tag must exist");
 		NBTTagList newTag = new NBTTagList();
 		if (upper.getTagList(name, type) != null) {
 			newTag = upper.getTagList(name, type);
@@ -81,23 +95,26 @@ public class NBTUtils {
 		upper.setTag(name, newTag);
 		return newTag;
 	}
-	
+
 	public static NBTTagList addCompoundList(NBTTagCompound upper, String name) {
 		return addList(upper, 10, name);
 	}
-	
+
 	public static boolean contains(NBTTagCompound container, NBTTagCompound check) {
-		if (container == null) return true;
-		if (check == null) return false;
+		if (container == null)
+			return true;
+		if (check == null)
+			return false;
 		boolean match = true;
 		for (String key : container.getKeySet()) {
 			NBTBase tag = container.getTag(key);
 			NBTBase checkTag = check.getTag(key);
 			if (tag == null)
 				continue;
-			if (checkTag == null) return false;
+			if (checkTag == null)
+				return false;
 			if (tag instanceof NBTTagCompound && checkTag instanceof NBTTagCompound)
-				match &= contains((NBTTagCompound)tag, (NBTTagCompound) checkTag);
+				match &= contains((NBTTagCompound) tag, (NBTTagCompound) checkTag);
 			else
 				match &= tag.equals(checkTag);
 			if (!match)

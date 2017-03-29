@@ -1,9 +1,10 @@
 package am2.blocks;
 
 public class BlockWitchwoodSlabsDouble extends BlockWitchwoodSlabs {
-	
-	public BlockWitchwoodSlabsDouble() {}
-	
+
+	public BlockWitchwoodSlabsDouble() {
+	}
+
 	@Override
 	public boolean isDouble() {
 		return true;

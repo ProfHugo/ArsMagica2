@@ -16,7 +16,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
-public class EntityAISummonAllies extends EntityAIBase{
+public class EntityAISummonAllies extends EntityAIBase {
 	private final EntityLifeGuardian host;
 	private int cooldownTicks = 0;
 	private boolean hasCasted = false;
@@ -24,54 +24,58 @@ public class EntityAISummonAllies extends EntityAIBase{
 	private Class<? extends EntityCreature>[] mobs;
 
 	@SafeVarargs
-	public EntityAISummonAllies(EntityLifeGuardian host, Class<? extends EntityCreature>... summons){
+	public EntityAISummonAllies(EntityLifeGuardian host, Class<? extends EntityCreature>... summons) {
 		this.host = host;
 		this.setMutexBits(1);
 		mobs = summons;
 	}
 
 	@Override
-	public boolean shouldExecute(){
+	public boolean shouldExecute() {
 		cooldownTicks--;
-		boolean execute = ((IArsMagicaBoss)host).getCurrentAction() != BossActions.CASTING && cooldownTicks <= 0;
-		if (execute) hasCasted = false;
+		boolean execute = ((IArsMagicaBoss) host).getCurrentAction() != BossActions.CASTING && cooldownTicks <= 0;
+		if (execute)
+			hasCasted = false;
 		return execute;
 	}
 
 	@Override
-	public boolean continueExecuting(){
+	public boolean continueExecuting() {
 		return !hasCasted;
 	}
 
 	@Override
-	public void resetTask(){
-		((IArsMagicaBoss)host).setCurrentAction(BossActions.IDLE);
+	public void resetTask() {
+		((IArsMagicaBoss) host).setCurrentAction(BossActions.IDLE);
 		cooldownTicks = 200;
 		hasCasted = true;
 		actionTicks = 0;
 	}
 
 	@Override
-	public void updateTask(){
-		if (((IArsMagicaBoss)host).getCurrentAction() != BossActions.CASTING)
-			((IArsMagicaBoss)host).setCurrentAction(BossActions.CASTING);
+	public void updateTask() {
+		if (((IArsMagicaBoss) host).getCurrentAction() != BossActions.CASTING)
+			((IArsMagicaBoss) host).setCurrentAction(BossActions.CASTING);
 
 		actionTicks++;
-		if (actionTicks == 16){
+		if (actionTicks == 16) {
 			if (!host.worldObj.isRemote)
-				host.worldObj.playSound(host.posX, host.posY, host.posZ, AMSounds.LIFE_GUARDIAN_SUMMON, SoundCategory.HOSTILE, 1.0f, host.getRNG().nextFloat() * 0.5f + 0.5f, false);
+				host.worldObj.playSound(host.posX, host.posY, host.posZ, AMSounds.LIFE_GUARDIAN_SUMMON,
+						SoundCategory.HOSTILE, 1.0f, host.getRNG().nextFloat() * 0.5f + 0.5f, false);
 			int numAllies = 3;
-			for (int i = 0; i < numAllies; ++i){
+			for (int i = 0; i < numAllies; ++i) {
 				Class<? extends EntityCreature> summon = mobs[host.worldObj.rand.nextInt(mobs.length)];
-				try{
+				try {
 					Constructor<? extends EntityCreature> ctor = summon.getConstructor(World.class);
-					EntityCreature mob = (EntityCreature)ctor.newInstance(host.worldObj);
-					mob.setPosition(host.posX + host.worldObj.rand.nextDouble() * 2 - 1, host.posY, host.posZ + host.worldObj.rand.nextDouble() * 2 - 1);
+					EntityCreature mob = (EntityCreature) ctor.newInstance(host.worldObj);
+					mob.setPosition(host.posX + host.worldObj.rand.nextDouble() * 2 - 1, host.posY,
+							host.posZ + host.worldObj.rand.nextDouble() * 2 - 1);
 					mob.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("speed"), 99999, 1));
 					mob.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("strength"), 99999, 1));
-					mob.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("regeneration"), 99999, 1));
+					mob.addPotionEffect(
+							new PotionEffect(Potion.getPotionFromResourceLocation("regeneration"), 99999, 1));
 					mob.addPotionEffect(new BuffEffectMagicShield(99999, 1));
-					if (host.getHealth() < host.getMaxHealth() / 2){
+					if (host.getHealth() < host.getMaxHealth() / 2) {
 						mob.addPotionEffect(new BuffEffectShrink(99999, 1));
 					}
 					EntityUtils.makeSummon_MonsterFaction(mob, false);
@@ -80,13 +84,13 @@ public class EntityAISummonAllies extends EntityAIBase{
 					host.worldObj.spawnEntityInWorld(mob);
 
 					host.queued_minions.add(mob);
-				}catch (Throwable e){
+				} catch (Throwable e) {
 					e.printStackTrace();
 					return;
 				}
 			}
 		}
-		if (actionTicks >= 23){
+		if (actionTicks >= 23) {
 			resetTask();
 		}
 	}

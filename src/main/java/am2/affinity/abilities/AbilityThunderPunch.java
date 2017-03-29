@@ -22,11 +22,12 @@ public class AbilityThunderPunch extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.LIGHTNING;
 	}
-	
+
 	@Override
 	public void applyHurt(EntityPlayer player, LivingHurtEvent event, boolean isAttacker) {
 		if (isAttacker && !player.worldObj.isRemote && player.getHeldItemMainhand() == null) {
-			player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, false));
-		} 
+			player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, event.getEntityLiving().posX,
+					event.getEntityLiving().posY, event.getEntityLiving().posZ, false));
+		}
 	}
 }

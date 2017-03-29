@@ -21,7 +21,7 @@ public class AbilityMagicWeakness extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.ARCANE;
 	}
-	
+
 	@Override
 	public void applyHurt(EntityPlayer player, LivingHurtEvent event, boolean isAttacker) {
 		if (!isAttacker) {

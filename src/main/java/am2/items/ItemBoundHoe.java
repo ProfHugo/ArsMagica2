@@ -19,16 +19,18 @@ public class ItemBoundHoe extends ItemHoe implements IBoundItem {
 		this.setMaxDamage(0);
 		this.setCreativeTab(null);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		if (!stack.hasTagCompound())
 			return stack;
 		ItemStack copiedStack = SpellUtils.merge(stack.copy());
-		copiedStack.getTagCompound().getCompoundTag("AM2").setInteger("CurrentGroup", SpellUtils.currentStage(stack) + 1);
+		copiedStack.getTagCompound().getCompoundTag("AM2").setInteger("CurrentGroup",
+				SpellUtils.currentStage(stack) + 1);
 		copiedStack.setItem(ItemDefs.spell);
-		SpellUtils.applyStackStage(copiedStack, entityLiving, null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, null, worldIn, true, true, 0);
+		SpellUtils.applyStackStage(copiedStack, entityLiving, null, entityLiving.posX, entityLiving.posY,
+				entityLiving.posZ, null, worldIn, true, true, 0);
 		return stack;
 	}
 

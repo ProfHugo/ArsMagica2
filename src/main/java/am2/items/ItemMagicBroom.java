@@ -13,19 +13,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class ItemMagicBroom extends ItemArsMagica{
+public class ItemMagicBroom extends ItemArsMagica {
 
-	public ItemMagicBroom(){
+	public ItemMagicBroom() {
 		super();
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand){
-		if (!world.isRemote){
+	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos,
+			EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+		if (!world.isRemote) {
 			RayTraceResult mop = this.rayTrace(world, player, true);
-			if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK){
+			if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
 				TileEntity te = world.getTileEntity(mop.getBlockPos());
-				if (te instanceof IInventory){
+				if (te instanceof IInventory) {
 					EntityBroom broom = new EntityBroom(world);
 					broom.setPosition(player.posX, player.posY, player.posZ);
 					broom.setChestLocation(new AMVector3(mop.getBlockPos()));
@@ -33,7 +34,7 @@ public class ItemMagicBroom extends ItemArsMagica{
 
 					stack.stackSize--;
 
-					if (stack.stackSize == 0){
+					if (stack.stackSize == 0) {
 						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
 					}
 					return EnumActionResult.SUCCESS;

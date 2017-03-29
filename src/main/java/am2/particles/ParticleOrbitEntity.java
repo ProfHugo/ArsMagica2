@@ -4,10 +4,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public final class ParticleOrbitEntity extends ParticleController{
+public final class ParticleOrbitEntity extends ParticleController {
 
 	private final Entity target;
-//	private double distance;
+	// private double distance;
 	private final boolean rotateClockwise;
 	private double targetY;
 	private double curYOffset;
@@ -17,7 +17,8 @@ public final class ParticleOrbitEntity extends ParticleController{
 	private double orbitY = -512;
 	private boolean ignoreYCoordinate = false;
 
-	public ParticleOrbitEntity(AMParticle particleEffect, Entity orbitTarget, double orbitSpeed, int priority, boolean exclusive){
+	public ParticleOrbitEntity(AMParticle particleEffect, Entity orbitTarget, double orbitSpeed, int priority,
+			boolean exclusive) {
 		super(particleEffect, priority, exclusive);
 		target = orbitTarget;
 		orbitAngle = particle.getWorldObj().rand.nextInt(360);
@@ -27,40 +28,40 @@ public final class ParticleOrbitEntity extends ParticleController{
 		this.orbitSpeed = orbitSpeed;
 	}
 
-	public ParticleOrbitEntity setOrbitY(double orbitY){
+	public ParticleOrbitEntity setOrbitY(double orbitY) {
 		this.orbitY = orbitY;
 		return this;
 	}
 
-	public ParticleOrbitEntity SetTargetDistance(double targetDistance){
+	public ParticleOrbitEntity SetTargetDistance(double targetDistance) {
 		this.targetDistance = targetDistance;
 		return this;
 	}
 
-	private void generateNewTargetY(){
-		if (target != null){
+	private void generateNewTargetY() {
+		if (target != null) {
 			targetY = particle.getWorldObj().rand.nextDouble() * target.height;
-		}else{
+		} else {
 			targetY = 0;
 		}
 	}
 
-//	private void generateNewDistance(){
-//		if (target != null){
-//			targetDistance = particle.getWorldObj().rand.nextDouble() * 2;
-//		}else{
-//			targetDistance = 0;
-//		}
-//	}
+	// private void generateNewDistance(){
+	// if (target != null){
+	// targetDistance = particle.getWorldObj().rand.nextDouble() * 2;
+	// }else{
+	// targetDistance = 0;
+	// }
+	// }
 
 	@Override
-	public void doUpdate(){
+	public void doUpdate() {
 
-		if (firstTick){
+		if (firstTick) {
 			curYOffset = particle.getPosY() - (target.posY + target.getEyeHeight());
 		}
 
-		if (target == null || target.isDead){
+		if (target == null || target.isDead) {
 			this.finish();
 			return;
 		}
@@ -69,34 +70,34 @@ public final class ParticleOrbitEntity extends ParticleController{
 		double posZ;
 		double posY = particle.getPosY();
 
-		if (Math.abs(targetY - curYOffset) < 0.1){
+		if (Math.abs(targetY - curYOffset) < 0.1) {
 			generateNewTargetY();
 		}
 
 		posX = target.posX + (Math.cos(orbitAngle) * targetDistance);
 		posZ = target.posZ + (Math.sin(orbitAngle) * targetDistance);
 
-		if (targetY < curYOffset){
+		if (targetY < curYOffset) {
 			curYOffset -= orbitSpeed / 4;
-		}else if (targetY > curYOffset){
+		} else if (targetY > curYOffset) {
 			curYOffset += orbitSpeed / 4;
 		}
 
-		if (rotateClockwise){
+		if (rotateClockwise) {
 			orbitAngle += orbitSpeed;
-		}else{
+		} else {
 			orbitAngle -= orbitSpeed;
 		}
-		if (orbitAngle > 360){
+		if (orbitAngle > 360) {
 			orbitAngle -= 360;
-		}else if (orbitAngle < 0){
+		} else if (orbitAngle < 0) {
 			orbitAngle += 360;
 		}
 
-		if (!ignoreYCoordinate){
-			if (orbitY != -512){
+		if (!ignoreYCoordinate) {
+			if (orbitY != -512) {
 				posY = (target.posY + target.getEyeHeight()) + orbitY;
-			}else{
+			} else {
 				int offset = 0;
 				if (target instanceof EntityPlayer && !(target instanceof EntityPlayerMP))
 					offset += 2 * target.height;
@@ -105,22 +106,23 @@ public final class ParticleOrbitEntity extends ParticleController{
 		}
 
 		particle.setPosition(posX, posY, posZ);
-		if (firstTick){
+		if (firstTick) {
 			particle.setPrevPos(posX, posY, posZ);
 		}
 	}
 
 	@Override
-	public ParticleController clone(){
-		ParticleOrbitEntity clone = new ParticleOrbitEntity(particle, target, orbitSpeed, priority, rotateClockwise).SetTargetDistance(targetDistance);
-		if (orbitY != -512){
+	public ParticleController clone() {
+		ParticleOrbitEntity clone = new ParticleOrbitEntity(particle, target, orbitSpeed, priority, rotateClockwise)
+				.SetTargetDistance(targetDistance);
+		if (orbitY != -512) {
 			clone.setOrbitY(orbitY);
 		}
 		clone.setIgnoreYCoordinate(ignoreYCoordinate);
 		return clone;
 	}
 
-	public ParticleOrbitEntity setIgnoreYCoordinate(boolean b){
+	public ParticleOrbitEntity setIgnoreYCoordinate(boolean b) {
 		ignoreYCoordinate = b;
 		return this;
 	}

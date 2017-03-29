@@ -9,7 +9,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 
 @JEIPlugin
-public class JEIHandler implements IModPlugin{
+public class JEIHandler implements IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
@@ -20,7 +20,7 @@ public class JEIHandler implements IModPlugin{
 
 	@Override
 	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-		
+
 	}
 
 }

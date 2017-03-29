@@ -20,69 +20,71 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
-public class BlockFlickerHabitat extends BlockAMPowered{
+public class BlockFlickerHabitat extends BlockAMPowered {
 
-	public BlockFlickerHabitat(){
+	public BlockFlickerHabitat() {
 		super(Material.ROCK);
 		setHardness(2);
 		setResistance(3);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int i){
+	public TileEntity createNewTileEntity(World world, int i) {
 		return new TileEntityFlickerHabitat();
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ){
+			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
 
-		if (heldItem != null && heldItem.getItem() == ItemDefs.crystalWrench){
-			if (worldIn.isRemote){
+		if (heldItem != null && heldItem.getItem() == ItemDefs.crystalWrench) {
+			if (worldIn.isRemote) {
 				playerIn.swingArm(hand);
 			}
 			return false;
-		}else{
-			FMLNetworkHandler.openGui(playerIn, ArsMagica2.instance, IDDefs.GUI_FLICKER_HABITAT, worldIn, pos.getX(), pos.getY(), pos.getZ());
+		} else {
+			FMLNetworkHandler.openGui(playerIn, ArsMagica2.instance, IDDefs.GUI_FLICKER_HABITAT, worldIn, pos.getX(),
+					pos.getY(), pos.getZ());
 			return true;
 		}
 	}
-	
+
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+			ItemStack stack) {
 		setBlockMode(worldIn, pos);
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 	}
-	
+
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
 		setBlockMode(worldIn, pos);
 		super.onBlockAdded(worldIn, pos, state);
 	}
 
-	protected void setBlockMode(World world, BlockPos pos){
+	protected void setBlockMode(World world, BlockPos pos) {
 		if (world.isRemote)
 			return;
 
 		TileEntity ent = world.getTileEntity(pos);
 		int habCount = 0;
 
-		if (ent instanceof TileEntityFlickerHabitat){
-			TileEntityFlickerHabitat hab = (TileEntityFlickerHabitat)ent;
-			for (EnumFacing direction : EnumFacing.values()){
+		if (ent instanceof TileEntityFlickerHabitat) {
+			TileEntityFlickerHabitat hab = (TileEntityFlickerHabitat) ent;
+			for (EnumFacing direction : EnumFacing.values()) {
 				Block block = world.getBlockState(pos.offset(direction)).getBlock();
 				TileEntity te = world.getTileEntity(pos.offset(direction));
-				if (block == BlockDefs.elementalAttuner && te != null && te instanceof TileEntityFlickerHabitat){
-					TileEntityFlickerHabitat foundHab = (TileEntityFlickerHabitat)te;
-					if (foundHab.isUpgrade() == false){
+				if (block == BlockDefs.elementalAttuner && te != null && te instanceof TileEntityFlickerHabitat) {
+					TileEntityFlickerHabitat foundHab = (TileEntityFlickerHabitat) te;
+					if (foundHab.isUpgrade() == false) {
 						habCount++;
-						if (habCount == 1){
+						if (habCount == 1) {
 							hab.setUpgrade(true, direction);
-						}else{
+						} else {
 							world.destroyBlock(pos, true);
 						}
-					}else{
+					} else {
 						world.destroyBlock(pos, true);
 					}
 				}
@@ -91,59 +93,59 @@ public class BlockFlickerHabitat extends BlockAMPowered{
 	}
 
 	@Override
-	public void onNeighborChange(IBlockAccess iblockaccess, BlockPos pos, BlockPos neighbor){
+	public void onNeighborChange(IBlockAccess iblockaccess, BlockPos pos, BlockPos neighbor) {
 		if (!(iblockaccess instanceof World))
 			return;
-		World world = (World)iblockaccess;
+		World world = (World) iblockaccess;
 		if (world.isRemote)
 			return;
 
 		TileEntity te = world.getTileEntity(pos);
 
-		if (te instanceof TileEntityFlickerHabitat){
-			TileEntityFlickerHabitat hab = (TileEntityFlickerHabitat)te;
+		if (te instanceof TileEntityFlickerHabitat) {
+			TileEntityFlickerHabitat hab = (TileEntityFlickerHabitat) te;
 
-			if (hab.isUpgrade()){
+			if (hab.isUpgrade()) {
 				int habCount = 0;
-				for (EnumFacing direction : EnumFacing.values()){
+				for (EnumFacing direction : EnumFacing.values()) {
 					te = world.getTileEntity(pos.offset(direction));
-					if (te != null && te instanceof TileEntityFlickerHabitat){
-						TileEntityFlickerHabitat foundHab = (TileEntityFlickerHabitat)te;
-						if (foundHab.isUpgrade() == false){
+					if (te != null && te instanceof TileEntityFlickerHabitat) {
+						TileEntityFlickerHabitat foundHab = (TileEntityFlickerHabitat) te;
+						if (foundHab.isUpgrade() == false) {
 							habCount++;
-							if (habCount == 1){
-							}else{
+							if (habCount == 1) {
+							} else {
 								world.destroyBlock(pos, true);
 							}
-						}else{
+						} else {
 							world.destroyBlock(pos, true);
 						}
 					}
 				}
 
-				if (habCount == 0){
+				if (habCount == 0) {
 					world.destroyBlock(pos, true);
 				}
-			}else{
+			} else {
 				hab.scanForNearbyUpgrades();
 
-				if (!hab.isUpgrade()){
+				if (!hab.isUpgrade()) {
 					hab.scanForNearbyUpgrades();
 				}
 			}
 		}
 	}
-	
-	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state){
-		TileEntityFlickerHabitat habitat = (TileEntityFlickerHabitat)worldIn.getTileEntity(pos);
 
-		//if there is no habitat at the location break out
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		TileEntityFlickerHabitat habitat = (TileEntityFlickerHabitat) worldIn.getTileEntity(pos);
+
+		// if there is no habitat at the location break out
 		if (habitat == null)
 			return;
 
-		//if the habitat has a flicker throw it on the ground
-		if (habitat.hasFlicker()){
+		// if the habitat has a flicker throw it on the ground
+		if (habitat.hasFlicker()) {
 			ItemStack stack = habitat.getStackInSlot(0);
 
 			float offsetX = worldIn.rand.nextFloat() * 0.8F + 0.1F;
@@ -151,20 +153,21 @@ public class BlockFlickerHabitat extends BlockAMPowered{
 			float offsetZ = worldIn.rand.nextFloat() * 0.8F + 0.1F;
 			float force = 0.05F;
 
-			EntityItem entityItem = new EntityItem(worldIn, pos.getX() + offsetX, pos.getY() + offsetY, pos.getZ() + offsetZ, stack);
-			entityItem.motionX = (float)worldIn.rand.nextGaussian() * force;
-			entityItem.motionY = (float)worldIn.rand.nextGaussian() * force + 0.2F;
-			entityItem.motionZ = (float)worldIn.rand.nextGaussian() * force;
+			EntityItem entityItem = new EntityItem(worldIn, pos.getX() + offsetX, pos.getY() + offsetY,
+					pos.getZ() + offsetZ, stack);
+			entityItem.motionX = (float) worldIn.rand.nextGaussian() * force;
+			entityItem.motionY = (float) worldIn.rand.nextGaussian() * force + 0.2F;
+			entityItem.motionZ = (float) worldIn.rand.nextGaussian() * force;
 			worldIn.spawnEntityInWorld(entityItem);
 		}
 
-		if (!habitat.isUpgrade()){
-			for (EnumFacing direction : EnumFacing.values()){
+		if (!habitat.isUpgrade()) {
+			for (EnumFacing direction : EnumFacing.values()) {
 				TileEntity te = worldIn.getTileEntity(pos.offset(direction));
-				if (te != null && te instanceof TileEntityFlickerHabitat){
-					TileEntityFlickerHabitat upgHab = (TileEntityFlickerHabitat)te;
+				if (te != null && te instanceof TileEntityFlickerHabitat) {
+					TileEntityFlickerHabitat upgHab = (TileEntityFlickerHabitat) te;
 
-					if (upgHab.isUpgrade()){
+					if (upgHab.isUpgrade()) {
 						worldIn.destroyBlock(pos.offset(direction), true);
 						worldIn.setTileEntity(pos.offset(direction), null);
 					}

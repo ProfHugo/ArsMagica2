@@ -7,9 +7,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockWitchwoodStairs extends BlockStairs{
+public class BlockWitchwoodStairs extends BlockStairs {
 
-	public BlockWitchwoodStairs(IBlockState state){
+	public BlockWitchwoodStairs(IBlockState state) {
 		super(state);
 		this.setHardness(2.0f);
 		this.setResistance(2.0f);

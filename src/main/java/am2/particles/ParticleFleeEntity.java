@@ -4,13 +4,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
-public class ParticleFleeEntity extends ParticleController{
+public class ParticleFleeEntity extends ParticleController {
 
 	private Entity target;
 	private double fleeSpeed;
 	private double targetDistance;
 
-	public ParticleFleeEntity(AMParticle particleEffect, Entity fleeEntity, double fleeSpeed, double targetDistance, int priority, boolean exclusive){
+	public ParticleFleeEntity(AMParticle particleEffect, Entity fleeEntity, double fleeSpeed, double targetDistance,
+			int priority, boolean exclusive) {
 		super(particleEffect, priority, exclusive);
 		this.target = fleeEntity;
 		this.fleeSpeed = fleeSpeed;
@@ -18,7 +19,7 @@ public class ParticleFleeEntity extends ParticleController{
 	}
 
 	@Override
-	public void doUpdate(){
+	public void doUpdate() {
 
 		double posX;
 		double posZ;
@@ -36,27 +37,27 @@ public class ParticleFleeEntity extends ParticleController{
 		posZ = particle.getPosZ() + (fleeSpeed * Math.sin(radians));
 		double deltaY;
 
-		if (target instanceof EntityLiving){
-			EntityLiving entityliving = (EntityLiving)target;
-			deltaY = posY - (entityliving.posY + (double)entityliving.getEyeHeight());
-		}else{
+		if (target instanceof EntityLiving) {
+			EntityLiving entityliving = (EntityLiving) target;
+			deltaY = posY - (entityliving.posY + (double) entityliving.getEyeHeight());
+		} else {
 			deltaY = (target.getEntityBoundingBox().minY + target.getEntityBoundingBox().maxY) / 2D - posY;
 		}
 		double horizontalDistance = MathHelper.sqrt_double(deltaX * deltaX + deltaZ * deltaZ);
-		float pitchRotation = (float)(-Math.atan2(deltaY, horizontalDistance));
+		float pitchRotation = (float) (-Math.atan2(deltaY, horizontalDistance));
 		double pitchRadians = pitchRotation;
 
 		posY = particle.getPosY() + (fleeSpeed * Math.sin(pitchRadians));
 
-		if (distanceToTarget > targetDistance){
+		if (distanceToTarget > targetDistance) {
 			this.finish();
-		}else{
+		} else {
 			particle.setPosition(posX, posY, posZ);
 		}
 	}
 
 	@Override
-	public ParticleController clone(){
+	public ParticleController clone() {
 		return new ParticleFleeEntity(particle, target, fleeSpeed, targetDistance, priority, exclusive);
 	}
 

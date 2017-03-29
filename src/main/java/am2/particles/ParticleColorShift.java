@@ -1,6 +1,6 @@
 package am2.particles;
 
-public final class ParticleColorShift extends ParticleController{
+public final class ParticleColorShift extends ParticleController {
 
 	private float minRed;
 	private float maxRed;
@@ -21,7 +21,7 @@ public final class ParticleColorShift extends ParticleController{
 	private float greenShift;
 	private float blueShift;
 
-	public ParticleColorShift(AMParticle particleEffect, int priority, boolean exclusive){
+	public ParticleColorShift(AMParticle particleEffect, int priority, boolean exclusive) {
 		super(particleEffect, priority, exclusive);
 		minRed = 0f;
 		minGreen = 0f;
@@ -36,7 +36,7 @@ public final class ParticleColorShift extends ParticleController{
 		GenerateNextColorTarget();
 	}
 
-	public ParticleColorShift SetColorTarget(float red, float green, float blue){
+	public ParticleColorShift SetColorTarget(float red, float green, float blue) {
 		targetRed = red;
 		targetGreen = green;
 		targetBlue = blue;
@@ -48,7 +48,7 @@ public final class ParticleColorShift extends ParticleController{
 		return this;
 	}
 
-	public ParticleColorShift SetShiftSpeed(float speed){
+	public ParticleColorShift SetShiftSpeed(float speed) {
 		this.shiftSpeed = speed;
 
 		redShift = shiftSpeed;
@@ -58,7 +58,8 @@ public final class ParticleColorShift extends ParticleController{
 		return this;
 	}
 
-	public ParticleColorShift SetColorRange(float minRed, float minBlue, float minGreen, float maxRed, float maxGreen, float maxBlue){
+	public ParticleColorShift SetColorRange(float minRed, float minBlue, float minGreen, float maxRed, float maxGreen,
+			float maxBlue) {
 		this.minRed = minRed;
 		this.maxRed = maxRed;
 		this.minGreen = minGreen;
@@ -68,53 +69,57 @@ public final class ParticleColorShift extends ParticleController{
 		return this;
 	}
 
-	public ParticleColorShift SetEndOnReachingTargetColor(){
+	public ParticleColorShift SetEndOnReachingTargetColor() {
 		endOnReachingColor = true;
 		return this;
 	}
 
-	private void GenerateNextColorTarget(){
+	private void GenerateNextColorTarget() {
 		targetRed = (particle.getWorldObj().rand.nextFloat() * (maxRed - minRed)) + minRed;
 		targetGreen = (particle.getWorldObj().rand.nextFloat() * (maxGreen - minGreen)) + minGreen;
 		targetBlue = (particle.getWorldObj().rand.nextFloat() * (maxBlue - minBlue)) + minBlue;
 	}
 
 	@Override
-	public void doUpdate(){
+	public void doUpdate() {
 
 		float currentRed = particle.GetParticleRed();
 		float currentGreen = particle.GetParticleGreen();
 		float currentBlue = particle.GetParticleBlue();
 
-		if (currentRed == targetRed && currentGreen == targetGreen && currentBlue == targetBlue){
-			if (endOnReachingColor){
+		if (currentRed == targetRed && currentGreen == targetGreen && currentBlue == targetBlue) {
+			if (endOnReachingColor) {
 				this.finish();
 				return;
-			}else{
+			} else {
 				GenerateNextColorTarget();
 			}
 		}
 
-		particle.setRGBColorF(ShiftValue(currentRed, targetRed, redShift), ShiftValue(currentGreen, targetGreen, greenShift), ShiftValue(currentBlue, targetBlue, blueShift));
+		particle.setRGBColorF(ShiftValue(currentRed, targetRed, redShift),
+				ShiftValue(currentGreen, targetGreen, greenShift), ShiftValue(currentBlue, targetBlue, blueShift));
 	}
 
-	private float ShiftValue(float current, float target, float step){
+	private float ShiftValue(float current, float target, float step) {
 		float curDist = Math.abs(target - current);
-		if (curDist < step){
+		if (curDist < step) {
 			step = curDist;
 		}
-		if (current < target){
+		if (current < target) {
 			current += step;
-		}else if (current > target){
+		} else if (current > target) {
 			current -= step;
 		}
 		return current;
 	}
 
 	@Override
-	public ParticleController clone(){
-		ParticleColorShift clone = new ParticleColorShift(particle, priority, endOnReachingColor).SetShiftSpeed(shiftSpeed).SetColorRange(minRed, minBlue, minGreen, maxRed, maxGreen, maxBlue).SetColorTarget(targetRed, targetGreen, targetBlue);
-		if (this.endOnReachingColor) clone.SetEndOnReachingTargetColor();
+	public ParticleController clone() {
+		ParticleColorShift clone = new ParticleColorShift(particle, priority, endOnReachingColor)
+				.SetShiftSpeed(shiftSpeed).SetColorRange(minRed, minBlue, minGreen, maxRed, maxGreen, maxBlue)
+				.SetColorTarget(targetRed, targetGreen, targetBlue);
+		if (this.endOnReachingColor)
+			clone.SetEndOnReachingTargetColor();
 		return clone;
 	}
 

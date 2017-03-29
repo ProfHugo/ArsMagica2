@@ -2,7 +2,7 @@ package am2.api.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
 
-public interface IAMEnchantmentHelper{
+public interface IAMEnchantmentHelper {
 	/**
 	 * Gets the current ID for soulbound enchantment
 	 */

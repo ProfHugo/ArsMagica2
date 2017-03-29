@@ -14,28 +14,28 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 public class RiftStorage implements IRiftStorage, ICapabilityProvider, ICapabilitySerializable<NBTBase> {
-	
+
 	private ItemStack[] stacks = new ItemStack[54];
 
 	private int accessLevel;
-	
+
 	@CapabilityInject(IRiftStorage.class)
 	public static Capability<IRiftStorage> INSTANCE = null;
-	
+
 	@Override
-	public int getSizeInventory(){
+	public int getSizeInventory() {
 		return 54;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i){
+	public ItemStack getStackInSlot(int i) {
 		return stacks[i];
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j){
-		if (stacks[i] != null){
-			if (stacks[i].stackSize <= j){
+	public ItemStack decrStackSize(int i, int j) {
+		if (stacks[i] != null) {
+			if (stacks[i].stackSize <= j) {
 				ItemStack itemstack = stacks[i];
 				stacks[i] = null;
 				return itemstack;
@@ -43,71 +43,71 @@ public class RiftStorage implements IRiftStorage, ICapabilityProvider, ICapabili
 
 			ItemStack itemstack1 = stacks[i].splitStack(j);
 
-			if (stacks[i].stackSize == 0){
+			if (stacks[i].stackSize == 0) {
 				stacks[i] = null;
 			}
 
 			return itemstack1;
-		}else{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int i){
-		if (stacks[i] != null){
+	public ItemStack removeStackFromSlot(int i) {
+		if (stacks[i] != null) {
 			ItemStack itemstack = stacks[i];
 			stacks[i] = null;
 			return itemstack;
-		}else{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack){
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		stacks[i] = itemstack;
-		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()){
+		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
 	}
 
 	@Override
-	public String getName(){
+	public String getName() {
 		return "Void Storage";
 	}
 
 	@Override
-	public boolean hasCustomName(){
+	public boolean hasCustomName() {
 		return false;
 	}
 
 	@Override
-	public int getInventoryStackLimit(){
+	public int getInventoryStackLimit() {
 		return 64;
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer){
-		//if (accessEntity == null || accessEntity.isDead) return false;
-		return true;//entityplayer.getDistanceSqToEntity(accessEntity) < 64;
+	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+		// if (accessEntity == null || accessEntity.isDead) return false;
+		return true;// entityplayer.getDistanceSqToEntity(accessEntity) < 64;
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player){
+	public void openInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player){
+	public void closeInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack){
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
 
 	@Override
-	public void markDirty(){
+	public void markDirty() {
 	}
 
 	@Override
@@ -116,7 +116,8 @@ public class RiftStorage implements IRiftStorage, ICapabilityProvider, ICapabili
 	}
 
 	@Override
-	public void setField(int id, int value) {}
+	public void setField(int id, int value) {
+	}
 
 	@Override
 	public int getFieldCount() {
@@ -125,7 +126,7 @@ public class RiftStorage implements IRiftStorage, ICapabilityProvider, ICapabili
 
 	@Override
 	public void clear() {
-		//this.stacks = new ItemStack[54];
+		// this.stacks = new ItemStack[54];
 	}
 
 	@Override
@@ -145,11 +146,11 @@ public class RiftStorage implements IRiftStorage, ICapabilityProvider, ICapabili
 			return (T) this;
 		return null;
 	}
-	
+
 	public static IRiftStorage For(EntityLivingBase thePlayer) {
 		return thePlayer.getCapability(INSTANCE, null);
 	}
-	
+
 	@Override
 	public NBTBase serializeNBT() {
 		return new IRiftStorage.Storage().writeNBT(INSTANCE, this, null);
@@ -159,12 +160,12 @@ public class RiftStorage implements IRiftStorage, ICapabilityProvider, ICapabili
 	public void deserializeNBT(NBTBase nbt) {
 		new IRiftStorage.Storage().readNBT(INSTANCE, this, null, nbt);
 	}
-	
+
 	@Override
 	public int getAccessLevel() {
 		return accessLevel;
 	}
-	
+
 	@Override
 	public void setAccessLevel(int accessLevel) {
 		this.accessLevel = accessLevel;

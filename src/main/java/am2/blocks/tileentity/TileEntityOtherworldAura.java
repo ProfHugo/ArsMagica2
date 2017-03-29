@@ -17,85 +17,90 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-public class TileEntityOtherworldAura extends TileEntityAMPower{
+public class TileEntityOtherworldAura extends TileEntityAMPower {
 
-	private ArrayList<PowerTypes> valid = Lists.newArrayList(
-			PowerTypes.DARK,
-			PowerTypes.NEUTRAL
-	);
+	private ArrayList<PowerTypes> valid = Lists.newArrayList(PowerTypes.DARK, PowerTypes.NEUTRAL);
 
 	private ArrayList<AMVector3> nearbyInventories;
 	private boolean active;
 	private TileEntityCraftingAltar watchTarget;
-	private int delayCounter; //used as a delay when an item isn't found (prevents oversearching)
-	private String placedByUsername = ""; //username of the player who placed the block (used to get the shadow's texture)
-	private EntityShadowHelper helper; //the helper entity that actually moves items around
+	private int delayCounter; // used as a delay when an item isn't found
+								// (prevents oversearching)
+	private String placedByUsername = ""; // username of the player who placed
+											// the block (used to get the
+											// shadow's texture)
+	private EntityShadowHelper helper; // the helper entity that actually moves
+										// items around
 
-	public TileEntityOtherworldAura(){
+	public TileEntityOtherworldAura() {
 		super(200);
 	}
 
 	@Override
-	public boolean canRelayPower(PowerTypes type){
+	public boolean canRelayPower(PowerTypes type) {
 		return false;
 	}
 
 	@Override
-	public int getChargeRate(){
+	public int getChargeRate() {
 		return 100;
 	}
 
 	@Override
-	public ArrayList<PowerTypes> getValidPowerTypes(){
+	public ArrayList<PowerTypes> getValidPowerTypes() {
 		return valid;
 	}
 
-	public void setActive(boolean active, TileEntityCraftingAltar watchMe){
-		if (active && this.active) return;
+	public void setActive(boolean active, TileEntityCraftingAltar watchMe) {
+		if (active && this.active)
+			return;
 		this.active = active;
-		if (active){
+		if (active) {
 			refreshNearbyInventories();
 			watchTarget = watchMe;
-		}else{
+		} else {
 			nearbyInventories = null;
 			watchTarget = null;
-			if (this.helper != null){
+			if (this.helper != null) {
 				this.helper.unSummon();
 				this.helper = null;
 			}
 		}
 	}
 
-	private void refreshNearbyInventories(){
+	private void refreshNearbyInventories() {
 		nearbyInventories = new ArrayList<AMVector3>();
 		int radius = 6;
-		for (int i = -radius; i <= radius; ++i){
-			for (int j = -radius; j <= radius; ++j){
-				for (int k = -radius; k <= radius; ++k){
-					if (i == 0 && j == 0 && k == 0) continue;
+		for (int i = -radius; i <= radius; ++i) {
+			for (int j = -radius; j <= radius; ++j) {
+				for (int k = -radius; k <= radius; ++k) {
+					if (i == 0 && j == 0 && k == 0)
+						continue;
 					TileEntity te = worldObj.getTileEntity(pos.add(i, j, k));
-					if (te == null) continue;
-					if (!(te instanceof IInventory)) continue;
+					if (te == null)
+						continue;
+					if (!(te instanceof IInventory))
+						continue;
 					nearbyInventories.add(new AMVector3(te));
 				}
 			}
 		}
 	}
 
-	private AMVector3 findInNearbyInventories(ItemStack search){
+	private AMVector3 findInNearbyInventories(ItemStack search) {
 		Iterator<AMVector3> it = this.nearbyInventories.iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			AMVector3 vec = it.next();
 			TileEntity te = worldObj.getTileEntity(vec.toBlockPos());
-			if (te == null || !(te instanceof IInventory)){
-				//not found, prune list and move on
+			if (te == null || !(te instanceof IInventory)) {
+				// not found, prune list and move on
 				it.remove();
 				continue;
 			}
-			IInventory inventory = ((IInventory)te);
-			//search from all 6 sides
-			for (EnumFacing facing : EnumFacing.values()){
-				if (InventoryUtilities.inventoryHasItem(inventory, search, 1, facing)){
+			IInventory inventory = ((IInventory) te);
+			// search from all 6 sides
+			for (EnumFacing facing : EnumFacing.values()) {
+				if (InventoryUtilities.inventoryHasItem(inventory, search, 1, facing)) {
 					return vec;
 				}
 			}
@@ -103,7 +108,7 @@ public class TileEntityOtherworldAura extends TileEntityAMPower{
 		return null;
 	}
 
-	private void spawnHelper(){
+	private void spawnHelper() {
 		if (helper != null || worldObj.isRemote)
 			return;
 
@@ -113,7 +118,7 @@ public class TileEntityOtherworldAura extends TileEntityAMPower{
 			this.helper.setAltarTarget(watchTarget);
 		this.worldObj.spawnEntityInWorld(helper);
 
-		if (this.watchTarget != null){
+		if (this.watchTarget != null) {
 			this.helper.setDropoffLocation(new AMVector3(watchTarget.getPos().down(2)));
 			if (placedByUsername != null && !placedByUsername.isEmpty())
 				this.helper.setMimicUser(placedByUsername);
@@ -121,71 +126,76 @@ public class TileEntityOtherworldAura extends TileEntityAMPower{
 	}
 
 	@Override
-	public void update(){
+	public void update() {
 		super.update();
 
-		//sanity check
-		if (nearbyInventories == null) return;
-		if (watchTarget == null || !watchTarget.isCrafting()){
+		// sanity check
+		if (nearbyInventories == null)
+			return;
+		if (watchTarget == null || !watchTarget.isCrafting()) {
 			setActive(false, null);
 			return;
 		}
 
-		if (helper != null && helper.isDead){
+		if (helper != null && helper.isDead) {
 			return;
 		}
 
-		if (!worldObj.isRemote){
-			if (PowerNodeRegistry.For(worldObj).checkPower(this, 1.25f)){
-				if (delayCounter-- <= 0){
-					if (helper == null){
+		if (!worldObj.isRemote) {
+			if (PowerNodeRegistry.For(worldObj).checkPower(this, 1.25f)) {
+				if (delayCounter-- <= 0) {
+					if (helper == null) {
 						spawnHelper();
 					}
 
 					ItemStack next = watchTarget.getNextPlannedItem();
-					if (next == null){
+					if (next == null) {
 						setActive(false, null);
 						return;
 					}
 
-					if (next.getItem() == ItemDefs.etherium){
+					if (next.getItem() == ItemDefs.etherium) {
 						if (!this.helper.hasSearchLocation())
 							this.helper.setSearchLocationAndItem(new AMVector3(1, 1, 1), next);
 						delayCounter = 100;
-					}else{
+					} else {
 						AMVector3 location = findInNearbyInventories(next);
-						if (location == null){
-							//can't find it nearby - don't search again for 5 seconds (gives player time to add)
+						if (location == null) {
+							// can't find it nearby - don't search again for 5
+							// seconds (gives player time to add)
 							delayCounter = 20;
 							return;
-						}else{
+						} else {
 							if (!this.helper.hasSearchLocation())
 								this.helper.setSearchLocationAndItem(location, next);
-							delayCounter = 20; //delay for 5s (give the helper time to get the item and toss it in)
+							delayCounter = 20; // delay for 5s (give the helper
+												// time to get the item and toss
+												// it in)
 						}
 					}
 				}
-				PowerNodeRegistry.For(worldObj).consumePower(this, PowerNodeRegistry.For(worldObj).getHighestPowerType(this), 1.25f);
-			}else{
+				PowerNodeRegistry.For(worldObj).consumePower(this,
+						PowerNodeRegistry.For(worldObj).getHighestPowerType(this), 1.25f);
+			} else {
 				if (this.helper != null)
 					this.helper.unSummon();
 			}
 		}
 	}
 
-	public void setPlacedByUsername(String userName){
+	public void setPlacedByUsername(String userName) {
 		this.placedByUsername = userName;
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound){
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setString("placedBy", placedByUsername);
 		return nbttagcompound;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound){
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 		this.placedByUsername = nbttagcompound.getString("placedBy");
 	}

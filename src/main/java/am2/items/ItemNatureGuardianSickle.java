@@ -28,46 +28,52 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 
 @SuppressWarnings("deprecation")
-public class ItemNatureGuardianSickle extends ItemArsMagica{
+public class ItemNatureGuardianSickle extends ItemArsMagica {
 
-	public ItemNatureGuardianSickle(){
+	public ItemNatureGuardianSickle() {
 		super();
 		setMaxStackSize(1);
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot slot){
+	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot slot) {
 		Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(slot);
 		if (slot.equals(EntityEquipmentSlot.MAINHAND)) {
-			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 9, 0));
-			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -3, 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(),
+					new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 9, 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(),
+					new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -3, 0));
 		}
 		return multimap;
 	}
 
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4){
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List,
+			boolean par4) {
 		par3List.add(I18n.translateToLocal("am2.tooltip.nature_scythe"));
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 	}
-	
-	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-		int radius = 1;
-		for (int i = -radius; i <= radius; ++i){
-			for (int j = -radius; j <= radius; ++j){
-				for (int k = -radius; k <= radius; ++k){
 
-					if (EntityExtension.For(entityLiving).getCurrentMana() < 5f){
+	@Override
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos,
+			EntityLivingBase entityLiving) {
+		int radius = 1;
+		for (int i = -radius; i <= radius; ++i) {
+			for (int j = -radius; j <= radius; ++j) {
+				for (int k = -radius; k <= radius; ++k) {
+
+					if (EntityExtension.For(entityLiving).getCurrentMana() < 5f) {
 						if (worldIn.isRemote)
 							ArsMagica2.proxy.flashManaBar();
 						return false;
 					}
 
 					IBlockState nextBlock = worldIn.getBlockState(pos.add(i, j, k));
-					if (nextBlock == null) continue;
-					if (nextBlock.getBlock() instanceof BlockLeaves){
-						if (ForgeEventFactory.doPlayerHarvestCheck(DummyEntityPlayer.fromEntityLiving(entityLiving), nextBlock, true))
+					if (nextBlock == null)
+						continue;
+					if (nextBlock.getBlock() instanceof BlockLeaves) {
+						if (ForgeEventFactory.doPlayerHarvestCheck(DummyEntityPlayer.fromEntityLiving(entityLiving),
+								nextBlock, true))
 							if (!worldIn.isRemote)
 								worldIn.destroyBlock(pos.add(i, j, k), true);
 						EntityExtension.For(entityLiving).deductMana(5f);
@@ -80,25 +86,28 @@ public class ItemNatureGuardianSickle extends ItemArsMagica{
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, EnumHand hand){
-		if (flingSickle(par1ItemStack, par2World, par3EntityPlayer)){
-			par3EntityPlayer.setItemStackToSlot(hand == EnumHand.MAIN_HAND ? EntityEquipmentSlot.MAINHAND : EntityEquipmentSlot.OFFHAND, null);//inventory.setInventorySlotContents(par3EntityPlayer.inventory.currentItem, null);
+	public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World par2World,
+			EntityPlayer par3EntityPlayer, EnumHand hand) {
+		if (flingSickle(par1ItemStack, par2World, par3EntityPlayer)) {
+			par3EntityPlayer.setItemStackToSlot(
+					hand == EnumHand.MAIN_HAND ? EntityEquipmentSlot.MAINHAND : EntityEquipmentSlot.OFFHAND, null);// inventory.setInventorySlotContents(par3EntityPlayer.inventory.currentItem,
+																													// null);
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, par1ItemStack);
 	}
 
-	public boolean flingSickle(ItemStack stack, World world, EntityPlayer player){
-		if (!EntityExtension.For(player).hasEnoughtMana(250) && !player.capabilities.isCreativeMode){
+	public boolean flingSickle(ItemStack stack, World world, EntityPlayer player) {
+		if (!EntityExtension.For(player).hasEnoughtMana(250) && !player.capabilities.isCreativeMode) {
 			if (world.isRemote)
 				ArsMagica2.proxy.flashManaBar();
 			return false;
 		}
-		if (!world.isRemote){
+		if (!world.isRemote) {
 			EntityThrownSickle projectile = new EntityThrownSickle(world, player, 1.25f);
 			projectile.setSickleNBT(stack);
 			projectile.setThrowingEntity(player);
 			projectile.setProjectileSpeed(2.0);
-			//projectile.setInMotion(1.25);
+			// projectile.setInMotion(1.25);
 			world.spawnEntityInWorld(projectile);
 			EntityExtension.For(player).deductMana(250f);
 		}
@@ -106,7 +115,7 @@ public class ItemNatureGuardianSickle extends ItemArsMagica{
 	}
 
 	@Override
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List){
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
 		par3List.add(ItemDefs.natureScytheEnchanted.copy());
 	}
 }

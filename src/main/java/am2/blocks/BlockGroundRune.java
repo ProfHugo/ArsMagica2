@@ -18,19 +18,19 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class BlockGroundRune extends BlockAMContainer{
-	
-	protected BlockGroundRune(){
+public abstract class BlockGroundRune extends BlockAMContainer {
+
+	protected BlockGroundRune() {
 		super(Material.WOOD);
 		setTickRandomly(true);
 		float f = 0.0625F;
 		setBlockBounds(f, 0.0F, f, 1.0F - f, 0.03125F, 1.0F - f);
 		setHardness(10);
 		setResistance(0.5f);
-		//setBlockBounds(f, 0.0F, f, 1.0F - f, 0.0625F, 1.0F - f);
+		// setBlockBounds(f, 0.0F, f, 1.0F - f, 0.0625F, 1.0F - f);
 	}
 
-	protected boolean triggerOnCaster(){
+	protected boolean triggerOnCaster() {
 		return false;
 	}
 
@@ -38,21 +38,22 @@ public abstract class BlockGroundRune extends BlockAMContainer{
 	public abstract TileEntity createNewTileEntity(World var1, int i);
 
 	@Override
-	public int quantityDropped(Random random){
+	public int quantityDropped(Random random) {
 		return 0;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos,
+			EnumFacing side) {
 		return side == EnumFacing.DOWN || side == EnumFacing.UP;
 	}
-	
+
 	@Override
-	public int tickRate(World world){
+	public int tickRate(World world) {
 		return 20;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return NULL_AABB;
@@ -64,41 +65,44 @@ public abstract class BlockGroundRune extends BlockAMContainer{
 	}
 
 	@Override
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos){
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		return worldIn.getBlockState(pos.down()).isNormalCube() && worldIn.isAirBlock(pos);
 	}
 
-	public boolean placeAt(World world, BlockPos pos, IBlockState state){
-		if (!canPlaceBlockAt(world, pos)) return false;
+	public boolean placeAt(World world, BlockPos pos, IBlockState state) {
+		if (!canPlaceBlockAt(world, pos))
+			return false;
 		world.setBlockState(pos, state);
 		return true;
 	}
-	
+
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
-		if (worldIn.isRemote){
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		if (worldIn.isRemote) {
 			return;
 		}
 		setStateIfMobInteractsWithPlate(worldIn, pos);
 	}
-	
+
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn){
-		if (worldIn.isRemote){
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+		if (worldIn.isRemote) {
 			return;
 		}
 		setStateIfMobInteractsWithPlate(worldIn, pos);
 		return;
 	}
 
-	private void setStateIfMobInteractsWithPlate(World world, BlockPos pos){
+	private void setStateIfMobInteractsWithPlate(World world, BlockPos pos) {
 		float f = 0.125F;
 		List<Entity> list = null;
-		list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB((float)pos.getX() - f, pos.getY(), (float)pos.getZ() - f, (float)(pos.getX() + 1 + f), (double)pos.getY() + 2D, (float)(pos.getZ() + 1 + f)));
-		if (list.size() > 0){
-			if (ActivateRune(world, list, pos)){
+		list = world.getEntitiesWithinAABBExcludingEntity(null,
+				new AxisAlignedBB((float) pos.getX() - f, pos.getY(), (float) pos.getZ() - f,
+						(float) (pos.getX() + 1 + f), (double) pos.getY() + 2D, (float) (pos.getZ() + 1 + f)));
+		if (list.size() > 0) {
+			if (ActivateRune(world, list, pos)) {
 				IBlockState state = world.getBlockState(pos);
-				if (!isPermanent(world, pos, state)){
+				if (!isPermanent(world, pos, state)) {
 					int numTriggers = getNumTriggers(world, pos, state);
 					if (--numTriggers <= 0)
 						world.setBlockToAir(pos);
@@ -111,16 +115,16 @@ public abstract class BlockGroundRune extends BlockAMContainer{
 	}
 
 	protected abstract boolean ActivateRune(World world, List<Entity> entitiesInRange, BlockPos pos);
-	
+
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state){
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 		worldIn.notifyBlockOfStateChange(pos, state.getBlock());
 		worldIn.notifyBlockOfStateChange(pos, worldIn.getBlockState(pos.down()).getBlock());
 		super.breakBlock(worldIn, pos, state);
 	}
-	
+
 	@Override
-	public EnumPushReaction getMobilityFlag(IBlockState state){
+	public EnumPushReaction getMobilityFlag(IBlockState state) {
 		return EnumPushReaction.DESTROY;
 	}
 
@@ -129,22 +133,22 @@ public abstract class BlockGroundRune extends BlockAMContainer{
 	protected abstract int getNumTriggers(World world, BlockPos pos, IBlockState state);
 
 	public abstract void setNumTriggers(World world, BlockPos pos, IBlockState state, int numTriggers);
-	
+
 	@Override
-	public boolean isOpaqueCube(IBlockState state){
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override
 	public int getLightOpacity(IBlockState state) {
 		return 0;
 	}
-	
+
 	@Override
 	public boolean isTranslucent(IBlockState state) {
 		return true;
 	}
-	
+
 	@Override
 	public BlockAMContainer registerAndName(ResourceLocation rl) {
 		this.setUnlocalizedName(rl.toString());

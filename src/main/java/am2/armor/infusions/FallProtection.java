@@ -15,37 +15,39 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class FallProtection extends ArmorImbuement{
+public class FallProtection extends ArmorImbuement {
 
 	@Override
-	public String getID(){
+	public String getID() {
 		return "fallprot";
 	}
 
 	@Override
-	public ImbuementTiers getTier(){
+	public ImbuementTiers getTier() {
 		return ImbuementTiers.FOURTH;
 	}
 
 	@Override
-	public EnumSet<ImbuementApplicationTypes> getApplicationTypes(){
+	public EnumSet<ImbuementApplicationTypes> getApplicationTypes() {
 		return EnumSet.of(ImbuementApplicationTypes.ON_TICK);
 	}
 
 	@Override
-	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType, Object... params){
+	public boolean applyEffect(EntityPlayer player, World world, ItemStack stack, ImbuementApplicationTypes matchedType,
+			Object... params) {
 		if (world.isRemote)
 			return false;
 
 		int distanceToGround = MathUtilities.getDistanceToGround(player, world);
 		IEntityExtension extendedProperties = EntityExtension.For(player);
-		if (player.fallDistance >= extendedProperties.getFallProtection() + 4f && distanceToGround < -8 * player.motionY){
-			if (!player.isPotionActive(PotionEffectsDefs.slowfall) && !player.capabilities.isFlying){
+		if (player.fallDistance >= extendedProperties.getFallProtection() + 4f
+				&& distanceToGround < -8 * player.motionY) {
+			if (!player.isPotionActive(PotionEffectsDefs.slowfall) && !player.capabilities.isFlying) {
 
 				BuffEffectSlowfall sf = new BuffEffectSlowfall(distanceToGround * 3, 1);
 				player.addPotionEffect(sf);
 
-				stack.damageItem((int)(player.fallDistance * 6), player);
+				stack.damageItem((int) (player.fallDistance * 6), player);
 
 				player.fallDistance = 0;
 				return true;
@@ -55,22 +57,22 @@ public class FallProtection extends ArmorImbuement{
 	}
 
 	@Override
-	public EntityEquipmentSlot[] getValidSlots(){
-		return new EntityEquipmentSlot[]{EntityEquipmentSlot.FEET};
+	public EntityEquipmentSlot[] getValidSlots() {
+		return new EntityEquipmentSlot[] { EntityEquipmentSlot.FEET };
 	}
 
 	@Override
-	public boolean canApplyOnCooldown(){
+	public boolean canApplyOnCooldown() {
 		return false;
 	}
 
 	@Override
-	public int getCooldown(){
+	public int getCooldown() {
 		return 900;
 	}
 
 	@Override
-	public int getArmorDamage(){
+	public int getArmorDamage() {
 		return 0;
 	}
 }

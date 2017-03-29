@@ -11,10 +11,11 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderRiftStorage extends Render<EntityRiftStorage> {
-	
+
 	private static final ResourceLocation TEXTURE_MAIN = new ResourceLocation("arsmagica2", "textures/mobs/Rift.png");
-	private static final ResourceLocation TEXTURE_SECONDARY = new ResourceLocation("arsmagica2", "textures/mobs/Rift2.png");
-	
+	private static final ResourceLocation TEXTURE_SECONDARY = new ResourceLocation("arsmagica2",
+			"textures/mobs/Rift2.png");
+
 	public RenderRiftStorage(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -24,15 +25,16 @@ public class RenderRiftStorage extends Render<EntityRiftStorage> {
 		return TEXTURE_MAIN;
 	}
 
-	public void renderRift(EntityRiftStorage entityRiftStorage, double d, double d1, double d2, float f, float f1){
+	public void renderRift(EntityRiftStorage entityRiftStorage, double d, double d1, double d2, float f, float f1) {
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(d, d1, d2);
-		GL11.glEnable(32826 /*GL_RESCALE_NORMAL_EXT*/);
-		GL11.glScalef(entityRiftStorage.getScale(0) * 2, entityRiftStorage.getScale(1) * 2, entityRiftStorage.getScale(0) * 2);
+		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
+		GL11.glScalef(entityRiftStorage.getScale(0) * 2, entityRiftStorage.getScale(1) * 2,
+				entityRiftStorage.getScale(0) * 2);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_SRC_ALPHA);
-		//GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+		// GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		Tessellator tessellator = Tessellator.getInstance();
 
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
@@ -62,15 +64,14 @@ public class RenderRiftStorage extends Render<EntityRiftStorage> {
 		renderSprite(tessellator);
 		GL11.glPopMatrix();
 
-
-		GL11.glDisable(32826 /*GL_RESCALE_NORMAL_EXT*/);
+		GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glPopMatrix();
 	}
 
-	private void renderSprite(Tessellator tessellator){
+	private void renderSprite(Tessellator tessellator) {
 
 		float TLX = 0;
 		float BRX = 1;
@@ -82,14 +83,14 @@ public class RenderRiftStorage extends Render<EntityRiftStorage> {
 		float f6 = 0.25F;
 
 		tessellator.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		tessellator.getBuffer().pos(0.0F - f5, 0.0F - f6, 0.0D).tex( TLX, BRY).endVertex();
-		tessellator.getBuffer().pos(f4 - f5, 0.0F - f6, 0.0D).tex( BRX, BRY).endVertex();
-		tessellator.getBuffer().pos(f4 - f5, f4 - f6, 0.0D).tex( BRX, TLY).endVertex();
-		tessellator.getBuffer().pos(0.0F - f5, f4 - f6, 0.0D).tex( TLX, TLY).endVertex();
+		tessellator.getBuffer().pos(0.0F - f5, 0.0F - f6, 0.0D).tex(TLX, BRY).endVertex();
+		tessellator.getBuffer().pos(f4 - f5, 0.0F - f6, 0.0D).tex(BRX, BRY).endVertex();
+		tessellator.getBuffer().pos(f4 - f5, f4 - f6, 0.0D).tex(BRX, TLY).endVertex();
+		tessellator.getBuffer().pos(0.0F - f5, f4 - f6, 0.0D).tex(TLX, TLY).endVertex();
 		tessellator.draw();
 	}
 
-	public void doRender(EntityRiftStorage entity, double d, double d1, double d2, float f, float f1){
+	public void doRender(EntityRiftStorage entity, double d, double d1, double d2, float f, float f1) {
 		try {
 			renderRift(entity, d, d1, d2, f, f1);
 		} catch (Exception e) {

@@ -1,4 +1,5 @@
 package am2.gui;
+
 import am2.blocks.tileentity.TileEntityArcaneDeconstructor;
 import am2.container.ContainerArcaneDeconstructor;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -6,14 +7,15 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiArcaneDeconstructor extends GuiContainer{
+public class GuiArcaneDeconstructor extends GuiContainer {
 
 	private TileEntityArcaneDeconstructor deconstructor;
 
-	private static final ResourceLocation background = new ResourceLocation("arsmagica2", "textures/gui/deconstruction_table_GUI.png");
+	private static final ResourceLocation background = new ResourceLocation("arsmagica2",
+			"textures/gui/deconstruction_table_GUI.png");
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j){
+	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		mc.renderEngine.bindTexture(background);
 		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 		int l = (width - xSize) / 2;
@@ -25,7 +27,7 @@ public class GuiArcaneDeconstructor extends GuiContainer{
 			this.drawTexturedModalRect(l + 79, i1 + 65, 176, 0, 17, overlayHeight);
 	}
 
-	public GuiArcaneDeconstructor(InventoryPlayer inventoryplayer, TileEntityArcaneDeconstructor deconstructorEntity){
+	public GuiArcaneDeconstructor(InventoryPlayer inventoryplayer, TileEntityArcaneDeconstructor deconstructorEntity) {
 		super(new ContainerArcaneDeconstructor(inventoryplayer, deconstructorEntity));
 		this.deconstructor = deconstructorEntity;
 		xSize = 176;
@@ -33,6 +35,6 @@ public class GuiArcaneDeconstructor extends GuiContainer{
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2){
+	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 	}
 }

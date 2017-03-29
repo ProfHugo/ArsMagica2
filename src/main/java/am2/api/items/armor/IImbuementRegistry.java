@@ -4,21 +4,21 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-
-public interface IImbuementRegistry{
+public interface IImbuementRegistry {
 	/**
 	 * Registers a new imbuement instance into the system
 	 */
 	void registerImbuement(ArmorImbuement imbuementInstance);
 
 	/**
-	 * Locates the specified imbuement registered to the passed-in ID.
-	 * Returns null if not found.
+	 * Locates the specified imbuement registered to the passed-in ID. Returns
+	 * null if not found.
 	 */
 	ArmorImbuement getImbuementByID(ResourceLocation ID);
 
 	/**
-	 * Returns all imbuements registered into the specified tier for the given armor type (slot).
+	 * Returns all imbuements registered into the specified tier for the given
+	 * armor type (slot).
 	 */
 	ArmorImbuement[] getImbuementsForTier(ImbuementTiers tier, EntityEquipmentSlot armorType);
 

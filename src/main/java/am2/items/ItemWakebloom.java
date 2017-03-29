@@ -13,35 +13,35 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
-public class ItemWakebloom extends ItemBlock{
+public class ItemWakebloom extends ItemBlock {
 
 	public ItemWakebloom(Block block) {
 		super(block);
 	}
-	
-	
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn,
-			EnumHand hand){
+			EnumHand hand) {
 		RayTraceResult mop = this.rayTrace(worldIn, playerIn, true);
 
-		if (mop == null){
+		if (mop == null) {
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
-		}else{
-			if (mop.typeOfHit == Type.BLOCK){
+		} else {
+			if (mop.typeOfHit == Type.BLOCK) {
 
-				if (!worldIn.canMineBlockBody(playerIn, mop.getBlockPos())){
+				if (!worldIn.canMineBlockBody(playerIn, mop.getBlockPos())) {
 					return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 				}
 
-				if (!playerIn.canPlayerEdit(mop.getBlockPos(), mop.sideHit, itemStackIn)){
+				if (!playerIn.canPlayerEdit(mop.getBlockPos(), mop.sideHit, itemStackIn)) {
 					return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 				}
 
-				if (worldIn.getBlockState(mop.getBlockPos()) == Blocks.FLOWING_WATER.getDefaultState() || worldIn.getBlockState(mop.getBlockPos()) == Blocks.WATER.getDefaultState()){
+				if (worldIn.getBlockState(mop.getBlockPos()) == Blocks.FLOWING_WATER.getDefaultState()
+						|| worldIn.getBlockState(mop.getBlockPos()) == Blocks.WATER.getDefaultState()) {
 					worldIn.setBlockState(mop.getBlockPos().up(), BlockDefs.wakebloom.getDefaultState());
 
-					if (!playerIn.capabilities.isCreativeMode){
+					if (!playerIn.capabilities.isCreativeMode) {
 						--itemStackIn.stackSize;
 					}
 				}

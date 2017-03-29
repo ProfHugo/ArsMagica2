@@ -31,7 +31,7 @@ public class CommandArsMagica extends CommandBase {
 	public String getCommandUsage(ICommandSender sender) {
 		return "commands.am2.usage";
 	}
-	
+
 	@Override
 	public int getRequiredPermissionLevel() {
 		return 2;
@@ -39,7 +39,8 @@ public class CommandArsMagica extends CommandBase {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if (args.length == 0) throw new WrongUsageException("Wrong usage");
+		if (args.length == 0)
+			throw new WrongUsageException("Wrong usage");
 		else if (args[0].equalsIgnoreCase("magiclevel"))
 			handleMagicLevelUp(server, sender, args);
 		else if (args[0].equalsIgnoreCase("forcesync")) {
@@ -47,33 +48,44 @@ public class CommandArsMagica extends CommandBase {
 			notifyCommandListener(sender, this, "commands.am2.sync.successful", new Object[] {});
 		}
 	}
-	
-	private void handleMagicLevelUp(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if (args.length < 2) throw new WrongUsageException("Magic Level requires at least one argument");
+
+	private void handleMagicLevelUp(MinecraftServer server, ICommandSender sender, String[] args)
+			throws CommandException {
+		if (args.length < 2)
+			throw new WrongUsageException("Magic Level requires at least one argument");
 		else if (args.length == 2) {
 			int level = parseInt(args[1]);
-			if (level < 1) level = 1;
-            EntityPlayer entityplayer = getCommandSenderAsPlayer(sender);
-            EntityExtension.For(entityplayer).setMagicLevelWithMana(level);
-            notifyCommandListener(sender, this, "commands.am2.levelup.successful", new Object[] {entityplayer.getDisplayName(), level});
+			if (level < 1)
+				level = 1;
+			EntityPlayer entityplayer = getCommandSenderAsPlayer(sender);
+			EntityExtension.For(entityplayer).setMagicLevelWithMana(level);
+			notifyCommandListener(sender, this, "commands.am2.levelup.successful",
+					new Object[] { entityplayer.getDisplayName(), level });
 		} else if (args.length == 3) {
 			int level = parseInt(args[1]);
-			if (level < 1) level = 1;
+			if (level < 1)
+				level = 1;
 			Entity ent = getEntity(server, sender, args[2]);
 			if (ent instanceof EntityLivingBase) {
 				EntityExtension.For((EntityLivingBase) ent).setMagicLevelWithMana(level);
 			}
-			notifyCommandListener(sender, this, "commands.am2.levelup.successful", new Object[] {ent.getDisplayName(), level});
-		} else throw new WrongUsageException("Magic Level has too much arguments");
+			notifyCommandListener(sender, this, "commands.am2.levelup.successful",
+					new Object[] { ent.getDisplayName(), level });
+		} else
+			throw new WrongUsageException("Magic Level has too much arguments");
 	}
-	
+
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
-		if (args.length == 1) return getListOfStringsMatchingLastWord(args, Lists.newArrayList("magiclevel", "forcesync"));
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args,
+			BlockPos pos) {
+		if (args.length == 1)
+			return getListOfStringsMatchingLastWord(args, Lists.newArrayList("magiclevel", "forcesync"));
 		else if (args.length == 2) {
-			if (args[0].equalsIgnoreCase("magiclevel")) return Collections.emptyList();
+			if (args[0].equalsIgnoreCase("magiclevel"))
+				return Collections.emptyList();
 		} else if (args.length == 3) {
-			if (args[0].equalsIgnoreCase("magiclevel")) return getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+			if (args[0].equalsIgnoreCase("magiclevel"))
+				return getListOfStringsMatchingLastWord(args, server.getAllUsernames());
 		}
 		return Collections.emptyList();
 	}

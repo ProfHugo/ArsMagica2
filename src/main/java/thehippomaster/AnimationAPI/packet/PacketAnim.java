@@ -9,20 +9,20 @@ import thehippomaster.AnimationAPI.AnimationAPI;
 import thehippomaster.AnimationAPI.IAnimatedEntity;
 
 public class PacketAnim implements IMessage {
-	
+
 	private byte animID;
 	private int entityID;
-	
+
 	public PacketAnim() {
 	}
-	
+
 	public PacketAnim(byte anim, int entity) {
 		animID = anim;
 		entityID = entity;
 	}
-	
+
 	@Override
-	public void toBytes( ByteBuf buffer) {
+	public void toBytes(ByteBuf buffer) {
 		buffer.writeByte(animID);
 		buffer.writeInt(entityID);
 	}
@@ -37,10 +37,11 @@ public class PacketAnim implements IMessage {
 		@Override
 		public IMessage onMessage(PacketAnim packet, MessageContext ctx) {
 			World world = AnimationAPI.proxy.getWorldClient();
-			IAnimatedEntity entity = (IAnimatedEntity)world.getEntityByID(packet.entityID);
-			if(entity != null && packet.animID != -1) {
+			IAnimatedEntity entity = (IAnimatedEntity) world.getEntityByID(packet.entityID);
+			if (entity != null && packet.animID != -1) {
 				entity.setAnimID(packet.animID);
-				if(packet.animID == 0) entity.setAnimTick(0);
+				if (packet.animID == 0)
+					entity.setAnimTick(0);
 			}
 			return null;
 		}

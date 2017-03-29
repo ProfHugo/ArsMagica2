@@ -23,17 +23,19 @@ public class AbilityReflexes extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.LIGHTNING;
 	}
-	
+
 	@Override
 	public void applyTick(EntityPlayer player) {
 		IAttributeInstance attribute = player.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute, AffinityAbilityModifiers.lightningAffinitySpeed, true);
+		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute,
+				AffinityAbilityModifiers.lightningAffinitySpeed, true);
 	}
-	
+
 	@Override
 	public void removeEffects(EntityPlayer player) {
 		IAttributeInstance attribute = player.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute, AffinityAbilityModifiers.lightningAffinitySpeed, false);
+		AffinityAbilityModifiers.instance.applyOrRemoveModifier(attribute,
+				AffinityAbilityModifiers.lightningAffinitySpeed, false);
 	}
 
 }

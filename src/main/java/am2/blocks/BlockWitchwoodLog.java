@@ -15,9 +15,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockWitchwoodLog extends BlockLog{
+public class BlockWitchwoodLog extends BlockLog {
 
-	public BlockWitchwoodLog(){
+	public BlockWitchwoodLog() {
 		super();
 		setHardness(3.0f);
 		setResistance(3.0f);
@@ -29,42 +29,42 @@ public class BlockWitchwoodLog extends BlockLog{
 	/**
 	 * Returns the quantity of items to drop on block destruction.
 	 */
-	public int quantityDropped(Random par1Random){
+	public int quantityDropped(Random par1Random) {
 		return 1;
 	}
 
 	/**
 	 * returns a number between 0 and 3
 	 */
-	public static int limitToValidMetadata(int par0){
+	public static int limitToValidMetadata(int par0) {
 		return par0 & 3;
 	}
-	
+
 	@Override
 	public int damageDropped(IBlockState state) {
 		return 0;
 	}
 
 	@Override
-	public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List){
+	public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
 		par3List.add(new ItemStack(this));
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, LOG_AXIS);
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(LOG_AXIS).ordinal();
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(LOG_AXIS, EnumAxis.values()[MathHelper.clamp_int(meta, 0, 3)]);
 	}
-	
+
 	public BlockWitchwoodLog registerAndName(ResourceLocation rl) {
 		this.setUnlocalizedName(rl.toString());
 		GameRegistry.register(this, rl);

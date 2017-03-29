@@ -31,7 +31,7 @@ import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
 import thehippomaster.AnimationAPI.IAnimatedEntity;
 
-public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity{
+public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity {
 
 	private int wingFlapTime = 0;
 	private int ticksSinceLastAttack = 0;
@@ -39,16 +39,17 @@ public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity{
 	private int hitCount = 0;
 	private AMVector3 spawn;
 
-	private static final DataParameter<Integer> ATTACK_TARGET = EntityDataManager.createKey(EntityEnderGuardian.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> ATTACK_TARGET = EntityDataManager.createKey(EntityEnderGuardian.class,
+			DataSerializers.VARINT);
 
-	public EntityEnderGuardian(World par1World){
+	public EntityEnderGuardian(World par1World) {
 		super(par1World);
 		setSize(1, 3);
 	}
 
 	@Override
-	protected void initSpecificAI(){
-		//tasks.addTask(2, new EntityAIHandsOfTheDead(this));
+	protected void initSpecificAI() {
+		// tasks.addTask(2, new EntityAIHandsOfTheDead(this));
 		tasks.addTask(2, new EntityAIShadowstep(this));
 		tasks.addTask(2, new EntityAIEnderwave(this));
 		tasks.addTask(2, new EntityAIOtherworldlyRoar(this));
@@ -59,37 +60,37 @@ public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity{
 	}
 
 	@Override
-	public int getTotalArmorValue(){
+	public int getTotalArmorValue() {
 		return 16;
 	}
 
 	@Override
-	protected void entityInit(){
+	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(ATTACK_TARGET, -1);
 	}
 
 	@Override
-	public float getEyeHeight(){
+	public float getEyeHeight() {
 		return 2.5f;
 	}
 
 	@Override
-	protected void applyEntityAttributes(){
+	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2100D);
 	}
 
 	@Override
-	protected float modifyDamageAmount(DamageSource source, float damageAmt){
-		if (source.isMagicDamage()){
+	protected float modifyDamageAmount(DamageSource source, float damageAmt) {
+		if (source.isMagicDamage()) {
 			damageAmt *= 2f;
 		}
 		return damageAmt;
 	}
 
 	@Override
-	public void onUpdate(){
+	public void onUpdate() {
 		super.onUpdate();
 
 		if (spawn == null)
@@ -101,10 +102,11 @@ public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity{
 		if (this.motionY < 0)
 			this.motionY *= 0.7999999f;
 
-		switch (getCurrentAction()){
-		case LONG_CASTING: //roar
+		switch (getCurrentAction()) {
+		case LONG_CASTING: // roar
 			if (this.getTicksInCurrentAction() == 32)
-				worldObj.playSound(posX, posY, posZ, AMSounds.ENDER_GUARDIAN_ROAR, SoundCategory.HOSTILE, 1.0f, 1.0f, false);
+				worldObj.playSound(posX, posY, posZ, AMSounds.ENDER_GUARDIAN_ROAR, SoundCategory.HOSTILE, 1.0f, 1.0f,
+						false);
 			break;
 		case CHARGE:
 			if (this.getTicksInCurrentAction() == 0)
@@ -113,19 +115,20 @@ public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity{
 		default:
 		}
 
-		if (shouldFlapWings() && wingFlapTime % (50 * this.getWingFlapSpeed()) == 0){
-			worldObj.playSound(posX, posY, posZ, AMSounds.ENDER_GUARDIAN_FLAP, SoundCategory.HOSTILE, 1.0f, 1.0f, false);
+		if (shouldFlapWings() && wingFlapTime % (50 * this.getWingFlapSpeed()) == 0) {
+			worldObj.playSound(posX, posY, posZ, AMSounds.ENDER_GUARDIAN_FLAP, SoundCategory.HOSTILE, 1.0f, 1.0f,
+					false);
 		}
 	}
 
-	public int getTicksSinceLastAttack(){
+	public int getTicksSinceLastAttack() {
 		return ticksSinceLastAttack;
 	}
 
 	@Override
-	public void setAttackTarget(EntityLivingBase par1EntityLivingBase){
+	public void setAttackTarget(EntityLivingBase par1EntityLivingBase) {
 		super.setAttackTarget(par1EntityLivingBase);
-		if (!worldObj.isRemote){
+		if (!worldObj.isRemote) {
 			if (par1EntityLivingBase != null)
 				this.dataManager.set(ATTACK_TARGET, par1EntityLivingBase.getEntityId());
 			else
@@ -134,31 +137,31 @@ public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity{
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2){
+	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
 
-//		int you = 0;
-//		int should = 0;
-//		int not = 0;
-//		int be = 0;
-//		int looking = 0;
-//		int here = 0;
-//		int cheater = 0;
-		
-		//Thanks but I'm not reading all the code, just fixing.
-		
-		if (par1DamageSource.getSourceOfDamage() instanceof EntityEnderman){
-			((EntityEnderman)par1DamageSource.getSourceOfDamage()).attackEntityFrom(DamageSources.wtfBoom, 5000);
+		// int you = 0;
+		// int should = 0;
+		// int not = 0;
+		// int be = 0;
+		// int looking = 0;
+		// int here = 0;
+		// int cheater = 0;
+
+		// Thanks but I'm not reading all the code, just fixing.
+
+		if (par1DamageSource.getSourceOfDamage() instanceof EntityEnderman) {
+			((EntityEnderman) par1DamageSource.getSourceOfDamage()).attackEntityFrom(DamageSources.wtfBoom, 5000);
 			this.heal(10);
 			return false;
 		}
 
-		if (par1DamageSource.damageType.equals("outOfWorld")){
-			if (spawn != null){
+		if (par1DamageSource.damageType.equals("outOfWorld")) {
+			if (spawn != null) {
 				this.setPosition(spawn.x, spawn.y, spawn.z);
 				this.setCurrentAction(BossActions.IDLE);
 				if (!this.worldObj.isRemote)
 					ArsMagica2.proxy.addDeferredTargetSet(this, null);
-			}else{
+			} else {
 				this.setDead();
 			}
 			return false;
@@ -166,13 +169,14 @@ public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity{
 
 		ticksSinceLastAttack = 0;
 
-		if (!worldObj.isRemote && par1DamageSource.getSourceOfDamage() != null && par1DamageSource.getSourceOfDamage() instanceof EntityPlayer){
-			if (par1DamageSource.damageType == this.lastDamageType){
+		if (!worldObj.isRemote && par1DamageSource.getSourceOfDamage() != null
+				&& par1DamageSource.getSourceOfDamage() instanceof EntityPlayer) {
+			if (par1DamageSource.damageType == this.lastDamageType) {
 				hitCount++;
 				if (hitCount > 5)
 					this.heal(par2 / 4);
 				return false;
-			}else{
+			} else {
 				this.lastDamageType = par1DamageSource.damageType;
 				hitCount = 1;
 			}
@@ -182,26 +186,26 @@ public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity{
 	}
 
 	@Override
-	public EntityLivingBase getAttackTarget(){
+	public EntityLivingBase getAttackTarget() {
 		if (!worldObj.isRemote)
 			return super.getAttackTarget();
 		else
-			return (EntityLivingBase)worldObj.getEntityByID(this.dataManager.get(ATTACK_TARGET));
+			return (EntityLivingBase) worldObj.getEntityByID(this.dataManager.get(ATTACK_TARGET));
 	}
 
 	@Override
-	public void setCurrentAction(BossActions action){
+	public void setCurrentAction(BossActions action) {
 		this.currentAction = action;
 		if (action == BossActions.LONG_CASTING)
 			wingFlapTime = 0;
 	}
 
-	public int getWingFlapTime(){
+	public int getWingFlapTime() {
 		return wingFlapTime;
 	}
 
-	public float getWingFlapSpeed(){
-		switch (this.currentAction){
+	public float getWingFlapSpeed() {
+		switch (this.currentAction) {
 		case CASTING:
 			return 0.5f;
 		case STRIKE:
@@ -215,80 +219,84 @@ public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity{
 		}
 	}
 
-	public boolean shouldFlapWings(){
+	public boolean shouldFlapWings() {
 		return currentAction != BossActions.LONG_CASTING && currentAction != BossActions.SHIELD_BASH;
 	}
-	
+
 	@Override
-	public boolean isPotionActive(Potion par1Potion){
-		if (par1Potion == PotionEffectsDefs.spellReflect && (currentAction == BossActions.SHIELD_BASH || currentAction == BossActions.LONG_CASTING))
+	public boolean isPotionActive(Potion par1Potion) {
+		if (par1Potion == PotionEffectsDefs.spellReflect
+				&& (currentAction == BossActions.SHIELD_BASH || currentAction == BossActions.LONG_CASTING))
 			return true;
-		if (par1Potion == PotionEffectsDefs.magicShield && (currentAction == BossActions.SHIELD_BASH || currentAction == BossActions.LONG_CASTING))
+		if (par1Potion == PotionEffectsDefs.magicShield
+				&& (currentAction == BossActions.SHIELD_BASH || currentAction == BossActions.LONG_CASTING))
 			return true;
 		return super.isPotionActive(par1Potion);
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(){
+	protected SoundEvent getHurtSound() {
 		return AMSounds.ENDER_GUARDIAN_HIT;
 	}
 
 	@Override
-	protected SoundEvent getDeathSound(){
+	protected SoundEvent getDeathSound() {
 		return AMSounds.ENDER_GUARDIAN_DEATH;
 	}
 
 	@Override
-	protected SoundEvent getAmbientSound(){
+	protected SoundEvent getAmbientSound() {
 		return AMSounds.ENDER_GUARDIAN_IDLE;
 	}
 
 	@Override
-	public SoundEvent getAttackSound(){
+	public SoundEvent getAttackSound() {
 		return AMSounds.ENDER_GUARDIAN_ATTACK;
 	}
 
 	@Override
-	protected void dropFewItems(boolean par1, int par2){
+	protected void dropFewItems(boolean par1, int par2) {
 		if (par1)
 			this.entityDropItem(new ItemStack(ItemDefs.infinityOrb, 1, 2), 0.0f);
 
 		int i = rand.nextInt(4);
 
-		for (int j = 0; j < i; j++){
-			this.entityDropItem(new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.ENDER)), 0.0f);
+		for (int j = 0; j < i; j++) {
+			this.entityDropItem(
+					new ItemStack(ItemDefs.essence, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.ENDER)), 0.0f);
 		}
 
 		i = rand.nextInt(10);
 
-		if (i < 3 && par1){
+		if (i < 3 && par1) {
 			this.entityDropItem(ItemDefs.enderBootsEnchanted.copy(), 0.0f);
 		}
 	}
 
 	@Override
-	public void setAnimID(int id){
+	public void setAnimID(int id) {
 		setCurrentAction(BossActions.values()[id]);
 		ticksInCurrentAction = 0;
 	}
 
 	@Override
-	public void setAnimTick(int tick){
+	public void setAnimTick(int tick) {
 		this.ticksInCurrentAction = tick;
 	}
 
 	@Override
-	public int getAnimID(){
+	public int getAnimID() {
 		return currentAction.ordinal();
 	}
 
 	@Override
-	public int getAnimTick(){
+	public int getAnimTick() {
 		return ticksInCurrentAction;
 	}
-	
+
 	@Override
-	public void fall(float distance, float damageMultiplier) {}
+	public void fall(float distance, float damageMultiplier) {
+	}
 
 	@Override
 	protected Color getBarColor() {

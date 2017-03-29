@@ -12,65 +12,68 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
-public class ItemRuneBag extends ItemArsMagica{
+public class ItemRuneBag extends ItemArsMagica {
 
-	public ItemRuneBag(){
+	public ItemRuneBag() {
 		super();
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer entityplayer, EnumHand hand){
-		if (entityplayer.isSneaking()){
-			FMLNetworkHandler.openGui(entityplayer, ArsMagica2.instance, IDDefs.GUI_RUNE_BAG, world, (int)entityplayer.posX, (int)entityplayer.posY, (int)entityplayer.posZ);
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer entityplayer,
+			EnumHand hand) {
+		if (entityplayer.isSneaking()) {
+			FMLNetworkHandler.openGui(entityplayer, ArsMagica2.instance, IDDefs.GUI_RUNE_BAG, world,
+					(int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
 		}
 		return super.onItemRightClick(stack, world, entityplayer, hand);
 	}
 
-	private ItemStack[] getMyInventory(ItemStack itemStack){
+	private ItemStack[] getMyInventory(ItemStack itemStack) {
 		return ReadFromStackTagCompound(itemStack);
 	}
 
-	public void UpdateStackTagCompound(ItemStack itemStack, ItemStack[] values){
-		if (itemStack.getTagCompound() == null){
+	public void UpdateStackTagCompound(ItemStack itemStack, ItemStack[] values) {
+		if (itemStack.getTagCompound() == null) {
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
-		for (int i = 0; i < values.length; ++i){
+		for (int i = 0; i < values.length; ++i) {
 			ItemStack stack = values[i];
-			if (stack == null){
+			if (stack == null) {
 				itemStack.getTagCompound().removeTag("runebagmeta" + i);
 				continue;
-			}else{
+			} else {
 				itemStack.getTagCompound().setInteger("runebagmeta" + i, stack.getItemDamage());
 			}
 		}
 	}
 
 	@Override
-	public boolean getShareTag(){
+	public boolean getShareTag() {
 		return true;
 	}
 
-	public void UpdateStackTagCompound(ItemStack itemStack, InventoryRuneBag inventory){
-		if (itemStack.getTagCompound() == null){
+	public void UpdateStackTagCompound(ItemStack itemStack, InventoryRuneBag inventory) {
+		if (itemStack.getTagCompound() == null) {
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
-		for (int i = 0; i < inventory.getSizeInventory(); ++i){
+		for (int i = 0; i < inventory.getSizeInventory(); ++i) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null){
+			if (stack == null) {
 				continue;
-			}else{
+			} else {
 				itemStack.getTagCompound().setInteger("runebagmeta" + i, stack.getItemDamage());
 			}
 		}
 	}
 
-	public ItemStack[] ReadFromStackTagCompound(ItemStack itemStack){
-		if (itemStack.getTagCompound() == null){
+	public ItemStack[] ReadFromStackTagCompound(ItemStack itemStack) {
+		if (itemStack.getTagCompound() == null) {
 			return new ItemStack[InventoryRuneBag.inventorySize];
 		}
 		ItemStack[] items = new ItemStack[InventoryRuneBag.inventorySize];
-		for (int i = 0; i < items.length; ++i){
-			if (!itemStack.getTagCompound().hasKey("runebagmeta" + i) || itemStack.getTagCompound().getInteger("runebagmeta" + i) == -1){
+		for (int i = 0; i < items.length; ++i) {
+			if (!itemStack.getTagCompound().hasKey("runebagmeta" + i)
+					|| itemStack.getTagCompound().getInteger("runebagmeta" + i) == -1) {
 				items[i] = null;
 				continue;
 			}
@@ -81,7 +84,7 @@ public class ItemRuneBag extends ItemArsMagica{
 		return items;
 	}
 
-	public InventoryRuneBag ConvertToInventory(ItemStack runeBagStack){
+	public InventoryRuneBag ConvertToInventory(ItemStack runeBagStack) {
 		InventoryRuneBag irb = new InventoryRuneBag();
 		irb.SetInventoryContents(getMyInventory(runeBagStack));
 		return irb;

@@ -6,8 +6,8 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelLifeGuardian extends ModelBase{
-	//fields
+public class ModelLifeGuardian extends ModelBase {
+	// fields
 	ModelRenderer Shape1;
 	ModelRenderer Shape2;
 	ModelRenderer Shape3;
@@ -33,7 +33,7 @@ public class ModelLifeGuardian extends ModelBase{
 	ModelRenderer Shape23;
 	ModelRenderer Shape24;
 
-	public ModelLifeGuardian(){
+	public ModelLifeGuardian() {
 		textureWidth = 128;
 		textureHeight = 128;
 
@@ -183,7 +183,7 @@ public class ModelLifeGuardian extends ModelBase{
 		setRotation(Shape24, 0F, 0F, 0F);
 	}
 
-	public void setAngles(Entity e, float f, float f1, float f2, float f3, float f4, float f5){
+	public void setAngles(Entity e, float f, float f1, float f2, float f3, float f4, float f5) {
 		float angle = (f2 + f5) * 0.05f;
 		setRotation(Shape21, 0, 0, angle);
 		setRotation(Shape22, 0, 0, angle);
@@ -192,20 +192,20 @@ public class ModelLifeGuardian extends ModelBase{
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 
 		setAngles(entity, f, f1, f2, f3, f4, f5);
 
 		float angle = (f2 + f5) * 2;
 
-		//bottom bits
-		//Shape1.render(f5);
+		// bottom bits
+		// Shape1.render(f5);
 
-		//main body
+		// main body
 		GL11.glPushMatrix();
 		GL11.glRotatef(angle, 0, 1, 0);
-		GL11.glTranslatef(0, (float)Math.sin(f2 / 15f) / 10f, 0);
+		GL11.glTranslatef(0, (float) Math.sin(f2 / 15f) / 10f, 0);
 		Shape3.render(f5);
 		Shape4.render(f5);
 		Shape5.render(f5);
@@ -214,11 +214,12 @@ public class ModelLifeGuardian extends ModelBase{
 		Shape8.render(f5);
 		Shape9.render(f5);
 		Shape10.render(f5);
-		/*GL11.glPopMatrix();
-
-		GL11.glPushMatrix();
-		GL11.glRotatef(-angle, 0, 1, 0);*/
-		//pillars
+		/*
+		 * GL11.glPopMatrix();
+		 * 
+		 * GL11.glPushMatrix(); GL11.glRotatef(-angle, 0, 1, 0);
+		 */
+		// pillars
 		Shape11.render(f5);
 		Shape12.render(f5);
 		Shape13.render(f5);
@@ -231,7 +232,7 @@ public class ModelLifeGuardian extends ModelBase{
 		Shape20.render(f5);
 		GL11.glPopMatrix();
 
-		//runes
+		// runes
 
 		Shape21.render(f5);
 		Shape22.render(f5);
@@ -239,7 +240,7 @@ public class ModelLifeGuardian extends ModelBase{
 		Shape24.render(f5);
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z){
+	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

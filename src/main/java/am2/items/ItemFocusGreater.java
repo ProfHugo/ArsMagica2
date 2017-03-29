@@ -5,29 +5,25 @@ import am2.api.items.ItemFocus;
 import am2.defs.ItemDefs;
 import net.minecraft.item.ItemStack;
 
-public class ItemFocusGreater extends ItemFocus implements ISpellFocus{
+public class ItemFocusGreater extends ItemFocus implements ISpellFocus {
 
-	public ItemFocusGreater(){
+	public ItemFocusGreater() {
 		super();
 	}
 
 	@Override
-	public Object[] getRecipeItems(){
-		return new Object[]{
-				"A A", "PFP", "A A",
-				'A', new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_ARCANEASH),
-				'F', ItemDefs.standardFocus,
-				'P', new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_PURIFIED_VINTEUM)
-		};
+	public Object[] getRecipeItems() {
+		return new Object[] { "A A", "PFP", "A A", 'A', new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_ARCANEASH), 'F',
+				ItemDefs.standardFocus, 'P', new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_PURIFIED_VINTEUM) };
 	}
 
 	@Override
-	public String getInGameName(){
+	public String getInGameName() {
 		return "Greater Focus";
 	}
 
 	@Override
-	public int getFocusLevel(){
+	public int getFocusLevel() {
 		return 2;
 	}
 }

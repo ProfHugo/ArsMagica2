@@ -16,9 +16,9 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
 public class ModelCullface implements IModel {
-	
+
 	IModel parent;
-	
+
 	public ModelCullface(IModel parent) {
 		this.parent = parent;
 	}
@@ -34,7 +34,8 @@ public class ModelCullface implements IModel {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(IModelState state, VertexFormat format,
+			Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		ImmutableMap<TransformType, TRSRTransformation> map = IPerspectiveAwareModel.MapWrapper.getTransforms(state);
 		return new BakedModelCullface(parent.bake(state, format, bakedTextureGetter), map);
 	}

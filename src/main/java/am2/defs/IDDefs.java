@@ -8,7 +8,7 @@ public class IDDefs {
 	public static final UUID entangledID = UUID.fromString("F5047292-E5F9-4EB1-986E-9A5DFE832203");
 	public static final UUID furyDmgID = UUID.fromString("03B0A79B-9769-43AE-BFE3-830D993D4A70");
 	public static final UUID furyMoveID = UUID.fromString("03B0A79B-9769-43AE-BFE3-830D993D4A69");
-	
+
 	public static final int GUI_OCCULUS = 0;
 	public static final int GUI_SPELL_CUSTOMIZATION = 1;
 	public static final int GUI_RIFT = 2;
@@ -33,5 +33,5 @@ public class IDDefs {
 	public static final int GUI_INERT_SPAWNER = 21;
 	public static final int GUI_SUMMONER = 22;
 	public static final int GUI_ESSENCE_BAG = 23;
-	
+
 }

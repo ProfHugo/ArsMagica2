@@ -5,7 +5,7 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 @Cancelable
-public class ReconstructorRepairEvent extends Event{
+public class ReconstructorRepairEvent extends Event {
 
 	/**
 	 * The item being repaired.
@@ -17,8 +17,7 @@ public class ReconstructorRepairEvent extends Event{
 	 *
 	 * @param item
 	 */
-	public ReconstructorRepairEvent(ItemStack item){
+	public ReconstructorRepairEvent(ItemStack item) {
 		this.item = item;
 	}
 }
-

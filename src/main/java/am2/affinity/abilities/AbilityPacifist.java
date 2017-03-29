@@ -24,7 +24,7 @@ public class AbilityPacifist extends AbstractAffinityAbility {
 	public Affinity getAffinity() {
 		return Affinity.LIFE;
 	}
-	
+
 	@Override
 	public void applyKill(EntityPlayer player, LivingDeathEvent event) {
 		if (event.getEntityLiving().getCreatureAttribute() != EnumCreatureAttribute.UNDEAD) {

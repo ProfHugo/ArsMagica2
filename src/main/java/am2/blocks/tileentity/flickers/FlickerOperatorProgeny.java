@@ -22,30 +22,31 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
-public class FlickerOperatorProgeny extends AbstractFlickerFunctionality{
+public class FlickerOperatorProgeny extends AbstractFlickerFunctionality {
 
 	private static final int BASE_COOLDOWN = 2000;
 	private static final float COOLDOWN_BONUS = 0.75f;
-	private static final int COOLDOWN_MINIMUM = 600; //minimum 30 seconds
-	
+	private static final int COOLDOWN_MINIMUM = 600; // minimum 30 seconds
+
 	public final static FlickerOperatorProgeny instance = new FlickerOperatorProgeny();
 
 	@Override
-	public boolean RequiresPower(){
+	public boolean RequiresPower() {
 		return true;
 	}
 
 	@Override
-	public int PowerPerOperation(){
+	public int PowerPerOperation() {
 		return 500;
 	}
 
 	@Override
-	public boolean DoOperation(World worldObj, IFlickerController<?> habitat, boolean powered){
+	public boolean DoOperation(World worldObj, IFlickerController<?> habitat, boolean powered) {
 		HashMap<Class<? extends EntityAnimal>, Integer> entityCount = new HashMap<>();
 		int radius = 8;
-		List<EntityAnimal> creatures = worldObj.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(((TileEntity)habitat).getPos()).expandXyz(radius));
-		for (EntityAnimal creature : creatures){
+		List<EntityAnimal> creatures = worldObj.getEntitiesWithinAABB(EntityAnimal.class,
+				new AxisAlignedBB(((TileEntity) habitat).getPos()).expandXyz(radius));
+		for (EntityAnimal creature : creatures) {
 			Class<? extends EntityAnimal> clazz = creature.getClass();
 			if (!SpawnBlacklists.canProgenyAffect(clazz))
 				continue;
@@ -55,18 +56,21 @@ public class FlickerOperatorProgeny extends AbstractFlickerFunctionality{
 			if (!creature.isInLove() && creature.getGrowingAge() == 0)
 				count++;
 			entityCount.put(clazz, count);
-			if (count == 2){
-				if (worldObj.isRemote){
-					AMParticle particle = (AMParticle)ArsMagica2.proxy.particleManager.spawn(worldObj, "heart", ((TileEntity)habitat).getPos().getX() + 0.5, ((TileEntity)habitat).getPos().getX() + 0.7, ((TileEntity)habitat).getPos().getX() + 0.5);
-					if (particle != null){
+			if (count == 2) {
+				if (worldObj.isRemote) {
+					AMParticle particle = (AMParticle) ArsMagica2.proxy.particleManager.spawn(worldObj, "heart",
+							((TileEntity) habitat).getPos().getX() + 0.5, ((TileEntity) habitat).getPos().getX() + 0.7,
+							((TileEntity) habitat).getPos().getX() + 0.5);
+					if (particle != null) {
 						particle.setMaxAge(20);
 						particle.AddParticleController(new ParticleFloatUpward(particle, 0, 0.05f, 1, false));
 					}
-				}else{
-					creatures = worldObj.getEntitiesWithinAABB(clazz, new AxisAlignedBB(((TileEntity)habitat).getPos()).expandXyz(radius));
+				} else {
+					creatures = worldObj.getEntitiesWithinAABB(clazz,
+							new AxisAlignedBB(((TileEntity) habitat).getPos()).expandXyz(radius));
 					count = 0;
-					for (EntityAnimal animal : creatures){
-						if (!animal.isChild()){
+					for (EntityAnimal animal : creatures) {
+						if (!animal.isChild()) {
 							animal.setInLove(null);
 							count++;
 							if (count == 2)
@@ -82,46 +86,42 @@ public class FlickerOperatorProgeny extends AbstractFlickerFunctionality{
 	}
 
 	@Override
-	public boolean DoOperation(World worldObj, IFlickerController<?> controller, boolean powered, Affinity[] flickers){
+	public boolean DoOperation(World worldObj, IFlickerController<?> controller, boolean powered, Affinity[] flickers) {
 		return DoOperation(worldObj, controller, powered);
 	}
 
 	@Override
-	public void RemoveOperator(World worldObj, IFlickerController<?> controller, boolean powered){
+	public void RemoveOperator(World worldObj, IFlickerController<?> controller, boolean powered) {
 	}
 
 	@Override
-	public int TimeBetweenOperation(boolean powered, Affinity[] flickers){
-		if (powered){
+	public int TimeBetweenOperation(boolean powered, Affinity[] flickers) {
+		if (powered) {
 			float base = BASE_COOLDOWN;
 			for (Affinity aff : flickers)
 				if (aff == Affinity.LIGHTNING)
 					base *= COOLDOWN_BONUS;
 
-			return (int)Math.max(base, COOLDOWN_MINIMUM);
-		}else{
+			return (int) Math.max(base, COOLDOWN_MINIMUM);
+		} else {
 			return BASE_COOLDOWN;
 		}
 	}
 
 	@Override
-	public void RemoveOperator(World worldObj, IFlickerController<?> controller, boolean powered, Affinity[] flickers){
+	public void RemoveOperator(World worldObj, IFlickerController<?> controller, boolean powered, Affinity[] flickers) {
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				"ELE",
-				"EFE",
-				"EWE",
-				Character.valueOf('E'), Items.EGG,
-				Character.valueOf('L'), AffinityShiftUtils.getEssenceForAffinity(Affinity.LIFE),
-				Character.valueOf('F'), new ItemStack(ItemDefs.flickerJar, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.LIFE)),
+	public Object[] getRecipe() {
+		return new Object[] { "ELE", "EFE", "EWE", Character.valueOf('E'), Items.EGG, Character.valueOf('L'),
+				AffinityShiftUtils.getEssenceForAffinity(Affinity.LIFE), Character.valueOf('F'),
+				new ItemStack(ItemDefs.flickerJar, 1, ArsMagicaAPI.getAffinityRegistry().getId(Affinity.LIFE)),
 				Character.valueOf('W'), new ItemStack(ItemDefs.rune, 1, EnumDyeColor.WHITE.getDyeDamage())
 
 		};
 	}
-	
+
 	@Override
 	public ResourceLocation getTexture() {
 		return new ResourceLocation("arsmagica2", "FlickerOperatorProgeny");
@@ -129,8 +129,7 @@ public class FlickerOperatorProgeny extends AbstractFlickerFunctionality{
 
 	@Override
 	public Affinity[] getMask() {
-		return new Affinity[] {Affinity.LIFE};
+		return new Affinity[] { Affinity.LIFE };
 	}
-
 
 }

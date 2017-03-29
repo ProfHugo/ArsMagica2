@@ -11,13 +11,13 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-public class ItemLiquidEssenceBottle extends ItemArsMagica{
+public class ItemLiquidEssenceBottle extends ItemArsMagica {
 
-	public ItemLiquidEssenceBottle(){
+	public ItemLiquidEssenceBottle() {
 		super();
 		this.setMaxStackSize(1);
 	}
-	
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn,
 			EnumHand hand) {
@@ -27,19 +27,20 @@ public class ItemLiquidEssenceBottle extends ItemArsMagica{
 	}
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack){
+	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
 		return EnumAction.DRINK;
 	}
-	
+
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving){
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		stack = new ItemStack(Items.GLASS_BOTTLE);
-		entityLiving.addPotionEffect(new BuffMaxManaIncrease(6000, 1)); //5 mins
+		entityLiving.addPotionEffect(new BuffMaxManaIncrease(6000, 1)); // 5
+																		// mins
 		return stack;
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack par1ItemStack){
+	public int getMaxItemUseDuration(ItemStack par1ItemStack) {
 		return 32;
 	}
 }

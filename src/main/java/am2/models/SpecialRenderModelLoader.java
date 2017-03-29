@@ -36,13 +36,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
-public class SpecialRenderModelLoader implements ICustomModelLoader{
-	
+public class SpecialRenderModelLoader implements ICustomModelLoader {
+
 	public class Baked implements IPerspectiveAwareModel {
-		
+
 		private ItemStack stack = null;
 		private EntityLivingBase entity = null;
-		
+
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 			return new ArrayList<>();
@@ -85,23 +85,24 @@ public class SpecialRenderModelLoader implements ICustomModelLoader{
 		}
 
 	}
-	
+
 	class Overrides extends ItemOverrideList {
-		
+
 		Baked baked;
 
 		public Overrides(Baked baked) {
 			super(new ArrayList<>());
 			this.baked = baked;
 		}
-		
+
 		@Override
-		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
+		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world,
+				EntityLivingBase entity) {
 			baked.stack = stack;
 			baked.entity = entity;
 			return super.handleItemState(originalModel, stack, world, entity);
 		}
-		
+
 	}
 
 	class Model implements IModel {
@@ -116,7 +117,8 @@ public class SpecialRenderModelLoader implements ICustomModelLoader{
 		}
 
 		@Override
-		public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+		public IBakedModel bake(IModelState state, VertexFormat format,
+				Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 			return new SpecialRenderModelLoader.Baked();
 		}
 
@@ -126,37 +128,34 @@ public class SpecialRenderModelLoader implements ICustomModelLoader{
 		}
 	}
 
-	static ImmutableMap<TransformType, TRSRTransformation> transforms = IPerspectiveAwareModel.MapWrapper.getTransforms(ModelUtils.DEFAULT_ITEM_STATE);
+	static ImmutableMap<TransformType, TRSRTransformation> transforms = IPerspectiveAwareModel.MapWrapper
+			.getTransforms(ModelUtils.DEFAULT_ITEM_STATE);
 
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager) {
-		
+
 	}
 
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
-		return (modelLocation.toString().contains("nature_scythe") ||
-				modelLocation.toString().contains("winter_arm") ||
-				modelLocation.toString().contains("air_sled") ||
-				modelLocation.toString().contains("fire_ears") ||
-				modelLocation.toString().contains("water_orbs") ||
-				modelLocation.toString().contains("earth_armor") ||
-				modelLocation.toString().contains("arcane_spellbook") ||
-				modelLocation.toString().contains("keystone_recepticle") ||
-				modelLocation.toString().contains("flicker_habitat") ||
-				modelLocation.toString().contains("crystal_marker") ||
-				modelLocation.toString().contains("keystone_chest") ||
-				modelLocation.toString().contains("magic_broom") ||
-				modelLocation.toString().contains("essence_conduit") ||
-				modelLocation.toString().contains("arcane_reconstructor") ||
-				modelLocation.toString().contains("seer_stone") ||
-				modelLocation.toString().contains("warding_candle") ||
-				modelLocation.toString().contains("bound_shield") ||
-				modelLocation.toString().contains("calefactor") ||
-				modelLocation.toString().contains("magicians_workbench") ||
-				modelLocation.toString().contains("summoner") ||
-				modelLocation.toString().contains("astral_barrier") ||
-				modelLocation.toString().contains("otherworld_aura")) && modelLocation.getResourceDomain().equals("arsmagica2") && !modelLocation.toString().contains(".obj");
+		return (modelLocation.toString().contains("nature_scythe") || modelLocation.toString().contains("winter_arm")
+				|| modelLocation.toString().contains("air_sled") || modelLocation.toString().contains("fire_ears")
+				|| modelLocation.toString().contains("water_orbs") || modelLocation.toString().contains("earth_armor")
+				|| modelLocation.toString().contains("arcane_spellbook")
+				|| modelLocation.toString().contains("keystone_recepticle")
+				|| modelLocation.toString().contains("flicker_habitat")
+				|| modelLocation.toString().contains("crystal_marker")
+				|| modelLocation.toString().contains("keystone_chest")
+				|| modelLocation.toString().contains("magic_broom")
+				|| modelLocation.toString().contains("essence_conduit")
+				|| modelLocation.toString().contains("arcane_reconstructor")
+				|| modelLocation.toString().contains("seer_stone")
+				|| modelLocation.toString().contains("warding_candle")
+				|| modelLocation.toString().contains("bound_shield") || modelLocation.toString().contains("calefactor")
+				|| modelLocation.toString().contains("magicians_workbench")
+				|| modelLocation.toString().contains("summoner") || modelLocation.toString().contains("astral_barrier")
+				|| modelLocation.toString().contains("otherworld_aura"))
+				&& modelLocation.getResourceDomain().equals("arsmagica2") && !modelLocation.toString().contains(".obj");
 	}
 
 	@Override

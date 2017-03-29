@@ -5,28 +5,24 @@ import am2.api.items.ItemFocus;
 import am2.defs.ItemDefs;
 import net.minecraft.init.Items;
 
-public class ItemFocusStandard extends ItemFocus implements ISpellFocus{
+public class ItemFocusStandard extends ItemFocus implements ISpellFocus {
 
-	public ItemFocusStandard(){
+	public ItemFocusStandard() {
 		super();
 	}
 
 	@Override
-	public Object[] getRecipeItems(){
-		return new Object[]{
-				" R ", "RFR", " R ",
-				'R', Items.REDSTONE,
-				'F', ItemDefs.lesserFocus
-		};
+	public Object[] getRecipeItems() {
+		return new Object[] { " R ", "RFR", " R ", 'R', Items.REDSTONE, 'F', ItemDefs.lesserFocus };
 	}
 
 	@Override
-	public String getInGameName(){
+	public String getInGameName() {
 		return "Focus";
 	}
 
 	@Override
-	public int getFocusLevel(){
+	public int getFocusLevel() {
 		return 1;
 	}
 }

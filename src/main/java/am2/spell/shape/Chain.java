@@ -27,10 +27,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class Chain extends SpellShape{
+public class Chain extends SpellShape {
 
 	@Override
-	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster, EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP, int useCount){
+	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster,
+			EntityLivingBase target, World world, double x, double y, double z, EnumFacing side, boolean giveXP,
+			int useCount) {
 
 		RayTraceResult mop = item.getMovingObjectPosition(caster, world, 8.0f, true, false);
 		double range = SpellUtils.getModifiedDouble_Mul(8, stack, caster, target, world, SpellModifiers.RANGE);
@@ -38,31 +40,33 @@ public class Chain extends SpellShape{
 
 		ArrayList<EntityLivingBase> targets = new ArrayList<EntityLivingBase>();
 
-		if (target != null){
+		if (target != null) {
 			mop = new RayTraceResult(target);
 		}
 
-		if (mop != null && mop.typeOfHit == RayTraceResult.Type.ENTITY && mop.entityHit != null){
+		if (mop != null && mop.typeOfHit == RayTraceResult.Type.ENTITY && mop.entityHit != null) {
 			Entity e = mop.entityHit;
-			if (e instanceof EntityDragonPart && ((EntityDragonPart)e).entityDragonObj instanceof EntityLivingBase)
-				e = (EntityLivingBase)((EntityDragonPart)e).entityDragonObj;
-			if (e instanceof EntityLivingBase){
-				do{
-					targets.add((EntityLivingBase)e);
+			if (e instanceof EntityDragonPart && ((EntityDragonPart) e).entityDragonObj instanceof EntityLivingBase)
+				e = (EntityLivingBase) ((EntityDragonPart) e).entityDragonObj;
+			if (e instanceof EntityLivingBase) {
+				do {
+					targets.add((EntityLivingBase) e);
 
-					List<EntityLivingBase> nearby = world.getEntitiesWithinAABB(EntityLivingBase.class, e.getEntityBoundingBox().expand(range, range, range));
+					List<EntityLivingBase> nearby = world.getEntitiesWithinAABB(EntityLivingBase.class,
+							e.getEntityBoundingBox().expand(range, range, range));
 					EntityLivingBase closest = null;
-					for (EntityLivingBase near : nearby){
-						if (targets.contains(near) || near == caster) continue;
+					for (EntityLivingBase near : nearby) {
+						if (targets.contains(near) || near == caster)
+							continue;
 
-						if (closest == null || closest.getDistanceSqToEntity(e) > near.getDistanceSqToEntity(e)){
+						if (closest == null || closest.getDistanceSqToEntity(e) > near.getDistanceSqToEntity(e)) {
 							closest = near;
 						}
 					}
 
 					e = closest;
 
-				}while (e != null && targets.size() < num_targets);
+				} while (e != null && targets.size() < num_targets);
 			}
 		}
 
@@ -71,58 +75,61 @@ public class Chain extends SpellShape{
 
 		EntityLivingBase prevEntity = null;
 
-		for (EntityLivingBase e : targets){
+		for (EntityLivingBase e : targets) {
 			if (e == caster)
 				continue;
 			result = SpellUtils.applyStageToEntity(stack, caster, world, e, giveXP);
 			SpellUtils.applyStackStage(stack, caster, e, e.posX, e.posY, e.posZ, null, world, true, giveXP, 0);
 
-			if (world.isRemote){
+			if (world.isRemote) {
 				if (prevEntity == null)
 					spawnChainParticles(world, x, y, z, e.posX, e.posY + e.getEyeHeight(), e.posZ, stack);
 				else
-					spawnChainParticles(world, prevEntity.posX, prevEntity.posY + e.getEyeHeight(), prevEntity.posZ, e.posX, e.posY + e.getEyeHeight(), e.posZ, stack);
+					spawnChainParticles(world, prevEntity.posX, prevEntity.posY + e.getEyeHeight(), prevEntity.posZ,
+							e.posX, e.posY + e.getEyeHeight(), e.posZ, stack);
 			}
 			prevEntity = e;
 
-			if (result == SpellCastResult.SUCCESS){
+			if (result == SpellCastResult.SUCCESS) {
 				atLeastOneApplication = true;
 			}
 		}
 
-		if (atLeastOneApplication){
+		if (atLeastOneApplication) {
 			return SpellCastResult.SUCCESS;
 		}
 		return result;
 	}
-	
+
 	@Override
 	public EnumSet<SpellModifiers> getModifiers() {
 		return EnumSet.of(SpellModifiers.RANGE, SpellModifiers.PROCS);
 	}
 
-
-	private void spawnChainParticles(World world, double startX, double startY, double startZ, double endX, double endY, double endZ, ItemStack spellStack){
+	private void spawnChainParticles(World world, double startX, double startY, double startZ, double endX, double endY,
+			double endZ, ItemStack spellStack) {
 		int color = getPFXColor(spellStack);
 
 		Affinity aff = AffinityShiftUtils.getMainShiftForStack(spellStack);
 
-		if (aff.equals(Affinity.LIGHTNING)){
-			ArsMagica2.proxy.particleManager.BoltFromPointToPoint(world, startX, startY, startZ, endX, endY, endZ, 1, color);
-		}else{
+		if (aff.equals(Affinity.LIGHTNING)) {
+			ArsMagica2.proxy.particleManager.BoltFromPointToPoint(world, startX, startY, startZ, endX, endY, endZ, 1,
+					color);
+		} else {
 			if (color == -1)
 				color = aff.getColor();
-			ArsMagica2.proxy.particleManager.BeamFromPointToPoint(world, startX, startY, startZ, endX, endY, endZ, color);
+			ArsMagica2.proxy.particleManager.BeamFromPointToPoint(world, startX, startY, startZ, endX, endY, endZ,
+					color);
 		}
 	}
 
-	private int getPFXColor(ItemStack stack){
+	private int getPFXColor(ItemStack stack) {
 		int color = -1;
-		if (SpellUtils.modifierIsPresent(SpellModifiers.COLOR, stack)){
+		if (SpellUtils.modifierIsPresent(SpellModifiers.COLOR, stack)) {
 			ArrayList<SpellModifier> mods = SpellUtils.getModifiersForStage(stack, -1);
-			for (SpellModifier mod : mods){
-				if (mod instanceof Colour){
-					color = (int)mod.getModifier(SpellModifiers.COLOR, null, null, null, stack.getTagCompound());
+			for (SpellModifier mod : mods) {
+				if (mod instanceof Colour) {
+					color = (int) mod.getModifier(SpellModifiers.COLOR, null, null, null, stack.getTagCompound());
 				}
 			}
 		}
@@ -130,65 +137,62 @@ public class Chain extends SpellShape{
 	}
 
 	@Override
-	public boolean isChanneled(){
+	public boolean isChanneled() {
 		return false;
 	}
 
 	@Override
-	public Object[] getRecipe(){
-		return new Object[]{
-				new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_SUNSTONE),
-				Items.LEAD,
-				Items.IRON_INGOT,
-				Blocks.TRIPWIRE_HOOK,
-				Items.STRING
-		};
+	public Object[] getRecipe() {
+		return new Object[] { new ItemStack(ItemDefs.itemOre, 1, ItemOre.META_SUNSTONE), Items.LEAD, Items.IRON_INGOT,
+				Blocks.TRIPWIRE_HOOK, Items.STRING };
 	}
 
 	@Override
-	public float manaCostMultiplier(ItemStack spellStack){
+	public float manaCostMultiplier(ItemStack spellStack) {
 		return 1.5f;
 	}
 
 	@Override
-	public boolean isTerminusShape(){
+	public boolean isTerminusShape() {
 		return false;
 	}
 
 	@Override
-	public boolean isPrincipumShape(){
+	public boolean isPrincipumShape() {
 		return false;
 	}
-	
-	@Override
-	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {}
 
-//	@Override
-//	public String getSoundForAffinity(Affinity affinity, ItemStack stack, World world){
-//		switch (affinity){
-//		case AIR:
-//			return "arsmagica2:spell.cast.air";
-//		case ARCANE:
-//			return "arsmagica2:spell.cast.arcane";
-//		case EARTH:
-//			return "arsmagica2:spell.cast.earth";
-//		case ENDER:
-//			return "arsmagica2:spell.cast.ender";
-//		case FIRE:
-//			return "arsmagica2:spell.cast.fire";
-//		case ICE:
-//			return "arsmagica2:spell.cast.ice";
-//		case LIFE:
-//			return "arsmagica2:spell.cast.life";
-//		case LIGHTNING:
-//			return "arsmagica2:spell.cast.lightning";
-//		case NATURE:
-//			return "arsmagica2:spell.cast.nature";
-//		case WATER:
-//			return "arsmagica2:spell.cast.water";
-//		case NONE:
-//		default:
-//			return "arsmagica2:spell.cast.none";
-//		}
-//	}
+	@Override
+	public void encodeBasicData(NBTTagCompound tag, Object[] recipe) {
+	}
+
+	// @Override
+	// public String getSoundForAffinity(Affinity affinity, ItemStack stack,
+	// World world){
+	// switch (affinity){
+	// case AIR:
+	// return "arsmagica2:spell.cast.air";
+	// case ARCANE:
+	// return "arsmagica2:spell.cast.arcane";
+	// case EARTH:
+	// return "arsmagica2:spell.cast.earth";
+	// case ENDER:
+	// return "arsmagica2:spell.cast.ender";
+	// case FIRE:
+	// return "arsmagica2:spell.cast.fire";
+	// case ICE:
+	// return "arsmagica2:spell.cast.ice";
+	// case LIFE:
+	// return "arsmagica2:spell.cast.life";
+	// case LIGHTNING:
+	// return "arsmagica2:spell.cast.lightning";
+	// case NATURE:
+	// return "arsmagica2:spell.cast.nature";
+	// case WATER:
+	// return "arsmagica2:spell.cast.water";
+	// case NONE:
+	// default:
+	// return "arsmagica2:spell.cast.none";
+	// }
+	// }
 }

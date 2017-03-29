@@ -25,9 +25,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockKeystoneTrapdoor extends BlockTrapDoor implements ITileEntityProvider{
+public class BlockKeystoneTrapdoor extends BlockTrapDoor implements ITileEntityProvider {
 
-	public BlockKeystoneTrapdoor(){
+	public BlockKeystoneTrapdoor() {
 		super(Material.WOOD);
 		this.setHardness(2.5f);
 		this.setResistance(2.0f);
@@ -35,48 +35,51 @@ public class BlockKeystoneTrapdoor extends BlockTrapDoor implements ITileEntityP
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int i){
+	public TileEntity createNewTileEntity(World world, int i) {
 		return new TileEntityKeystoneDoor();
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ){
+			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntity te = worldIn.getTileEntity(pos);
 
 		playerIn.swingArm(hand);
 
-		if (KeystoneUtilities.HandleKeystoneRecovery(playerIn, (IKeystoneLockable<?>)te))
+		if (KeystoneUtilities.HandleKeystoneRecovery(playerIn, (IKeystoneLockable<?>) te))
 			return true;
-		if (KeystoneUtilities.instance.canPlayerAccess((IKeystoneLockable<?>)te, playerIn, KeystoneAccessType.USE)){
-			if (playerIn.isSneaking()){
-				FMLNetworkHandler.openGui(playerIn, ArsMagica2.instance, IDDefs.GUI_KEYSTONE_LOCKABLE, worldIn, pos.getX(), pos.getY(), pos.getZ());
-			}else{
-				//worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_WOODEN_DOOR_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f, true);
+		if (KeystoneUtilities.instance.canPlayerAccess((IKeystoneLockable<?>) te, playerIn, KeystoneAccessType.USE)) {
+			if (playerIn.isSneaking()) {
+				FMLNetworkHandler.openGui(playerIn, ArsMagica2.instance, IDDefs.GUI_KEYSTONE_LOCKABLE, worldIn,
+						pos.getX(), pos.getY(), pos.getZ());
+			} else {
+				// worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(),
+				// SoundEvents.BLOCK_WOODEN_DOOR_OPEN, SoundCategory.BLOCKS,
+				// 1.0f, 1.0f, true);
 				return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
 			}
 		}
 
 		return false;
 	}
-	
+
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player,
-			boolean willHarvest){
-		IKeystoneLockable<?> lockable = (IKeystoneLockable<?>)world.getTileEntity(pos);
-		if (!KeystoneUtilities.instance.canPlayerAccess(lockable, player, KeystoneAccessType.BREAK)) return false;
+			boolean willHarvest) {
+		IKeystoneLockable<?> lockable = (IKeystoneLockable<?>) world.getTileEntity(pos);
+		if (!KeystoneUtilities.instance.canPlayerAccess(lockable, player, KeystoneAccessType.BREAK))
+			return false;
 
 		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
-	
-	
+
 	public Block registerAndName(ResourceLocation rl) {
 		this.setUnlocalizedName(rl.toString());
 		GameRegistry.register(this, rl);
 		GameRegistry.register(new ItemBlockSubtypes(this), rl);
 		return this;
 	}
-	
+
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.TRANSLUCENT;

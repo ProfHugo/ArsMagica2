@@ -15,67 +15,72 @@ import thehippomaster.AnimationAPI.IAnimatedEntity;
 /*
 */
 
-public class EntityAIStatic extends AIAnimation{
+public class EntityAIStatic extends AIAnimation {
 
 	private int cooldownTicks = 0;
 
-	public EntityAIStatic(IAnimatedEntity entity){
+	public EntityAIStatic(IAnimatedEntity entity) {
 		super(entity);
 		this.setMutexBits(3);
 	}
 
 	@Override
-	public boolean shouldAnimate(){
-		//accessor method in AIAnimation that gives access to the entity
+	public boolean shouldAnimate() {
+		// accessor method in AIAnimation that gives access to the entity
 		EntityLiving living = getEntity();
 
-		//must have an attack target
-		if (living.getAttackTarget() == null || living.getDistanceSqToEntity(living.getAttackTarget()) > 64D || !living.getEntitySenses().canSee(living.getAttackTarget()))
+		// must have an attack target
+		if (living.getAttackTarget() == null || living.getDistanceSqToEntity(living.getAttackTarget()) > 64D
+				|| !living.getEntitySenses().canSee(living.getAttackTarget()))
 			return false;
 
 		return cooldownTicks-- <= 0;
 	}
 
 	@Override
-	public int getAnimID(){
+	public int getAnimID() {
 		return BossActions.CHARGE.ordinal();
 	}
 
 	@Override
-	public boolean isAutomatic(){
+	public boolean isAutomatic() {
 		return false;
 	}
 
 	@Override
-	public int getDuration(){
+	public int getDuration() {
 		return 107;
 	}
 
 	@Override
-	public void resetTask(){
+	public void resetTask() {
 		cooldownTicks = 50;
 		doStrike();
 		super.resetTask();
 	}
 
 	@Override
-	public void updateTask(){
+	public void updateTask() {
 		EntityLightningGuardian guardian = getEntity();
-		if (guardian.getAttackTarget() != null){
+		if (guardian.getAttackTarget() != null) {
 			guardian.getLookHelper().setLookPositionWithEntity(guardian.getAttackTarget(), 10, 10);
-			if (guardian.getTicksInCurrentAction() == 20){
+			if (guardian.getTicksInCurrentAction() == 20) {
 				if (!guardian.worldObj.isRemote)
-					guardian.worldObj.playSound(guardian.posX, guardian.posY, guardian.posZ, AMSounds.LIGHTNING_GUARDIAN_STATIC, SoundCategory.HOSTILE, 1.0f, guardian.getRNG().nextFloat() * 0.5f + 0.5f, false);
+					guardian.worldObj.playSound(guardian.posX, guardian.posY, guardian.posZ,
+							AMSounds.LIGHTNING_GUARDIAN_STATIC, SoundCategory.HOSTILE, 1.0f,
+							guardian.getRNG().nextFloat() * 0.5f + 0.5f, false);
 			}
-			if (guardian.getTicksInCurrentAction() > 66 && guardian.getTicksInCurrentAction() % 15 == 0 && guardian.getEntitySenses().canSee(guardian.getAttackTarget())){
+			if (guardian.getTicksInCurrentAction() > 66 && guardian.getTicksInCurrentAction() % 15 == 0
+					&& guardian.getEntitySenses().canSee(guardian.getAttackTarget())) {
 				doStrike();
 			}
 		}
 	}
 
-	private void doStrike(){
+	private void doStrike() {
 		EntityLightningGuardian guardian = getEntity();
-		List<EntityLivingBase> entities = guardian.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, guardian.getEntityBoundingBox().expand(8, 3, 8));
+		List<EntityLivingBase> entities = guardian.worldObj.getEntitiesWithinAABB(EntityLivingBase.class,
+				guardian.getEntityBoundingBox().expand(8, 3, 8));
 		for (EntityLivingBase e : entities)
 			if (e != guardian)
 				e.attackEntityFrom(DamageSources.causeLightningDamage(guardian), 8);

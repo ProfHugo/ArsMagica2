@@ -11,7 +11,7 @@ public class PlayerMagicLevelChangeEvent extends PlayerEvent {
 		super(player);
 		this.level = level;
 	}
-	
+
 	public int getLevel() {
 		return level;
 	}

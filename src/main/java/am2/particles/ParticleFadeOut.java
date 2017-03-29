@@ -1,23 +1,23 @@
 package am2.particles;
 
-public final class ParticleFadeOut extends ParticleController{
+public final class ParticleFadeOut extends ParticleController {
 
 	private float fadeSpeed;
 
-	public ParticleFadeOut(AMParticle particleEffect, int priority, boolean exclusive){
+	public ParticleFadeOut(AMParticle particleEffect, int priority, boolean exclusive) {
 		super(particleEffect, priority, exclusive);
 		fadeSpeed = 0.01f;
 	}
 
-	public ParticleFadeOut setFadeSpeed(float fadeSpeed){
+	public ParticleFadeOut setFadeSpeed(float fadeSpeed) {
 		this.fadeSpeed = fadeSpeed;
 		return this;
 	}
 
 	@Override
-	public void doUpdate(){
+	public void doUpdate() {
 		float alpha = particle.GetParticleAlpha();
-		if (alpha <= 0){
+		if (alpha <= 0) {
 			this.finish();
 			return;
 		}
@@ -25,7 +25,7 @@ public final class ParticleFadeOut extends ParticleController{
 	}
 
 	@Override
-	public ParticleController clone(){
+	public ParticleController clone() {
 		return new ParticleFadeOut(particle, priority, exclusive).setFadeSpeed(fadeSpeed);
 	}
 }

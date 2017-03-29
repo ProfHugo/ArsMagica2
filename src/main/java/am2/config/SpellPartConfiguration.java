@@ -8,22 +8,23 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
-public class SpellPartConfiguration extends Configuration{
-	
+public class SpellPartConfiguration extends Configuration {
+
 	private final ArrayList<String> disabled = new ArrayList<>();
-	
-	public SpellPartConfiguration(File file){
+
+	public SpellPartConfiguration(File file) {
 		super(file);
 	}
-	
+
 	public ArrayList<String> getDisabledSkills(boolean reload) {
-		
+
 		if (reload) {
 			load();
 			disabled.clear();
 			for (ResourceLocation rl : ArsMagicaAPI.getSpellRegistry().getKeys()) {
 				String name = rl.toString();
-				if (name.startsWith("arsmagica2:")) name = rl.getResourcePath();
+				if (name.startsWith("arsmagica2:"))
+					name = rl.getResourcePath();
 				Property prop = this.get("enabled_spell_part", name, true);
 				prop.setRequiresWorldRestart(true);
 				if (!prop.getBoolean())
@@ -31,14 +32,15 @@ public class SpellPartConfiguration extends Configuration{
 			}
 			save();
 		}
-		
+
 		return disabled;
 	}
-	
+
 	public boolean isSkillDisabled(String name) {
 		name = name.replaceAll("arsmagica2:", "");
 		for (String str : disabled) {
-			if (str.equalsIgnoreCase(name)) return true;
+			if (str.equalsIgnoreCase(name))
+				return true;
 		}
 		return false;
 	}
@@ -47,7 +49,8 @@ public class SpellPartConfiguration extends Configuration{
 		ArrayList<Integer> intArray = new ArrayList<>();
 		for (String disabled : disabled) {
 			ResourceLocation rl = new ResourceLocation(disabled);
-			if (!disabled.contains(":")) rl = new ResourceLocation("arsmagica2:" + disabled);
+			if (!disabled.contains(":"))
+				rl = new ResourceLocation("arsmagica2:" + disabled);
 			intArray.add(ArsMagicaAPI.getSkillRegistry().getId(rl));
 		}
 		int[] ret = new int[intArray.size()];
@@ -63,7 +66,8 @@ public class SpellPartConfiguration extends Configuration{
 		for (int i : disabledSkills) {
 			ResourceLocation rl = ArsMagicaAPI.getSkillRegistry().getObjectById(i).getRegistryName();
 			String name = rl.toString();
-			if (name.startsWith("arsmagica2:")) name = rl.getResourcePath();
+			if (name.startsWith("arsmagica2:"))
+				name = rl.getResourcePath();
 			disabled.add(name);
 		}
 	}
